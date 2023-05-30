@@ -34,7 +34,7 @@
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Conatct Number</label>
-                            <input type="text" name="contact" placeholder="Enter manager conatct number">
+                            <input type="text" name="contact_number" placeholder="Enter manager conatct number">
                         </div>
                     </div>
                     <hr>

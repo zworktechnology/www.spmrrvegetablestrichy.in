@@ -31,7 +31,7 @@
                                 <td>{{ ++$keydata }}</td>
                                 <td>{{ $invitetdata->name }}</td>
                                 <td>{{ $invitetdata->email }}</td>
-                                <td>{{ $invitetdata->contact }}</td>
+                                <td>{{ $invitetdata->contact_number }}</td>
                                 <td>{{ $invitetdata->role->name }}</td>
                                 @if ( $invitetdata->invite_accepted_at == '')
                                 <td><span class="badges bg-lightred">Pending</span></td>

@@ -36,7 +36,7 @@ class InviteController extends Controller
 
         $data->role_id = $request->get('role_id');
         $data->name = $request->get('name');
-        $data->contact = $request->get('contact');
+        $data->contact_number = $request->get('contact_number');
         $data->email = $request->get('email');
         $data->token = $token;
         $data->unique_key = $randomkey;
