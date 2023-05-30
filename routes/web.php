@@ -1,0 +1,107 @@
+<?php
+
+use App\Http\Controllers\BranchController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InviteController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UnitController;
+use App\Http\Controllers\BankController;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// INVITE ACCEPT
+Route::get('/accept/{token}', [InviteController::class, 'accept']);
+
+Auth::routes();
+
+// BACKEND - ROUTE - WITH SANTUM VERIFIED
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+
+    // DASHBOARD
+    Route::middleware(['auth:sanctum', 'verified'])->get('/home', [HomeController::class, 'index'])->name('home');
+
+    // INVITE CONTROLLER
+    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+        // INDEX
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/invite', [InviteController::class, 'index'])->name('invite.index');
+        // STORE
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/invite/store', [InviteController::class, 'store'])->name('invite.store');
+    });
+
+    // BRANCH CONTROLLER
+    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+        // INDEX
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/branch', [BranchController::class, 'index'])->name('branch.index');
+        // STORE
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/branch/store', [BranchController::class, 'store'])->name('branch.store');
+        // EDIT
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/branch/edit/{unique_key}', [BranchController::class, 'edit'])->name('branch.edit');
+        // DELETE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/branch/delete/{unique_key}', [BranchController::class, 'delete'])->name('branch.delete');
+    });
+    
+    // CUSTOMER CONTROLLER
+    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+        // INDEX
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/customer', [CustomerController::class, 'index'])->name('customer.index');
+        // STORE
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/customer/store', [CustomerController::class, 'store'])->name('customer.store');
+        // EDIT
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/customer/edit/{unique_key}', [CustomerController::class, 'edit'])->name('customer.edit');
+        // DELETE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/customer/delete/{unique_key}', [CustomerController::class, 'delete'])->name('customer.delete');
+    });
+
+    // SUPPLIER CONTROLLER
+    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+        // INDEX
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/supplier', [SupplierController::class, 'index'])->name('supplier.index');
+        // STORE
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/supplier/store', [SupplierController::class, 'store'])->name('supplier.store');
+        // EDIT
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/supplier/edit/{unique_key}', [SupplierController::class, 'edit'])->name('supplier.edit');
+        // DELETE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/supplier/delete/{unique_key}', [SupplierController::class, 'delete'])->name('supplier.delete');
+    });
+
+
+    // UNIT CONTROLLER
+    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+        // INDEX
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/unit', [UnitController::class, 'index'])->name('unit.index');
+        // STORE
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/unit/store', [UnitController::class, 'store'])->name('unit.store');
+        // EDIT
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/unit/edit/{unique_key}', [UnitController::class, 'edit'])->name('unit.edit');
+        // DELETE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/unit/delete/{unique_key}', [UnitController::class, 'delete'])->name('unit.delete');
+    });
+
+
+    // BANK CONTROLLER
+    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+        // INDEX
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/bank', [BankController::class, 'index'])->name('bank.index');
+        // STORE
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/bank/store', [BankController::class, 'store'])->name('bank.store');
+        // EDIT
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/bank/edit/{unique_key}', [BankController::class, 'edit'])->name('bank.edit');
+        // DELETE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/bank/delete/{unique_key}', [BankController::class, 'delete'])->name('bank.delete');
+    });
+});
