@@ -2,8 +2,6 @@
 
 @section('content')
 
-
-
    <div class="content">
       <div class="page-header">
          <div class="page-title">
@@ -11,13 +9,9 @@
          </div>
       </div>
 
-
       <div class="card">
          <div class="card-body">
             <div class="row">
-
-               
-
                <div class="col-lg-16 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Supplier</label>
@@ -55,11 +49,10 @@
                      <input type="time" name="timenow" placeholder="" value="{{ $timenow }}">
                   </div>
                </div>
-
-               
             </div>
 
-<br/>
+            <br/>
+
             <div class="row">
                <div class="table-responsive col-12">
                   <table class="table">
@@ -97,33 +90,8 @@
                   </table>
                </div>
             </div>
-
-
-
-
-
          </div>
       </div>
-
-
-
-
-
-
    </div>
-   
-<script language="JavaScript">
-
-$(document).ready(function() {
-   $("#addproductfields").click(function() {
-
-
-      alert('');
-   });
-});
-
-
-</script>
 
 @endsection
-

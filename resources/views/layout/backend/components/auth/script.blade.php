@@ -1,4 +1,4 @@
-<script src="{{ asset('assets/backend/js/jquery-3.6.0.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 
 <script src="{{ asset('assets/backend/js/feather.min.js') }}"></script>
 
@@ -21,3 +21,13 @@
 <script src="{{ asset('assets/backend/plugins/toastr/toastr.js') }}"></script>
 
 <script src="{{ asset('assets/backend/js/script.js') }}"></script>
+
+<script src="{{ asset('assets/backend/js/custom/purchase_create.js') }}"></script>
+
+<script>
+    $(document).ready(function() {
+        $("#addproductfields").click(function() {
+            alert('Hi');
+        });
+    });
+</script>
