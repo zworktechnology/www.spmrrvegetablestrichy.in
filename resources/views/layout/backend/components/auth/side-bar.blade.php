@@ -19,6 +19,9 @@
                         <li class="{{ Route::is('supplier.index') ? 'active' : '' }}">
                             <a href="{{ route('supplier.index') }}"><i data-feather="users"></i><span>Supliers</span></a>
                         </li>
+                        <li class="{{ Route::is('purchase.index', 'purchase.store') ? 'active' : '' }}">
+                            <a href="{{ route('purchase.index') }}"><i data-feather="users"></i><span>Purchase</span></a>
+                        </li>
                         @hasrole('Super-Admin')
                         <li class="{{ Route::is('invite.index', 'invite.store') ? 'active' : '' }}">
                             <a href="{{ route('invite.index') }}"><i data-feather="user-check"></i><span>Managers</span></a>
@@ -37,6 +40,10 @@
                         </li>
                         <li class="{{ Route::is('bank.index', 'bank.store', 'bank.edit') ? 'active' : '' }}">
                             <a href="{{ route('bank.index') }}"><i data-feather="map"></i><span>Bank</span></a>
+                        </li>
+
+                        <li class="{{ Route::is('product.index', 'product.store', 'product.edit') ? 'active' : '' }}">
+                            <a href="{{ route('product.index') }}"><i data-feather="map"></i><span>Product</span></a>
                         </li>
                     </ul>
                 </li>
