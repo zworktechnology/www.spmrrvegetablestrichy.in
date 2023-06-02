@@ -135,3 +135,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/delete/{unique_key}', [PurchaseController::class, 'delete'])->name('purchase.delete');
     });
 });
+
+
+
+Route::get('getProducts/', [PurchaseController::class, 'getProducts']);

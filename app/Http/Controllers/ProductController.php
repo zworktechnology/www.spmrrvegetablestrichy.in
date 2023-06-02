@@ -61,4 +61,7 @@ class ProductController extends Controller
         return redirect()->route('product.index')->with('soft_destroy', 'Successfully deleted the product !');
     }
 
+
+    
+
 }

@@ -25,9 +25,128 @@
 <script src="{{ asset('assets/backend/js/custom/purchase_create.js') }}"></script>
 
 <script>
+   var j = 1;
+   var i = 1;
     $(document).ready(function() {
         $("#addproductfields").click(function() {
-            alert('Hi');
+         ++i;
+            $("#product_fields").append(
+                    '<tr>' +
+                    '<td class=""><input type="hidden"id="purchase_detail_id"name="purchase_detail_id[]" />' +
+                    '<select class="select form-control product_id"name="product_id[]" id="product_id' + i + '"required>' +
+                    '<option value="" selected hidden class="text-muted">Select Product</option></select>' +
+                    '</td>' +
+                    '<td><input type="text" class="form-control" id="bag" name="bag[]" placeholder="Bag" value="" required /></td>' +
+                    '<td><input type="text" class="form-control kgs" id="kgs" name="kgs[]" placeholder="kgs" value="" required /></td>' +
+                    '<td><input type="text" class="form-control price_per_kg" id="price_per_kg" name="price_per_kg[]" placeholder="Price Per Kg" value="" required /></td>' +
+                    '<td class="text-end"><input type="text" class="form-control total_price" id="total_price" readonly style="background-color: #e9ecef;" name="total_price[]" placeholder="" value="" required /></td>' +
+                    '<td><button style="width: 100px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-tr" type="button" >Remove</button></td>' +
+                    '</tr>'
+                );
+
+
+
+                $.ajax({
+                    url: '/getProducts/',
+                    type: 'get',
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response['data']);
+                        var len = response['data'].length;
+
+                        var selectedValues = new Array();
+
+                        if (len > 0) {
+                            for (var i = 0; i < len; i++) {
+                                
+                                    var id = response['data'][i].id;
+                                    var name = response['data'][i].name;
+                                    var option = "<option value='" + id + "'>" + name +
+                                        "</option>";
+                                    selectedValues.push(option);
+                            }
+                        }
+                        ++j;
+                        $('#product_id' + j).append(selectedValues);
+                        //add_count.push(Object.keys(selectedValues).length);
+                    }
+                });
         });
     });
+
+
+    $(document).on('click', '.remove-tr', function() {
+            $(this).parents('tr').remove();
+        });
+
+
+      $(document).on("blur", "input[name*=kgs]", function() {
+         var kgs = $(this).val();
+         var price_per_kg = $(this).parents('tr').find('.price_per_kg').val();
+         var total = kgs * price_per_kg;
+         $(this).parents('tr').find('.total_price').val(total);
+
+         var totalAmount = 0;
+            $("input[name='total_price[]']").each(
+                                    function() {
+                                        //alert($(this).val());
+                                        totalAmount = Number(totalAmount) +
+                                            Number($(this).val());
+                                        $('.total_amount').val(
+                                            totalAmount);
+                                    });
+
+            $(document).on("keyup", 'input.extracost', function() {   
+                var extracost = $(this).val();
+                var total_amount = $(".total_amount").val();
+                var gross_amount = Number(total_amount) + Number(extracost);
+                $('.gross_amount').val(gross_amount.toFixed(2));
+                var old_balance = $(".old_balance").val();
+                var grand_total = Number(old_balance) + Number(gross_amount);
+                $('.grand_total').val(grand_total.toFixed(2));
+            });   
+            
+            $(document).on("keyup", 'input.payable_amount', function() { 
+                var payable_amount = $(this).val();
+                var grand_total = $(".grand_total").val();
+                var pending_amount = Number(grand_total) - Number(payable_amount);
+                $('.pending_amount').val(pending_amount.toFixed(2));
+            });
+      });
+
+      $(document).on("blur", "input[name*=price_per_kg]", function() {
+         var price_per_kg = $(this).val();
+         var kgs = $(this).parents('tr').find('.kgs').val();
+         var total = kgs * price_per_kg;
+         $(this).parents('tr').find('.total_price').val(total);
+
+         var totalAmount = 0;
+            $("input[name='total_price[]']").each(
+                                    function() {
+                                        //alert($(this).val());
+                                        totalAmount = Number(totalAmount) +
+                                            Number($(this).val());
+                                        $('.total_amount').val(
+                                            totalAmount);
+                                    });
+            $(document).on("keyup", 'input.extracost', function() {   
+                var extracost = $(this).val();
+                var total_amount = $(".total_amount").val();
+                var gross_amount = Number(total_amount) + Number(extracost);
+                $('.gross_amount').val(gross_amount.toFixed(2));
+                var old_balance = $(".old_balance").val();
+                var grand_total = Number(old_balance) + Number(gross_amount);
+                $('.grand_total').val(grand_total.toFixed(2));
+            });   
+            
+            $(document).on("keyup", 'input.payable_amount', function() { 
+                var payable_amount = $(this).val();
+                var grand_total = $(".grand_total").val();
+                var pending_amount = Number(grand_total) - Number(payable_amount);
+                $('.pending_amount').val(pending_amount.toFixed(2));
+            });                    
+      });
+
+
+      
 </script>

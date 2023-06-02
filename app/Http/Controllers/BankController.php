@@ -22,6 +22,7 @@ class BankController extends Controller
         $data = new Bank();
 
         $data->unique_key = $randomkey;
+        $data->name = $request->get('name');
         $data->details = $request->get('details');
         
         $data->save();
@@ -34,7 +35,7 @@ class BankController extends Controller
     public function edit(Request $request, $unique_key)
     {
         $BankData = Bank::where('unique_key', '=', $unique_key)->first();
-
+        $BankData->name = $request->get('name');
         $BankData->details = $request->get('details');
         $BankData->status = $request->get('status');
         

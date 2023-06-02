@@ -12,6 +12,7 @@ class Bank extends Model
 
     protected $fillable = [
         'unique_key',
+        'name',
         'details',
         'status',
         'soft_delete'

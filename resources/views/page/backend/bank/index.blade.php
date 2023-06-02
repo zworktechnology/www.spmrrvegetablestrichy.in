@@ -19,7 +19,7 @@
                         <thead>
                             <tr>
                                 <th>Sl. No</th>
-                                <th>Details</th>
+                                <th>Bank</th>
                                 <th>Status</th>
                                 <th>action</th>
                             </tr>
@@ -28,7 +28,7 @@
                             @foreach ($data as $keydata => $bankdata)
                                 <tr>
                                     <td>{{ ++$keydata }}</td>
-                                    <td>{{ $bankdata->details }}</td>
+                                    <td>{{ $bankdata->name }}</td>
                                     @if ($bankdata->status == 0)
                                         <td><span class="badges bg-lightgreen">Active</span></td>
                                     @else

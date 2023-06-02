@@ -9,6 +9,12 @@
                    
                    @csrf
                 <div class="row">
+                    <div class="col-lg-6 col-sm-12 col-12">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" name="name" id="name" placeholder="Bank Name" value="{{ $bankdata->name }}">
+                        </div>
+                    </div>
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Details</label>

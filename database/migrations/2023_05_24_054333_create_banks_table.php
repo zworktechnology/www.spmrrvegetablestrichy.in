@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
 
             $table->string('unique_key')->unique();
-            $table->string('details');
+            $table->string('name');
+            $table->string('details')->nullable();
             $table->string('status')->default(0);
             $table->boolean('soft_delete')->default(0);
             $table->timestamps();
