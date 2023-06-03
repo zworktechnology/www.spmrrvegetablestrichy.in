@@ -130,7 +130,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // STORE
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/purchase/store', [PurchaseController::class, 'store'])->name('purchase.store');
         // EDIT
-        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/purchase/edit/{unique_key}', [PurchaseController::class, 'edit'])->name('purchase.edit');
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchase/edit/{unique_key}', [PurchaseController::class, 'edit'])->name('purchase.edit');
+        // UPDATE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/update/{unique_key}', [PurchaseController::class, 'update'])->name('purchase.update');
+        // INVOICE
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchase/invoice/{unique_key}', [PurchaseController::class, 'invoice'])->name('purchase.invoice');
         // DELETE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/delete/{unique_key}', [PurchaseController::class, 'delete'])->name('purchase.delete');
     });
@@ -139,3 +143,4 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
 Route::get('getProducts/', [PurchaseController::class, 'getProducts']);
+Route::get('getoldbalance/{id}', [PurchaseController::class, 'getoldbalance']);

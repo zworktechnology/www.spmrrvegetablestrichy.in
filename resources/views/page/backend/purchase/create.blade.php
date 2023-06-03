@@ -85,7 +85,7 @@
                            <th style="font-size:15px; width:28%;">Product</th>
                            <th style="font-size:15px; width:12%;">Bag</th>
                            <th style="font-size:15px; width:12%;">Kgs </th>
-                           <th style="font-size:15px; width:18%;">Rate</th>
+                           <th style="font-size:15px; width:18%;">Price / Kg</th>
                            <th style="font-size:15px; width:20%;">Amount</th>
                            
                         </tr>

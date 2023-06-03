@@ -34,32 +34,30 @@
                                     <td>{{ $purchasedata['supplier'] }}</td>
                                     <td>{{ $purchasedata['branch'] }}</td>
                                     <td>{{ $purchasedata['grand_total'] }}</td>
-                                    @if ($purchasedata['status'] == 0)
-                                        <td><span class="badges bg-lightgreen">Active</span></td>
+                                    @if ($purchasedata['balance_amount'] > 0)
+                                        <td><span class="badges bg-lightred">Overdue</span></td>
                                     @else
-                                        <td><span class="badges bg-lightred">De-Active</span></td>
+                                        <td><span class="badges bg-lightgreen">Paid</span></td>
                                     @endif
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
                                             <li>
-                                                <a href="#edit{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
-                                                    data-id="{{ $purchasedata['unique_key'] }}"
-                                                    data-bs-target=".purchaseedit-modal-xl{{ $purchasedata['unique_key'] }}" class="badges bg-lightyellow" style="color: white">Edit</a>
+                                                
+                                                <a href="{{ route('purchase.edit', ['unique_key' => $purchasedata['unique_key']]) }}" class="badges bg-lightyellow" style="color: white">Edit</a>
                                             </li>
-                                            <li>
+                                            <li hidden>
                                                 <a href="#delete{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
                                                     data-id="{{ $purchasedata['unique_key'] }}"
                                                     data-bs-target=".purchasedelete-modal-xl{{ $purchasedata['unique_key'] }}" class="badges bg-lightgrey" style="color: white">Delete</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}" class="badges bg-lightgreen" style="color: white">Generate Invoice</a>
                                             </li>
                                         </ul>
                                     </td>
                                 </tr>
 
-                                <div class="modal fade purchaseedit-modal-xl{{ $purchasedata['unique_key'] }}" tabindex="-1"
-                                    role="dialog" aria-labelledby="purchaseeditLargeModalLabel{{ $purchasedata['unique_key'] }}"
-                                    aria-hidden="true">
-                                    @include('page.backend.purchase.edit')
-                                </div>
+                                
 
                                 <div class="modal fade purchasedelete-modal-xl{{ $purchasedata['unique_key'] }}"
                                     tabindex="-1" role="dialog"
