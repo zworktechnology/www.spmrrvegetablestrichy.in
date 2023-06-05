@@ -11,6 +11,14 @@
                     </ul>
                 </li>
                 <li class="submenu-open">
+                    <h6 class="submenu-hdr">Bill Management</h6>
+                    <ul>
+                        <li class="{{ Route::is('purchase.index', 'purchase.store') ? 'active' : '' }}">
+                            <a href="{{ route('purchase.index') }}"><i data-feather="shopping-bag"></i><span>Purchase</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="submenu-open">
                     <h6 class="submenu-hdr">User Management</h6>
                     <ul>
                         <li class="{{ Route::is('customer.index', 'customer.store') ? 'active' : '' }}">
@@ -18,9 +26,6 @@
                         </li>
                         <li class="{{ Route::is('supplier.index') ? 'active' : '' }}">
                             <a href="{{ route('supplier.index') }}"><i data-feather="users"></i><span>Supliers</span></a>
-                        </li>
-                        <li class="{{ Route::is('purchase.index', 'purchase.store') ? 'active' : '' }}">
-                            <a href="{{ route('purchase.index') }}"><i data-feather="users"></i><span>Purchase</span></a>
                         </li>
                         @hasrole('Super-Admin')
                         <li class="{{ Route::is('invite.index', 'invite.store') ? 'active' : '' }}">
@@ -35,15 +40,15 @@
                         <li class="{{ Route::is('branch.index', 'branch.store', 'branch.edit') ? 'active' : '' }}">
                             <a href="{{ route('branch.index') }}"><i data-feather="map"></i><span>Branch</span></a>
                         </li>
-                        <li class="{{ Route::is('unit.index', 'unit.store', 'unit.edit') ? 'active' : '' }}">
+                        <li class="{{ Route::is('unit.index', 'unit.store', 'unit.edit') ? 'active' : '' }}" hidden>
                             <a href="{{ route('unit.index') }}"><i data-feather="map"></i><span>Unit</span></a>
                         </li>
                         <li class="{{ Route::is('bank.index', 'bank.store', 'bank.edit') ? 'active' : '' }}">
-                            <a href="{{ route('bank.index') }}"><i data-feather="map"></i><span>Bank</span></a>
+                            <a href="{{ route('bank.index') }}"><i data-feather="credit-card"></i><span>Bank</span></a>
                         </li>
 
                         <li class="{{ Route::is('product.index', 'product.store', 'product.edit') ? 'active' : '' }}">
-                            <a href="{{ route('product.index') }}"><i data-feather="map"></i><span>Product</span></a>
+                            <a href="{{ route('product.index') }}"><i data-feather="box"></i><span>Product</span></a>
                         </li>
                     </ul>
                 </li>
