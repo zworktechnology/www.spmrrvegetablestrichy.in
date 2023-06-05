@@ -20,4 +20,9 @@ class Supplier extends Model
         'status',
         'soft_delete'
     ];
+
+    public function purchase()
+    {
+        return $this->hasMany(Purchase::class, 'supplier_id');
+    }
 }

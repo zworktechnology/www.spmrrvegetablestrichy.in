@@ -22,27 +22,21 @@
                                 <th>Supplier</th>
                                 <th>Branch</th>
                                 <th>Total</th>
-                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($purchase_data as $keydata => $purchasedata)
+                            @foreach ($data as $keydata => $purchasedata)
                                 <tr>
-                                    <td>{{ $purchasedata['bill_no'] }}</td>
-                                    <td>{{ date('d M Y', strtotime($purchasedata['date'])) }} - {{ date('h:i A', strtotime($purchasedata['time'])) }}</td>
-                                    <td>{{ $purchasedata['supplier'] }}</td>
-                                    <td>{{ $purchasedata['branch'] }}</td>
-                                    <td>{{ $purchasedata['grand_total'] }}</td>
-                                    @if ($purchasedata['balance_amount'] > 0)
-                                        <td><span class="badges bg-lightred">Overdue</span></td>
-                                    @else
-                                        <td><span class="badges bg-lightgreen">Paid</span></td>
-                                    @endif
+                                    <td>#{{ $purchasedata->bill_no }}</td>
+                                    <td>{{ date('d M Y', strtotime($purchasedata->date)) }} - {{ date('h:i A', strtotime($purchasedata->time)) }}</td>
+                                    <td>{{ $purchasedata->supplier->name }}</td>
+                                    <td>{{ $purchasedata->branch->name }}</td>
+                                    <td>{{ $purchasedata->gross_amount }}</td>
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
                                             <li>
-                                                
+
                                                 <a href="{{ route('purchase.edit', ['unique_key' => $purchasedata['unique_key']]) }}" class="badges bg-lightyellow" style="color: white">Edit</a>
                                             </li>
                                             <li hidden>
@@ -51,13 +45,13 @@
                                                     data-bs-target=".purchasedelete-modal-xl{{ $purchasedata['unique_key'] }}" class="badges bg-lightgrey" style="color: white">Delete</a>
                                             </li>
                                             <li>
-                                                <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}" class="badges bg-lightgreen" style="color: white">Generate Invoice</a>
+                                                <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}" class="badges bg-lightgreen" style="color: white">Invoice</a>
                                             </li>
                                         </ul>
                                     </td>
                                 </tr>
 
-                                
+
 
                                 <div class="modal fade purchasedelete-modal-xl{{ $purchasedata['unique_key'] }}"
                                     tabindex="-1" role="dialog"

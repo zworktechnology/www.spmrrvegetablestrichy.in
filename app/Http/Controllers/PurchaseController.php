@@ -19,24 +19,8 @@ class PurchaseController extends Controller
     public function index()
     {
         $data = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        $purchase_data = [];
-        foreach ($data as $key => $datas) {
-            $branch = Branch::findOrFail($datas->branch_id);
-            $supplier = Supplier::findOrFail($datas->supplier_id);
 
-            $purchase_data[] = array(
-                'branch' => $branch->name,
-                'supplier' => $supplier->name,
-                'bill_no' => $datas->bill_no,
-                'date' => $datas->date,
-                'time' => $datas->time,
-                'grand_total' => $datas->grand_total,
-                'balance_amount' => $datas->balance_amount,
-                'unique_key' => $datas->unique_key,
-            );
-        }
-
-        return view('page.backend.purchase.index', compact('purchase_data'));
+        return view('page.backend.purchase.index', compact('data'));
     }
 
 
@@ -49,7 +33,7 @@ class PurchaseController extends Controller
         $today = Carbon::now()->format('Y-m-d');
         $timenow = Carbon::now()->format('H:i');
 
-        
+
         $last_purchaseid = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->latest('id')->first();
         if($last_purchaseid != ''){
             $billno = $last_purchaseid->bill_no + 1;
@@ -63,14 +47,11 @@ class PurchaseController extends Controller
 
     public function store(Request $request)
     {
-
         // Purchase Table
         $randomkey = Str::random(5);
         $branch_id = $request->get('branch_id');
         $supplier_id = $request->get('supplier_id');
 
-
-        
         $data = new Purchase();
 
         $data->unique_key = $randomkey;
@@ -90,7 +71,6 @@ class PurchaseController extends Controller
         $data->balance_amount = $request->get('pending_amount');
         $data->save();
 
-
         $insertedId = $data->id;
 
         // Purchase Products Table
@@ -108,7 +88,6 @@ class PurchaseController extends Controller
             $PurchaseProduct->total_price = $request->total_price[$key];
             $PurchaseProduct->save();
 
-
             $product_Data = Product::where('id', '=', $product_id)->first();
             $bag_count = $product_Data->available_stockin_bag;
             $kg_count = $product_Data->available_stockin_kilograms;
@@ -123,13 +102,9 @@ class PurchaseController extends Controller
                 'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
             ]);
         }
-        
-
 
         return redirect()->route('purchase.index')->with('add', 'Purchase Data added successfully!');
     }
-
-
 
     public function edit($unique_key)
     {
@@ -142,7 +117,6 @@ class PurchaseController extends Controller
 
         return view('page.backend.purchase.edit', compact('product', 'branch', 'supplier', 'bank', 'PurchaseData', 'PurchaseProducts'));
     }
-
 
     public function update(Request $request, $unique_key)
     {
@@ -164,7 +138,6 @@ class PurchaseController extends Controller
         $Purchase_Data->balance_amount = $request->get('pending_amount');
         $Purchase_Data->update();
 
-
         $PurchaseId = $Purchase_Data->id;
 
         // Purchase Products Table
@@ -178,7 +151,7 @@ class PurchaseController extends Controller
         $updatedpurchaseproduct_id = $request->purchase_detail_id;
         $updated_PurchaseProduct_id = array_filter($updatedpurchaseproduct_id);
         $different_ids = array_merge(array_diff($Purchaseproducts, $updated_PurchaseProduct_id), array_diff($updated_PurchaseProduct_id, $Purchaseproducts));
-        
+
         if (!empty($different_ids)) {
             foreach ($different_ids as $key => $differents_id) {
 
@@ -187,27 +160,24 @@ class PurchaseController extends Controller
                     $product_Data = Product::where('soft_delete', '!=', 1)->where('id', '=', $getPurchaseOld->product_id)->first();
                     $bag_count = $product_Data->available_stockin_bag;
                     $kg_count = $product_Data->available_stockin_kilograms;
-    
+
                     $New_bagcount = $getPurchaseOld->bag;
                     $New_kgcount = $getPurchaseOld->kgs;
-    
+
                     $totalbag_count =  $bag_count - $New_bagcount;
                     $totalkg_count =  $kg_count - $New_kgcount;
-    
+
                     DB::table('products')->where('id', $getPurchaseOld->product_id)->update([
                         'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
                     ]);
-                
             }
         }
-
 
         if (!empty($different_ids)) {
             foreach ($different_ids as $key => $different_id) {
                 PurchaseProduct::where('id', $different_id)->delete();
             }
         }
-
 
         foreach ($request->get('purchase_detail_id') as $key => $purchase_detail_id) {
             if ($purchase_detail_id > 0) {
@@ -266,7 +236,7 @@ class PurchaseController extends Controller
 
     public function invoice($unique_key)
     {
-
+        return view('page.backend.purchase.invoice');
     }
 
 

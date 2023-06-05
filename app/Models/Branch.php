@@ -21,4 +21,9 @@ class Branch extends Model
         'logo',
         'status'
     ];
+
+    public function purchase()
+    {
+        return $this->hasMany(Purchase::class, 'branch_id');
+    }
 }

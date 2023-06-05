@@ -32,12 +32,12 @@ class Purchase extends Model
 
     public function supplier()
     {
-        return $this->hasMany(Supplier::class, 'supplier_id');
+        return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 
 
     public function branch()
     {
-        return $this->hasMany(Branch::class, 'branch_id');
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 }
