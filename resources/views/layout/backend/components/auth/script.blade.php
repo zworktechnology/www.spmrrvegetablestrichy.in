@@ -49,7 +49,7 @@
                     type: 'get',
                     dataType: 'json',
                     success: function(response) {
-                        console.log(response['data']);
+                        //console.log(response['data']);
                         var len = response['data'].length;
 
                         var selectedValues = new Array();
@@ -71,17 +71,55 @@
                 });
         });
 
-
-        $('#supplier_id').on('change', function() {
-            var supplier_id = this.value;
+        $('#branch_id').on('change', function() {
+            var branch_id = this.value;
+            var supplier_id = $("#supplier_id").val();
             $('.old_balance').html('');
             $.ajax({
-            url: '/getoldbalance/' + supplier_id,
+            url: '/getoldbalance/',
             type: 'get',
+            data: {
+                        _token: "{{ csrf_token() }}",
+                        supplier_id: supplier_id,
+                        branch_id: branch_id
+                    },
             dataType: 'json',
                 success: function(response) {
                     console.log(response['data']);
-                    $(".old_balance").val(response['data']);
+                    var value = 0;
+                    if(response['data'] > 0){
+                        $(".old_balance").val(response['data']);
+                    }else {
+                        $(".old_balance").val(value);
+                    }
+                    
+                }
+            });
+        });
+
+
+        $('#supplier_id').on('change', function() {
+            var supplier_id = this.value;
+            var branch_id = $("#branch_id").val();
+            $('.old_balance').html('');
+            $.ajax({
+            url: '/getoldbalance/',
+            type: 'get',
+            data: {
+                        _token: "{{ csrf_token() }}",
+                        supplier_id: supplier_id,
+                        branch_id: branch_id
+                    },
+            dataType: 'json',
+                success: function(response) {
+                    console.log(response['data']);
+                    var value = 0;
+                    if(response['data'] > 0){
+                        $(".old_balance").val(response['data']);
+                    }else {
+                        $(".old_balance").val(value);
+                    }
+                    
                 }
             });
         });
