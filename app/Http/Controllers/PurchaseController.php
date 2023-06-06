@@ -283,10 +283,17 @@ class PurchaseController extends Controller
         echo json_encode($userData);
     }
 
-    public function getoldbalance($supplier_id)
+    public function getoldbalance()
     {
-        $get_OldBalance = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('supplier_id', '=', $supplier_id)->latest('id')->first();
-        $userData['data'] = $get_OldBalance->balance_amount;
+        $supplier_id = request()->get('supplier_id');
+        $branch_id = request()->get('branch_id');
+
+        $get_OldBalance = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('supplier_id', '=', $supplier_id)->where('branch_id', '=', $branch_id)->latest('id')->first();
+        if($get_OldBalance != ""){
+            $userData['data'] = $get_OldBalance->balance_amount;
+        }else {
+            $userData['data'] = 'null';
+        }
         echo json_encode($userData);
     }
 }
