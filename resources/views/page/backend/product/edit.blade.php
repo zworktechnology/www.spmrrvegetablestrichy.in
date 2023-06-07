@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-xl">
+<div class="modal-dialog modal-l">
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="producteditLargeModalLabel{{ $producttdata['unique_key'] }}">Update Customer</h5>
@@ -10,7 +10,7 @@
 
                 @csrf
                 <div class="row">
-                    <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Name</label>
                             <select class="select form-control" name="productlist_id" id="productlist_id">
@@ -21,7 +21,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Name</label>
                             <select class="select form-control" name="branchid" id="branchid">
@@ -32,25 +32,25 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Description</label>
                             <textarea type="text" name="description" placeholder="Enter Description">{{ $producttdata['description'] }}</textarea>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Available Stockin Bags</label>
                             <input type="text" name="available_stockin_bag" placeholder="Enter Available Stockin Bags"  value="{{ $producttdata['available_stockin_bag'] }}">
                         </div>
                     </div>
-                    <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Available Stockin Kilograms</label>
                             <input type="text" name="available_stockin_kilograms" placeholder="Enter Available Stockin Kilograms"  value="{{ $producttdata['available_stockin_kilograms'] }}">
                         </div>
                     </div>
-                    <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Status</label>
                             <div class="input-group">
@@ -63,7 +63,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label style="color:white">Status</label>
                             <div class="input-group">

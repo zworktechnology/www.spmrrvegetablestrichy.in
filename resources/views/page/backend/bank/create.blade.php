@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-xl">
+<div class="modal-dialog modal-l">
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="bankLargeModalLabel">Add new Bank</h5>
@@ -7,13 +7,13 @@
             <form autocomplete="off" method="POST" action="{{ route('bank.store') }}">
                 @csrf
                 <div class="row">
-                    <div class="col-lg-6 col-sm-12 col-12">
+                    <div class="col-lg-12 col-sm-12 col-12">
                         <div class="form-group">
                             <label>Name</label>
                             <input type="text" name="name" id="name" placeholder="Bank Name">
                         </div>
                     </div>
-                    <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Details</label>
                             <textarea type="text" name="details" placeholder="Enter your Bank Details"></textarea>

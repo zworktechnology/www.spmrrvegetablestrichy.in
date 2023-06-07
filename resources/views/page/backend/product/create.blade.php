@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-xl">
+<div class="modal-dialog modal-l">
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="productLargeModalLabel">Add new Product</h5>
@@ -7,7 +7,7 @@
             <form autocomplete="off" method="POST" action="{{ route('product.store') }}">
                 @csrf
                 <div class="row">
-                    <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Product</label>
                             <select class="select " name="productlist_id" id="productlist_id">
@@ -18,7 +18,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Branch</label>
                             <select class="select " name="branchid" id="branchid">
@@ -29,19 +29,19 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Description</label>
                             <textarea type="text" name="description" placeholder="Enter Description"></textarea>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Available Stockin Bags</label>
                             <input type="text" name="available_stockin_bag" placeholder="Enter Available Stockin Bags">
                         </div>
                     </div>
-                    <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Available Stockin Kilograms</label>
                             <input type="text" name="available_stockin_kilograms" placeholder="Enter Available Stockin Kilograms">
