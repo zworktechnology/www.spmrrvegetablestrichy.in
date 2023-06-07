@@ -10,6 +10,7 @@ use App\Http\Controllers\BankController;
 use App\Http\Controllers\ProductlistController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\SalesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -149,9 +150,29 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // DELETE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/delete/{unique_key}', [PurchaseController::class, 'delete'])->name('purchase.delete');
     });
+
+
+    // SALES CONTROLLER
+    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+        // INDEX
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/sales', [SalesController::class, 'index'])->name('sales.index');
+        // CREATE
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/sales/create', [SalesController::class, 'create'])->name('sales.create');
+        // STORE
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/sales/store', [SalesController::class, 'store'])->name('sales.store');
+        // EDIT
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/sales/edit/{unique_key}', [SalesController::class, 'edit'])->name('sales.edit');
+        // UPDATE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/sales/update/{unique_key}', [SalesController::class, 'update'])->name('sales.update');
+        // INVOICE
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/sales/invoice/{unique_key}', [SalesController::class, 'invoice'])->name('sales.invoice');
+        // DELETE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/sales/delete/{unique_key}', [SalesController::class, 'delete'])->name('sales.delete');
+    });
 });
 
 
 
 Route::get('getProducts/', [PurchaseController::class, 'getProducts']);
 Route::get('/getoldbalance', [PurchaseController::class, 'getoldbalance']);
+Route::get('/getoldbalanceforSales', [SalesController::class, 'getoldbalanceforSales']);
