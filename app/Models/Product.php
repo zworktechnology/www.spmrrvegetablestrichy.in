@@ -11,7 +11,8 @@ class Product extends Model
 
     protected $fillable = [
         'unique_key',
-        'name',
+        'productlist_id',
+        'branchtable_id',
         'description',
         'available_stockin_bag',
         'available_stockin_kilograms',

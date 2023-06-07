@@ -96,8 +96,8 @@
                               <input type="hidden"id="purchase_detail_id"name="purchase_detail_id[]" />
                               <select class=" form-control product_id" name="product_id[]" id="product_id1"required>
                                  <option value="" selected hidden class="text-muted">Select Product</option>
-                                    @foreach ($product as $products)
-                                       <option value="{{ $products->id }}">{{ $products->name }}</option>
+                                    @foreach ($productlist as $productlists)
+                                       <option value="{{ $productlists->id }}">{{ $productlists->name }}</option>
                                     @endforeach
                               </select>
                            </td>
@@ -154,7 +154,8 @@
 
             
             <div class="modal-footer">
-               <input type="submit" class="btn btn-primary" name="submit" value="submit"style="margin-right: 10%;" />
+               <input type="submit" class="btn btn-primary" name="submit" value="submit" />
+               <a href="{{ route('purchase.index') }}" class="btn btn-danger" value="">Cancel</a>
             </div>
          </form>
 

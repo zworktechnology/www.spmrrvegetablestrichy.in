@@ -98,8 +98,8 @@
                         <tr>
                            <td class="">
                               <input type="hidden"id="purchase_detail_id"name="purchase_detail_id[]" value="{{ $Purchase_Products->id }}"/>
-                              @foreach ($product as $products)
-                                 @if ($products->id == $Purchase_Products->product_id)
+                              @foreach ($productlist as $products)
+                                 @if ($products->id == $Purchase_Products->productlist_id)
                                     <input type="text"class="form-control" name="product_name[]" value="{{ $products->name }}" readonly>
                                     <input type="hidden" id="product_id" name="product_id[]" value="{{ $Purchase_Products->id }}" />
                                  @endif
@@ -157,7 +157,8 @@
 
             
             <div class="modal-footer">
-               <input type="submit" class="btn btn-primary" name="submit" value="submit"style="margin-right: 10%;" />
+               <input type="submit" class="btn btn-primary" name="submit" value="submit" />
+               <a href="{{ route('purchase.index') }}" class="btn btn-danger" value="">Cancel</a>
             </div>
          </form>
 

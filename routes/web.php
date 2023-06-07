@@ -7,6 +7,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\ProductlistController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use Illuminate\Support\Facades\Route;
@@ -105,6 +106,16 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/bank/edit/{unique_key}', [BankController::class, 'edit'])->name('bank.edit');
         // DELETE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/bank/delete/{unique_key}', [BankController::class, 'delete'])->name('bank.delete');
+    });
+
+    // PRODUCTLIST CONTROLLER
+    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+        // INDEX
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/product', [ProductlistController::class, 'index'])->name('product.index');
+        // STORE
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/productlist/store', [ProductlistController::class, 'store'])->name('productlist.store');
+        // EDIT
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/productlist/edit/{unique_key}', [ProductlistController::class, 'edit'])->name('productlist.edit');
     });
 
 

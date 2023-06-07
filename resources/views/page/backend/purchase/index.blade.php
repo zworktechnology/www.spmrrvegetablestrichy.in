@@ -26,13 +26,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($data as $keydata => $purchasedata)
+                            @foreach ($purchase_data as $keydata => $purchasedata)
                                 <tr>
-                                    <td>#{{ $purchasedata->bill_no }}</td>
-                                    <td>{{ date('d M Y', strtotime($purchasedata->date)) }} - {{ date('h:i A', strtotime($purchasedata->time)) }}</td>
-                                    <td>{{ $purchasedata->supplier->name }}</td>
-                                    <td>{{ $purchasedata->branch->name }}</td>
-                                    <td>{{ $purchasedata->gross_amount }}</td>
+                                    <td>#{{ $purchasedata['bill_no'] }}</td>
+                                    <td>{{ date('d M Y', strtotime($purchasedata['date'])) }} - {{ date('h:i A', strtotime($purchasedata['date'])) }}</td>
+                                    <td>{{ $purchasedata['supplier_name'] }}</td>
+                                    <td>{{ $purchasedata['branch_name'] }}</td>
+                                    <td>{{ $purchasedata['gross_amount'] }}</td>
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
                                             <li>
@@ -66,10 +66,7 @@
             </div>
         </div>
 
-        <div class="modal fade product-modal-xl" tabindex="-1" role="dialog" aria-labelledby="productLargeModalLabel"
-            aria-hidden="true">
-            @include('page.backend.product.create')
-        </div>
+        
 
 
     </div>

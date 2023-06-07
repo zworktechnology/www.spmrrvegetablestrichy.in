@@ -2,7 +2,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title"
-                id="productdeleteLargeModalLabel{{ $producttdata->unique_key }}">
+                id="productdeleteLargeModalLabel{{ $producttdata['unique_key'] }}">
                 Destroy Product</h5>
         </div>
         <div class="modal-body px-4 py-5 text-center">
@@ -17,13 +17,13 @@
 
             <div class="hstack gap-2 justify-content-center mb-0">
                 <form autocomplete="off" method="POST"
-                    action="{{ route('product.delete', [$producttdata->unique_key]) }}">
+                    action="{{ route('product.delete', [$producttdata['unique_key']]) }}">
                     @method('PUT')
                     @csrf
                     <button type="submit" class="btn btn-danger">Yes, Delete it</button>
                 </form>
-                <button type="button" class="btn btn-secondary"
-                    data-bs-dismiss="modal">Cancel</button>
+                <a href="{{ route('product.index') }}"><button type="button" class="btn btn-secondary"
+                    data-bs-dismiss="modal">Cancel</button></a>
             </div>
         </div>
     </div>

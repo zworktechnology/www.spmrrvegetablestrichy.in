@@ -9,8 +9,24 @@
                 <div class="row">
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" name="name" placeholder="Enter Product name">
+                            <label>Product</label>
+                            <select class="select " name="productlist_id" id="productlist_id">
+                                <option value="" disabled selected hiddden>Select Product</option>
+                                @foreach ($productlistdata as $productlistdatas)
+                                    <option value="{{ $productlistdatas->id }}">{{ $productlistdatas->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label>Branch</label>
+                            <select class="select " name="branchid" id="branchid">
+                                <option value="" disabled selected hiddden>Select Branch</option>
+                                @foreach ($branch_data as $branch_datas)
+                                    <option value="{{ $branch_datas->id }}">{{ $branch_datas->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
@@ -34,8 +50,8 @@
                     <hr>
                     <div class="col-lg-12 button-align">
                         <button type="submit" class="btn btn-submit me-2">Submit</button>
-                        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal"
-                            aria-label="Close">Cancel</button>
+                        <a href="{{ route('product.index') }}"><button type="button" class="btn btn-cancel" data-bs-dismiss="modal"
+                            aria-label="Close">Cancel</button></a>
                     </div>
                 </div>
             </form>

@@ -22,8 +22,8 @@
                     @csrf
                     <button type="submit" class="btn btn-danger">Yes, Delete it</button>
                 </form>
-                <button type="button" class="btn btn-secondary"
-                    data-bs-dismiss="modal">Cancel</button>
+                <a href="{{ route('branch.index') }}"><button type="button" class="btn btn-secondary"
+                    data-bs-dismiss="modal">Cancel</button></a>
             </div>
         </div>
     </div>
