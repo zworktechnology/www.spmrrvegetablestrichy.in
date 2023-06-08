@@ -53,14 +53,14 @@
                                 </tr>
 
                                 <div class="modal fade bankedit-modal-xl{{ $bankdata->unique_key }}"
-                                    tabindex="-1" role="dialog"
+                                    tabindex="-1" role="dialog" data-bs-backdrop="static"
                                     aria-labelledby="bankeditLargeModalLabel{{ $bankdata->unique_key }}"
                                     aria-hidden="true">
                                     @include('page.backend.bank.edit')
                                 </div>
 
                                 <div class="modal fade bankdelete-modal-xl{{ $bankdata->unique_key }}"
-                                    tabindex="-1" role="dialog"
+                                    tabindex="-1" role="dialog"data-bs-backdrop="static"
                                     aria-labelledby="bankdeleteLargeModalLabel{{ $bankdata->unique_key }}"
                                     aria-hidden="true">
                                     @include('page.backend.bank.delete')
@@ -72,7 +72,7 @@
             </div>
         </div>
 
-        <div class="modal fade bank-modal-xl" tabindex="-1" role="dialog" aria-labelledby="bankLargeModalLabel"
+        <div class="modal fade bank-modal-xl" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="bankLargeModalLabel"
             aria-hidden="true">
             @include('page.backend.bank.create')
         </div>

@@ -55,13 +55,13 @@
                                 </tr>
 
                                 <div class="modal fade cusomeredit-modal-xl{{ $customertdata->unique_key }}" tabindex="-1"
-                                    role="dialog" aria-labelledby="customereditLargeModalLabel{{ $customertdata->unique_key }}"
+                                    role="dialog" data-bs-backdrop="static" aria-labelledby="customereditLargeModalLabel{{ $customertdata->unique_key }}"
                                     aria-hidden="true">
                                     @include('page.backend.customer.edit')
                                 </div>
 
                                 <div class="modal fade cusomerdelete-modal-xl{{ $customertdata->unique_key }}"
-                                    tabindex="-1" role="dialog"
+                                    tabindex="-1" role="dialog"data-bs-backdrop="static"
                                     aria-labelledby="customerdeleteLargeModalLabel{{ $customertdata->unique_key }}"
                                     aria-hidden="true">
                                     @include('page.backend.customer.delete')
@@ -74,7 +74,7 @@
         </div>
 
         <div class="modal fade cusomer-modal-xl" tabindex="-1" role="dialog" aria-labelledby="customerLargeModalLabel"
-            aria-hidden="true">
+            aria-hidden="true" data-bs-backdrop="static">
             @include('page.backend.customer.create')
         </div>
 

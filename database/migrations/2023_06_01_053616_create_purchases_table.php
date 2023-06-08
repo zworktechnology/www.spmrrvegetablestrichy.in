@@ -39,6 +39,7 @@ return new class extends Migration
             $table->string('grand_total')->nullable();
             $table->string('paid_amount')->nullable();
             $table->string('balance_amount')->nullable();
+            $table->string('paid_status')->nullable();
 
             $table->string('status')->default(0);
             $table->boolean('soft_delete')->default(0);

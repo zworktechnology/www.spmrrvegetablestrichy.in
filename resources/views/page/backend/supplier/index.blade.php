@@ -46,9 +46,12 @@
                                                     data-bs-target=".supplieredit-modal-xl{{ $suppliertdata->unique_key }}" class="badges bg-lightyellow" style="color: white">Edit</a>
                                             </li>
                                             <li>
-                                                <a href="#delete{{ $suppliertdata->unique_key }}" data-bs-toggle="modal"
+                                                <a href="#delete{{ $suppliertdata->unique_key }}" data-bs-toggle="modal" 
                                                     data-id="{{ $suppliertdata->unique_key }}"
                                                     data-bs-target=".supplierdelete-modal-xl{{ $suppliertdata->unique_key }}" class="badges bg-lightgrey" style="color: white">Delete</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ route('supplier.checkbalance', ['id' => $suppliertdata->id]) }}" class="badges bg-lightred" style="color: white">Check Balance</a>
                                             </li>
                                         </ul>
 
@@ -57,18 +60,20 @@
                                 </tr>
 
                                 <div class="modal fade supplieredit-modal-xl{{ $suppliertdata->unique_key }}"
-                                    tabindex="-1" role="dialog"
+                                    tabindex="-1" role="dialog" data-bs-backdrop="static"
                                     aria-labelledby="suppliereditLargeModalLabel{{ $suppliertdata->unique_key }}"
                                     aria-hidden="true">
                                     @include('page.backend.supplier.edit')
                                 </div>
 
                                 <div class="modal fade supplierdelete-modal-xl{{ $suppliertdata->unique_key }}"
-                                    tabindex="-1" role="dialog"
+                                    tabindex="-1" role="dialog" data-bs-backdrop="static"
                                     aria-labelledby="supplierdeleteLargeModalLabel{{ $suppliertdata->unique_key }}"
                                     aria-hidden="true">
                                     @include('page.backend.supplier.delete')
                                 </div>
+
+                               
                             @endforeach
                         </tbody>
                     </table>

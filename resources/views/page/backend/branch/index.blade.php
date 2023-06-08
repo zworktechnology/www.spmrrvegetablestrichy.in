@@ -56,12 +56,12 @@
 
                                 <div class="modal fade branchedit-modal-xl{{ $branchdata->unique_key }}" tabindex="-1"
                                     role="dialog" aria-labelledby="branchdeleteLargeModalLabel{{ $branchdata->unique_key }}"
-                                    aria-hidden="true">
+                                    aria-hidden="true"data-bs-backdrop="static">
                                     @include('page.backend.branch.edit')
                                 </div>
 
                                 <div class="modal fade branchdelete-modal-xl{{ $branchdata->unique_key }}"
-                                    tabindex="-1" role="dialog"
+                                    tabindex="-1" role="dialog" data-bs-backdrop="static"
                                     aria-labelledby="branchdeleteLargeModalLabel{{ $branchdata->unique_key }}"
                                     aria-hidden="true">
                                     @include('page.backend.branch.delete')

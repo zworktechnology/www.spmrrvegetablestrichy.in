@@ -29,6 +29,8 @@
 
    var j = 1;
    var i = 1;
+   var m = 1;
+   var n = 2;
     $(document).ready(function() {
         $("#addproductfields").click(function() {
          ++i;
@@ -126,6 +128,8 @@
             });
         });
 
+
+
     });
 
 
@@ -200,6 +204,10 @@
                 var old_balance = $(".old_balance").val();
                 var grand_total = Number(old_balance) + Number(gross_amount);
                 $('.grand_total').val(grand_total.toFixed(2));
+
+                var payable_amount = $(".payable_amount").val();
+                var pending_amount = Number(grand_total) - Number(payable_amount);
+                $('.pending_amount').val(pending_amount.toFixed(2));
             });   
             
             $(document).on("keyup", 'input.payable_amount', function() { 
@@ -248,6 +256,10 @@
                 var old_balance = $(".old_balance").val();
                 var grand_total = Number(old_balance) + Number(gross_amount);
                 $('.grand_total').val(grand_total.toFixed(2));
+
+                var payable_amount = $(".payable_amount").val();
+                var pending_amount = Number(grand_total) - Number(payable_amount);
+                $('.pending_amount').val(pending_amount.toFixed(2));
             });   
             
             $(document).on("keyup", 'input.payable_amount', function() { 
@@ -444,6 +456,10 @@ $(document).on('click', '.remove-salestr', function() {
                 var sales_old_balance = $(".sales_old_balance").val();
                 var sales_grand_total = Number(sales_old_balance) + Number(sales_gross_amount);
                 $('.sales_grand_total').val(sales_grand_total.toFixed(2));
+
+                var salespayable_amount = $(".salespayable_amount").val();
+                var sales_pending_amount = Number(sales_grand_total) - Number(salespayable_amount);
+                $('.sales_pending_amount').val(sales_pending_amount.toFixed(2));
             });   
             
             $(document).on("keyup", 'input.salespayable_amount', function() { 
@@ -493,6 +509,10 @@ $(document).on('click', '.remove-salestr', function() {
                 var sales_old_balance = $(".sales_old_balance").val();
                 var sales_grand_total = Number(sales_old_balance) + Number(sales_gross_amount);
                 $('.sales_grand_total').val(sales_grand_total.toFixed(2));
+
+                var salespayable_amount = $(".salespayable_amount").val();
+                var sales_pending_amount = Number(sales_grand_total) - Number(salespayable_amount);
+                $('.sales_pending_amount').val(sales_pending_amount.toFixed(2));
             });   
             
             $(document).on("keyup", 'input.salespayable_amount', function() { 
@@ -502,6 +522,8 @@ $(document).on('click', '.remove-salestr', function() {
                 $('.sales_pending_amount').val(sales_pending_amount.toFixed(2));
             });   
       });
+
+
 
 
 </script>
