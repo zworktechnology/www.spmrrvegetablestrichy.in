@@ -67,7 +67,10 @@ class PurchaseController extends Controller
         $randomkey = Str::random(5);
         
         $supplier_id = $request->get('supplier_id');
+        $branchdata_s = $request->get('branch_id');
+        $payable_amount = $request->get('payable_amount');
 
+                        
         $data = new Purchase();
 
         $data->unique_key = $randomkey;
@@ -347,4 +350,8 @@ class PurchaseController extends Controller
         }
         echo json_encode($userData);
     }
+
+
+
+    
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Supplier;
+use App\Models\Branch;
+use App\Models\Purchase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -11,7 +13,6 @@ class SupplierController extends Controller
     public function index()
     {
         $data = Supplier::where('soft_delete', '!=', 1)->get();
-
         return view('page.backend.supplier.index', compact('data'));
     }
 
@@ -63,6 +64,53 @@ class SupplierController extends Controller
         $data->update();
 
         return redirect()->route('supplier.index')->with('soft_destroy', 'Successfully deleted the Supplier !');
+    }
+
+
+    public function checkbalance($id)
+    {
+       
+        $supplier = Supplier::findOrFail($id);
+        $suppliername = $supplier->name;
+
+        $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $supplier_output = [];
+        $total_amount = 0;
+        foreach ($branch as $key => $get_all_branch) {
+
+            $get_all_balance = Purchase::where('soft_delete', '!=', 1)
+                                        ->where('status', '!=', 1)
+                                        ->where('supplier_id', '=', $id)
+                                        ->where('branch_id', '=', $get_all_branch->id)
+                                        ->latest('id')
+                                        ->first();
+            
+           if($get_all_balance != ""){
+
+                $total_amount += $get_all_balance->balance_amount;
+                
+                $supplier_output[] = array(
+                    'total' => $get_all_balance->balance_amount,
+                    'total_amount' => $total_amount,
+                    'branch' => $get_all_branch->name,
+                );
+           }else {
+                $supplier_output[] = array(
+                    'total' => '',
+                    'total_amount' => '',
+                    'branch' => '',
+                );
+           }
+
+                
+            
+            
+
+            
+            
+        }
+        
+        return view('page.backend.supplier.checkbalance', compact('supplier_output', 'suppliername', 'total_amount'));
     }
 
 }

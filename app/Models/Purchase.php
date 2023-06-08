@@ -25,6 +25,7 @@ class Purchase extends Model
         'grand_total',
         'paid_amount',
         'balance_amount',
+        'paid_status',
         'status',
         'soft_delete'
     ];

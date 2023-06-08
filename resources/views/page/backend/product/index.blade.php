@@ -58,13 +58,13 @@
                                     </tr>
 
                                     <div class="modal fade productedit-modal-xl{{ $producttdata['unique_key'] }}" tabindex="-1"
-                                        role="dialog" aria-labelledby="producteditLargeModalLabel{{ $producttdata['unique_key'] }}"
+                                        role="dialog" data-bs-backdrop="static" aria-labelledby="producteditLargeModalLabel{{ $producttdata['unique_key'] }}"
                                         aria-hidden="true">
                                         @include('page.backend.product.edit')
                                     </div>
 
                                     <div class="modal fade productdelete-modal-xl{{ $producttdata['unique_key'] }}"
-                                        tabindex="-1" role="dialog"
+                                        tabindex="-1" data-bs-backdrop="static" role="dialog"
                                         aria-labelledby="productdeleteLargeModalLabel{{ $producttdata['unique_key'] }}"
                                         aria-hidden="true">
                                         @include('page.backend.product.delete')
