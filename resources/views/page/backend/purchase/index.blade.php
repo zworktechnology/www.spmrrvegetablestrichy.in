@@ -13,39 +13,27 @@
 
 
         <div class="row">
-            @foreach ($allbranch as $keydata => $allbranches)
-            <div class="col-lg-3 col-sm-6 col-12">
-                <a href="{{ route('purchase.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
-                    <div class="dash-widget">
-                        <div class="dash-widgetimg">
-                            <span><img src="{{ asset('assets/backend/img/icons/dash1.svg') }}" alt="img"></span>
-                        </div>
-                        <div class="dash-widgetcontent">
-                            <h5>{{ $allbranches->name }}</h5>
-                            <h6></h6>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            @endforeach  
-            <div class="col-lg-3 col-sm-6 col-12">
+
+            <div class="col-lg-2 col-sm-4 col-6">
                 <a href="{{ route('purchase.index') }}" style="color: black">
                     <div class="dash-widget">
-                        <div class="dash-widgetimg">
-                            <span><img src="{{ asset('assets/backend/img/icons/dash1.svg') }}" alt="img"></span>
-                        </div>
                         <div class="dash-widgetcontent">
-                            <h5>All</h5>
-                            <h6></h6>
+                            <h6 style="font-weight: bold;">All</h6>
                         </div>
                     </div>
                 </a>
-            <div style="display: flex; margin-bottom: 10px;">
-                <a href="" style="color: white; margin-left: 10px; " class="badges bg-lightyellow">All</a>
-                @foreach ($allbranch as $keydata => $allbranches)
-                    <a href="" style="color: white; margin-left: 10px; " class="badges bg-lightyellow">{{ $allbranches->name }}</a>
-                @endforeach
             </div>
+            @foreach ($allbranch as $keydata => $allbranches)
+            <div class="col-lg-2 col-sm-4 col-6">
+                <a href="{{ route('purchase.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
+                    <div class="dash-widget">
+                        <div class="dash-widgetcontent">
+                            <h6 style="font-weight: bold;">{{ $allbranches->name }}</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            @endforeach
         </div>
 
         <div class="card">
