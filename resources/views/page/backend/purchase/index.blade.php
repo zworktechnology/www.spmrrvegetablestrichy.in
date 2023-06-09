@@ -7,7 +7,7 @@
                 <h4>Purchase</h4>
             </div>
             <div class="page-btn">
-            <a href="{{ route('purchase.create') }}" class="btn btn-added">Add Purchase</a>
+                <a href="{{ route('purchase.create') }}" class="btn btn-added">Add Purchase</a>
             </div>
         </div>
 
@@ -40,6 +40,11 @@
                         </div>
                     </div>
                 </a>
+            <div style="display: flex; margin-bottom: 10px;">
+                <a href="" style="color: white; margin-left: 10px; " class="badges bg-lightyellow">All</a>
+                @foreach ($allbranch as $keydata => $allbranches)
+                    <a href="" style="color: white; margin-left: 10px; " class="badges bg-lightyellow">{{ $allbranches->name }}</a>
+                @endforeach
             </div>
         </div>
 
@@ -61,7 +66,8 @@
                             @foreach ($purchase_data as $keydata => $purchasedata)
                                 <tr>
                                     <td>#{{ $purchasedata['bill_no'] }}</td>
-                                    <td>{{ date('d M Y', strtotime($purchasedata['date'])) }} - {{ date('h:i A', strtotime($purchasedata['date'])) }}</td>
+                                    <td>{{ date('d M Y', strtotime($purchasedata['date'])) }} -
+                                        {{ date('h:i A', strtotime($purchasedata['date'])) }}</td>
                                     <td>{{ $purchasedata['supplier_name'] }}</td>
                                     <td>{{ $purchasedata['branch_name'] }}</td>
                                     <td>{{ $purchasedata['gross_amount'] }}</td>
@@ -69,18 +75,22 @@
                                         <ul class="list-unstyled hstack gap-1 mb-0">
                                             <li>
 
-                                                <a href="{{ route('purchase.edit', ['unique_key' => $purchasedata['unique_key']]) }}" class="badges bg-lightyellow" style="color: white">Edit</a>
+                                                <a href="{{ route('purchase.edit', ['unique_key' => $purchasedata['unique_key']]) }}"
+                                                    class="badges bg-lightyellow" style="color: white">Edit</a>
                                             </li>
                                             <li hidden>
                                                 <a href="#delete{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
                                                     data-id="{{ $purchasedata['unique_key'] }}"
-                                                    data-bs-target=".purchasedelete-modal-xl{{ $purchasedata['unique_key'] }}" class="badges bg-lightgrey" style="color: white">Delete</a>
+                                                    data-bs-target=".purchasedelete-modal-xl{{ $purchasedata['unique_key'] }}"
+                                                    class="badges bg-lightgrey" style="color: white">Delete</a>
                                             </li>
                                             <li>
-                                                <a href="{{ route('purchase.view', ['unique_key' => $purchasedata['unique_key']]) }}" class="badges bg-lightred" style="color: white">View</a>
+                                                <a href="{{ route('purchase.view', ['unique_key' => $purchasedata['unique_key']]) }}"
+                                                    class="badges bg-lightred" style="color: white">View</a>
                                             </li>
                                             <li>
-                                                <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}" class="badges bg-lightgreen" style="color: white">Invoice</a>
+                                                <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
+                                                    class="badges bg-lightgreen" style="color: white">Invoice</a>
                                             </li>
                                         </ul>
                                     </td>
@@ -101,7 +111,7 @@
             </div>
         </div>
 
-        
+
 
 
     </div>
