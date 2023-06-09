@@ -26,4 +26,9 @@ class Branch extends Model
     {
         return $this->hasMany(Purchase::class, 'branch_id');
     }
+
+    public function expence()
+    {
+        return $this->hasMany(Expence::class, 'branch_id');
+    }
 }

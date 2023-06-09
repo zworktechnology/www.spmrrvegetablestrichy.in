@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductlistController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\ExpenceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -58,7 +59,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // DELETE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/branch/delete/{unique_key}', [BranchController::class, 'delete'])->name('branch.delete');
     });
-    
+
     // CUSTOMER CONTROLLER
     Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // INDEX
@@ -96,6 +97,19 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/unit/edit/{unique_key}', [UnitController::class, 'edit'])->name('unit.edit');
         // DELETE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/unit/delete/{unique_key}', [UnitController::class, 'delete'])->name('unit.delete');
+    });
+
+
+    // EXPENCE CONTROLLER
+    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+        // INDEX
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/expence', [ExpenceController::class, 'index'])->name('expence.index');
+        // STORE
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/expence/store', [ExpenceController::class, 'store'])->name('expence.store');
+        // EDIT
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/expence/edit/{unique_key}', [ExpenceController::class, 'edit'])->name('expence.edit');
+        // DELETE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/expence/delete/{unique_key}', [ExpenceController::class, 'delete'])->name('expence.delete');
     });
 
 

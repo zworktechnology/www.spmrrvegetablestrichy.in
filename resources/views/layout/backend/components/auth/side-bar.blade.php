@@ -19,6 +19,9 @@
                         <li class="{{ Route::is('sales.index', 'sales.store') ? 'active' : '' }}">
                             <a href="{{ route('sales.index') }}"><i data-feather="shopping-bag"></i><span>Sales</span></a>
                         </li>
+                        <li class="{{ Route::is('expence.index', 'expence.store') ? 'active' : '' }}">
+                            <a href="{{ route('expence.index') }}"><i data-feather="shopping-bag"></i><span>Expence</span></a>
+                        </li>
                     </ul>
                 </li>
                 <li class="submenu-open">
