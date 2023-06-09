@@ -36,7 +36,8 @@ class PurchaseController extends Controller
                 'bill_no' => $datas->bill_no,
             );
         }
-        return view('page.backend.purchase.index', compact('purchase_data'));
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch'));
     }
 
 
@@ -321,6 +322,22 @@ class PurchaseController extends Controller
     public function invoice($unique_key)
     {
         return view('page.backend.purchase.invoice');
+    }
+
+
+
+    public function view($unique_key) {
+
+        $PurchaseData = Purchase::where('unique_key', '=', $unique_key)->first();
+
+        $suppliername = Supplier::where('id', '=', $PurchaseData->supplier_id)->first();
+        $branchname = Branch::where('id', '=', $PurchaseData->branch_id)->first();
+        $bankname = Bank::where('id', '=', $PurchaseData->bank_id)->first();
+
+        $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $PurchaseData->id)->get();
+
+        return view('page.backend.purchase.view', compact('PurchaseData', 'suppliername', 'branchname', 'bankname', 'PurchaseProducts', 'productlist'));
     }
 
 

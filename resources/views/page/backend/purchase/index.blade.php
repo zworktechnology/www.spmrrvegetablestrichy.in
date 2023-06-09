@@ -11,6 +11,24 @@
             </div>
         </div>
 
+
+        <div class="row">
+        @foreach ($allbranch as $keydata => $allbranches)
+            <div class="col-lg-3 col-sm-6 col-12">
+                <div class="dash-widget">
+                    <div class="dash-widgetimg">
+                        <span><img src="{{ asset('assets/backend/img/icons/dash1.svg') }}" alt="img"></span>
+                    </div>
+                    <div class="dash-widgetcontent">
+                        <h5><a href="" style="color: black">{{ $allbranches->name }}</a></h5>
+                        <h6></h6>
+                    </div>
+                </div>
+            </div>
+         @endforeach  
+            
+        </div>
+
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
@@ -43,6 +61,9 @@
                                                 <a href="#delete{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
                                                     data-id="{{ $purchasedata['unique_key'] }}"
                                                     data-bs-target=".purchasedelete-modal-xl{{ $purchasedata['unique_key'] }}" class="badges bg-lightgrey" style="color: white">Delete</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ route('purchase.view', ['unique_key' => $purchasedata['unique_key']]) }}" class="badges bg-lightred" style="color: white">View</a>
                                             </li>
                                             <li>
                                                 <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}" class="badges bg-lightgreen" style="color: white">Invoice</a>
