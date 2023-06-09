@@ -41,6 +41,30 @@ class PurchaseController extends Controller
     }
 
 
+    public function branchdata($branch_id)
+    {
+        $branchwise_data = Purchase::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $purchase_data = [];
+        foreach ($branchwise_data as $key => $branchwise_datas) {
+            $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+            $supplier_name = Supplier::findOrFail($branchwise_datas->supplier_id);
+
+
+            $purchase_data[] = array(
+                'unique_key' => $branchwise_datas->unique_key,
+                'branch_name' => $branch_name->name,
+                'supplier_name' => $supplier_name->name,
+                'date' => $branchwise_datas->date,
+                'time' => $branchwise_datas->time,
+                'gross_amount' => $branchwise_datas->gross_amount,
+                'bill_no' => $branchwise_datas->bill_no,
+            );
+        }
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'branch_id'));
+    }
+
+
     public function create()
     {
         $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();

@@ -129,6 +129,48 @@
         });
 
 
+           // $('.checkbalance').each(function() {
+                //        $(this).on('click', function(e) {
+                 //          e.preventDefault();
+                 //          var $this = $(this),
+                 //          supplierid = $this.attr('data-id');
+                            //alert(supplierid);
+
+                            
+
+                  //          $.ajax({
+                  //              url: '/getsupplierbalance/',
+                  //              type: 'get',
+                   //             data: {
+                   //                         _token: "{{ csrf_token() }}",
+                   //                         supplierid: supplierid
+                  //                      },
+                   //             dataType: 'json',
+                  //                  success: function(response) {
+                                        
+                  //                      var len = response.length;
+                                       
+                   //                     if (len > 0) {
+                   //                         for (var i = 0; i < len; i++) {
+                    //                            var total = response[0].total;
+                    //                            console.log(total);
+                                                
+                    //                            $('#supplier_balance' + m).html(total);
+                    //                            $('#suppliertotal').html(response[i].total_amount.toFixed(2));
+                    //                        }
+                    //                       for (var i = 0; i < len; i++) {
+                    //                            var total1 = response[1].total;
+                    //                            console.log(total1);
+                                                
+                    //                            $('#supplier_balance' + n).html(total1);
+                    //                        }
+                    //                    }
+                     //               }
+                    //            });
+
+
+                    //    });
+                    // });
 
     });
 

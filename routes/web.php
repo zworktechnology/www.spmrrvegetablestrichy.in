@@ -153,7 +153,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/delete/{unique_key}', [PurchaseController::class, 'delete'])->name('purchase.delete');
         // VIEW
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchase/view/{unique_key}', [PurchaseController::class, 'view'])->name('purchase.view');
-        
+        // INDEX BRANCH WISE
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchase/branchdata/{branch_id}', [PurchaseController::class, 'branchdata'])->name('purchase.branchdata');
     });
 
 
