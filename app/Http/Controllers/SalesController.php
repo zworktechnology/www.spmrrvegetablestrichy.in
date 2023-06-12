@@ -55,10 +55,52 @@ class SalesController extends Controller
                 'sales_terms' => $sales_terms,
             );
         }
-        return view('page.backend.sales.index', compact('Sales_data'));
+
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        return view('page.backend.sales.index', compact('Sales_data','allbranch'));
     }
 
 
+    public function branchdata($branch_id)
+    {
+        $branchwise_data = Sales::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $Sales_data = [];
+        $sales_terms = [];
+        foreach ($branchwise_data as $key => $branchwise_datas) {
+            $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+            $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+            $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+            foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                $sales_terms[] = array(
+                    'bag' => $SalesProducts_arrdata->bag,
+                    'kgs' => $SalesProducts_arrdata->kgs,
+                    'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                    'total_price' => $SalesProducts_arrdata->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                );
+            }
+
+            $Sales_data[] = array(
+                'unique_key' => $branchwise_datas->unique_key,
+                'branch_name' => $branch_name->name,
+                'customer_name' => $customer_name->name,
+                'date' => $branchwise_datas->date,
+                'time' => $branchwise_datas->time,
+                'gross_amount' => $branchwise_datas->gross_amount,
+                'bill_no' => $branchwise_datas->bill_no,
+                'id' => $branchwise_datas->id,
+                'sales_terms' => $sales_terms,
+            );
+        }
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        return view('page.backend.sales.index', compact('Sales_data', 'allbranch', 'branch_id'));
+    }
 
     public function create()
     {

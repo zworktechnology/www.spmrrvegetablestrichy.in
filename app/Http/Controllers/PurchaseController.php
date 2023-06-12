@@ -71,6 +71,21 @@ class PurchaseController extends Controller
             $supplier_name = Supplier::findOrFail($branchwise_datas->supplier_id);
 
 
+            $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $branchwise_datas->id)->get();
+            foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                $terms[] = array(
+                    'bag' => $PurchaseProducts_arrdata->bag,
+                    'kgs' => $PurchaseProducts_arrdata->kgs,
+                    'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                    'total_price' => $PurchaseProducts_arrdata->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                );
+            }
+
             $purchase_data[] = array(
                 'unique_key' => $branchwise_datas->unique_key,
                 'branch_name' => $branch_name->name,
@@ -79,6 +94,8 @@ class PurchaseController extends Controller
                 'time' => $branchwise_datas->time,
                 'gross_amount' => $branchwise_datas->gross_amount,
                 'bill_no' => $branchwise_datas->bill_no,
+                'id' => $branchwise_datas->id,
+                'terms' => $terms,
             );
         }
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -110,92 +127,208 @@ class PurchaseController extends Controller
     public function store(Request $request)
     {
         // Purchase Table
-        $randomkey = Str::random(5);
-
-        $supplier_id = $request->get('supplier_id');
-        $branchdata_s = $request->get('branch_id');
-        $payable_amount = $request->get('payable_amount');
+        $save = $request->get('submit');
+        $saveandprint = $request->get('saveandprint');
+        if($save == 'Save'){
 
 
-        $data = new Purchase();
+            $randomkey = Str::random(5);
 
-        $data->unique_key = $randomkey;
-        $data->supplier_id = $request->get('supplier_id');
-        $data->branch_id = $request->get('branch_id');
-        $data->date = $request->get('date');
-        $data->time = $request->get('time');
-        $data->bill_no = $request->get('billno');
-        $data->bank_id = $request->get('bank_id');
-        $data->total_amount = $request->get('total_amount');
-        $data->note = $request->get('extracost_note');
-        $data->extra_cost = $request->get('extracost');
-        $data->gross_amount = $request->get('gross_amount');
-        $data->old_balance = $request->get('old_balance');
-        $data->grand_total = $request->get('grand_total');
-        $data->paid_amount = $request->get('payable_amount');
-        $data->balance_amount = $request->get('pending_amount');
-        $data->save();
-
-        $insertedId = $data->id;
-
-        // Purchase Products Table
-        foreach ($request->get('product_id') as $key => $product_id) {
-
-            $pprandomkey = Str::random(5);
-
-            $PurchaseProduct = new PurchaseProduct;
-            $PurchaseProduct->unique_key = $pprandomkey;
-            $PurchaseProduct->purchase_id = $insertedId;
-            $PurchaseProduct->productlist_id = $product_id;
-            $PurchaseProduct->bag = $request->bag[$key];
-            $PurchaseProduct->kgs = $request->kgs[$key];
-            $PurchaseProduct->price_per_kg = $request->price_per_kg[$key];
-            $PurchaseProduct->total_price = $request->total_price[$key];
-            $PurchaseProduct->save();
-
-            $product_ids = $request->product_id[$key];
+            $supplier_id = $request->get('supplier_id');
+            $branchdata_s = $request->get('branch_id');
+            $payable_amount = $request->get('payable_amount');
 
 
-            $branch_id = $request->get('branch_id');
-            $product_Data = Product::where('productlist_id', '=', $product_ids)->where('branchtable_id', '=', $branch_id)->first();
+            $data = new Purchase();
 
-            if($product_Data != ""){
-                if($branch_id == $product_Data->branchtable_id){
+            $data->unique_key = $randomkey;
+            $data->supplier_id = $request->get('supplier_id');
+            $data->branch_id = $request->get('branch_id');
+            $data->date = $request->get('date');
+            $data->time = $request->get('time');
+            $data->bill_no = $request->get('billno');
+            $data->bank_id = $request->get('bank_id');
+            $data->total_amount = $request->get('total_amount');
+            $data->note = $request->get('extracost_note');
+            $data->extra_cost = $request->get('extracost');
+            $data->gross_amount = $request->get('gross_amount');
+            $data->old_balance = $request->get('old_balance');
+            $data->grand_total = $request->get('grand_total');
+            $data->paid_amount = $request->get('payable_amount');
+            $data->balance_amount = $request->get('pending_amount');
+            $data->save();
 
-                    $bag_count = $product_Data->available_stockin_bag;
-                    $kg_count = $product_Data->available_stockin_kilograms;
+            $insertedId = $data->id;
 
-                    $New_bagcount = $request->bag[$key];
-                    $New_kgcount = $request->kgs[$key];
+            // Purchase Products Table
+            foreach ($request->get('product_id') as $key => $product_id) {
 
-                    $totalbag_count = $bag_count + $New_bagcount;
-                    $totalkg_count = $kg_count + $New_kgcount;
+                $pprandomkey = Str::random(5);
 
-                    DB::table('products')->where('productlist_id', $product_ids)->where('branchtable_id', $branch_id)->update([
-                        'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
-                    ]);
+                $PurchaseProduct = new PurchaseProduct;
+                $PurchaseProduct->unique_key = $pprandomkey;
+                $PurchaseProduct->purchase_id = $insertedId;
+                $PurchaseProduct->productlist_id = $product_id;
+                $PurchaseProduct->bag = $request->bag[$key];
+                $PurchaseProduct->kgs = $request->kgs[$key];
+                $PurchaseProduct->price_per_kg = $request->price_per_kg[$key];
+                $PurchaseProduct->total_price = $request->total_price[$key];
+                $PurchaseProduct->save();
+
+                $product_ids = $request->product_id[$key];
+
+
+                $branch_id = $request->get('branch_id');
+                $product_Data = Product::where('productlist_id', '=', $product_ids)->where('branchtable_id', '=', $branch_id)->first();
+
+                if($product_Data != ""){
+                    if($branch_id == $product_Data->branchtable_id){
+
+                        $bag_count = $product_Data->available_stockin_bag;
+                        $kg_count = $product_Data->available_stockin_kilograms;
+
+                        $New_bagcount = $request->bag[$key];
+                        $New_kgcount = $request->kgs[$key];
+
+                        $totalbag_count = $bag_count + $New_bagcount;
+                        $totalkg_count = $kg_count + $New_kgcount;
+
+                        DB::table('products')->where('productlist_id', $product_ids)->where('branchtable_id', $branch_id)->update([
+                            'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
+                        ]);
+                    }
+                }else {
+                        $product_randomkey = Str::random(5);
+
+                        $New_bagcount = $request->bag[$key];
+                        $New_kgcount = $request->kgs[$key];
+
+                        $ProductlistData = new Product;
+                        $ProductlistData->unique_key = $product_randomkey;
+                        $ProductlistData->productlist_id = $product_ids;
+                        $ProductlistData->branchtable_id = $branch_id;
+                        $ProductlistData->available_stockin_bag = $New_bagcount;
+                        $ProductlistData->available_stockin_kilograms = $New_kgcount;
+                        $ProductlistData->save();
+
+
                 }
-            }else {
-                    $product_randomkey = Str::random(5);
-
-                    $New_bagcount = $request->bag[$key];
-                    $New_kgcount = $request->kgs[$key];
-
-                    $ProductlistData = new Product;
-                    $ProductlistData->unique_key = $product_randomkey;
-                    $ProductlistData->productlist_id = $product_ids;
-                    $ProductlistData->branchtable_id = $branch_id;
-                    $ProductlistData->available_stockin_bag = $New_bagcount;
-                    $ProductlistData->available_stockin_kilograms = $New_kgcount;
-                    $ProductlistData->save();
 
 
             }
 
 
+            
+            return redirect()->route('purchase.index')->with('add', 'Purchase Data added successfully!');
+
+        }
+        if($saveandprint == 'Save & Print'){
+
+
+            $randomkey = Str::random(5);
+
+            $supplier_id = $request->get('supplier_id');
+            $branchdata_s = $request->get('branch_id');
+            $payable_amount = $request->get('payable_amount');
+
+
+            $data = new Purchase();
+
+            $data->unique_key = $randomkey;
+            $data->supplier_id = $request->get('supplier_id');
+            $data->branch_id = $request->get('branch_id');
+            $data->date = $request->get('date');
+            $data->time = $request->get('time');
+            $data->bill_no = $request->get('billno');
+            $data->bank_id = $request->get('bank_id');
+            $data->total_amount = $request->get('total_amount');
+            $data->note = $request->get('extracost_note');
+            $data->extra_cost = $request->get('extracost');
+            $data->gross_amount = $request->get('gross_amount');
+            $data->old_balance = $request->get('old_balance');
+            $data->grand_total = $request->get('grand_total');
+            $data->paid_amount = $request->get('payable_amount');
+            $data->balance_amount = $request->get('pending_amount');
+            $data->save();
+
+            $insertedId = $data->id;
+
+            // Purchase Products Table
+            foreach ($request->get('product_id') as $key => $product_id) {
+
+                $pprandomkey = Str::random(5);
+
+                $PurchaseProduct = new PurchaseProduct;
+                $PurchaseProduct->unique_key = $pprandomkey;
+                $PurchaseProduct->purchase_id = $insertedId;
+                $PurchaseProduct->productlist_id = $product_id;
+                $PurchaseProduct->bag = $request->bag[$key];
+                $PurchaseProduct->kgs = $request->kgs[$key];
+                $PurchaseProduct->price_per_kg = $request->price_per_kg[$key];
+                $PurchaseProduct->total_price = $request->total_price[$key];
+                $PurchaseProduct->save();
+
+                $product_ids = $request->product_id[$key];
+
+
+                $branch_id = $request->get('branch_id');
+                $product_Data = Product::where('productlist_id', '=', $product_ids)->where('branchtable_id', '=', $branch_id)->first();
+
+                if($product_Data != ""){
+                    if($branch_id == $product_Data->branchtable_id){
+
+                        $bag_count = $product_Data->available_stockin_bag;
+                        $kg_count = $product_Data->available_stockin_kilograms;
+
+                        $New_bagcount = $request->bag[$key];
+                        $New_kgcount = $request->kgs[$key];
+
+                        $totalbag_count = $bag_count + $New_bagcount;
+                        $totalkg_count = $kg_count + $New_kgcount;
+
+                        DB::table('products')->where('productlist_id', $product_ids)->where('branchtable_id', $branch_id)->update([
+                            'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
+                        ]);
+                    }
+                }else {
+                        $product_randomkey = Str::random(5);
+
+                        $New_bagcount = $request->bag[$key];
+                        $New_kgcount = $request->kgs[$key];
+
+                        $ProductlistData = new Product;
+                        $ProductlistData->unique_key = $product_randomkey;
+                        $ProductlistData->productlist_id = $product_ids;
+                        $ProductlistData->branchtable_id = $branch_id;
+                        $ProductlistData->available_stockin_bag = $New_bagcount;
+                        $ProductlistData->available_stockin_kilograms = $New_kgcount;
+                        $ProductlistData->save();
+
+
+                }
+
+
+            }
+
+            $PurchaseData = Purchase::where('unique_key', '=', $randomkey)->first();
+
+            $suppliername = Supplier::where('id', '=', $PurchaseData->supplier_id)->first();
+            $branchname = Branch::where('id', '=', $PurchaseData->branch_id)->first();
+            $bankname = Bank::where('id', '=', $PurchaseData->bank_id)->first();
+
+            $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $PurchaseData->id)->get();
+            
+
+            return redirect()->route('purchase.print_view', ['PurchaseData' => $PurchaseData, 'suppliername' => $suppliername, 'branchname' => $branchname, 'bankname' => $bankname, 'productlist' => $productlist, 'PurchaseProducts' => $PurchaseProducts, 'unique_key' => $randomkey])->with('add', 'Purchase Data added successfully!');
+
+
+
         }
 
-        return redirect()->route('purchase.index')->with('add', 'Purchase Data added successfully!');
+        
+
+        
     }
 
 
@@ -371,7 +504,7 @@ class PurchaseController extends Controller
 
 
 
-    public function view($unique_key) {
+    public function print_view($unique_key) {
 
         $PurchaseData = Purchase::where('unique_key', '=', $unique_key)->first();
 
@@ -382,7 +515,7 @@ class PurchaseController extends Controller
         $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $PurchaseData->id)->get();
 
-        return view('page.backend.purchase.view', compact('PurchaseData', 'suppliername', 'branchname', 'bankname', 'PurchaseProducts', 'productlist'));
+        return view('page.backend.purchase.print_view', compact('PurchaseData', 'suppliername', 'branchname', 'bankname', 'PurchaseProducts', 'productlist'));
     }
 
 

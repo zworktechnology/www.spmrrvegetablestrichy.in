@@ -18,7 +18,7 @@
                <div class="col-lg-16 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Supplier<span style="color: red;">*</span> </label>
-                     <select class="select" name="supplier_id" id="supplier_id">
+                     <select class="select" name="supplier_id" id="supplier_id" required>
                         <option value="" disabled selected hiddden>Select Supplier</option>
                            @foreach ($supplier as $suppliers)
                               <option value="{{ $suppliers->id }}">{{ $suppliers->name }}</option>
@@ -30,7 +30,7 @@
                <div class="col-lg-16 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Branch<span style="color: red;">*</span></label>
-                     <select class="select branch_id" name="branch_id" id="branch_id">
+                     <select class="select branch_id" name="branch_id" id="branch_id" required>
                         <option value="" disabled selected hiddden>Select Branch</option>
                            @foreach ($branch as $branches)
                               <option value="{{ $branches->id }}">{{ $branches->name }}</option>
@@ -42,14 +42,14 @@
                <div class="col-lg-6 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Date<span style="color: red;">*</span></label>
-                     <input type="date" name="date" placeholder="" value="{{ $today }}">
+                     <input type="date" name="date" placeholder="" value="{{ $today }}" required>
                   </div>
                </div>
 
                <div class="col-lg-6 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span style="color: red;">*</span></label>
-                     <input type="time" name="time" placeholder="" value="{{ $timenow }}">
+                     <input type="time" name="time" placeholder="" value="{{ $timenow }}" required>
                   </div>
                </div>
 
@@ -64,7 +64,7 @@
                <div class="col-lg-16 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank<span style="color: red;">*</span></label>
-                     <select class="select" name="bank_id" id="bank_id">
+                     <select class="select" name="bank_id" id="bank_id" required>
                         <option value="" disabled selected hiddden>Select Bank</option>
                         @foreach ($bank as $banks)
                            <option value="{{ $banks->id }}">{{ $banks->name }}</option>
@@ -121,9 +121,9 @@
                            
                         </tr>
                         <tr>
-                           <td colspan="3"><input type="text" class="form-control" id="extracost_note" placeholder="Note" name="extracost_note" required/></td>
+                           <td colspan="3"><input type="text" class="form-control" id="extracost_note" placeholder="Note" name="extracost_note"/></td>
                            <td style="font-size:15px;color: black;" class="text-end">Extra Cost<span style="color: red;">*</span></td>
-                           <td><input type="text" class="form-control extracost" id="extracost" placeholder="Extra Cost" name="extracost"/></td>
+                           <td><input type="text" class="form-control extracost" id="extracost" placeholder="Extra Cost" name="extracost" value="0"/></td>
                         </tr>
                         <tr>
                            <td colspan="4" class="text-end" style="font-size:15px;color: black;">Gross Amount</td>
@@ -139,7 +139,7 @@
                         </tr>
                         <tr>
                            <td colspan="4" class="text-end" style="font-size:15px;color: black;">Payable Amount<span style="color: red;">*</span></td>
-                           <td><input type="text" class="form-control payable_amount" name="payable_amount" placeholder="Payable Amount" id="payable_amount"></td>
+                           <td><input type="text" class="form-control payable_amount" name="payable_amount" placeholder="Payable Amount" id="payable_amount" required></td>
                         </tr>
                         <tr>
                            <td colspan="4" class="text-end" style="font-size:15px;color: black;">Pending Amount</td>
@@ -154,7 +154,8 @@
 
             
             <div class="modal-footer">
-               <input type="submit" class="btn btn-primary" name="submit" value="submit" />
+               <input type="submit" class="btn btn-primary" name="submit" value="Save" />
+               <input type="submit" class="btn btn-success" name="saveandprint" value="Save & Print" />
                <a href="{{ route('purchase.index') }}" class="btn btn-danger" value="">Cancel</a>
             </div>
          </form>

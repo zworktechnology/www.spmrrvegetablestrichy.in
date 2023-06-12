@@ -10,6 +10,29 @@
             <a href="{{ route('sales.create') }}" class="btn btn-added">Add Sales</a>
             </div>
         </div>
+        <div class="row">
+
+            <div class="col-lg-2 col-sm-4 col-6">
+                <a href="{{ route('sales.index') }}" style="color: black">
+                    <div class="dash-widget">
+                        <div class="dash-widgetcontent">
+                            <h6 style="font-weight: bold;">All</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            @foreach ($allbranch as $keydata => $allbranches)
+            <div class="col-lg-2 col-sm-4 col-6">
+                <a href="{{ route('sales.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
+                    <div class="dash-widget">
+                        <div class="dash-widgetcontent">
+                            <h6 style="font-weight: bold;">{{ $allbranches->name }}</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            @endforeach
+        </div>
 
         <div class="card">
             <div class="card-body">
