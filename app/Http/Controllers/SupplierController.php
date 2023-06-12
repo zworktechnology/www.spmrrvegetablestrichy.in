@@ -12,8 +12,8 @@ class SupplierController extends Controller
 {
     public function index()
     {
-        
-        
+
+
 
         $data = Supplier::where('soft_delete', '!=', 1)->get();
         $supplierarr_data = [];
@@ -22,11 +22,7 @@ class SupplierController extends Controller
 
             $total_purchase_amt = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('supplier_id', '=', $datas->id)->sum('grand_total');
             $total_paid = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('supplier_id', '=', $datas->id)->sum('paid_amount');
-            $tot_bal = Purchase::where('soft_delete', '!=', 1)
-                                    ->where('status', '!=', 1)
-                                    ->where('supplier_id', '=', $datas->id)
-                                    ->latest('id')
-                                    ->first();
+            $tot_bal = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('supplier_id', '=', $datas->id)->latest('id')->first();
 
             $supplierarr_data[] = array(
                 'unique_key' => $datas->unique_key,
@@ -41,12 +37,12 @@ class SupplierController extends Controller
                 'shop_address' => $datas->shop_address,
                 'shop_contact_number' => $datas->shop_contact_number,
                 'balance_amount' => $tot_bal->balance_amount,
-            );                    
+            );
         }
         $alldata_branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
 
-        
+
 
         return view('page.backend.supplier.index', compact('supplierarr_data', 'alldata_branch'));
     }
@@ -64,7 +60,7 @@ class SupplierController extends Controller
         $data->shop_name = $request->get('shop_name');
         $data->shop_address = $request->get('shop_address');
         $data->shop_contact_number = $request->get('shop_contact_number');
-        
+
         $data->save();
 
 
@@ -83,7 +79,7 @@ class SupplierController extends Controller
         $SupplierData->shop_address = $request->get('shop_address');
         $SupplierData->shop_contact_number = $request->get('shop_contact_number');
         $SupplierData->status = $request->get('status');
-        
+
         $SupplierData->update();
 
         return redirect()->route('supplier.index')->with('update', 'Supplier Data updated successfully!');
@@ -104,7 +100,7 @@ class SupplierController extends Controller
 
     public function getsupplierbalance()
     {
-       
+
         $supplierid = request()->get('supplierid');
 
         $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -118,11 +114,11 @@ class SupplierController extends Controller
                                         ->where('branch_id', '=', $get_all_branch->id)
                                         ->latest('id')
                                         ->first();
-            
+
            if($get_all_balance != ""){
-            
-                
-                
+
+
+
                 $supplier_output[] = array(
                     'balance_amount' => $get_all_balance->balance_amount,
                     'branch' => $get_all_branch->name,
@@ -138,8 +134,8 @@ class SupplierController extends Controller
                 array('status' => 'false')
             );
         }
-        
-        
+
+
     }
 
 }

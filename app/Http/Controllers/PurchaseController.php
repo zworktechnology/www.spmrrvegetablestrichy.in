@@ -57,8 +57,8 @@ class PurchaseController extends Controller
         }
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
-        
-        
+
+
 
         return view('page.backend.purchase.index', compact('purchase_data', 'allbranch'));
     }
@@ -220,7 +220,7 @@ class PurchaseController extends Controller
             }
 
 
-            
+
             return redirect()->route('purchase.index')->with('add', 'Purchase Data added successfully!');
 
         }
@@ -320,7 +320,7 @@ class PurchaseController extends Controller
 
             $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $PurchaseData->id)->get();
-            
+
 
             return redirect()->route('purchase.print_view', ['PurchaseData' => $PurchaseData, 'suppliername' => $suppliername, 'branchname' => $branchname, 'bankname' => $bankname, 'productlist' => $productlist, 'PurchaseProducts' => $PurchaseProducts, 'unique_key' => $randomkey])->with('add', 'Purchase Data added successfully!');
 
@@ -328,9 +328,9 @@ class PurchaseController extends Controller
 
         }
 
-        
 
-        
+
+
     }
 
 
@@ -498,7 +498,7 @@ class PurchaseController extends Controller
 
     }
 
-    
+
 
 
     public function invoice($unique_key)
@@ -596,7 +596,7 @@ class PurchaseController extends Controller
                 array('status' => 'false')
             );
         }
-        
+
     }
 
 
@@ -617,7 +617,7 @@ class PurchaseController extends Controller
             'terms' => '',
         );
 
-        
+
 
         return view('page.backend.purchase.report', compact('branch', 'supplier', 'purchase_data'));
     }
@@ -633,7 +633,7 @@ class PurchaseController extends Controller
         $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
-        
+
         if($purchasereport_branch != ""){
 
             $branchwise_report = Purchase::where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -658,7 +658,7 @@ class PurchaseController extends Controller
 
                     );
                 }
-                
+
 
                 $purchase_data[] = array(
                     'unique_key' => $branchwise_datas->unique_key,
@@ -686,9 +686,9 @@ class PurchaseController extends Controller
                 'terms' => '',
             );
         }
-        
-        
-        
+
+
+
         if($purchasereport_supplier != ""){
 
             $supplierwise_report = Purchase::where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -747,8 +747,8 @@ class PurchaseController extends Controller
                 'terms' => '',
             );
         }
-        
-        
+
+
         if($purchasereport_fromdate != ""){
 
             $fromdate_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -809,10 +809,10 @@ class PurchaseController extends Controller
                 'terms' => '',
             );
         }
-        
-        
-        
-        
+
+
+
+
         if($purchasereport_todate != ""){
 
             $todate_report = Purchase::where('date', '=', $purchasereport_todate)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -874,9 +874,9 @@ class PurchaseController extends Controller
 
 
 
-        
+
         if($purchasereport_fromdate && $purchasereport_supplier){
-            
+
 
             $datefilter_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $purchase_data = [];
@@ -917,7 +917,7 @@ class PurchaseController extends Controller
                     'terms' => $todate_terms,
                 );
 
-            }            
+            }
 
 
         }else{
@@ -978,7 +978,7 @@ class PurchaseController extends Controller
                     'terms' => $todate_terms,
                 );
 
-            }            
+            }
 
 
         }else{
@@ -1041,7 +1041,7 @@ class PurchaseController extends Controller
                     'terms' => $todate_terms,
                 );
 
-            }            
+            }
 
         }else{
 
@@ -1102,7 +1102,7 @@ class PurchaseController extends Controller
                     'terms' => $todate_terms,
                 );
 
-            }          
+            }
 
         }else{
 
@@ -1166,7 +1166,7 @@ class PurchaseController extends Controller
                     'terms' => $todate_terms,
                 );
 
-            }           
+            }
         }else{
 
             $purchase_data[] = array(
@@ -1227,7 +1227,7 @@ class PurchaseController extends Controller
                     'terms' => $todate_terms,
                 );
 
-            } 
+            }
 
 
         }else{
@@ -1291,7 +1291,7 @@ class PurchaseController extends Controller
                     'terms' => $todate_terms,
                 );
 
-            }       
+            }
 
 
 
@@ -1356,7 +1356,7 @@ class PurchaseController extends Controller
                     'terms' => $todate_terms,
                     );
 
-            }       
+            }
 
 
 
@@ -1374,11 +1374,11 @@ class PurchaseController extends Controller
                 'terms' => '',
             );
         }
-        
-        
-        
 
-        return view('page.backend.purchase.report', compact('purchasereport_fromdate', 'branch', 'supplier', 'purchasereport_todate','purchasereport_branch', 'purchasereport_supplier', 'purchase_data'));
+
+
+
+        return view('page.backend.purchase.report', compact('purchasereport_fromdate', 'branch', 'supplier', 'purchasereport_todate','purchasereport_branch', 'purchasereport_supplier', 'purchase_data', 'purchasereport_fromdate', 'purchasereport_todate', 'purchasereport_branch', 'purchasereport_supplier'));
     }
 
 

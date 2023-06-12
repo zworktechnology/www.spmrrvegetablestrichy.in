@@ -19,11 +19,7 @@ class CustomerController extends Controller
 
             $total_sale_amt = Sales::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('customer_id', '=', $datas->id)->sum('grand_total');
             $total_paid = Sales::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('customer_id', '=', $datas->id)->sum('paid_amount');
-            $tot_bal = Sales::where('soft_delete', '!=', 1)
-                                    ->where('status', '!=', 1)
-                                    ->where('customer_id', '=', $datas->id)
-                                    ->latest('id')
-                                    ->first();
+            $tot_bal = Sales::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('customer_id', '=', $datas->id)->latest('id')->first();
 
             $customerarr_data[] = array(
                 'unique_key' => $datas->unique_key,
@@ -38,8 +34,8 @@ class CustomerController extends Controller
                 'shop_address' => $datas->shop_address,
                 'shop_contact_number' => $datas->shop_contact_number,
                 'balance_amount' => $tot_bal->balance_amount,
-            );     
-        }        
+            );
+        }
 
         return view('page.backend.customer.index', compact('customerarr_data'));
     }
@@ -57,7 +53,7 @@ class CustomerController extends Controller
         $data->shop_name = $request->get('shop_name');
         $data->shop_address = $request->get('shop_address');
         $data->shop_contact_number = $request->get('shop_contact_number');
-        
+
         $data->save();
 
 
