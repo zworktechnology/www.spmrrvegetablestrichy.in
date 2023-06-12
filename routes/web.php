@@ -196,3 +196,5 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 Route::get('getProducts/', [PurchaseController::class, 'getProducts']);
 Route::get('/getoldbalance', [PurchaseController::class, 'getoldbalance']);
 Route::get('/getoldbalanceforSales', [SalesController::class, 'getoldbalanceforSales']);
+Route::get('/getPurchaseview', [PurchaseController::class, 'getPurchaseview']);
+Route::get('/getSalesview', [SalesController::class, 'getSalesview']);

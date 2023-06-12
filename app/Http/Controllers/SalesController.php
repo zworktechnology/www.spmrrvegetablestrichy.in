@@ -21,9 +21,26 @@ class SalesController extends Controller
     {
         $data = Sales::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $Sales_data = [];
+        $sales_terms = [];
         foreach ($data as $key => $datas) {
             $branch_name = Branch::findOrFail($datas->branch_id);
             $customer_name = Customer::findOrFail($datas->customer_id);
+
+            $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->get();
+            foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                $sales_terms[] = array(
+                    'bag' => $SalesProducts_arrdata->bag,
+                    'kgs' => $SalesProducts_arrdata->kgs,
+                    'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                    'total_price' => $SalesProducts_arrdata->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                );
+            }
+
 
 
             $Sales_data[] = array(
@@ -34,6 +51,8 @@ class SalesController extends Controller
                 'time' => $datas->time,
                 'gross_amount' => $datas->gross_amount,
                 'bill_no' => $datas->bill_no,
+                'id' => $datas->id,
+                'sales_terms' => $sales_terms,
             );
         }
         return view('page.backend.sales.index', compact('Sales_data'));
@@ -298,6 +317,55 @@ class SalesController extends Controller
             $userData['data'] = 'null';
         }
         echo json_encode($userData);
+    }
+
+
+    public function getSalesview()
+    {
+        $sales_id = request()->get('sales_id');
+        $get_Sales = Sales::where('soft_delete', '!=', 1)
+                                    ->where('status', '!=', 1)
+                                    ->where('id', '=', $sales_id)
+                                    ->get();
+        $output = [];
+        foreach ($get_Sales as $key => $get_Sales_data) {
+
+            $customer_namearr = Customer::where('id', '=', $get_Sales_data->customer_id)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->first();
+            $branch_namearr = Branch::where('id', '=', $get_Sales_data->branch_id)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->first();
+            $bank_namearr = Bank::where('id', '=', $get_Sales_data->bank_id)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->first();
+
+            $output[] = array(
+                'sales_customername' => $customer_namearr->name,
+                'sales_customercontact_number' => $customer_namearr->contact_number,
+                'sales_customershop_name' => $customer_namearr->shop_name,
+                'sales_customershop_address' => $customer_namearr->shop_address,
+                'sales_branchname' => $branch_namearr->name,
+                'salesbranch_contact_number' => $branch_namearr->contact_number,
+                'salesbranch_shop_name' => $branch_namearr->shop_name,
+                'salesbranch_address' => $branch_namearr->address,
+
+                'sales_date' => date('d m Y', strtotime($get_Sales_data->date)),
+                'sales_time' => date('h:i A', strtotime($get_Sales_data->time)),
+
+                'sales_bank_namedata' => $bank_namearr->name,
+                'sales_total_amount' => $get_Sales_data->total_amount,
+                'sales_extra_cost' => $get_Sales_data->extra_cost,
+                'sales_old_balance' => $get_Sales_data->old_balance,
+                'sales_grand_total' => $get_Sales_data->grand_total,
+                'sales_paid_amount' => $get_Sales_data->paid_amount,
+                'sales_balance_amount' => $get_Sales_data->balance_amount,
+                'sales_bill_no' => $get_Sales_data->bill_no,
+            );
+        }
+
+        if (isset($output) & !empty($output)) {
+            echo json_encode($output);
+        }else{
+            echo json_encode(
+                array('status' => 'false')
+            );
+        }
+        
     }
 
 }

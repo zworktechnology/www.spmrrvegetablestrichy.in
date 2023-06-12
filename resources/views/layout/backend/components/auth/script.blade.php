@@ -129,6 +129,110 @@
         });
 
 
+
+        $('.purchaseview').each(function() {
+            $(this).on('click', function(e) {
+                e.preventDefault();
+                var $this = $(this),
+                purchase_id = $this.attr('data-id');
+                //alert(purchase_id);
+
+                $.ajax({
+                    url: '/getPurchaseview/',
+                    type: 'get',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        purchase_id: purchase_id
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        var len = response.length;
+                        if (len > 0) {
+                            for (var i = 0; i < len; i++) {
+                                $('.purchase_bill_no').html(response[i].purchase_bill_no);
+                                $('.purchase_total_amount').html(response[i].purchase_total_amount);
+                                $('.purchase_extra_cost').html(response[i].purchase_extra_cost);
+                                $('.purchase_old_balance').html(response[i].purchase_old_balance);
+                                $('.purchase_grand_total').html(response[i].purchase_grand_total);
+                                $('.purchase_paid_amount').html(response[i].purchase_paid_amount);
+                                $('.purchase_balance_amount').html(response[i].purchase_balance_amount);
+
+                                $('.suppliername').html(response[i].suppliername);
+                                $('.supplier_contact_number').html(response[i].supplier_contact_number);
+                                $('.supplier_shop_name').html(response[i].supplier_shop_name);
+                                $('.supplier_shop_address').html(response[i].supplier_shop_address);
+
+                                $('.branchname').html(response[i].branchname);
+                                $('.branch_contact_number').html(response[i].branch_contact_number);
+                                $('.branch_shop_name').html(response[i].branch_shop_name);
+                                $('.branch_address').html(response[i].branch_address);
+
+                                $('.date').html(response[i].date);
+                                $('.time').html(response[i].time);
+                                $('.bank_namedata').html(response[i].bank_namedata);
+                            }
+                        }
+                    }
+                });
+
+
+            });
+        });
+
+
+
+        $('.salesview').each(function() {
+            $(this).on('click', function(e) {
+                e.preventDefault();
+                var $this = $(this),
+                sales_id = $this.attr('data-id');
+                //alert(purchase_id);
+
+                $.ajax({
+                    url: '/getSalesview/',
+                    type: 'get',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        sales_id: sales_id
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        var len = response.length;
+                        if (len > 0) {
+                            for (var i = 0; i < len; i++) {
+                                $('.sales_bill_no').html(response[i].sales_bill_no);
+                                $('.sales_total_amount').html(response[i].sales_total_amount);
+                                $('.sales_extra_cost').html(response[i].sales_extra_cost);
+                                $('.sales_old_balance').html(response[i].sales_old_balance);
+                                $('.sales_grand_total').html(response[i].sales_grand_total);
+                                $('.sales_paid_amount').html(response[i].sales_paid_amount);
+                                $('.sales_balance_amount').html(response[i].sales_balance_amount);
+
+                                $('.sales_customername').html(response[i].sales_customername);
+                                $('.sales_customercontact_number').html(response[i].sales_customercontact_number);
+                                $('.sales_customershop_name').html(response[i].sales_customershop_name);
+                                $('.sales_customershop_address').html(response[i].sales_customershop_address);
+
+                                $('.sales_branchname').html(response[i].sales_branchname);
+                                $('.salesbranch_contact_number').html(response[i].salesbranch_contact_number);
+                                $('.salesbranch_shop_name').html(response[i].salesbranch_shop_name);
+                                $('.salesbranch_address').html(response[i].salesbranch_address);
+
+                                $('.sales_date').html(response[i].sales_date);
+                                $('.sales_time').html(response[i].sales_time);
+                                $('.sales_bank_namedata').html(response[i].sales_bank_namedata);
+                            }
+                        }
+                    }
+                });
+
+
+            });
+        });
+
+
            // $('.checkbalance').each(function() {
                 //        $(this).on('click', function(e) {
                  //          e.preventDefault();

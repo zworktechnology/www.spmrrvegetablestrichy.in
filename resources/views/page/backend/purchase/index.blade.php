@@ -73,8 +73,11 @@
                                                     class="badges bg-lightgrey" style="color: white">Delete</a>
                                             </li>
                                             <li>
-                                                <a href="{{ route('purchase.view', ['unique_key' => $purchasedata['unique_key']]) }}"
-                                                    class="badges bg-lightred" style="color: white">View</a>
+                                                <a href="#purchaseview{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
+                                                    data-id="{{ $purchasedata['id'] }}" 
+                                                    data-bs-target=".purchaseview-modal-xl{{ $purchasedata['unique_key'] }}"
+                                                    class="badges bg-lightred purchaseview" style="color: white">View</a>
+                                                
                                             </li>
                                             <li>
                                                 <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
@@ -84,7 +87,12 @@
                                     </td>
                                 </tr>
 
-
+                                <div class="modal fade purchaseview-modal-xl{{ $purchasedata['unique_key'] }}"
+                                    tabindex="-1" role="dialog" data-bs-backdrop="static"
+                                    aria-labelledby="purchaseviewLargeModalLabel{{ $purchasedata['unique_key'] }}"
+                                    aria-hidden="true">
+                                    @include('page.backend.purchase.view')
+                                </div>
 
                                 <div class="modal fade purchasedelete-modal-xl{{ $purchasedata['unique_key'] }}"
                                     tabindex="-1" role="dialog"

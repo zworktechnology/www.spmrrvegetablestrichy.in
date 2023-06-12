@@ -21,10 +21,25 @@ class PurchaseController extends Controller
     {
         $data = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $purchase_data = [];
+        $terms = [];
         foreach ($data as $key => $datas) {
             $branch_name = Branch::findOrFail($datas->branch_id);
             $supplier_name = Supplier::findOrFail($datas->supplier_id);
 
+            $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+            foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                $terms[] = array(
+                    'bag' => $PurchaseProducts_arrdata->bag,
+                    'kgs' => $PurchaseProducts_arrdata->kgs,
+                    'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                    'total_price' => $PurchaseProducts_arrdata->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                );
+            }
 
             $purchase_data[] = array(
                 'unique_key' => $datas->unique_key,
@@ -34,9 +49,15 @@ class PurchaseController extends Controller
                 'time' => $datas->time,
                 'gross_amount' => $datas->gross_amount,
                 'bill_no' => $datas->bill_no,
+                'id' => $datas->id,
+                'terms' => $terms,
             );
         }
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+        
+        
+
         return view('page.backend.purchase.index', compact('purchase_data', 'allbranch'));
     }
 
@@ -390,6 +411,55 @@ class PurchaseController extends Controller
             $userData['data'] = 'null';
         }
         echo json_encode($userData);
+    }
+
+
+    public function getPurchaseview()
+    {
+        $purchase_id = request()->get('purchase_id');
+        $get_Purchase = Purchase::where('soft_delete', '!=', 1)
+                                    ->where('status', '!=', 1)
+                                    ->where('id', '=', $purchase_id)
+                                    ->get();
+        $output = [];
+        foreach ($get_Purchase as $key => $get_Purchase_data) {
+
+            $Supplier_namearr = Supplier::where('id', '=', $get_Purchase_data->supplier_id)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->first();
+            $branch_namearr = Branch::where('id', '=', $get_Purchase_data->branch_id)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->first();
+            $bank_namearr = Bank::where('id', '=', $get_Purchase_data->bank_id)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->first();
+
+            $output[] = array(
+                'suppliername' => $Supplier_namearr->name,
+                'supplier_contact_number' => $Supplier_namearr->contact_number,
+                'supplier_shop_name' => $Supplier_namearr->shop_name,
+                'supplier_shop_address' => $Supplier_namearr->shop_address,
+                'branchname' => $branch_namearr->name,
+                'branch_contact_number' => $branch_namearr->contact_number,
+                'branch_shop_name' => $branch_namearr->shop_name,
+                'branch_address' => $branch_namearr->address,
+
+                'date' => date('d m Y', strtotime($get_Purchase_data->date)),
+                'time' => date('h:i A', strtotime($get_Purchase_data->time)),
+
+                'bank_namedata' => $bank_namearr->name,
+                'purchase_total_amount' => $get_Purchase_data->total_amount,
+                'purchase_extra_cost' => $get_Purchase_data->extra_cost,
+                'purchase_old_balance' => $get_Purchase_data->old_balance,
+                'purchase_grand_total' => $get_Purchase_data->grand_total,
+                'purchase_paid_amount' => $get_Purchase_data->paid_amount,
+                'purchase_balance_amount' => $get_Purchase_data->balance_amount,
+                'purchase_bill_no' => $get_Purchase_data->bill_no,
+            );
+        }
+
+        if (isset($output) & !empty($output)) {
+            echo json_encode($output);
+        }else{
+            echo json_encode(
+                array('status' => 'false')
+            );
+        }
+        
     }
 
 
