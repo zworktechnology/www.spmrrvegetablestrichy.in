@@ -198,3 +198,4 @@ Route::get('/getoldbalance', [PurchaseController::class, 'getoldbalance']);
 Route::get('/getoldbalanceforSales', [SalesController::class, 'getoldbalanceforSales']);
 Route::get('/getPurchaseview', [PurchaseController::class, 'getPurchaseview']);
 Route::get('/getSalesview', [SalesController::class, 'getSalesview']);
+Route::get('/getsupplierbalance', [SupplierController::class, 'getsupplierbalance']);

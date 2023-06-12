@@ -51,7 +51,9 @@
                                                     data-bs-target=".supplierdelete-modal-xl{{ $suppliertdata->unique_key }}" class="badges bg-lightgrey" style="color: white">Delete</a>
                                             </li>
                                             <li>
-                                                <a href="{{ route('supplier.checkbalance', ['id' => $suppliertdata->id]) }}" class="badges bg-lightred" style="color: white">Check Balance</a>
+                                                <a href="#checkbalance{{ $suppliertdata->unique_key }}" data-bs-toggle="modal" 
+                                                    data-id="{{ $suppliertdata->id }}"
+                                                    data-bs-target=".checkbalance-modal-xl{{ $suppliertdata->unique_key }}" class="badges bg-lightred checkbalance" style="color: white">Check Balance</a>
                                             </li>
                                         </ul>
 
@@ -65,6 +67,14 @@
                                     aria-hidden="true">
                                     @include('page.backend.supplier.edit')
                                 </div>
+
+                                <div class="modal fade checkbalance-modal-xl{{ $suppliertdata->unique_key }}"
+                                    tabindex="-1" role="dialog" data-bs-backdrop="static"
+                                    aria-labelledby="checkbalanceLargeModalLabel{{ $suppliertdata->unique_key }}"
+                                    aria-hidden="true">
+                                    @include('page.backend.supplier.checkbalance')
+                                </div>
+
 
                                 <div class="modal fade supplierdelete-modal-xl{{ $suppliertdata->unique_key }}"
                                     tabindex="-1" role="dialog" data-bs-backdrop="static"

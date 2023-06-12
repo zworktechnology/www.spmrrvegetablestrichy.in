@@ -13,7 +13,10 @@ class SupplierController extends Controller
     public function index()
     {
         $data = Supplier::where('soft_delete', '!=', 1)->get();
-        return view('page.backend.supplier.index', compact('data'));
+        $alldata_branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+
+        return view('page.backend.supplier.index', compact('data', 'alldata_branch'));
     }
 
     public function store(Request $request)
@@ -67,50 +70,44 @@ class SupplierController extends Controller
     }
 
 
-    public function checkbalance($id)
+    public function getsupplierbalance()
     {
        
-        $supplier = Supplier::findOrFail($id);
-        $suppliername = $supplier->name;
+        $supplierid = request()->get('supplierid');
 
         $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $supplier_output = [];
-        $total_amount = 0;
+        $total_bal_amount = 0;
         foreach ($branch as $key => $get_all_branch) {
 
             $get_all_balance = Purchase::where('soft_delete', '!=', 1)
                                         ->where('status', '!=', 1)
-                                        ->where('supplier_id', '=', $id)
+                                        ->where('supplier_id', '=', $supplierid)
                                         ->where('branch_id', '=', $get_all_branch->id)
                                         ->latest('id')
                                         ->first();
             
            if($get_all_balance != ""){
-
-                $total_amount += $get_all_balance->balance_amount;
+            
+                
                 
                 $supplier_output[] = array(
-                    'total' => $get_all_balance->balance_amount,
-                    'total_amount' => $total_amount,
+                    'balance_amount' => $get_all_balance->balance_amount,
                     'branch' => $get_all_branch->name,
-                );
-           }else {
-                $supplier_output[] = array(
-                    'total' => '',
-                    'total_amount' => '',
-                    'branch' => '',
                 );
            }
 
-                
-            
-            
+        }
 
-            
-            
+        if (isset($supplier_output) & !empty($supplier_output)) {
+            echo json_encode($supplier_output);
+        }else{
+            echo json_encode(
+                array('status' => 'false')
+            );
         }
         
-        return view('page.backend.supplier.checkbalance', compact('supplier_output', 'suppliername', 'total_amount'));
+        
     }
 
 }
