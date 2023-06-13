@@ -56,6 +56,12 @@
                                                     data-id="{{ $customertdata['unique_key'] }}"
                                                     data-bs-target=".cusomerdelete-modal-xl{{ $customertdata['unique_key'] }}" class="badges bg-lightgrey" style="color: white">Delete</a>
                                             </li>
+
+                                            <li>
+                                                <a href="#customercheckbalance{{ $customertdata['unique_key'] }}" data-bs-toggle="modal" 
+                                                    data-id="{{ $customertdata['id'] }}"
+                                                    data-bs-target=".customercheckbalance-modal-xl{{ $customertdata['unique_key'] }}" class="badges bg-lightred customercheckbalance" style="color: white">Check Balance</a>
+                                            </li>
                                         </ul>
                                     </td>
                                 </tr>
@@ -64,6 +70,13 @@
                                     role="dialog" data-bs-backdrop="static" aria-labelledby="customereditLargeModalLabel{{ $customertdata['unique_key'] }}"
                                     aria-hidden="true">
                                     @include('page.backend.customer.edit')
+                                </div>
+
+
+                                <div class="modal fade customercheckbalance-modal-xl{{ $customertdata['unique_key'] }}" tabindex="-1"
+                                    role="dialog" data-bs-backdrop="static" aria-labelledby="customercheckbalanceLargeModalLabel{{ $customertdata['unique_key'] }}"
+                                    aria-hidden="true">
+                                    @include('page.backend.customer.checkbalance')
                                 </div>
 
                                 <div class="modal fade cusomerdelete-modal-xl{{ $customertdata['unique_key'] }}"

@@ -62,11 +62,39 @@ class SupplierController extends Controller
             );
         }
         $alldata_branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $tot_balance_Arr = [];
+
+        foreach ($alldata_branch as $key => $alldata_branchs) {
+            $Supplier_array = Supplier::where('soft_delete', '!=', 1)->get();
+            foreach ($Supplier_array as $key => $Supplier_arra) {
+
+
+                $get_all_balance = Purchase::where('soft_delete', '!=', 1)
+                                        ->where('status', '!=', 1)
+                                        ->where('supplier_id', '=', $Supplier_arra->id)
+                                        ->where('branch_id', '=', $alldata_branchs->id)
+                                        ->latest('id')
+                                        ->first();
+                if($get_all_balance != ""){
+                    $tot_balace = $get_all_balance->balance_amount;
+                }else {
+                    $tot_balace = 0;
+                }                        
+
+                $tot_balance_Arr[] = array(
+                    'Supplier_name' => $Supplier_arra->name,
+                    'branch_name' => $alldata_branchs->name,
+                    'Supplier_id' => $Supplier_arra->id,
+                    'balance_amount' => $tot_balace
+                );
+
+            }
+        }
 
 
 
 
-        return view('page.backend.supplier.index', compact('supplierarr_data', 'alldata_branch'));
+        return view('page.backend.supplier.index', compact('supplierarr_data', 'tot_balance_Arr'));
     }
 
     public function store(Request $request)
