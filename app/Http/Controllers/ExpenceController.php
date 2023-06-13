@@ -12,8 +12,11 @@ class ExpenceController extends Controller
 {
     public function index()
     {
+
+        $today = Carbon::now()->format('Y-m-d');
+
         $branch = Branch::where('soft_delete', '!=', 1)->get();
-        $data = Expence::where('soft_delete', '!=', 1)->get();
+        $data = Expence::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
         $today = Carbon::now()->format('Y-m-d');
         $timenow = Carbon::now()->format('H:i');
 

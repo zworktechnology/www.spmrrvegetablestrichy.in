@@ -19,7 +19,9 @@ class SalesController extends Controller
 {
     public function index()
     {
-        $data = Sales::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+        $today = Carbon::now()->format('Y-m-d');
+        $data = Sales::where('date', '=', $today)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $Sales_data = [];
         $sales_terms = [];
         foreach ($data as $key => $datas) {
@@ -126,72 +128,184 @@ class SalesController extends Controller
     public function store(Request $request)
     {
         // Sales Table
-        $randomkey = Str::random(5);
 
-        $data = new Sales();
-
-        $data->unique_key = $randomkey;
-        $data->customer_id = $request->get('sales_customerid');
-        $data->branch_id = $request->get('sales_branch_id');
-        $data->date = $request->get('sales_date');
-        $data->time = $request->get('sales_time');
-        $data->bill_no = $request->get('sales_billno');
-        $data->bank_id = $request->get('sales_bank_id');
-        $data->total_amount = $request->get('sales_total_amount');
-        $data->note = $request->get('sales_extracost_note');
-        $data->extra_cost = $request->get('sales_extracost');
-        $data->gross_amount = $request->get('sales_gross_amount');
-        $data->old_balance = $request->get('sales_old_balance');
-        $data->grand_total = $request->get('sales_grand_total');
-        $data->paid_amount = $request->get('salespayable_amount');
-        $data->balance_amount = $request->get('sales_pending_amount');
-        $data->save();
-
-        $insertedId = $data->id;
-
-        // Purchase Products Table
-        foreach ($request->get('sales_product_id') as $key => $sales_product_id) {
-
-            $salesprandomkey = Str::random(5);
-
-            $SalesProduct = new SalesProduct;
-            $SalesProduct->unique_key = $salesprandomkey;
-            $SalesProduct->sales_id = $insertedId;
-            $SalesProduct->productlist_id = $sales_product_id;
-            $SalesProduct->bag = $request->sales_bag[$key];
-            $SalesProduct->kgs = $request->sales_kgs[$key];
-            $SalesProduct->price_per_kg = $request->sales_priceperkg[$key];
-            $SalesProduct->total_price = $request->sales_total_price[$key];
-            $SalesProduct->save();
-
-            $product_ids = $request->sales_product_id[$key];
+        $sales_save = $request->get('sales_submit');
+        $sales_saveandprint = $request->get('sales_saveandprint');
+        if($sales_save == 'Save'){
 
 
-            $sales_branch_id = $request->get('sales_branch_id');
-            $product_Data = Product::where('productlist_id', '=', $product_ids)->where('branchtable_id', '=', $sales_branch_id)->first();
-            
-            if($product_Data != ""){
-                if($sales_branch_id == $product_Data->branchtable_id){
+            $randomkey = Str::random(5);
 
-                    $bag_count = $product_Data->available_stockin_bag;
-                    $kg_count = $product_Data->available_stockin_kilograms;
+            $data = new Sales();
     
-                    $New_bagcount = $request->sales_bag[$key];
-                    $New_kgcount = $request->sales_kgs[$key];
+            $data->unique_key = $randomkey;
+            $data->customer_id = $request->get('sales_customerid');
+            $data->branch_id = $request->get('sales_branch_id');
+            $data->date = $request->get('sales_date');
+            $data->time = $request->get('sales_time');
+            $data->bill_no = $request->get('sales_billno');
+            $data->bank_id = $request->get('sales_bank_id');
+            $data->total_amount = $request->get('sales_total_amount');
+            $data->note = $request->get('sales_extracost_note');
+            $data->extra_cost = $request->get('sales_extracost');
+            $data->gross_amount = $request->get('sales_gross_amount');
+            $data->old_balance = $request->get('sales_old_balance');
+            $data->grand_total = $request->get('sales_grand_total');
+            $data->paid_amount = $request->get('salespayable_amount');
+            $data->balance_amount = $request->get('sales_pending_amount');
+            $data->save();
+    
+            $insertedId = $data->id;
+    
+            // Purchase Products Table
+            foreach ($request->get('sales_product_id') as $key => $sales_product_id) {
+    
+                $salesprandomkey = Str::random(5);
+    
+                $SalesProduct = new SalesProduct;
+                $SalesProduct->unique_key = $salesprandomkey;
+                $SalesProduct->sales_id = $insertedId;
+                $SalesProduct->productlist_id = $sales_product_id;
+                $SalesProduct->bag = $request->sales_bag[$key];
+                $SalesProduct->kgs = $request->sales_kgs[$key];
+                $SalesProduct->price_per_kg = $request->sales_priceperkg[$key];
+                $SalesProduct->total_price = $request->sales_total_price[$key];
+                $SalesProduct->save();
+    
+                $product_ids = $request->sales_product_id[$key];
+    
+    
+                $sales_branch_id = $request->get('sales_branch_id');
+                $product_Data = Product::where('productlist_id', '=', $product_ids)->where('branchtable_id', '=', $sales_branch_id)->first();
+                
+                if($product_Data != ""){
+                    if($sales_branch_id == $product_Data->branchtable_id){
+    
+                        $bag_count = $product_Data->available_stockin_bag;
+                        $kg_count = $product_Data->available_stockin_kilograms;
         
-                    $totalbag_count = $bag_count - $New_bagcount;
-                    $totalkg_count = $kg_count - $New_kgcount;
-    
-                    DB::table('products')->where('productlist_id', $product_ids)->where('branchtable_id', $sales_branch_id)->update([
-                        'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
-                    ]);
-                }
-            }
+                        $New_bagcount = $request->sales_bag[$key];
+                        $New_kgcount = $request->sales_kgs[$key];
             
+                        $totalbag_count = $bag_count - $New_bagcount;
+                        $totalkg_count = $kg_count - $New_kgcount;
+        
+                        DB::table('products')->where('productlist_id', $product_ids)->where('branchtable_id', $sales_branch_id)->update([
+                            'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
+                        ]);
+                    }
+                }
+                
+    
+            }
+    
+            return redirect()->route('sales.index')->with('add', 'Sales Data added successfully!');
 
         }
+        if($sales_saveandprint == 'Save & Print'){
 
-        return redirect()->route('sales.index')->with('add', 'Sales Data added successfully!');
+
+
+            $randomkey = Str::random(5);
+
+            $data = new Sales();
+    
+            $data->unique_key = $randomkey;
+            $data->customer_id = $request->get('sales_customerid');
+            $data->branch_id = $request->get('sales_branch_id');
+            $data->date = $request->get('sales_date');
+            $data->time = $request->get('sales_time');
+            $data->bill_no = $request->get('sales_billno');
+            $data->bank_id = $request->get('sales_bank_id');
+            $data->total_amount = $request->get('sales_total_amount');
+            $data->note = $request->get('sales_extracost_note');
+            $data->extra_cost = $request->get('sales_extracost');
+            $data->gross_amount = $request->get('sales_gross_amount');
+            $data->old_balance = $request->get('sales_old_balance');
+            $data->grand_total = $request->get('sales_grand_total');
+            $data->paid_amount = $request->get('salespayable_amount');
+            $data->balance_amount = $request->get('sales_pending_amount');
+            $data->save();
+    
+            $insertedId = $data->id;
+    
+            // Purchase Products Table
+            foreach ($request->get('sales_product_id') as $key => $sales_product_id) {
+    
+                $salesprandomkey = Str::random(5);
+    
+                $SalesProduct = new SalesProduct;
+                $SalesProduct->unique_key = $salesprandomkey;
+                $SalesProduct->sales_id = $insertedId;
+                $SalesProduct->productlist_id = $sales_product_id;
+                $SalesProduct->bag = $request->sales_bag[$key];
+                $SalesProduct->kgs = $request->sales_kgs[$key];
+                $SalesProduct->price_per_kg = $request->sales_priceperkg[$key];
+                $SalesProduct->total_price = $request->sales_total_price[$key];
+                $SalesProduct->save();
+    
+                $product_ids = $request->sales_product_id[$key];
+    
+    
+                $sales_branch_id = $request->get('sales_branch_id');
+                $product_Data = Product::where('productlist_id', '=', $product_ids)->where('branchtable_id', '=', $sales_branch_id)->first();
+                
+                if($product_Data != ""){
+                    if($sales_branch_id == $product_Data->branchtable_id){
+    
+                        $bag_count = $product_Data->available_stockin_bag;
+                        $kg_count = $product_Data->available_stockin_kilograms;
+        
+                        $New_bagcount = $request->sales_bag[$key];
+                        $New_kgcount = $request->sales_kgs[$key];
+            
+                        $totalbag_count = $bag_count - $New_bagcount;
+                        $totalkg_count = $kg_count - $New_kgcount;
+        
+                        DB::table('products')->where('productlist_id', $product_ids)->where('branchtable_id', $sales_branch_id)->update([
+                            'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
+                        ]);
+                    }
+                }
+                
+    
+            }
+
+
+
+            $SalesData = Sales::where('unique_key', '=', $randomkey)->first();
+
+            $customer_idname = Customer::where('id', '=', $SalesData->customer_id)->first();
+            $branchname = Branch::where('id', '=', $SalesData->branch_id)->first();
+            $bankname = Bank::where('id', '=', $SalesData->bank_id)->first();
+
+            $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $SalesProduct_darta = SalesProduct::where('sales_id', '=', $SalesData->id)->get();
+    
+            return redirect()->route('sales.print_view', ['SalesData' => $SalesData, 'customer_idname' => $customer_idname, 'branchname' => $branchname, 'bankname' => $bankname, 'productlist' => $productlist, 'SalesProduct_darta' => $SalesProduct_darta, 'unique_key' => $randomkey])->with('add', 'Sales Data added successfully!');
+
+
+
+        }
+        
+
+
+
+    }
+
+
+    public function print_view($unique_key) {
+
+        $SalesData = Sales::where('unique_key', '=', $unique_key)->first();
+
+        $customer_idname = Customer::where('id', '=', $SalesData->customer_id)->first();
+            $branchname = Branch::where('id', '=', $SalesData->branch_id)->first();
+            $bankname = Bank::where('id', '=', $SalesData->bank_id)->first();
+
+            $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $SalesProduct_darta = SalesProduct::where('sales_id', '=', $SalesData->id)->get();
+
+        return view('page.backend.sales.print_view', compact('SalesData', 'customer_idname', 'branchname', 'bankname', 'SalesProduct_darta', 'productlist'));
     }
 
 

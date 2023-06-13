@@ -156,7 +156,8 @@
 
             
             <div class="modal-footer">
-               <input type="submit" class="btn btn-primary" name="submit" value="submit" />
+            <input type="submit" class="btn btn-primary" name="sales_submit" value="Save" />
+               <input type="submit" class="btn btn-success sales_saveandprint" name="sales_saveandprint" value="Save & Print" />
                <a href="{{ route('sales.index') }}" class="btn btn-danger" value="">Cancel</a>
             </div>
          </form>

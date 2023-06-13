@@ -58,6 +58,14 @@
                         </li>
                     </ul>
                 </li>
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">Report</h6>
+                    <ul>
+                        <li class="{{ Route::is('purchase.report') ? 'active' : '' }}">
+                            <a href="{{ route('purchase.report') }}"><i data-feather="map"></i><span>Purchase Report</span></a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>
