@@ -24,6 +24,28 @@ class SupplierController extends Controller
             $total_paid = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('supplier_id', '=', $datas->id)->sum('paid_amount');
             $tot_bal = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('supplier_id', '=', $datas->id)->latest('id')->first();
 
+            if($total_purchase_amt != ""){
+                $tot_purchaseAmount = $total_purchase_amt;
+            }else {
+                $tot_purchaseAmount = '';
+            }
+
+
+
+            if($total_paid != ""){
+                $total_paid_Amount = $total_paid;
+            }else {
+                $total_paid_Amount = '';
+            }
+
+
+            if($tot_bal != ""){
+                $total_balance = $tot_bal->balance_amount;
+            }else {
+                $total_balance = '';
+            }
+
+
             $supplierarr_data[] = array(
                 'unique_key' => $datas->unique_key,
                 'name' => $supplier_name->name,
@@ -31,12 +53,12 @@ class SupplierController extends Controller
                 'shop_name' => $datas->shop_name,
                 'status' => $datas->status,
                 'id' => $datas->id,
-                'total_purchase_amt' => $total_purchase_amt,
-                'total_paid' => $total_paid,
+                'total_purchase_amt' => $tot_purchaseAmount,
+                'total_paid' => $total_paid_Amount,
                 'email_address' => $datas->email_address,
                 'shop_address' => $datas->shop_address,
                 'shop_contact_number' => $datas->shop_contact_number,
-                'balance_amount' => $tot_bal->balance_amount,
+                'balance_amount' => $total_balance,
             );
         }
         $alldata_branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
