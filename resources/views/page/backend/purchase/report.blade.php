@@ -66,7 +66,13 @@
                         <h4 class="purchase_report_heading" style="margin-left: 3%;margin-top: 2%;">
                         @foreach ($purchase_data as $keydata => $purchase)
                         @if ($purchase['unique_key'] != '')
-                        {{ $purchase['heading'] }}
+
+                            @if($keydata == 0)
+                            {{ $purchase['heading'] }}
+                            @endif
+
+
+                        
                         @endif
                         @endforeach
                         </h4>
