@@ -12,11 +12,43 @@ class SupplierController extends Controller
 {
     public function index()
     {
+        
+        
+
         $data = Supplier::where('soft_delete', '!=', 1)->get();
+        $supplierarr_data = [];
+        foreach ($data as $key => $datas) {
+            $supplier_name = Supplier::findOrFail($datas->id);
+
+            $total_purchase_amt = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('supplier_id', '=', $datas->id)->sum('grand_total');
+            $total_paid = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('supplier_id', '=', $datas->id)->sum('paid_amount');
+            $tot_bal = Purchase::where('soft_delete', '!=', 1)
+                                    ->where('status', '!=', 1)
+                                    ->where('supplier_id', '=', $datas->id)
+                                    ->latest('id')
+                                    ->first();
+
+            $supplierarr_data[] = array(
+                'unique_key' => $datas->unique_key,
+                'name' => $supplier_name->name,
+                'contact_number' => $datas->contact_number,
+                'shop_name' => $datas->shop_name,
+                'status' => $datas->status,
+                'id' => $datas->id,
+                'total_purchase_amt' => $total_purchase_amt,
+                'total_paid' => $total_paid,
+                'email_address' => $datas->email_address,
+                'shop_address' => $datas->shop_address,
+                'shop_contact_number' => $datas->shop_contact_number,
+                'balance_amount' => $tot_bal->balance_amount,
+            );                    
+        }
         $alldata_branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
 
-        return view('page.backend.supplier.index', compact('data', 'alldata_branch'));
+        
+
+        return view('page.backend.supplier.index', compact('supplierarr_data', 'alldata_branch'));
     }
 
     public function store(Request $request)

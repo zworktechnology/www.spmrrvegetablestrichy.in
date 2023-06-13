@@ -22,18 +22,24 @@
                                 <th>Name</th>
                                 <th>Mobile</th>
                                 <th>Shop Name</th>
+                                <th>Total Sale</th>
+                                <th>Total Paid</th>
+                                <th>Total Balance</th>
                                 <th>Status</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($data as $keydata => $customertdata)
+                            @foreach ($customerarr_data as $keydata => $customertdata)
                                 <tr>
                                     <td>{{ ++$keydata }}</td>
-                                    <td>{{ $customertdata->name }}</td>
-                                    <td>{{ $customertdata->contact_number }}</td>
-                                    <td>{{ $customertdata->shop_name }}</td>
-                                    @if ($customertdata->status == 0)
+                                    <td>{{ $customertdata['name'] }}</td>
+                                    <td>{{ $customertdata['contact_number'] }}</td>
+                                    <td>{{ $customertdata['shop_name'] }}</td>
+                                    <td>₹ {{ $customertdata['total_sale_amt'] }}</td>
+                                    <td>₹ {{ $customertdata['total_paid'] }}</td>
+                                    <td>₹ {{ $customertdata['balance_amount'] }}</td>
+                                    @if ($customertdata['status'] == 0)
                                         <td><span class="badges bg-lightgreen">Active</span></td>
                                     @else
                                         <td><span class="badges bg-lightred">De-Active</span></td>
@@ -41,28 +47,28 @@
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
                                             <li>
-                                                <a href="#edit{{ $customertdata->unique_key }}" data-bs-toggle="modal"
-                                                    data-id="{{ $customertdata->unique_key }}"
-                                                    data-bs-target=".cusomeredit-modal-xl{{ $customertdata->unique_key }}" class="badges bg-lightyellow" style="color: white">Edit</a>
+                                                <a href="#edit{{ $customertdata['unique_key'] }}" data-bs-toggle="modal"
+                                                    data-id="{{ $customertdata['unique_key'] }}"
+                                                    data-bs-target=".cusomeredit-modal-xl{{ $customertdata['unique_key'] }}" class="badges bg-lightyellow" style="color: white">Edit</a>
                                             </li>
                                             <li>
-                                                <a href="#delete{{ $customertdata->unique_key }}" data-bs-toggle="modal"
-                                                    data-id="{{ $customertdata->unique_key }}"
-                                                    data-bs-target=".cusomerdelete-modal-xl{{ $customertdata->unique_key }}" class="badges bg-lightgrey" style="color: white">Delete</a>
+                                                <a href="#delete{{ $customertdata['unique_key'] }}" data-bs-toggle="modal"
+                                                    data-id="{{ $customertdata['unique_key'] }}"
+                                                    data-bs-target=".cusomerdelete-modal-xl{{ $customertdata['unique_key'] }}" class="badges bg-lightgrey" style="color: white">Delete</a>
                                             </li>
                                         </ul>
                                     </td>
                                 </tr>
 
-                                <div class="modal fade cusomeredit-modal-xl{{ $customertdata->unique_key }}" tabindex="-1"
-                                    role="dialog" data-bs-backdrop="static" aria-labelledby="customereditLargeModalLabel{{ $customertdata->unique_key }}"
+                                <div class="modal fade cusomeredit-modal-xl{{ $customertdata['unique_key'] }}" tabindex="-1"
+                                    role="dialog" data-bs-backdrop="static" aria-labelledby="customereditLargeModalLabel{{ $customertdata['unique_key'] }}"
                                     aria-hidden="true">
                                     @include('page.backend.customer.edit')
                                 </div>
 
-                                <div class="modal fade cusomerdelete-modal-xl{{ $customertdata->unique_key }}"
+                                <div class="modal fade cusomerdelete-modal-xl{{ $customertdata['unique_key'] }}"
                                     tabindex="-1" role="dialog"data-bs-backdrop="static"
-                                    aria-labelledby="customerdeleteLargeModalLabel{{ $customertdata->unique_key }}"
+                                    aria-labelledby="customerdeleteLargeModalLabel{{ $customertdata['unique_key'] }}"
                                     aria-hidden="true">
                                     @include('page.backend.customer.delete')
                                 </div>

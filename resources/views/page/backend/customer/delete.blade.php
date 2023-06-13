@@ -2,7 +2,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title"
-                id="customerdeleteLargeModalLabel{{ $customertdata->unique_key }}">
+                id="customerdeleteLargeModalLabel{{ $customertdata['unique_key'] }}">
                 Destroy Customer</h5>
         </div>
         <div class="modal-body px-4 py-5 text-center">
@@ -17,7 +17,7 @@
 
             <div class="hstack gap-2 justify-content-center mb-0">
                 <form autocomplete="off" method="POST"
-                    action="{{ route('customer.delete', [$customertdata->unique_key]) }}">
+                    action="{{ route('customer.delete', [$customertdata['unique_key']]) }}">
                     @method('PUT')
                     @csrf
                     <button type="submit" class="btn btn-danger">Yes, Delete it</button>

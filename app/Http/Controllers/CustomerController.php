@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\Customer;
+use App\Models\Purchase;
+use App\Models\Sales;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -11,7 +13,35 @@ class CustomerController extends Controller
     {
         $data = Customer::where('soft_delete', '!=', 1)->get();
 
-        return view('page.backend.customer.index', compact('data'));
+        $customerarr_data = [];
+        foreach ($data as $key => $datas) {
+            $Customer_name = Customer::findOrFail($datas->id);
+
+            $total_sale_amt = Sales::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('customer_id', '=', $datas->id)->sum('grand_total');
+            $total_paid = Sales::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('customer_id', '=', $datas->id)->sum('paid_amount');
+            $tot_bal = Sales::where('soft_delete', '!=', 1)
+                                    ->where('status', '!=', 1)
+                                    ->where('customer_id', '=', $datas->id)
+                                    ->latest('id')
+                                    ->first();
+
+            $customerarr_data[] = array(
+                'unique_key' => $datas->unique_key,
+                'name' => $Customer_name->name,
+                'contact_number' => $datas->contact_number,
+                'shop_name' => $datas->shop_name,
+                'status' => $datas->status,
+                'id' => $datas->id,
+                'total_sale_amt' => $total_sale_amt,
+                'total_paid' => $total_paid,
+                'email_address' => $datas->email_address,
+                'shop_address' => $datas->shop_address,
+                'shop_contact_number' => $datas->shop_contact_number,
+                'balance_amount' => $tot_bal->balance_amount,
+            );     
+        }        
+
+        return view('page.backend.customer.index', compact('customerarr_data'));
     }
 
     public function store(Request $request)
