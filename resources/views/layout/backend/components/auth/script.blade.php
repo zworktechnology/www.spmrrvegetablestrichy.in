@@ -235,49 +235,49 @@
         });
 
 
-            $('.checkbalance').each(function() {
-                        $(this).on('click', function(e) {
-                           e.preventDefault();
-                           var $this = $(this),
-                           supplierid = $this.attr('data-id');
+            //$('.checkbalance').each(function() {
+               //         $(this).on('click', function(e) {
+                  //         e.preventDefault();
+                  //         var $this = $(this),
+                  //         supplierid = $this.attr('data-id');
                             //alert(supplierid);
 
                             
 
-                            $.ajax({
-                                url: '/getsupplierbalance/',
-                                type: 'get',
-                                data: {
-                                            _token: "{{ csrf_token() }}",
-                                            supplierid: supplierid
-                                        },
-                                dataType: 'json',
-                                    success: function(response) {
-                                        console.log(response);
-                                        var len = response.length;
-                                        var supplirtotbal = 0;
-                                        if (len > 0) {
-                                            for (var i = 0; i < len; i++) {
-                                                supplirtotbal += response[i].balance_amount << 0;
-                                                var balance_amount = response[0].balance_amount;
-                                                console.log(balance_amount);
+                    //        $.ajax({
+                      //          url: '/getsupplierbalance/',
+                    //            type: 'get',
+                    //            data: {
+                    //                        _token: "{{ csrf_token() }}",
+                     //                       supplierid: supplierid
+                      //                  },
+                      //          dataType: 'json',
+                      //              success: function(response) {
+                      //                  console.log(response);
+                      //                  var len = response.length;
+                       //                 var supplirtotbal = 0;
+                        //                if (len > 0) {
+                       //                     for (var i = 0; i < len; i++) {
+                        //                        supplirtotbal += response[i].balance_amount << 0;
+                        //                        var balance_amount = response[0].balance_amount;
+                        //                        console.log(balance_amount);
                                                 
-                                                $('.supplier_balance' + m).html(balance_amount);
-                                                $('.suplier_totbalnce').html(supplirtotbal);
-                                            }
-                                           for (var i = 0; i < len; i++) {
-                                                var balance_amount1 = response[1].balance_amount;
-                                                console.log(balance_amount1);
+                         //                       $('.supplier_balance' + m).html(balance_amount);
+                         //                       $('.suplier_totbalnce').html(supplirtotbal);
+                         //                   }
+                         //                  for (var i = 0; i < len; i++) {
+                          //                      var balance_amount1 = response[1].balance_amount;
+                          //                      console.log(balance_amount1);
                                                 
-                                                $('.supplier_balance' + n).html(balance_amount1);
-                                            }
-                                        }
-                                    }
-                                });
+                          //                      $('.supplier_balance' + n).html(balance_amount1);
+                           //                 }
+                           //             }
+                            //        }
+                            //    });
 
 
-                        });
-                     });
+                        //});
+                     //});
 
     });
 

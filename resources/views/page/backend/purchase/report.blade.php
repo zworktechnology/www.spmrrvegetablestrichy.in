@@ -32,7 +32,7 @@
                                 <label>Branch</label>
                                 <select class="select purchasereport_branch" name="purchasereport_branch"
                                     id="purchasereport_branch">
-                                    <option value="" disabled selected hiddden>Select Branch</option>
+                                    <option value=""  selected >Select Branch</option>
                                     @foreach ($branch as $branches)
                                         <option value="{{ $branches->id }}">{{ $branches->name }}</option>
                                     @endforeach
@@ -43,7 +43,7 @@
                             <div class="form-group">
                                 <label>Choose Supplier</label>
                                 <select class="select" name="purchasereport_supplier" id="purchasereport_supplier">
-                                    <option value="" disabled selected hiddden>Select Supplier</option>
+                                    <option value=""  selected >Select Supplier</option>
                                     @foreach ($supplier as $suppliers)
                                         <option value="{{ $suppliers->id }}">{{ $suppliers->name }}</option>
                                     @endforeach
@@ -61,6 +61,16 @@
             </div>
 
             <div class="card">
+                
+                    
+                        <h4 class="purchase_report_heading" style="margin-left: 3%;margin-top: 2%;">
+                        @foreach ($purchase_data as $keydata => $purchase)
+                        @if ($purchase['unique_key'] != '')
+                        {{ $purchase['heading'] }}
+                        @endif
+                        @endforeach
+                        </h4>
+                    
                 <div class="card-body">
                     <div class="row">
                         @if ($purchase_data != '')

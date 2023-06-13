@@ -658,6 +658,7 @@ class PurchaseController extends Controller
 
                     );
                 }
+                
 
 
                 $purchase_data[] = array(
@@ -670,6 +671,8 @@ class PurchaseController extends Controller
                     'bill_no' => $branchwise_datas->bill_no,
                     'id' => $branchwise_datas->id,
                     'terms' => $terms,
+                    'heading' => 'Branch - Filter Data',
+
                 );
             }
         }else{
@@ -684,6 +687,7 @@ class PurchaseController extends Controller
                 'bill_no' => '',
                 'id' => '',
                 'terms' => '',
+                'heading' => 'Branch wise Filter Data - No Data',
             );
         }
 
@@ -727,6 +731,7 @@ class PurchaseController extends Controller
                     'bill_no' => $supplierwise_report_datas->bill_no,
                     'id' => $supplierwise_report_datas->id,
                     'terms' => $supplier_terms,
+                    'heading' => 'Supplier - Filter Data',
                 );
 
 
@@ -745,6 +750,7 @@ class PurchaseController extends Controller
                 'bill_no' => '',
                 'id' => '',
                 'terms' => '',
+                'heading' => 'Supplier wise Filter Data - No Data',
             );
         }
 
@@ -788,6 +794,7 @@ class PurchaseController extends Controller
                     'bill_no' => $fromdate_report_datas->bill_no,
                     'id' => $fromdate_report_datas->id,
                     'terms' => $fromdate_terms,
+                    'heading' => 'FromDate - Filter Data',
                 );
 
 
@@ -807,6 +814,7 @@ class PurchaseController extends Controller
                 'bill_no' => '',
                 'id' => '',
                 'terms' => '',
+                'heading' => 'Supplier wise Filter Data - No Data',
             );
         }
 
@@ -852,6 +860,7 @@ class PurchaseController extends Controller
                     'bill_no' => $todate_report_datas->bill_no,
                     'id' => $todate_report_datas->id,
                     'terms' => $todate_terms,
+                    'heading' => 'ToDate - Filter Data',
                 );
 
             }
@@ -869,6 +878,7 @@ class PurchaseController extends Controller
                 'bill_no' => '',
                 'id' => '',
                 'terms' => '',
+                'heading' => 'ToDate wise Filter Data - No Data',
             );
         }
 
@@ -915,6 +925,7 @@ class PurchaseController extends Controller
                     'bill_no' => $datefilter_report_arr->bill_no,
                     'id' => $datefilter_report_arr->id,
                     'terms' => $todate_terms,
+                    'heading' => '(From Date & Supplier) - Filter Data',
                 );
 
             }
@@ -932,6 +943,7 @@ class PurchaseController extends Controller
                 'bill_no' => '',
                 'id' => '',
                 'terms' => '',
+                'heading' => '(From Date & Supplier) - Filter Data - No Data',
             );
         }
 
@@ -976,6 +988,7 @@ class PurchaseController extends Controller
                     'bill_no' => $datefilter_report_arr->bill_no,
                     'id' => $datefilter_report_arr->id,
                     'terms' => $todate_terms,
+                    'heading' => '(From Date & To Date) - Filter Data',
                 );
 
             }
@@ -993,6 +1006,7 @@ class PurchaseController extends Controller
                 'bill_no' => '',
                 'id' => '',
                 'terms' => '',
+                'heading' => '(From Date & To Date) - Filter Data - No Data',
             );
         }
 
@@ -1039,6 +1053,7 @@ class PurchaseController extends Controller
                     'bill_no' => $datefilter_report_arr->bill_no,
                     'id' => $datefilter_report_arr->id,
                     'terms' => $todate_terms,
+                    'heading' => '(To Date & Supplier) - Filter Data',
                 );
 
             }
@@ -1055,6 +1070,7 @@ class PurchaseController extends Controller
                 'bill_no' => '',
                 'id' => '',
                 'terms' => '',
+                'heading' => 'To Date & Supplier wise Filter Data - No Data',
             );
         }
 
@@ -1100,6 +1116,7 @@ class PurchaseController extends Controller
                     'bill_no' => $datefilter_report_arr->bill_no,
                     'id' => $datefilter_report_arr->id,
                     'terms' => $todate_terms,
+                    'heading' => '(Branch & Supplier) - Filter Data',
                 );
 
             }
@@ -1116,6 +1133,7 @@ class PurchaseController extends Controller
                 'bill_no' => '',
                 'id' => '',
                 'terms' => '',
+                'heading' => '(Branch & Supplier) - Filter Data - No Data',
             );
         }
 
@@ -1164,6 +1182,7 @@ class PurchaseController extends Controller
                     'bill_no' => $datefilter_report_arr->bill_no,
                     'id' => $datefilter_report_arr->id,
                     'terms' => $todate_terms,
+                    'heading' => '(From Date & Branch) - Filter Data',
                 );
 
             }
@@ -1179,6 +1198,7 @@ class PurchaseController extends Controller
                 'bill_no' => '',
                 'id' => '',
                 'terms' => '',
+                'heading' => '(From Date & Branch) - Filter Data - No Data',
             );
         }
 
@@ -1225,6 +1245,7 @@ class PurchaseController extends Controller
                     'bill_no' => $datefilter_report_arr->bill_no,
                     'id' => $datefilter_report_arr->id,
                     'terms' => $todate_terms,
+                    'heading' => '(To Date & Branch) - Filter Data',
                 );
 
             }
@@ -1242,6 +1263,7 @@ class PurchaseController extends Controller
                 'bill_no' => '',
                 'id' => '',
                 'terms' => '',
+                'heading' => '(To Date & Branch) - Filter Data - No Data',
             );
         }
 
@@ -1289,6 +1311,7 @@ class PurchaseController extends Controller
                     'bill_no' => $datefilter_report_arr->bill_no,
                     'id' => $datefilter_report_arr->id,
                     'terms' => $todate_terms,
+                    'heading' => '(From Date & To Date & Branch) - Filter Data',
                 );
 
             }
@@ -1307,6 +1330,7 @@ class PurchaseController extends Controller
                 'bill_no' => '',
                 'id' => '',
                 'terms' => '',
+                'heading' => '(From Date & To Date & Branch) - Filter Data - No Data',
             );
         }
 
@@ -1354,6 +1378,7 @@ class PurchaseController extends Controller
                     'bill_no' => $datefilter_report_arr->bill_no,
                     'id' => $datefilter_report_arr->id,
                     'terms' => $todate_terms,
+                    'heading' => '(From Date & To Date & Supplier) - Filter Data',
                     );
 
             }
@@ -1372,6 +1397,7 @@ class PurchaseController extends Controller
                 'bill_no' => '',
                 'id' => '',
                 'terms' => '',
+                'heading' => '(From Date & To Date & Supplier) - Filter Data - No Data',
             );
         }
 
