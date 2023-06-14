@@ -23,8 +23,8 @@ return new class extends Migration
             $table->unsignedBigInteger('productlist_id');
             $table->foreign('productlist_id')->references('id')->on('productlists')->onDelete('cascade');
 
-            $table->string('bag')->nullable();
-            $table->string('kgs')->nullable();
+            $table->string('bagorkg')->nullable();
+            $table->string('count')->nullable();
             $table->string('price_per_kg')->nullable();
             $table->string('total_price')->nullable();
             $table->string('status')->default(0);
