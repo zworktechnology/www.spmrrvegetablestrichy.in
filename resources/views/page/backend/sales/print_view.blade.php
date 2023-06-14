@@ -74,13 +74,13 @@
                            Product Name
                            </td>
                            <td style="padding: 5px;vertical-align: middle;font-weight: 600;color: black;font-size: 16px;padding: 10px; ">
-                           Bag
+                           Bag / Kg
                            </td>
                            <td style="padding: 5px;vertical-align: middle;font-weight: 600;color: black;font-size: 16px;padding: 10px; ">
-                           Kgs
+                           Count
                            </td>
                            <td style="padding: 5px;vertical-align: middle;font-weight: 600;color: black;font-size: 16px;padding: 10px; ">
-                           Price / Kg
+                           Price / Count
                            </td>
                            <td style="padding: 5px;vertical-align: middle;font-weight: 600;color: black;font-size: 16px;padding: 10px; ">
                            Amount
@@ -97,10 +97,10 @@
                                     @endforeach
                            </td>
                            <td style="padding: 10px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;"">
-                           {{ $SalesProduct_darta_arr->bag }}
+                           {{ $SalesProduct_darta_arr->bagorkg }}
                            </td>
                            <td style="padding: 10px;vertical-align: top;vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;"">
-                           {{ $SalesProduct_darta_arr->kgs }}
+                           {{ $SalesProduct_darta_arr->count }}
                            </td>
                            <td style="padding: 10px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;"">
                            {{ $SalesProduct_darta_arr->price_per_kg }}

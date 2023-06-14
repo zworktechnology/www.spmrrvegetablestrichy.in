@@ -86,14 +86,14 @@
                               type="button" id="addsalesproductfields" value="Add">Add</button>
                         <tr>
                            <th style="font-size:15px; width:28%;">Product</th>
-                           <th style="font-size:15px; width:12%;">Bag</th>
-                           <th style="font-size:15px; width:12%;">Kgs </th>
-                           <th style="font-size:15px; width:18%;">Price / K</th>
+                           <th style="font-size:15px; width:12%;">Bag / Kg</th>
+                           <th style="font-size:15px; width:12%;">Count </th>
+                           <th style="font-size:15px; width:18%;">Price / Count</th>
                            <th style="font-size:15px; width:20%;">Amount</th>
                            
                         </tr>
                      </thead>
-                     <tbody id="product_fields">
+                     <tbody id="sales_productfields">
                      @foreach ($SalesProducts as $index => $Sales_Products)
                         <tr>
                            <td class="">
@@ -105,9 +105,9 @@
                                  @endif
                               @endforeach
                            </td>
-                           <td><input type="text" class="form-control" id="sales_bag" readonly name="sales_bag[]" placeholder="Bag" value="{{ $Sales_Products->bag }}" required /></td>
-                           <td><input type="text" class="form-control sales_kgs" id="sales_kgs" readonly name="sales_kgs[]" placeholder="kgs" value="{{ $Sales_Products->kgs }}" required /></td>
-                           <td><input type="text" class="form-control sales_priceperkg" readonly id="sales_priceperkg" name="sales_priceperkg[]" placeholder="Price Per Kg" value="{{ $Sales_Products->price_per_kg }}" required /></td>
+                           <td><input type="text" class="form-control" id="sales_bagorkg" readonly name="sales_bagorkg[]" placeholder="Bag" value="{{ $Sales_Products->bagorkg }}" required /></td>
+                           <td><input type="text" class="form-control sales_count" id="sales_count" readonly name="sales_count[]" placeholder="kgs" value="{{ $Sales_Products->count }}" required /></td>
+                           <td><input type="text" class="form-control sales_priceperkg" readonly id="sales_priceperkg" name="sales_priceperkg[]" placeholder="Price Per Count" value="{{ $Sales_Products->price_per_kg }}" required /></td>
                            <td class="text-end"><input type="text" class="form-control sales_total_price" readonly id="sales_total_price"  style="background-color: #e9ecef;" name="sales_total_price[]" placeholder="" value="{{ $Sales_Products->total_price }}" required /></td>
                            <td><button style="width: 100px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-salestr" type="button" >Remove</button>
                            </td>

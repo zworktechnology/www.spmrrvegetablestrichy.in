@@ -83,9 +83,9 @@
                      <thead>
                         <tr>
                            <th style="font-size:15px; width:28%;">Product</th>
-                           <th style="font-size:15px; width:12%;">Bag</th>
-                           <th style="font-size:15px; width:12%;">Kgs </th>
-                           <th style="font-size:15px; width:18%;">Price / Kg</th>
+                           <th style="font-size:15px; width:12%;">Bag / Kg</th>
+                           <th style="font-size:15px; width:12%;">Count </th>
+                           <th style="font-size:15px; width:18%;">Price / Count</th>
                            <th style="font-size:15px; width:20%;">Amount</th>
                            
                         </tr>
@@ -101,9 +101,14 @@
                                     @endforeach
                               </select>
                            </td>
-                           <td><input type="text" class="form-control" id="bag" name="bag[]" placeholder="Bag" value="" required /></td>
-                           <td><input type="text" class="form-control kgs" id="kgs" name="kgs[]" placeholder="kgs" value="" required /></td>
-                           <td><input type="text" class="form-control price_per_kg" id="price_per_kg" name="price_per_kg[]" placeholder="Price Per Kg" value="" required /></td>
+                           <td><select class=" form-control bagorkg" name="bagorkg[]" id="bagorkg1"required>
+                                 <option value="" selected hidden class="text-muted">Select</option>
+                                     <option value="bag">Bag</option>
+                                    <option value="kg">Kg</option>
+                              </select>
+                           </td>
+                           <td><input type="text" class="form-control count" id="count" name="count[]" placeholder="count" value="" required /></td>
+                           <td><input type="text" class="form-control price_per_kg" id="price_per_kg" name="price_per_kg[]" placeholder="Price Per count" value="" required /></td>
                            <td class="text-end"><input type="text" class="form-control total_price" readonly id="total_price"  style="background-color: #e9ecef;" name="total_price[]" placeholder="" value="" required /></td>
                            <td>
                               <button style="width: 100px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"

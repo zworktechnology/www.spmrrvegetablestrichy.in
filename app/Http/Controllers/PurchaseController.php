@@ -33,8 +33,8 @@ class PurchaseController extends Controller
 
                 $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                 $terms[] = array(
-                    'bag' => $PurchaseProducts_arrdata->bag,
-                    'kgs' => $PurchaseProducts_arrdata->kgs,
+                    'bag' => $PurchaseProducts_arrdata->bagorkg,
+                    'kgs' => $PurchaseProducts_arrdata->count,
                     'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
                     'total_price' => $PurchaseProducts_arrdata->total_price,
                     'product_name' => $productlist_ID->name,
@@ -78,8 +78,8 @@ class PurchaseController extends Controller
 
                 $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                 $terms[] = array(
-                    'bag' => $PurchaseProducts_arrdata->bag,
-                    'kgs' => $PurchaseProducts_arrdata->kgs,
+                    'bag' => $PurchaseProducts_arrdata->bagorkg,
+                    'kgs' => $PurchaseProducts_arrdata->count,
                     'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
                     'total_price' => $PurchaseProducts_arrdata->total_price,
                     'product_name' => $productlist_ID->name,
@@ -171,8 +171,8 @@ class PurchaseController extends Controller
                 $PurchaseProduct->unique_key = $pprandomkey;
                 $PurchaseProduct->purchase_id = $insertedId;
                 $PurchaseProduct->productlist_id = $product_id;
-                $PurchaseProduct->bag = $request->bag[$key];
-                $PurchaseProduct->kgs = $request->kgs[$key];
+                $PurchaseProduct->bagorkg = $request->bagorkg[$key];
+                $PurchaseProduct->count = $request->count[$key];
                 $PurchaseProduct->price_per_kg = $request->price_per_kg[$key];
                 $PurchaseProduct->total_price = $request->total_price[$key];
                 $PurchaseProduct->save();
@@ -189,11 +189,14 @@ class PurchaseController extends Controller
                         $bag_count = $product_Data->available_stockin_bag;
                         $kg_count = $product_Data->available_stockin_kilograms;
 
-                        $New_bagcount = $request->bag[$key];
-                        $New_kgcount = $request->kgs[$key];
-
-                        $totalbag_count = $bag_count + $New_bagcount;
-                        $totalkg_count = $kg_count + $New_kgcount;
+                        if($request->bagorkg[$key] == 'bag'){
+                            $totalbag_count = $bag_count + $request->count[$key];
+                            $totalkg_count = $kg_count + 0;
+                        }else if($request->bagorkg[$key] == 'kg'){
+                            $totalkg_count = $kg_count + $request->count[$key];
+                            $totalbag_count = $bag_count + 0;
+                        }
+                        
 
                         DB::table('products')->where('productlist_id', $product_ids)->where('branchtable_id', $branch_id)->update([
                             'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
@@ -202,8 +205,14 @@ class PurchaseController extends Controller
                 }else {
                         $product_randomkey = Str::random(5);
 
-                        $New_bagcount = $request->bag[$key];
-                        $New_kgcount = $request->kgs[$key];
+                        
+                        if($request->bagorkg[$key] == 'bag'){
+                            $New_bagcount = $request->count[$key];
+                            $New_kgcount = 0;
+                        }else if($request->bagorkg[$key] == 'kg'){
+                            $New_kgcount = $request->count[$key];
+                            $New_bagcount = 0;
+                        }
 
                         $ProductlistData = new Product;
                         $ProductlistData->unique_key = $product_randomkey;
@@ -264,8 +273,8 @@ class PurchaseController extends Controller
                 $PurchaseProduct->unique_key = $pprandomkey;
                 $PurchaseProduct->purchase_id = $insertedId;
                 $PurchaseProduct->productlist_id = $product_id;
-                $PurchaseProduct->bag = $request->bag[$key];
-                $PurchaseProduct->kgs = $request->kgs[$key];
+                $PurchaseProduct->bagorkg = $request->bagorkg[$key];
+                $PurchaseProduct->count = $request->count[$key];
                 $PurchaseProduct->price_per_kg = $request->price_per_kg[$key];
                 $PurchaseProduct->total_price = $request->total_price[$key];
                 $PurchaseProduct->save();
@@ -282,11 +291,15 @@ class PurchaseController extends Controller
                         $bag_count = $product_Data->available_stockin_bag;
                         $kg_count = $product_Data->available_stockin_kilograms;
 
-                        $New_bagcount = $request->bag[$key];
-                        $New_kgcount = $request->kgs[$key];
+                        if($request->bagorkg[$key] == 'bag'){
+                            $totalbag_count = $bag_count + $request->count[$key];
+                            $totalkg_count = $kg_count + 0;
+                        }else if($request->bagorkg[$key] == 'kg'){
+                            $totalkg_count = $kg_count + $request->count[$key];
+                            $totalbag_count = $bag_count + 0;
+                        }
 
-                        $totalbag_count = $bag_count + $New_bagcount;
-                        $totalkg_count = $kg_count + $New_kgcount;
+                        
 
                         DB::table('products')->where('productlist_id', $product_ids)->where('branchtable_id', $branch_id)->update([
                             'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
@@ -295,8 +308,14 @@ class PurchaseController extends Controller
                 }else {
                         $product_randomkey = Str::random(5);
 
-                        $New_bagcount = $request->bag[$key];
-                        $New_kgcount = $request->kgs[$key];
+                        
+                        if($request->bagorkg[$key] == 'bag'){
+                            $New_bagcount = $request->count[$key];
+                            $New_kgcount = 0;
+                        }else if($request->bagorkg[$key] == 'kg'){
+                            $New_kgcount = $request->count[$key];
+                            $New_bagcount = 0;
+                        }
 
                         $ProductlistData = new Product;
                         $ProductlistData->unique_key = $product_randomkey;
@@ -308,9 +327,9 @@ class PurchaseController extends Controller
 
 
                 }
-
-
             }
+
+
 
             $PurchaseData = Purchase::where('unique_key', '=', $randomkey)->first();
 
@@ -394,17 +413,23 @@ class PurchaseController extends Controller
 
                 $getPurchaseOld = PurchaseProduct::where('id', '=', $differents_id)->first();
 
-                $product_Data = Product::where('soft_delete', '!=', 1)->where('productlist_id', '=', $getPurchaseOld->productlist_id)->where('branchtable_id', '=', $branch_id)->first();
+                $product_Data = Product::where('soft_delete', '!=', 1)->where('productlist_id', '=', $getPurchaseOld->productlist_id)->where('branchtable_id', '=', $Purchase_Data->branch_id)->first();
                 if($branch_id == $product_Data->branchtable_id){
 
                         $bag_count = $product_Data->available_stockin_bag;
                         $kg_count = $product_Data->available_stockin_kilograms;
 
-                        $New_bagcount = $getPurchaseOld->bag;
-                        $New_kgcount = $getPurchaseOld->kgs;
 
-                        $totalbag_count =  $bag_count - $New_bagcount;
-                        $totalkg_count =  $kg_count - $New_kgcount;
+                        if($getPurchaseOld->bagorkg == 'bag'){
+                            $totalbag_count = $bag_count - $getPurchaseOld->count;
+                            $totalkg_count = $kg_count - 0;
+                        }else if($getPurchaseOld->bagorkg == 'kg'){
+                            $totalkg_count = $kg_count - $getPurchaseOld->count;
+                            $totalbag_count = $bag_count - 0;
+                        }
+
+
+                        
 
                         DB::table('products')->where('productlist_id', $getPurchaseOld->productlist_id)->where('branchtable_id', $branch_id)->update([
                             'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
@@ -427,13 +452,13 @@ class PurchaseController extends Controller
                 $ids = $purchase_detail_id;
                 $purchaseID = $PurchaseId;
                 $productlist_id = $request->product_id[$key];
-                $bag = $request->bag[$key];
-                $kgs = $request->kgs[$key];
+                $bagorkg = $request->bagorkg[$key];
+                $count = $request->count[$key];
                 $price_per_kg = $request->price_per_kg[$key];
                 $total_price = $request->total_price[$key];
 
                 DB::table('purchase_products')->where('id', $ids)->update([
-                    'purchase_id' => $purchaseID,  'productlist_id' => $updateproduct_id,  'bag' => $bag,  'kgs' => $kgs, 'price_per_kg' => $price_per_kg, 'total_price' => $total_price
+                    'purchase_id' => $purchaseID,  'productlist_id' => $updateproduct_id,  'bagorkg' => $bagorkg,  'count' => $count, 'price_per_kg' => $price_per_kg, 'total_price' => $total_price
                 ]);
 
             } else if ($purchase_detail_id == '') {
@@ -446,8 +471,8 @@ class PurchaseController extends Controller
                     $PurchaseProduct->unique_key = $p_prandomkey;
                     $PurchaseProduct->purchase_id = $PurchaseId;
                     $PurchaseProduct->productlist_id = $request->product_id[$key];
-                    $PurchaseProduct->bag = $request->bag[$key];
-                    $PurchaseProduct->kgs = $request->kgs[$key];
+                    $PurchaseProduct->bagorkg = $request->bagorkg[$key];
+                    $PurchaseProduct->count = $request->count[$key];
                     $PurchaseProduct->price_per_kg = $request->price_per_kg[$key];
                     $PurchaseProduct->total_price = $request->total_price[$key];
                     $PurchaseProduct->save();
@@ -464,11 +489,16 @@ class PurchaseController extends Controller
                             $bag_count = $product_Data->available_stockin_bag;
                             $kg_count = $product_Data->available_stockin_kilograms;
 
-                            $New_bagcount = $request->bag[$key];
-                            $New_kgcount = $request->kgs[$key];
 
-                            $totalbag_count = $bag_count + $New_bagcount;
-                            $totalkg_count = $kg_count + $New_kgcount;
+                            if($request->bagorkg[$key] == 'bag'){
+                                $totalbag_count = $bag_count + $request->count[$key];
+                                $totalkg_count = $kg_count + 0;
+                            }else if($request->bagorkg[$key] == 'kg'){
+                                $totalkg_count = $kg_count + $request->count[$key];
+                                $totalbag_count = $bag_count + 0;
+                            }
+
+                            
 
                             DB::table('products')->where('productlist_id', $Product_id)->where('branchtable_id', $branch_id)->update([
                                 'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
@@ -477,8 +507,15 @@ class PurchaseController extends Controller
                     }else {
                         $updateproduct_randomkey = Str::random(5);
 
-                        $New_bagcount = $request->bag[$key];
-                        $New_kgcount = $request->kgs[$key];
+                        
+
+                        if($request->bagorkg[$key] == 'bag'){
+                            $New_bagcount = $request->count[$key];
+                            $New_kgcount = 0;
+                        }else if($request->bagorkg[$key] == 'kg'){
+                            $New_kgcount = $request->count[$key];
+                            $New_bagcount = 0;
+                        }
 
                         $ProductlistData = new Product;
                         $ProductlistData->unique_key = $updateproduct_randomkey;

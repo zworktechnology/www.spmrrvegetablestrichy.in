@@ -42,9 +42,12 @@
                     '<select class="select form-control product_id"name="product_id[]" id="product_id' + i + '"required>' +
                     '<option value="" selected hidden class="text-muted">Select Product</option></select>' +
                     '</td>' +
-                    '<td><input type="text" class="form-control" id="bag" name="bag[]" placeholder="Bag" value="" required /></td>' +
-                    '<td><input type="text" class="form-control kgs" id="kgs" name="kgs[]" placeholder="kgs" value="" required /></td>' +
-                    '<td><input type="text" class="form-control price_per_kg" id="price_per_kg" name="price_per_kg[]" placeholder="Price Per Kg" value="" required /></td>' +
+                    '<td><select class=" form-control bagorkg" name="bagorkg[]" id="bagorkg1"required>' +
+                    '<option value="" selected hidden class="text-muted">Select</option>' +
+                    '<option value="bag">Bag</option><option value="kg">Kg</option>' +
+                    '</select></td>' +
+                    '<td><input type="text" class="form-control count" id="count" name="count[]" placeholder="count" value="" required /></td>' +
+                    '<td><input type="text" class="form-control price_per_kg" id="price_per_kg" name="price_per_kg[]" placeholder="Price Per count" value="" required /></td>' +
                     '<td class="text-end"><input type="text" class="form-control total_price" id="total_price" readonly style="background-color: #e9ecef;" name="total_price[]" placeholder="" value="" required /></td>' +
                     '<td><button style="width: 100px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-tr" type="button" >Remove</button></td>' +
                     '</tr>'
@@ -316,10 +319,10 @@
     });
 
 
-      $(document).on("blur", "input[name*=kgs]", function() {
-         var kgs = $(this).val();
+      $(document).on("blur", "input[name*=count]", function() {
+         var count = $(this).val();
          var price_per_kg = $(this).parents('tr').find('.price_per_kg').val();
-         var total = kgs * price_per_kg;
+         var total = count * price_per_kg;
          $(this).parents('tr').find('.total_price').val(total);
 
          var totalAmount = 0;
@@ -369,8 +372,8 @@
 
       $(document).on("blur", "input[name*=price_per_kg]", function() {
          var price_per_kg = $(this).val();
-         var kgs = $(this).parents('tr').find('.kgs').val();
-         var total = kgs * price_per_kg;
+         var count = $(this).parents('tr').find('.count').val();
+         var total = count * price_per_kg;
          $(this).parents('tr').find('.total_price').val(total);
 
          var totalAmount = 0;
@@ -439,9 +442,12 @@ $(document).ready(function() {
                     '<select class="select form-control sales_product_id"name="sales_product_id[]" id="sales_product_id' + i + '"required>' +
                     '<option value="" selected hidden class="text-muted">Select Product</option></select>' +
                     '</td>' +
-                    '<td><input type="text" class="form-control" id="sales_bag" name="sales_bag[]" placeholder="Bag" value="" required /></td>' +
-                    '<td><input type="text" class="form-control sales_kgs" id="sales_kgs" name="sales_kgs[]" placeholder="kgs" value="" required /></td>' +
-                    '<td><input type="text" class="form-control sales_priceperkg" id="sales_priceperkg" name="sales_priceperkg[]" placeholder="Price Per Kg" value="" required /></td>' +
+                    '<td><select class=" form-control sales_bagorkg" name="sales_bagorkg[]" id="sales_bagorkg"required>' +
+                    '<option value="" selected hidden class="text-muted">Select</option>' +
+                    '<option value="bag">Bag</option><option value="kg">Kg</option>' +
+                    '</select></td>' +
+                    '<td><input type="text" class="form-control sales_count" id="sales_count" name="sales_count[]" placeholder="count" value="" required /></td>' +
+                    '<td><input type="text" class="form-control sales_priceperkg" id="sales_priceperkg" name="sales_priceperkg[]" placeholder="Price Per Count" value="" required /></td>' +
                     '<td class="text-end"><input type="text" class="form-control sales_total_price" id="sales_total_price" readonly style="background-color: #e9ecef;" name="sales_total_price[]" placeholder="" value="" required /></td>' +
                     '<td><button style="width: 100px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-salestr" type="button" >Remove</button></td>' +
                     '</tr>'
@@ -568,10 +574,10 @@ $(document).on('click', '.remove-salestr', function() {
 
 
 
-    $(document).on("blur", "input[name*=sales_kgs]", function() {
-         var sales_kgs = $(this).val();
+    $(document).on("blur", "input[name*=sales_count]", function() {
+         var sales_count = $(this).val();
          var sales_priceperkg = $(this).parents('tr').find('.sales_priceperkg').val();
-         var sales_total = sales_kgs * sales_priceperkg;
+         var sales_total = sales_count * sales_priceperkg;
          $(this).parents('tr').find('.sales_total_price').val(sales_total);
 
          var totalAmount = 0;
@@ -623,8 +629,8 @@ $(document).on('click', '.remove-salestr', function() {
 
       $(document).on("blur", "input[name*=sales_priceperkg]", function() {
          var sales_priceperkg = $(this).val();
-         var sales_kgs = $(this).parents('tr').find('.sales_kgs').val();
-         var sales_total = sales_kgs * sales_priceperkg;
+         var sales_count = $(this).parents('tr').find('.sales_count').val();
+         var sales_total = sales_count * sales_priceperkg;
          $(this).parents('tr').find('.sales_total_price').val(sales_total);
 
          var totalAmount = 0;
@@ -686,6 +692,28 @@ $(document).on('click', '.remove-salestr', function() {
 
             document.body.innerHTML = originalContents;
         }
-    
+
+
+
+        $(document).on("keyup", 'input.salespayable_amount', function() {
+            var payable_amount = $(this).val();
+            var grand_total = $(".sales_grand_total").val();
+
+            if (Number(payable_amount) > Number(grand_total)) {
+                alert('You are entering Maximum Amount of Total');
+                $(".salespayable_amount").val('');
+            }
+        });
+
+
+        $(document).on("keyup", 'input.payable_amount', function() {
+            var payable_amount = $(this).val();
+            var grand_total = $(".grand_total").val();
+
+            if (Number(payable_amount) > Number(grand_total)) {
+                alert('You are entering Maximum Amount of Total');
+                $(".payable_amount").val('');
+            }
+        });
 
 </script>

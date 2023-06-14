@@ -70,13 +70,13 @@
                               <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">Product</span>
                            </div>
                            <div class="col-lg-2 col-sm-3 col-12 border">
-                              <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">Bag</span>
+                              <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">Bag / Kg</span>
                            </div>
                            <div class="col-lg-2 col-sm-3 col-12 border">
-                              <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">Kgs</span>
+                              <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">Count</span>
                            </div>
                            <div class="col-lg-2 col-sm-3 col-12 border">
-                              <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">Price / Kg</span>
+                              <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">Price / Count</span>
                            </div>
                            <div class="col-lg-3 col-sm-3 col-12 border">
                               <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">Amount</span>
