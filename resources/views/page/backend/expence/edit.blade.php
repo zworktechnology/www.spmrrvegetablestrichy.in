@@ -1,11 +1,11 @@
 <div class="modal-dialog modal-l">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="expenceeditLargeModalLabel{{ $expenceData->unique_key }}">Update Expence</h5>
+            <h5 class="modal-title" id="expenceeditLargeModalLabel{{ $expenceData['unique_key'] }}">Update Expence</h5>
         </div>
         <div class="modal-body">
             <form autocomplete="off" method="POST"
-                action="{{ route('expence.edit', ['unique_key' => $expenceData->unique_key]) }}"
+                action="{{ route('expence.edit', ['unique_key' => $expenceData['unique_key']]) }}"
                 enctype="multipart/form-data">
 
                 @csrf
@@ -13,13 +13,13 @@
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Date</label>
-                            <input type="date" name="date" value="{{ $expenceData->date }}">
+                            <input type="date" name="date" value="{{ $expenceData['date'] }}">
                         </div>
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Time</label>
-                            <input type="time" name="time" value="{{ $expenceData->time }}">
+                            <input type="time" name="time" value="{{ $expenceData['time'] }}">
                         </div>
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
@@ -28,7 +28,7 @@
                             <select class="select" name="branch_id">
                                 <option value="" disabled selected hiddden>Select Branch</option>
                                    @foreach ($branch as $branches)
-                                      <option value="{{ $branches->id }}" @if ($branches->id === $expenceData->branch_id) selected='selected' @endif>{{ $branches->name }}</option>
+                                      <option value="{{ $branches->id }}" @if ($branches->id === $expenceData['branch_id']) selected='selected' @endif>{{ $branches->name }}</option>
                                    @endforeach
                              </select>
                         </div>
@@ -36,13 +36,13 @@
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Amount</label>
-                            <input type="text" name="amount" placeholder="Enter Amount" value="{{ $expenceData->amount }}">
+                            <input type="text" name="amount" placeholder="Enter Amount" value="{{ $expenceData['amount'] }}">
                         </div>
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Note</label>
-                            <input type="text" name="note" placeholder="Enter Note" value="{{ $expenceData->note }}">
+                            <input type="text" name="note" placeholder="Enter Note" value="{{ $expenceData['note'] }}">
                         </div>
                     </div>
                     <hr>

@@ -99,7 +99,7 @@
                                                 <tr>
                                                     <td>#{{ $purchasedata['bill_no'] }}</td>
                                                     <td>{{ date('d M Y', strtotime($purchasedata['date'])) }} -
-                                                        {{ date('h:i A', strtotime($purchasedata['date'])) }}</td>
+                                                        {{ date('h:i A', strtotime($purchasedata['time'])) }}</td>
                                                     <td>{{ $purchasedata['supplier_name'] }}</td>
                                                     <td>{{ $purchasedata['branch_name'] }}</td>
                                                     <td>{{ $purchasedata['gross_amount'] }}</td>

@@ -4,15 +4,69 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Expence</h4>
-            </div>
-            <div class="page-btn">
-                <button type="button" class="btn btn-primary waves-effect waves-light btn-added" data-bs-toggle="modal"
-                    data-bs-target=".cusomer-modal-xl">Add Expence</button>
+                <h4>Expense Report</h4>
             </div>
         </div>
 
-        <div class="card">
+        <form autocomplete="off" method="POST" action="{{ route('expence.report_view') }}" enctype="multipart/form-data">
+            @method('PUT')
+            @csrf
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>From Date</label>
+                                <input type="date" name="expencereport_fromdate" id="expencereport_fromdate">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>To Date</label>
+                                <input type="date" name="expencereport_todate" id="expencereport_todate">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Branch</label>
+                                <select class="select expencereport_branch" name="expencereport_branch"
+                                    id="expencereport_branch">
+                                    <option value=""  selected >Select Branch</option>
+                                    @foreach ($branch as $branches)
+                                        <option value="{{ $branches->id }}">{{ $branches->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-1 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label style="color: white">Action</label>
+                                <input type="submit" class="btn btn-primary" name="submit" value="Search" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                
+                    
+                        <h4 class="expense_report_heading" style="margin-left: 3%;margin-top: 2%;">
+                        @foreach ($expense_data as $keydata => $expense_datass)
+                        @if ($expense_datass['unique_key'] != '')
+
+                            @if($keydata == 0)
+                            {{ $expense_datass['heading'] }}
+                            @endif
+
+
+                        
+                        @endif
+                        @endforeach
+                        </h4>
+                    
+                        
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table customerdatanew">
@@ -28,6 +82,7 @@
                         </thead>
                         <tbody>
                             @foreach ($expense_data as $keydata => $expenceData)
+                            @if ($expenceData['unique_key'] != '')
                                 <tr>
                                     <td>{{ ++$keydata }}</td>
                                     <td>{{ $expenceData['branch_name'] }}</td>
@@ -62,18 +117,14 @@
                                     aria-hidden="true">
                                     @include('page.backend.expence.delete')
                                 </div>
+                                @endif
                             @endforeach
                         </tbody>
                     </table>
-                </div>
+               
             </div>
         </div>
 
-        <div class="modal fade cusomer-modal-xl" tabindex="-1" role="dialog" aria-labelledby="customerLargeModalLabel"
-            aria-hidden="true" data-bs-backdrop="static">
-            @include('page.backend.expence.create')
-        </div>
-
-
+        </form>
     </div>
 @endsection

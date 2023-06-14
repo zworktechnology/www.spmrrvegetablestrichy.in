@@ -64,6 +64,12 @@
                         <li class="{{ Route::is('purchase.report') ? 'active' : '' }}">
                             <a href="{{ route('purchase.report') }}"><i data-feather="map"></i><span>Purchase Report</span></a>
                         </li>
+                        <li class="{{ Route::is('sales.report') ? 'active' : '' }}">
+                            <a href="{{ route('sales.report') }}"><i data-feather="map"></i><span>Sales Report</span></a>
+                        </li>
+                        <li class="{{ Route::is('expence.report') ? 'active' : '' }}">
+                            <a href="{{ route('expence.report') }}"><i data-feather="map"></i><span>Expense Report</span></a>
+                        </li>
                     </ul>
                 </li>
             </ul>
