@@ -11,6 +11,42 @@
                     data-bs-target=".product-modal-xl">Add Product</button>
             </div>
         </div>
+
+
+        <div class="row">
+
+            <div class="col-lg-2 col-sm-4 col-6">
+                <a href="{{ route('product.index') }}" style="color: black">
+                    <div class="dash-widget">
+                        <div class="dash-widgetcontent">
+                            <h6 style="font-weight: bold;">All</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            @foreach ($branch_data as $keydata => $allbranches)
+            <div class="col-lg-2 col-sm-4 col-6">
+                
+                    <div class="dash-widget">
+                        <div class="dash-widgetcontent">
+                            <h6 style="font-weight: bold;">
+                            
+                            <a href="#branch_view{{ $allbranches->id }}" data-bs-toggle="modal"data-id="{{ $allbranches->id }}"
+                            data-bs-target=".branch_view-modal-xl{{ $allbranches->id }}" style="color:black">{{ $allbranches->name }}</a>
+
+                            </h6>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="modal fade branch_view-modal-xl{{ $allbranches->id }}" tabindex="-1"role="dialog" data-bs-backdrop="static"
+             aria-labelledby="branch_viewLargeModalLabel{{ $allbranches->id }}"aria-hidden="true">
+               @include('page.backend.product.branch_view')
+            </div>
+            @endforeach
+        </div>
+
+
         <div class="row">
         <div class="col-lg-9 col-sm-6 col-12">
             <div class="card">

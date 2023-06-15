@@ -37,6 +37,38 @@ class ExpenceController extends Controller
         return view('page.backend.expence.index', compact('expense_data', 'branch', 'today', 'timenow'));
     }
 
+    public function branchdata($branch_id)
+    {
+        $today = Carbon::now()->format('Y-m-d');
+        $branch = Branch::where('soft_delete', '!=', 1)->get();
+        $timenow = Carbon::now()->format('H:i');
+
+
+        $data = Expence::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+        $expense_data = [];
+        foreach ($data as $key => $datas) {
+            $branch_name = Branch::findOrFail($datas->branch_id);
+
+            $expense_data[] = array(
+                'branch_name' => $branch_name->name,
+                'date' => $datas->date,
+                'time' => $datas->time,
+                'amount' => $datas->amount,
+                'note' => $datas->note,
+                'unique_key' => $datas->unique_key,
+                'id' => $datas->id,
+                'branch_id' => $datas->branch_id,
+            );
+        }
+
+       
+
+        return view('page.backend.expence.index', compact('expense_data', 'branch', 'today', 'timenow'));
+    }
+
+
+
+
     public function store(Request $request)
     {
         $randomkey = Str::random(5);

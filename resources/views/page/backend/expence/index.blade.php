@@ -12,6 +12,31 @@
             </div>
         </div>
 
+
+        <div class="row">
+
+            <div class="col-lg-2 col-sm-4 col-6">
+                <a href="{{ route('expence.index') }}" style="color: black">
+                    <div class="dash-widget">
+                        <div class="dash-widgetcontent">
+                            <h6 style="font-weight: bold;">All</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            @foreach ($branch as $keydata => $allbranches)
+            <div class="col-lg-2 col-sm-4 col-6">
+                <a href="{{ route('expence.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
+                    <div class="dash-widget">
+                        <div class="dash-widgetcontent">
+                            <h6 style="font-weight: bold;">{{ $allbranches->name }}</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            @endforeach
+        </div>
+
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">

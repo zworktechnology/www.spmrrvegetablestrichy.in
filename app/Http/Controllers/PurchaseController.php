@@ -60,7 +60,7 @@ class PurchaseController extends Controller
 
 
 
-        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch'));
+        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'today'));
     }
 
 
@@ -562,6 +562,12 @@ class PurchaseController extends Controller
 
     public function delete($unique_key)
     {
+    }
+
+
+
+    public function datefilter(Request $request) {
+
     }
 
 

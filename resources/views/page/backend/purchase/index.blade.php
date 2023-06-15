@@ -6,8 +6,22 @@
             <div class="page-title">
                 <h4>Purchase</h4>
             </div>
-            <div class="page-btn">
-                <a href="{{ route('purchase.create') }}" class="btn btn-added">Add Purchase</a>
+            
+                <div class="row">
+                <form autocomplete="off" method="POST"
+                                            action="{{ route('purchase.datefilter') }}"
+                                            style="display: flex;">
+                                            @method('PUT')
+                                            @csrf
+                <div class="col-lg-4"><input type="date" name="from_date" required
+                                                    class="form-control from_date" value="{{ $today }}"></div>
+                
+                <div class="col-lg-4"><input type="submit"
+                                                    class="btn btn-success" value="Search"/></div>
+                </form>
+                <div class="page-btn">
+                <div class="col-lg-4"><a href="{{ route('purchase.create') }}" class="btn btn-added">Add Purchase</a></div>
+                </div>
             </div>
         </div>
 

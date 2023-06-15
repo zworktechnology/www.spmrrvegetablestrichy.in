@@ -33,10 +33,45 @@ class ProductController extends Controller
             );
         }
 
+
+        
+        $bag_array = [];
+        $Product_arr = Product::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        foreach ($Product_arr as $key => $Product_arrys) {
+            $productlist = Productlist::findOrFail($Product_arrys->productlist_id);
+            if($Product_arrys->available_stockin_bag){
+                $bag_array[] = array(
+                    'product_name' => $productlist->name,
+                    'bag' => $Product_arrys->available_stockin_bag,
+                    'branch_id' => $Product_arrys->branchtable_id,
+                );
+            }
+                    
+        }
+
+
+        $kg_array = [];
+        $Product_arry = Product::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        foreach ($Product_arry as $key => $Product_arrys) {
+            $productlist = Productlist::findOrFail($Product_arrys->productlist_id);
+            if($Product_arrys->available_stockin_kilograms){
+                $kg_array[] = array(
+                    'product_name' => $productlist->name,
+                    'kg' => $Product_arrys->available_stockin_kilograms,
+                    'branch_id' => $Product_arrys->branchtable_id,
+                );
+            }
+                    
+        }
+
         
 
-        return view('page.backend.product.index', compact('branch_data', 'product_data', 'productlistdata'));
+        return view('page.backend.product.index', compact('branch_data', 'product_data', 'productlistdata', 'bag_array', 'kg_array'));
     }
+
+
+
+    
 
     public function store(Request $request)
     {

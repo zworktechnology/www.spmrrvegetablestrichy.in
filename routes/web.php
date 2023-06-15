@@ -114,6 +114,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/expence/report', [ExpenceController::class, 'report'])->name('expence.report');
         // REPORT VIEW
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/expence/report_view', [ExpenceController::class, 'report_view'])->name('expence.report_view');
+        // INDEX BRANCH WISE
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/expence/branchdata/{branch_id}', [ExpenceController::class, 'branchdata'])->name('expence.branchdata');
     });
 
 
@@ -177,6 +179,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchase/report', [PurchaseController::class, 'report'])->name('purchase.report');
         // REPORT VIEW
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/report_view', [PurchaseController::class, 'report_view'])->name('purchase.report_view');
+        // DATAE FILTER
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/datefilter', [PurchaseController::class, 'datefilter'])->name('purchase.datefilter');
     });
 
 
