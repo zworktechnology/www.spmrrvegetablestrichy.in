@@ -100,8 +100,9 @@ class PurchaseController extends Controller
                 'terms' => $terms,
             );
         }
+        $today = Carbon::now()->format('Y-m-d');
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'branch_id'));
+        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'branch_id', 'today'));
     }
 
 
@@ -567,6 +568,52 @@ class PurchaseController extends Controller
 
 
     public function datefilter(Request $request) {
+
+        $today = Carbon::now()->format('Y-m-d');
+        $from_date = $request->get('from_date');
+
+
+
+        $data = Purchase::where('date', '=', $from_date)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $purchase_data = [];
+        $terms = [];
+        foreach ($data as $key => $datas) {
+            $branch_name = Branch::findOrFail($datas->branch_id);
+            $supplier_name = Supplier::findOrFail($datas->supplier_id);
+
+            $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+            foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                $terms[] = array(
+                    'bag' => $PurchaseProducts_arrdata->bagorkg,
+                    'kgs' => $PurchaseProducts_arrdata->count,
+                    'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                    'total_price' => $PurchaseProducts_arrdata->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                );
+            }
+
+            $purchase_data[] = array(
+                'unique_key' => $datas->unique_key,
+                'branch_name' => $branch_name->name,
+                'supplier_name' => $supplier_name->name,
+                'date' => $datas->date,
+                'time' => $datas->time,
+                'gross_amount' => $datas->gross_amount,
+                'bill_no' => $datas->bill_no,
+                'id' => $datas->id,
+                'terms' => $terms,
+            );
+        }
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+
+
+
+        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'today'));
 
     }
 

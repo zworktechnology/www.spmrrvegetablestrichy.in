@@ -59,12 +59,13 @@ class SalesController extends Controller
         }
 
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        return view('page.backend.sales.index', compact('Sales_data','allbranch'));
+        return view('page.backend.sales.index', compact('Sales_data','allbranch', 'today'));
     }
 
 
     public function branchdata($branch_id)
     {
+        $today = Carbon::now()->format('Y-m-d');
         $branchwise_data = Sales::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $Sales_data = [];
         $sales_terms = [];
@@ -101,7 +102,55 @@ class SalesController extends Controller
             );
         }
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        return view('page.backend.sales.index', compact('Sales_data', 'allbranch', 'branch_id'));
+        return view('page.backend.sales.index', compact('Sales_data', 'allbranch', 'branch_id', 'today'));
+    }
+
+    public function datefilter(Request $request) { 
+
+        $today = Carbon::now()->format('Y-m-d');
+        $from_date = $request->get('from_date');
+
+
+        $data = Sales::where('date', '=', $from_date)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $Sales_data = [];
+        $sales_terms = [];
+        foreach ($data as $key => $datas) {
+            $branch_name = Branch::findOrFail($datas->branch_id);
+            $customer_name = Customer::findOrFail($datas->customer_id);
+
+            $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->get();
+            foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                $sales_terms[] = array(
+                    'bag' => $SalesProducts_arrdata->bagorkg,
+                    'kgs' => $SalesProducts_arrdata->count,
+                    'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                    'total_price' => $SalesProducts_arrdata->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                );
+            }
+
+
+
+            $Sales_data[] = array(
+                'unique_key' => $datas->unique_key,
+                'branch_name' => $branch_name->name,
+                'customer_name' => $customer_name->name,
+                'date' => $datas->date,
+                'time' => $datas->time,
+                'gross_amount' => $datas->gross_amount,
+                'bill_no' => $datas->bill_no,
+                'id' => $datas->id,
+                'sales_terms' => $sales_terms,
+            );
+        }
+
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        return view('page.backend.sales.index', compact('Sales_data','allbranch', 'today'));
+
     }
 
     public function create()

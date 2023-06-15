@@ -6,6 +6,21 @@
             <div class="page-title">
                 <h4>Expence</h4>
             </div>
+            <div class="page-btn" style="margin-left: 20%;">
+                        
+                            <form autocomplete="off" method="POST"
+                                                        action="{{ route('expence.datefilter') }}"
+                                                        style="display: flex;">
+                                                        @method('PUT')
+                                                        @csrf
+                                <div class="col-lg-6"><input type="date" name="from_date" required
+                                                                    class="form-control from_date" value="{{ $today }}"></div>
+                                <div class="col-lg-1"></div>
+                                <div class="col-lg-5"><input type="submit"
+                                                                    class="btn btn-success" value="Search"/></div>
+                            </form>
+                        
+                    </div>
             <div class="page-btn">
                 <button type="button" class="btn btn-primary waves-effect waves-light btn-added" data-bs-toggle="modal"
                     data-bs-target=".cusomer-modal-xl">Add Expence</button>

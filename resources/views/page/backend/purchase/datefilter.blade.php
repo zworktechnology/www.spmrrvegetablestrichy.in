@@ -6,51 +6,27 @@
             <div class="page-title">
                 <h4>Purchase</h4>
             </div>
-                    <div class="page-btn" style="margin-left: 20%;">
-                        
-                            <form autocomplete="off" method="POST"
-                                                        action="{{ route('purchase.datefilter') }}"
-                                                        style="display: flex;">
-                                                        @method('PUT')
-                                                        @csrf
-                                <div class="col-lg-6"><input type="date" name="from_date" required
-                                                                    class="form-control from_date" value="{{ $today }}"></div>
-                                <div class="col-lg-1"></div>
-                                <div class="col-lg-5"><input type="submit"
-                                                                    class="btn btn-success" value="Search"/></div>
-                            </form>
-                        
-                    </div>
-                    <div class="page-btn">
-                        <div class="row"><a href="{{ route('purchase.create') }}" class="btn btn-added">Add Purchase</a></div>
-                    </div>
+            <div class="page-btn" style="margin-left: 20%;">
+                
+                    <form autocomplete="off" method="POST"
+                                                action="{{ route('purchase.datefilter') }}"
+                                                style="display: flex;">
+                                                @method('PUT')
+                                                @csrf
+                        <div class="col-lg-6"><input type="date" name="from_date" required
+                                                            class="form-control from_date" value="{{ $today }}"></div>
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-5"><input type="submit"
+                                                            class="btn btn-success" value="Search"/></div>
+                    </form>
+                
+            </div>
+                    
             
         </div>
 
 
-        <div class="row">
-
-            <div class="col-lg-2 col-sm-4 col-6">
-                <a href="{{ route('purchase.index') }}" style="color: black">
-                    <div class="dash-widget">
-                        <div class="dash-widgetcontent">
-                            <h6 style="font-weight: bold;">All</h6>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            @foreach ($allbranch as $keydata => $allbranches)
-            <div class="col-lg-2 col-sm-4 col-6">
-                <a href="{{ route('purchase.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
-                    <div class="dash-widget">
-                        <div class="dash-widgetcontent">
-                            <h6 style="font-weight: bold;">{{ $allbranches->name }}</h6>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            @endforeach
-        </div>
+       
 
         <div class="card">
             <div class="card-body">
