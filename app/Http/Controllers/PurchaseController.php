@@ -197,7 +197,7 @@ class PurchaseController extends Controller
                             $totalkg_count = $kg_count + $request->count[$key];
                             $totalbag_count = $bag_count + 0;
                         }
-                        
+
 
                         DB::table('products')->where('productlist_id', $product_ids)->where('branchtable_id', $branch_id)->update([
                             'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
@@ -206,7 +206,7 @@ class PurchaseController extends Controller
                 }else {
                         $product_randomkey = Str::random(5);
 
-                        
+
                         if($request->bagorkg[$key] == 'bag'){
                             $New_bagcount = $request->count[$key];
                             $New_kgcount = 0;
@@ -300,7 +300,7 @@ class PurchaseController extends Controller
                             $totalbag_count = $bag_count + 0;
                         }
 
-                        
+
 
                         DB::table('products')->where('productlist_id', $product_ids)->where('branchtable_id', $branch_id)->update([
                             'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
@@ -309,7 +309,7 @@ class PurchaseController extends Controller
                 }else {
                         $product_randomkey = Str::random(5);
 
-                        
+
                         if($request->bagorkg[$key] == 'bag'){
                             $New_bagcount = $request->count[$key];
                             $New_kgcount = 0;
@@ -430,7 +430,7 @@ class PurchaseController extends Controller
                         }
 
 
-                        
+
 
                         DB::table('products')->where('productlist_id', $getPurchaseOld->productlist_id)->where('branchtable_id', $branch_id)->update([
                             'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
@@ -499,7 +499,7 @@ class PurchaseController extends Controller
                                 $totalbag_count = $bag_count + 0;
                             }
 
-                            
+
 
                             DB::table('products')->where('productlist_id', $Product_id)->where('branchtable_id', $branch_id)->update([
                                 'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
@@ -508,7 +508,7 @@ class PurchaseController extends Controller
                     }else {
                         $updateproduct_randomkey = Str::random(5);
 
-                        
+
 
                         if($request->bagorkg[$key] == 'bag'){
                             $New_bagcount = $request->count[$key];
@@ -613,7 +613,7 @@ class PurchaseController extends Controller
 
 
 
-        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'today'));
+        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'today', 'from_date'));
 
     }
 
@@ -748,7 +748,7 @@ class PurchaseController extends Controller
 
                     );
                 }
-                
+
 
 
                 $purchase_data[] = array(
@@ -1227,24 +1227,17 @@ class PurchaseController extends Controller
             );
         }
 
-
-
-
         if($purchasereport_fromdate && $purchasereport_branch){
-
 
             $datefilter_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
-
             $purchase_data = [];
             $todate_terms = [];
-
 
             foreach ($datefilter_report as $key => $datefilter_report_arr) {
 
                 $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
                 $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
-
 
                 $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                 foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
@@ -1260,7 +1253,6 @@ class PurchaseController extends Controller
 
                     );
                 }
-
 
                 $purchase_data[] = array(
                     'unique_key' => $datefilter_report_arr->unique_key,
@@ -1292,22 +1284,17 @@ class PurchaseController extends Controller
             );
         }
 
-
-
         if($purchasereport_todate && $purchasereport_branch){
 
             $datefilter_report = Purchase::where('date', '=', $purchasereport_todate)->where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
-
             $purchase_data = [];
             $todate_terms = [];
-
 
             foreach ($datefilter_report as $key => $datefilter_report_arr) {
 
                 $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
                 $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
-
 
                 $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                 foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
@@ -1357,9 +1344,6 @@ class PurchaseController extends Controller
             );
         }
 
-
-
-
         if($purchasereport_fromdate && $purchasereport_todate && $purchasereport_branch){
 
             $datefilter_report = Purchase::whereBetween('date', [$purchasereport_fromdate, $purchasereport_todate])
@@ -1389,7 +1373,6 @@ class PurchaseController extends Controller
 
                     );
                 }
-
 
                 $purchase_data[] = array(
                     'unique_key' => $datefilter_report_arr->unique_key,

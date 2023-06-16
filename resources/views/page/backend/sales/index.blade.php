@@ -6,23 +6,18 @@
             <div class="page-title">
                 <h4>Sales</h4>
             </div>
-                        <div class="page-btn" style="margin-left: 20%;">
-                        
-                            <form autocomplete="off" method="POST"
-                                                        action="{{ route('sales.datefilter') }}"
-                                                        style="display: flex;">
-                                                        @method('PUT')
-                                                        @csrf
-                                <div class="col-lg-6"><input type="date" name="from_date" required
-                                                                    class="form-control from_date" value="{{ $today }}"></div>
-                                <div class="col-lg-1"></div>
-                                <div class="col-lg-5"><input type="submit"
-                                                                    class="btn btn-success" value="Search"/></div>
-                            </form>
-                        
+            <div style="display: flex;">
+                <form autocomplete="off" method="POST" action="{{ route('sales.datefilter') }}" style="display: flex;">
+                    @method('PUT')
+                    @csrf
+                    <div style="display: flex">
+                        <div style="margin-right: 10px;"><input type="date" name="from_date" required
+                                class="form-control from_date" value="{{ $today }}"></div>
+                        <div style="margin-right: 10px;"><input type="submit" class="btn btn-success" value="Search" />
+                        </div>
                     </div>
-            <div class="page-btn">
-            <div class="row"><a href="{{ route('sales.create') }}" class="btn btn-added">Add Sales</a></div>
+                </form>
+                <a href="{{ route('sales.create') }}" class="btn btn-added">Add Sales</a>
             </div>
         </div>
         <div class="row">
@@ -37,15 +32,15 @@
                 </a>
             </div>
             @foreach ($allbranch as $keydata => $allbranches)
-            <div class="col-lg-2 col-sm-4 col-6">
-                <a href="{{ route('sales.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
-                    <div class="dash-widget">
-                        <div class="dash-widgetcontent">
-                            <h6 style="font-weight: bold;">{{ $allbranches->name }}</h6>
+                <div class="col-lg-2 col-sm-4 col-6">
+                    <a href="{{ route('sales.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
+                        <div class="dash-widget">
+                            <div class="dash-widgetcontent">
+                                <h6 style="font-weight: bold;">{{ $allbranches->name }}</h6>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
             @endforeach
         </div>
 
@@ -67,7 +62,8 @@
                             @foreach ($Sales_data as $keydata => $Sales_datas)
                                 <tr>
                                     <td>#{{ $Sales_datas['bill_no'] }}</td>
-                                    <td>{{ date('d M Y', strtotime($Sales_datas['date'])) }} - {{ date('h:i A', strtotime($Sales_datas['date'])) }}</td>
+                                    <td>{{ date('d M Y', strtotime($Sales_datas['date'])) }} -
+                                        {{ date('h:i A', strtotime($Sales_datas['date'])) }}</td>
                                     <td>{{ $Sales_datas['customer_name'] }}</td>
                                     <td>{{ $Sales_datas['branch_name'] }}</td>
                                     <td>{{ $Sales_datas['gross_amount'] }}</td>
@@ -75,31 +71,31 @@
                                         <ul class="list-unstyled hstack gap-1 mb-0">
                                             <li>
 
-                                                <a href="{{ route('sales.edit', ['unique_key' => $Sales_datas['unique_key']]) }}" class="badges bg-lightyellow" style="color: white">Edit</a>
+                                                <a href="{{ route('sales.edit', ['unique_key' => $Sales_datas['unique_key']]) }}"
+                                                    class="badges bg-lightyellow" style="color: white">Edit</a>
                                             </li>
                                             <li>
                                                 <a href="#salesview{{ $Sales_datas['unique_key'] }}" data-bs-toggle="modal"
-                                                    data-id="{{ $Sales_datas['id'] }}" 
+                                                    data-id="{{ $Sales_datas['id'] }}"
                                                     data-bs-target=".salesview-modal-xl{{ $Sales_datas['unique_key'] }}"
                                                     class="badges bg-lightred salesview" style="color: white">View</a>
-                                                
+
                                             </li>
                                             <li>
-                                                <a href="{{ route('sales.invoice', ['unique_key' => $Sales_datas['unique_key']]) }}" class="badges bg-lightgreen" style="color: white">Invoice</a>
+                                                <a href="{{ route('sales.invoice', ['unique_key' => $Sales_datas['unique_key']]) }}"
+                                                    class="badges bg-lightgreen" style="color: white">Invoice</a>
                                             </li>
-                                            
+
                                         </ul>
                                     </td>
                                 </tr>
 
-                                <div class="modal fade salesview-modal-xl{{ $Sales_datas['unique_key'] }}"
-                                    tabindex="-1" role="dialog" data-bs-backdrop="static"
+                                <div class="modal fade salesview-modal-xl{{ $Sales_datas['unique_key'] }}" tabindex="-1"
+                                    role="dialog" data-bs-backdrop="static"
                                     aria-labelledby="salesviewLargeModalLabel{{ $Sales_datas['unique_key'] }}"
                                     aria-hidden="true">
                                     @include('page.backend.sales.view')
                                 </div>
-
-                               
                             @endforeach
                         </tbody>
                     </table>
@@ -107,7 +103,7 @@
             </div>
         </div>
 
-        
+
 
 
     </div>

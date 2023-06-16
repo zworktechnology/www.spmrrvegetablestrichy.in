@@ -6,30 +6,25 @@
             <div class="page-title">
                 <h4>Purchase</h4>
             </div>
-                    <div class="page-btn" style="margin-left: 20%;">
-                        
-                            <form autocomplete="off" method="POST"
-                                                        action="{{ route('purchase.datefilter') }}"
-                                                        style="display: flex;">
-                                                        @method('PUT')
-                                                        @csrf
-                                <div class="col-lg-6"><input type="date" name="from_date" required
-                                                                    class="form-control from_date" value="{{ $today }}"></div>
-                                <div class="col-lg-1"></div>
-                                <div class="col-lg-5"><input type="submit"
-                                                                    class="btn btn-success" value="Search"/></div>
-                            </form>
-                        
+            <div class="page-btn">
+                <div class="row">
+                    <div style="display: flex;">
+                        <form autocomplete="off" method="POST" action="{{ route('purchase.datefilter') }}">
+                            @method('PUT')
+                            @csrf
+                            <div style="display: flex">
+                                <div style="margin-right: 10px;"><input type="date" name="from_date" required class="form-control from_date"
+                                        value="{{ $today }}"></div>
+                                <div style="margin-right: 10px;"><input type="submit" class="btn btn-success" value="Search" /></div>
+                            </div>
+                        </form>
+                        <a href="{{ route('purchase.create') }}" class="btn btn-added">Add Purchase</a>
                     </div>
-                    <div class="page-btn">
-                        <div class="row"><a href="{{ route('purchase.create') }}" class="btn btn-added">Add Purchase</a></div>
-                    </div>
-            
+                </div>
+            </div>
         </div>
 
-
         <div class="row">
-
             <div class="col-lg-2 col-sm-4 col-6">
                 <a href="{{ route('purchase.index') }}" style="color: black">
                     <div class="dash-widget">
@@ -40,15 +35,15 @@
                 </a>
             </div>
             @foreach ($allbranch as $keydata => $allbranches)
-            <div class="col-lg-2 col-sm-4 col-6">
-                <a href="{{ route('purchase.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
-                    <div class="dash-widget">
-                        <div class="dash-widgetcontent">
-                            <h6 style="font-weight: bold;">{{ $allbranches->name }}</h6>
+                <div class="col-lg-2 col-sm-4 col-6">
+                    <a href="{{ route('purchase.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
+                        <div class="dash-widget">
+                            <div class="dash-widgetcontent">
+                                <h6 style="font-weight: bold;">{{ $allbranches->name }}</h6>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
             @endforeach
         </div>
 
@@ -89,11 +84,11 @@
                                                     class="badges bg-lightgrey" style="color: white">Delete</a>
                                             </li>
                                             <li>
-                                                <a href="#purchaseview{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
-                                                    data-id="{{ $purchasedata['id'] }}" 
+                                                <a href="#purchaseview{{ $purchasedata['unique_key'] }}"
+                                                    data-bs-toggle="modal" data-id="{{ $purchasedata['id'] }}"
                                                     data-bs-target=".purchaseview-modal-xl{{ $purchasedata['unique_key'] }}"
                                                     class="badges bg-lightred purchaseview" style="color: white">View</a>
-                                                
+
                                             </li>
                                             <li>
                                                 <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"

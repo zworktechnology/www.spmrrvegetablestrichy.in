@@ -6,27 +6,25 @@
             <div class="page-title">
                 <h4>Expence</h4>
             </div>
-            <div class="page-btn" style="margin-left: 20%;">
-                        
-                            <form autocomplete="off" method="POST"
-                                                        action="{{ route('expence.datefilter') }}"
-                                                        style="display: flex;">
-                                                        @method('PUT')
-                                                        @csrf
-                                <div class="col-lg-6"><input type="date" name="from_date" required
-                                                                    class="form-control from_date" value="{{ $today }}"></div>
-                                <div class="col-lg-1"></div>
-                                <div class="col-lg-5"><input type="submit"
-                                                                    class="btn btn-success" value="Search"/></div>
-                            </form>
-                        
-                    </div>
             <div class="page-btn">
-                <button type="button" class="btn btn-primary waves-effect waves-light btn-added" data-bs-toggle="modal"
-                    data-bs-target=".cusomer-modal-xl">Add Expence</button>
+                <div class="row">
+                    <div style="display: flex;">
+                        <form autocomplete="off" method="POST" action="{{ route('expence.datefilter') }}">
+                            @method('PUT')
+                            @csrf
+                            <div style="display: flex">
+                                <div style="margin-right: 10px;"><input type="date" name="from_date" required
+                                        class="form-control from_date" value="{{ $today }}"></div>
+                                <div style="margin-right: 10px;"><input type="submit" class="btn btn-success"
+                                        value="Search" /></div>
+                            </div>
+                        </form>
+                        <button type="button" class="btn btn-primary waves-effect waves-light btn-added"
+                            data-bs-toggle="modal" data-bs-target=".cusomer-modal-xl">Add Expence</button>
+                    </div>
+                </div>
             </div>
         </div>
-
 
         <div class="row">
 
@@ -40,15 +38,15 @@
                 </a>
             </div>
             @foreach ($branch as $keydata => $allbranches)
-            <div class="col-lg-2 col-sm-4 col-6">
-                <a href="{{ route('expence.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
-                    <div class="dash-widget">
-                        <div class="dash-widgetcontent">
-                            <h6 style="font-weight: bold;">{{ $allbranches->name }}</h6>
+                <div class="col-lg-2 col-sm-4 col-6">
+                    <a href="{{ route('expence.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
+                        <div class="dash-widget">
+                            <div class="dash-widgetcontent">
+                                <h6 style="font-weight: bold;">{{ $allbranches->name }}</h6>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
             @endforeach
         </div>
 
@@ -71,7 +69,8 @@
                                 <tr>
                                     <td>{{ ++$keydata }}</td>
                                     <td>{{ $expenceData['branch_name'] }}</td>
-                                    <td>{{ date('d M Y', strtotime($expenceData['date'])) }} - {{ date('h:i A', strtotime($expenceData['time'])) }}</td>
+                                    <td>{{ date('d M Y', strtotime($expenceData['date'])) }} -
+                                        {{ date('h:i A', strtotime($expenceData['time'])) }}</td>
                                     <td>{{ $expenceData['amount'] }}</td>
                                     <td>{!! $expenceData['note'] !!}</td>
                                     <td>
@@ -79,19 +78,22 @@
                                             <li>
                                                 <a href="#edit{{ $expenceData['unique_key'] }}" data-bs-toggle="modal"
                                                     data-id="{{ $expenceData['unique_key'] }}"
-                                                    data-bs-target=".expenceedit-modal-xl{{ $expenceData['unique_key'] }}" class="badges bg-lightyellow" style="color: white">Edit</a>
+                                                    data-bs-target=".expenceedit-modal-xl{{ $expenceData['unique_key'] }}"
+                                                    class="badges bg-lightyellow" style="color: white">Edit</a>
                                             </li>
                                             <li>
                                                 <a href="#delete{{ $expenceData['unique_key'] }}" data-bs-toggle="modal"
                                                     data-id="{{ $expenceData['unique_key'] }}"
-                                                    data-bs-target=".expencedelete-modal-xl{{ $expenceData['unique_key'] }}" class="badges bg-lightgrey" style="color: white">Delete</a>
+                                                    data-bs-target=".expencedelete-modal-xl{{ $expenceData['unique_key'] }}"
+                                                    class="badges bg-lightgrey" style="color: white">Delete</a>
                                             </li>
                                         </ul>
                                     </td>
                                 </tr>
 
                                 <div class="modal fade expenceedit-modal-xl{{ $expenceData['unique_key'] }}" tabindex="-1"
-                                    role="dialog" data-bs-backdrop="static" aria-labelledby="expenceeditLargeModalLabel{{ $expenceData['unique_key'] }}"
+                                    role="dialog" data-bs-backdrop="static"
+                                    aria-labelledby="expenceeditLargeModalLabel{{ $expenceData['unique_key'] }}"
                                     aria-hidden="true">
                                     @include('page.backend.expence.edit')
                                 </div>
