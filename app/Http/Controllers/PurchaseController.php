@@ -569,12 +569,12 @@ class PurchaseController extends Controller
 
     public function datefilter(Request $request) {
 
-        $today = Carbon::now()->format('Y-m-d');
-        $from_date = $request->get('from_date');
+        
+        $today = $request->get('from_date');
 
 
 
-        $data = Purchase::where('date', '=', $from_date)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $data = Purchase::where('date', '=', $today)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $purchase_data = [];
         $terms = [];
         foreach ($data as $key => $datas) {
@@ -613,7 +613,7 @@ class PurchaseController extends Controller
 
 
 
-        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'today', 'from_date'));
+        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'today'));
 
     }
 
@@ -640,6 +640,8 @@ class PurchaseController extends Controller
         echo json_encode($userData);
     }
 
+
+    
 
     public function getPurchaseview()
     {
@@ -719,194 +721,215 @@ class PurchaseController extends Controller
         $purchasereport_todate = $request->get('purchasereport_todate');
         $purchasereport_branch = $request->get('purchasereport_branch');
         $purchasereport_supplier = $request->get('purchasereport_supplier');
+        
+
 
         $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
 
-        if($purchasereport_branch != ""){
+        if($purchasereport_branch){
+
+            $GetBranch = Branch::findOrFail($purchasereport_branch);
+            $purchase_data = [];
 
             $branchwise_report = Purchase::where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-            $purchase_data = [];
-            $terms = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-                $supplier_name = Supplier::findOrFail($branchwise_datas->supplier_id);
+            if($branchwise_report != ''){
 
-
-                $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $branchwise_datas->id)->get();
-                foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
-
-                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                    $terms[] = array(
-                        'bag' => $PurchaseProducts_arrdata->bag,
-                        'kgs' => $PurchaseProducts_arrdata->kgs,
-                        'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                        'total_price' => $PurchaseProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
-
+               
+                $terms = [];
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $supplier_name = Supplier::findOrFail($branchwise_datas->supplier_id);
+    
+    
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $branchwise_datas->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+    
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bag,
+                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+    
+                        );
+                    }
+    
+    
+    
+                    $purchase_data[] = array(
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'supplier_name' => $supplier_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'terms' => $terms,
+                        'heading' => $branch_name->name . ' - Branch',
+    
                     );
                 }
-
-
-
+            }else {
                 $purchase_data[] = array(
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'supplier_name' => $supplier_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'gross_amount' => $branchwise_datas->gross_amount,
-                    'bill_no' => $branchwise_datas->bill_no,
-                    'id' => $branchwise_datas->id,
-                    'terms' => $terms,
-                    'heading' => 'Branch - Filter Data',
-
+                    'heading' => $GetBranch->name . ' - Branch',
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'supplier_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'terms' => '',
+                    
                 );
             }
-        }else{
-
-            $purchase_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'supplier_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'terms' => '',
-                'heading' => 'Branch wise Filter Data - No Data',
-            );
+            
+            
         }
 
 
 
-        if($purchasereport_supplier != ""){
+
+        if($purchasereport_supplier){
+            $GetSupplier = Supplier::findOrFail($purchasereport_supplier);
 
             $supplierwise_report = Purchase::where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $purchase_data = [];
-            $supplier_terms = [];
 
-            foreach ($supplierwise_report as $key => $supplierwise_report_datas) {
+            if($supplierwise_report != ''){
+                $supplier_terms = [];
 
-                $branch_name = Branch::findOrFail($supplierwise_report_datas->branch_id);
-                $supplier_name = Supplier::findOrFail($supplierwise_report_datas->supplier_id);
+                foreach ($supplierwise_report as $key => $supplierwise_report_datas) {
+
+                    $branch_name = Branch::findOrFail($supplierwise_report_datas->branch_id);
+                    $supplier_name = Supplier::findOrFail($supplierwise_report_datas->supplier_id);
 
 
-                $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $supplierwise_report_datas->id)->get();
-                foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $supplierwise_report_datas->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                    $supplier_terms[] = array(
-                        'bag' => $PurchaseProducts_arrdata->bag,
-                        'kgs' => $PurchaseProducts_arrdata->kgs,
-                        'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                        'total_price' => $PurchaseProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $supplier_terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bag,
+                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
 
+                        );
+                    }
+
+
+                    $purchase_data[] = array(
+                        'unique_key' => $supplierwise_report_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'supplier_name' => $supplier_name->name,
+                        'date' => $supplierwise_report_datas->date,
+                        'time' => $supplierwise_report_datas->time,
+                        'gross_amount' => $supplierwise_report_datas->gross_amount,
+                        'bill_no' => $supplierwise_report_datas->bill_no,
+                        'id' => $supplierwise_report_datas->id,
+                        'terms' => $supplier_terms,
+                        'heading' => $GetSupplier->name . ' - Supplier',
                     );
-                }
 
+
+
+                }
+            }else{
 
                 $purchase_data[] = array(
-                    'unique_key' => $supplierwise_report_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'supplier_name' => $supplier_name->name,
-                    'date' => $supplierwise_report_datas->date,
-                    'time' => $supplierwise_report_datas->time,
-                    'gross_amount' => $supplierwise_report_datas->gross_amount,
-                    'bill_no' => $supplierwise_report_datas->bill_no,
-                    'id' => $supplierwise_report_datas->id,
-                    'terms' => $supplier_terms,
-                    'heading' => 'Supplier - Filter Data',
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'supplier_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'terms' => '',
+                    'heading' => $GetSupplier->name . ' - Supplier',
                 );
-
-
-
             }
 
-        }else{
-
-            $purchase_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'supplier_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'terms' => '',
-                'heading' => 'Supplier wise Filter Data - No Data',
-            );
         }
+
+
+
 
 
         if($purchasereport_fromdate != ""){
 
             $fromdate_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $purchase_data = [];
-            $fromdate_terms = [];
+            if($fromdate_report != ''){
+                $fromdate_terms = [];
 
-            foreach ($fromdate_report as $key => $fromdate_report_datas) {
-
-
-                $branch_name = Branch::findOrFail($fromdate_report_datas->branch_id);
-                $supplier_name = Supplier::findOrFail($fromdate_report_datas->supplier_id);
+                foreach ($fromdate_report as $key => $fromdate_report_datas) {
 
 
-                $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $fromdate_report_datas->id)->get();
-                foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+                    $branch_name = Branch::findOrFail($fromdate_report_datas->branch_id);
+                    $supplier_name = Supplier::findOrFail($fromdate_report_datas->supplier_id);
 
-                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                    $fromdate_terms[] = array(
-                        'bag' => $PurchaseProducts_arrdata->bag,
-                        'kgs' => $PurchaseProducts_arrdata->kgs,
-                        'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                        'total_price' => $PurchaseProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
 
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $fromdate_report_datas->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $fromdate_terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bag,
+                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                        );
+                    }
+
+
+                    $purchase_data[] = array(
+                        'unique_key' => $fromdate_report_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'supplier_name' => $supplier_name->name,
+                        'date' => $fromdate_report_datas->date,
+                        'time' => $fromdate_report_datas->time,
+                        'gross_amount' => $fromdate_report_datas->gross_amount,
+                        'bill_no' => $fromdate_report_datas->bill_no,
+                        'id' => $fromdate_report_datas->id,
+                        'terms' => $fromdate_terms,
+                        'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - Report',
                     );
-                }
 
+
+
+                }
+            }else{
 
                 $purchase_data[] = array(
-                    'unique_key' => $fromdate_report_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'supplier_name' => $supplier_name->name,
-                    'date' => $fromdate_report_datas->date,
-                    'time' => $fromdate_report_datas->time,
-                    'gross_amount' => $fromdate_report_datas->gross_amount,
-                    'bill_no' => $fromdate_report_datas->bill_no,
-                    'id' => $fromdate_report_datas->id,
-                    'terms' => $fromdate_terms,
-                    'heading' => 'FromDate - Filter Data',
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'supplier_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'terms' => '',
+                    'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)),
                 );
-
-
-
             }
 
 
-        }else{
-
-            $purchase_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'supplier_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'terms' => '',
-                'heading' => 'Supplier wise Filter Data - No Data',
-            );
         }
+
 
 
 
@@ -915,127 +938,392 @@ class PurchaseController extends Controller
 
             $todate_report = Purchase::where('date', '=', $purchasereport_todate)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $purchase_data = [];
-            $todate_terms = [];
+            if($todate_report != ''){
+                $todate_terms = [];
 
 
-            foreach ($todate_report as $key => $todate_report_datas) {
+                foreach ($todate_report as $key => $todate_report_datas) {
 
-                $branch_name = Branch::findOrFail($todate_report_datas->branch_id);
-                $supplier_name = Supplier::findOrFail($todate_report_datas->supplier_id);
+                    $branch_name = Branch::findOrFail($todate_report_datas->branch_id);
+                    $supplier_name = Supplier::findOrFail($todate_report_datas->supplier_id);
 
 
-                $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $todate_report_datas->id)->get();
-                foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $todate_report_datas->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                    $todate_terms[] = array(
-                        'bag' => $PurchaseProducts_arrdata->bag,
-                        'kgs' => $PurchaseProducts_arrdata->kgs,
-                        'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                        'total_price' => $PurchaseProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $todate_terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bag,
+                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
 
+                        );
+                    }
+
+
+                    $purchase_data[] = array(
+                        'unique_key' => $todate_report_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'supplier_name' => $supplier_name->name,
+                        'date' => $todate_report_datas->date,
+                        'time' => $todate_report_datas->time,
+                        'gross_amount' => $todate_report_datas->gross_amount,
+                        'bill_no' => $todate_report_datas->bill_no,
+                        'id' => $todate_report_datas->id,
+                        'terms' => $todate_terms,
+                        'heading' => date('d-M-Y', strtotime($purchasereport_todate)) . ' - Report',
                     );
+
                 }
 
+            }else{
 
                 $purchase_data[] = array(
-                    'unique_key' => $todate_report_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'supplier_name' => $supplier_name->name,
-                    'date' => $todate_report_datas->date,
-                    'time' => $todate_report_datas->time,
-                    'gross_amount' => $todate_report_datas->gross_amount,
-                    'bill_no' => $todate_report_datas->bill_no,
-                    'id' => $todate_report_datas->id,
-                    'terms' => $todate_terms,
-                    'heading' => 'ToDate - Filter Data',
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'supplier_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'terms' => '',
+                    'heading' => date('d-M-Y', strtotime($purchasereport_todate)) . ' - Report',
                 );
-
             }
-
-
-        }else{
-
-            $purchase_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'supplier_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'terms' => '',
-                'heading' => 'ToDate wise Filter Data - No Data',
-            );
         }
+
 
 
 
 
         if($purchasereport_fromdate && $purchasereport_supplier){
-
+            $GetSupplier = Supplier::findOrFail($purchasereport_supplier);
 
             $datefilter_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $purchase_data = [];
+            if($datefilter_report != ''){
+                $todate_terms = [];
+
+
+                foreach ($datefilter_report as $key => $datefilter_report_arr) {
+
+                    $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
+                    $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
+
+
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $todate_terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bag,
+                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                        );
+                    }
+
+
+                    $purchase_data[] = array(
+                        'unique_key' => $datefilter_report_arr->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'supplier_name' => $supplier_name->name,
+                        'date' => $datefilter_report_arr->date,
+                        'time' => $datefilter_report_arr->time,
+                        'gross_amount' => $datefilter_report_arr->gross_amount,
+                        'bill_no' => $datefilter_report_arr->bill_no,
+                        'id' => $datefilter_report_arr->id,
+                        'terms' => $todate_terms,
+                        'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - Supplier(' . $GetSupplier->name . ')'
+                    );
+
+                }
+            }else{
+
+                $purchase_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'supplier_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'terms' => '',
+                    'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - Supplier(' . $GetSupplier->name . ')'
+                );
+            }
+
+        }
+
+
+
+
+        if($purchasereport_todate && $purchasereport_supplier){
+            $GetSupplier = Supplier::findOrFail($purchasereport_supplier);
+            $datefilter_report = Purchase::where('date', '=', $purchasereport_todate)->where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+
+            $purchase_data = [];
+            if($datefilter_report != ''){
+                $todate_terms = [];
+
+
+                    foreach ($datefilter_report as $key => $datefilter_report_arr) {
+
+                        $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
+                        $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
+
+
+                        $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                        foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                            $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                            $todate_terms[] = array(
+                                'bag' => $PurchaseProducts_arrdata->bag,
+                                'kgs' => $PurchaseProducts_arrdata->kgs,
+                                'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                                'total_price' => $PurchaseProducts_arrdata->total_price,
+                                'product_name' => $productlist_ID->name,
+                                'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                            );
+                        }
+
+
+                        $purchase_data[] = array(
+                            'unique_key' => $datefilter_report_arr->unique_key,
+                            'branch_name' => $branch_name->name,
+                            'supplier_name' => $supplier_name->name,
+                            'date' => $datefilter_report_arr->date,
+                            'time' => $datefilter_report_arr->time,
+                            'gross_amount' => $datefilter_report_arr->gross_amount,
+                            'bill_no' => $datefilter_report_arr->bill_no,
+                            'id' => $datefilter_report_arr->id,
+                            'terms' => $todate_terms,
+                            'heading' => date('d-M-Y', strtotime($purchasereport_todate)) . ' - Supplier(' . $GetSupplier->name . ')'
+                        );
+
+                    }
+            }else{
+
+                $purchase_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'supplier_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'terms' => '',
+                    'heading' => date('d-M-Y', strtotime($purchasereport_todate)) . ' - Supplier(' . $GetSupplier->name . ')'
+                );
+            }
+        }
+
+
+
+        if($purchasereport_branch && $purchasereport_supplier){
+
+            $GetSupplier = Supplier::findOrFail($purchasereport_supplier);
+            $GetBrach = Branch::findOrFail($purchasereport_branch);
+
+            $datefilter_report = Purchase::where('branch_id', '=', $purchasereport_branch)->where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+            $purchase_data = [];
+            if($datefilter_report != ''){
             $todate_terms = [];
 
 
-            foreach ($datefilter_report as $key => $datefilter_report_arr) {
+                foreach ($datefilter_report as $key => $datefilter_report_arr) {
 
-                $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
-                $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
+                    $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
+                    $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
 
 
-                $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
-                foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                    $todate_terms[] = array(
-                        'bag' => $PurchaseProducts_arrdata->bag,
-                        'kgs' => $PurchaseProducts_arrdata->kgs,
-                        'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                        'total_price' => $PurchaseProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $todate_terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bag,
+                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
 
+                        );
+                    }
+
+
+                    $purchase_data[] = array(
+                        'unique_key' => $datefilter_report_arr->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'supplier_name' => $supplier_name->name,
+                        'date' => $datefilter_report_arr->date,
+                        'time' => $datefilter_report_arr->time,
+                        'gross_amount' => $datefilter_report_arr->gross_amount,
+                        'bill_no' => $datefilter_report_arr->bill_no,
+                        'id' => $datefilter_report_arr->id,
+                        'terms' => $todate_terms,
+                        'heading' => $GetBrach->name . '(Branch) - Supplier(' . $GetSupplier->name . ')'
                     );
-                }
 
+                }
+            }else{
 
                 $purchase_data[] = array(
-                    'unique_key' => $datefilter_report_arr->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'supplier_name' => $supplier_name->name,
-                    'date' => $datefilter_report_arr->date,
-                    'time' => $datefilter_report_arr->time,
-                    'gross_amount' => $datefilter_report_arr->gross_amount,
-                    'bill_no' => $datefilter_report_arr->bill_no,
-                    'id' => $datefilter_report_arr->id,
-                    'terms' => $todate_terms,
-                    'heading' => '(From Date & Supplier) - Filter Data',
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'supplier_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'terms' => '',
+                    'heading' => $GetBrach->name . '(Branch) - Supplier(' . $GetSupplier->name . ')'
                 );
+            }
 
+        }
+
+
+
+        if($purchasereport_fromdate && $purchasereport_branch){
+            $GetBrach = Branch::findOrFail($purchasereport_branch);
+            $datefilter_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+            $purchase_data = [];
+            if($datefilter_report != ''){
+                $todate_terms = [];
+
+                foreach ($datefilter_report as $key => $datefilter_report_arr) {
+
+                    $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
+                    $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
+
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $todate_terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bag,
+                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                        );
+                    }
+
+                    $purchase_data[] = array(
+                        'unique_key' => $datefilter_report_arr->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'supplier_name' => $supplier_name->name,
+                        'date' => $datefilter_report_arr->date,
+                        'time' => $datefilter_report_arr->time,
+                        'gross_amount' => $datefilter_report_arr->gross_amount,
+                        'bill_no' => $datefilter_report_arr->bill_no,
+                        'id' => $datefilter_report_arr->id,
+                        'terms' => $todate_terms,
+                        'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . $GetBrach->name . '(Branch)'
+                    );
+
+                }
+            }else{
+
+                $purchase_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'supplier_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'terms' => '',
+                    'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . $GetBrach->name . '(Branch)'
+                );
+            }
+        }
+
+
+
+
+        if($purchasereport_todate && $purchasereport_branch){
+            $GetBrach = Branch::findOrFail($purchasereport_branch);
+            $datefilter_report = Purchase::where('date', '=', $purchasereport_todate)->where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+            $purchase_data = [];
+            if($datefilter_report != ''){
+                $todate_terms = [];
+
+                foreach ($datefilter_report as $key => $datefilter_report_arr) {
+
+                    $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
+                    $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
+
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $todate_terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bag,
+                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                        );
+                    }
+
+
+                    $purchase_data[] = array(
+                        'unique_key' => $datefilter_report_arr->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'supplier_name' => $supplier_name->name,
+                        'date' => $datefilter_report_arr->date,
+                        'time' => $datefilter_report_arr->time,
+                        'gross_amount' => $datefilter_report_arr->gross_amount,
+                        'bill_no' => $datefilter_report_arr->bill_no,
+                        'id' => $datefilter_report_arr->id,
+                        'terms' => $todate_terms,
+                        'heading' => date('d-M-Y', strtotime($purchasereport_todate)) . ' - ' . $GetBrach->name . '(Branch)'
+                    );
+
+                }
+            }else{
+
+                $purchase_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'supplier_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'terms' => '',
+                    'heading' => date('d-M-Y', strtotime($purchasereport_todate)) . ' - ' . $GetBrach->name . '(Branch)'
+                );
             }
 
 
-        }else{
-
-            $purchase_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'supplier_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'terms' => '',
-                'heading' => '(From Date & Supplier) - Filter Data - No Data',
-            );
         }
+
+
 
 
 
@@ -1044,440 +1332,197 @@ class PurchaseController extends Controller
 
             $datefilter_report = Purchase::whereBetween('date', [$purchasereport_fromdate, $purchasereport_todate])->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $purchase_data = [];
-            $todate_terms = [];
+            if($datefilter_report != ''){
+                $todate_terms = [];
 
-            foreach ($datefilter_report as $key => $datefilter_report_arr) {
+                foreach ($datefilter_report as $key => $datefilter_report_arr) {
 
-                $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
-                $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
+                    $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
+                    $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
 
 
-                $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
-                foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                    $todate_terms[] = array(
-                        'bag' => $PurchaseProducts_arrdata->bag,
-                        'kgs' => $PurchaseProducts_arrdata->kgs,
-                        'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                        'total_price' => $PurchaseProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $todate_terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bag,
+                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
 
+                        );
+                    }
+
+
+                    $purchase_data[] = array(
+                        'unique_key' => $datefilter_report_arr->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'supplier_name' => $supplier_name->name,
+                        'date' => $datefilter_report_arr->date,
+                        'time' => $datefilter_report_arr->time,
+                        'gross_amount' => $datefilter_report_arr->gross_amount,
+                        'bill_no' => $datefilter_report_arr->bill_no,
+                        'id' => $datefilter_report_arr->id,
+                        'terms' => $todate_terms,
+                        'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($purchasereport_todate))
                     );
-                }
 
+                }
+            }else{
 
                 $purchase_data[] = array(
-                    'unique_key' => $datefilter_report_arr->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'supplier_name' => $supplier_name->name,
-                    'date' => $datefilter_report_arr->date,
-                    'time' => $datefilter_report_arr->time,
-                    'gross_amount' => $datefilter_report_arr->gross_amount,
-                    'bill_no' => $datefilter_report_arr->bill_no,
-                    'id' => $datefilter_report_arr->id,
-                    'terms' => $todate_terms,
-                    'heading' => '(From Date & To Date) - Filter Data',
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'supplier_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'terms' => '',
+                    'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($purchasereport_todate))
                 );
-
             }
 
 
-        }else{
-
-            $purchase_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'supplier_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'terms' => '',
-                'heading' => '(From Date & To Date) - Filter Data - No Data',
-            );
         }
 
 
-
-        if($purchasereport_todate && $purchasereport_supplier){
-
-            $datefilter_report = Purchase::where('date', '=', $purchasereport_todate)->where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-
-
-            $purchase_data = [];
-            $todate_terms = [];
-
-
-            foreach ($datefilter_report as $key => $datefilter_report_arr) {
-
-                $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
-                $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
-
-
-                $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
-                foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
-
-                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                    $todate_terms[] = array(
-                        'bag' => $PurchaseProducts_arrdata->bag,
-                        'kgs' => $PurchaseProducts_arrdata->kgs,
-                        'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                        'total_price' => $PurchaseProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
-
-                    );
-                }
-
-
-                $purchase_data[] = array(
-                    'unique_key' => $datefilter_report_arr->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'supplier_name' => $supplier_name->name,
-                    'date' => $datefilter_report_arr->date,
-                    'time' => $datefilter_report_arr->time,
-                    'gross_amount' => $datefilter_report_arr->gross_amount,
-                    'bill_no' => $datefilter_report_arr->bill_no,
-                    'id' => $datefilter_report_arr->id,
-                    'terms' => $todate_terms,
-                    'heading' => '(To Date & Supplier) - Filter Data',
-                );
-
-            }
-
-        }else{
-
-            $purchase_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'supplier_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'terms' => '',
-                'heading' => 'To Date & Supplier wise Filter Data - No Data',
-            );
-        }
-
-
-
-        if($purchasereport_branch && $purchasereport_supplier){
-
-            $datefilter_report = Purchase::where('branch_id', '=', $purchasereport_branch)->where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-
-            $purchase_data = [];
-            $todate_terms = [];
-
-
-            foreach ($datefilter_report as $key => $datefilter_report_arr) {
-
-                $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
-                $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
-
-
-                $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
-                foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
-
-                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                    $todate_terms[] = array(
-                        'bag' => $PurchaseProducts_arrdata->bag,
-                        'kgs' => $PurchaseProducts_arrdata->kgs,
-                        'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                        'total_price' => $PurchaseProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
-
-                    );
-                }
-
-
-                $purchase_data[] = array(
-                    'unique_key' => $datefilter_report_arr->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'supplier_name' => $supplier_name->name,
-                    'date' => $datefilter_report_arr->date,
-                    'time' => $datefilter_report_arr->time,
-                    'gross_amount' => $datefilter_report_arr->gross_amount,
-                    'bill_no' => $datefilter_report_arr->bill_no,
-                    'id' => $datefilter_report_arr->id,
-                    'terms' => $todate_terms,
-                    'heading' => '(Branch & Supplier) - Filter Data',
-                );
-
-            }
-
-        }else{
-
-            $purchase_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'supplier_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'terms' => '',
-                'heading' => '(Branch & Supplier) - Filter Data - No Data',
-            );
-        }
-
-        if($purchasereport_fromdate && $purchasereport_branch){
-
-            $datefilter_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-
-            $purchase_data = [];
-            $todate_terms = [];
-
-            foreach ($datefilter_report as $key => $datefilter_report_arr) {
-
-                $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
-                $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
-
-                $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
-                foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
-
-                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                    $todate_terms[] = array(
-                        'bag' => $PurchaseProducts_arrdata->bag,
-                        'kgs' => $PurchaseProducts_arrdata->kgs,
-                        'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                        'total_price' => $PurchaseProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
-
-                    );
-                }
-
-                $purchase_data[] = array(
-                    'unique_key' => $datefilter_report_arr->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'supplier_name' => $supplier_name->name,
-                    'date' => $datefilter_report_arr->date,
-                    'time' => $datefilter_report_arr->time,
-                    'gross_amount' => $datefilter_report_arr->gross_amount,
-                    'bill_no' => $datefilter_report_arr->bill_no,
-                    'id' => $datefilter_report_arr->id,
-                    'terms' => $todate_terms,
-                    'heading' => '(From Date & Branch) - Filter Data',
-                );
-
-            }
-        }else{
-
-            $purchase_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'supplier_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'terms' => '',
-                'heading' => '(From Date & Branch) - Filter Data - No Data',
-            );
-        }
-
-        if($purchasereport_todate && $purchasereport_branch){
-
-            $datefilter_report = Purchase::where('date', '=', $purchasereport_todate)->where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-
-            $purchase_data = [];
-            $todate_terms = [];
-
-            foreach ($datefilter_report as $key => $datefilter_report_arr) {
-
-                $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
-                $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
-
-                $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
-                foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
-
-                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                    $todate_terms[] = array(
-                        'bag' => $PurchaseProducts_arrdata->bag,
-                        'kgs' => $PurchaseProducts_arrdata->kgs,
-                        'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                        'total_price' => $PurchaseProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
-
-                    );
-                }
-
-
-                $purchase_data[] = array(
-                    'unique_key' => $datefilter_report_arr->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'supplier_name' => $supplier_name->name,
-                    'date' => $datefilter_report_arr->date,
-                    'time' => $datefilter_report_arr->time,
-                    'gross_amount' => $datefilter_report_arr->gross_amount,
-                    'bill_no' => $datefilter_report_arr->bill_no,
-                    'id' => $datefilter_report_arr->id,
-                    'terms' => $todate_terms,
-                    'heading' => '(To Date & Branch) - Filter Data',
-                );
-
-            }
-
-
-        }else{
-
-            $purchase_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'supplier_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'terms' => '',
-                'heading' => '(To Date & Branch) - Filter Data - No Data',
-            );
-        }
 
         if($purchasereport_fromdate && $purchasereport_todate && $purchasereport_branch){
-
+            $GetBrach = Branch::findOrFail($purchasereport_branch);
             $datefilter_report = Purchase::whereBetween('date', [$purchasereport_fromdate, $purchasereport_todate])
                                             ->where('branch_id', '=', $purchasereport_branch)
                                             ->where('soft_delete', '!=', 1)
                                             ->where('status', '!=', 1)->get();
             $purchase_data = [];
-            $todate_terms = [];
+            if($datefilter_report != ''){
+                $todate_terms = [];
 
-            foreach ($datefilter_report as $key => $datefilter_report_arr) {
+                foreach ($datefilter_report as $key => $datefilter_report_arr) {
 
-                $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
-                $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
+                    $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
+                    $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
 
 
-                $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
-                foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                    $todate_terms[] = array(
-                        'bag' => $PurchaseProducts_arrdata->bag,
-                        'kgs' => $PurchaseProducts_arrdata->kgs,
-                        'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                        'total_price' => $PurchaseProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $todate_terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bag,
+                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
 
+                        );
+                    }
+
+                    $purchase_data[] = array(
+                        'unique_key' => $datefilter_report_arr->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'supplier_name' => $supplier_name->name,
+                        'date' => $datefilter_report_arr->date,
+                        'time' => $datefilter_report_arr->time,
+                        'gross_amount' => $datefilter_report_arr->gross_amount,
+                        'bill_no' => $datefilter_report_arr->bill_no,
+                        'id' => $datefilter_report_arr->id,
+                        'terms' => $todate_terms,
+                        'heading' => $GetBrach->name . ' Branch - (' . date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($purchasereport_todate)) . ')'
                     );
+
                 }
+            }else{
 
                 $purchase_data[] = array(
-                    'unique_key' => $datefilter_report_arr->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'supplier_name' => $supplier_name->name,
-                    'date' => $datefilter_report_arr->date,
-                    'time' => $datefilter_report_arr->time,
-                    'gross_amount' => $datefilter_report_arr->gross_amount,
-                    'bill_no' => $datefilter_report_arr->bill_no,
-                    'id' => $datefilter_report_arr->id,
-                    'terms' => $todate_terms,
-                    'heading' => '(From Date & To Date & Branch) - Filter Data',
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'supplier_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'terms' => '',
+                    'heading' => $GetBrach->name . ' Branch - (' . date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($purchasereport_todate)) . ')'
                 );
-
             }
-
-
-
-        }else{
-
-            $purchase_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'supplier_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'terms' => '',
-                'heading' => '(From Date & To Date & Branch) - Filter Data - No Data',
-            );
         }
 
 
 
         if($purchasereport_fromdate && $purchasereport_todate && $purchasereport_supplier){
+            $GetSupplier = Supplier::findOrFail($purchasereport_supplier);
 
-
-        $datefilter_report = Purchase::whereBetween('date', [$purchasereport_fromdate, $purchasereport_todate])
-                                                ->where('supplier_id', '=', $purchasereport_supplier)
-                                                ->where('soft_delete', '!=', 1)
-                                                ->where('status', '!=', 1)->get();
+            $datefilter_report = Purchase::whereBetween('date', [$purchasereport_fromdate, $purchasereport_todate])
+                                                    ->where('supplier_id', '=', $purchasereport_supplier)
+                                                    ->where('soft_delete', '!=', 1)
+                                                    ->where('status', '!=', 1)->get();
                 $purchase_data = [];
-                $todate_terms = [];
-
-            foreach ($datefilter_report as $key => $datefilter_report_arr) {
-
-                $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
-                $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
-
-
-                $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
-                foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
-
-                $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                    $todate_terms[] = array(
-                    'bag' => $PurchaseProducts_arrdata->bag,
-                    'kgs' => $PurchaseProducts_arrdata->kgs,
-                    'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                    'total_price' => $PurchaseProducts_arrdata->total_price,
-                    'product_name' => $productlist_ID->name,
-                    'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
-
+                if($datefilter_report != ''){
+                        $todate_terms = [];
+    
+                    foreach ($datefilter_report as $key => $datefilter_report_arr) {
+        
+                        $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
+                        $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
+        
+        
+                        $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                        foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+        
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                            $todate_terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bag,
+                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+        
+                            );
+                        }
+        
+        
+                            $purchase_data[] = array(
+                                'unique_key' => $datefilter_report_arr->unique_key,
+                                'branch_name' => $branch_name->name,
+                                'supplier_name' => $supplier_name->name,
+                                'date' => $datefilter_report_arr->date,
+                                'time' => $datefilter_report_arr->time,
+                                'gross_amount' => $datefilter_report_arr->gross_amount,
+                                'bill_no' => $datefilter_report_arr->bill_no,
+                                'id' => $datefilter_report_arr->id,
+                                'terms' => $todate_terms,
+                                'heading' => $GetSupplier->name . ' (Supplier) - (' . date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($purchasereport_todate)) . ')'
+                            );
+        
+                    }
+                }else{
+    
+                    $purchase_data[] = array(
+                        'unique_key' => '',
+                        'branch_name' => '',
+                        'supplier_name' => '',
+                        'date' => '',
+                        'time' => '',
+                        'gross_amount' => '',
+                        'bill_no' => '',
+                        'id' => '',
+                        'terms' => '',
+                        'heading' => $GetSupplier->name . ' (Supplier) - (' . date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($purchasereport_todate)) . ')'
                     );
                 }
-
-
-                    $purchase_data[] = array(
-                    'unique_key' => $datefilter_report_arr->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'supplier_name' => $supplier_name->name,
-                    'date' => $datefilter_report_arr->date,
-                    'time' => $datefilter_report_arr->time,
-                    'gross_amount' => $datefilter_report_arr->gross_amount,
-                    'bill_no' => $datefilter_report_arr->bill_no,
-                    'id' => $datefilter_report_arr->id,
-                    'terms' => $todate_terms,
-                    'heading' => '(From Date & To Date & Supplier) - Filter Data',
-                    );
 
             }
 
 
-
-        }else{
-
-            $purchase_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'supplier_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'terms' => '',
-                'heading' => '(From Date & To Date & Supplier) - Filter Data - No Data',
-            );
-        }
-
-
-
-
-        return view('page.backend.purchase.report', compact('purchasereport_fromdate', 'branch', 'supplier', 'purchasereport_todate','purchasereport_branch', 'purchasereport_supplier', 'purchase_data', 'purchasereport_fromdate', 'purchasereport_todate', 'purchasereport_branch', 'purchasereport_supplier'));
+        return view('page.backend.purchase.report', compact('purchasereport_fromdate', 'branch', 'supplier', 'purchasereport_todate','purchasereport_branch', 'purchasereport_supplier', 'purchase_data'));
     }
 
 

@@ -63,7 +63,7 @@
             <div class="card">
                 
                     
-                        <h4 class="sales_report_heading" style="margin-left: 3%;margin-top: 2%;">
+                        <h4 class="sales_report_heading" style="margin-left: 3%;margin-top: 2%;font-weight: 600;color: #c12171;">
                         @foreach ($Sales_data as $keydata => $sales_data_arr)
                         @if ($sales_data_arr['unique_key'] != '')
 

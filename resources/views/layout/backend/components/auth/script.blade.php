@@ -111,26 +111,26 @@
             var supplier_id = this.value;
             var branch_id = $("#branch_id").val();
             $('.old_balance').html('');
-            $.ajax({
-            url: '/getoldbalance/',
-            type: 'get',
-            data: {
-                        _token: "{{ csrf_token() }}",
-                        supplier_id: supplier_id,
-                        branch_id: branch_id
-                    },
-            dataType: 'json',
-                success: function(response) {
-                    console.log(response['data']);
-                    var value = 0;
-                    if(response['data'] > 0){
-                        $(".old_balance").val(response['data']);
-                    }else {
-                        $(".old_balance").val(value);
+                $.ajax({
+                    url: '/getoldbalance/',
+                    type: 'get',
+                    data: {
+                            _token: "{{ csrf_token() }}",
+                            supplier_id: supplier_id,
+                            branch_id: branch_id
+                        },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response['data']);
+                        var value = 0;
+                        if(response['data'] > 0){
+                            $(".old_balance").val(response['data']);
+                        }else {
+                            $(".old_balance").val(value);
+                        }
+                        
                     }
-                    
-                }
-            });
+                });
         });
 
 
@@ -283,6 +283,9 @@
                      //});
 
     });
+
+    
+
 
 
     $(document).on('click', '.remove-tr', function() {

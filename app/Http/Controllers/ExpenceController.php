@@ -69,15 +69,15 @@ class ExpenceController extends Controller
 
     public function datefilter(Request $request) 
     {
-        $today = Carbon::now()->format('Y-m-d');
-        $from_date = $request->get('from_date');
+        
+        $today = $request->get('from_date');
 
 
         $branch = Branch::where('soft_delete', '!=', 1)->get();
         $timenow = Carbon::now()->format('H:i');
 
 
-        $data = Expence::where('date', '=', $from_date)->where('soft_delete', '!=', 1)->get();
+        $data = Expence::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
         $expense_data = [];
         foreach ($data as $key => $datas) {
             $branch_name = Branch::findOrFail($datas->branch_id);
@@ -185,225 +185,287 @@ class ExpenceController extends Controller
 
 
         if($expencereport_branch != ""){
+            $getBranch = Branch::findOrFail($expencereport_branch);
 
             $branchwise_report = Expence::where('branch_id', '=', $expencereport_branch)->where('soft_delete', '!=', 1)->get();
             $expense_data = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+            if($branchwise_report != ''){
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
 
+
+                    $expense_data[] = array(
+                        'branch_name' => $branch_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'amount' => $branchwise_datas->amount,
+                        'note' => $branchwise_datas->note,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'id' => $branchwise_datas->id,
+                        'branch_id' => $branchwise_datas->branch_id,
+                        'heading' => $getBranch->name . ' - Branch',
+                    );
+                }
+            }else{
 
                 $expense_data[] = array(
-                    'branch_name' => $branch_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'amount' => $branchwise_datas->amount,
-                    'note' => $branchwise_datas->note,
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'id' => $branchwise_datas->id,
-                    'branch_id' => $branchwise_datas->branch_id,
-                    'heading' => 'Branch - Filter Data',
+                    'branch_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'amount' => '',
+                    'note' => '',
+                    'unique_key' => '',
+                    'id' => '',
+                    'branch_id' => '',
+                    'heading' => $getBranch->name . ' - Branch',
                 );
             }
-        }else{
-
-            $expense_data[] = array(
-                'branch_name' => '',
-                'date' => '',
-                'time' => '',
-                'amount' => '',
-                'note' => '',
-                'unique_key' => '',
-                'id' => '',
-                'branch_id' => '',
-                'heading' => '',
-            );
         }
 
 
 
         if($expencereport_fromdate || $expencereport_todate){
 
-            $branchwise_report = Expence::where('date', '=', $expencereport_fromdate)->orwhere('date', '=', $expencereport_todate)->where('soft_delete', '!=', 1)->get();
-            $expense_data = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
 
+            if($expencereport_fromdate){
+                $branchwise_report = Expence::where('date', '=', $expencereport_fromdate)->where('soft_delete', '!=', 1)->get();
+                $expense_data = [];
+                if($branchwise_report != ''){
+                    foreach ($branchwise_report as $key => $branchwise_datas) {
+                        $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+        
+        
+                        $expense_data[] = array(
+                            'branch_name' => $branch_name->name,
+                            'date' => $branchwise_datas->date,
+                            'time' => $branchwise_datas->time,
+                            'amount' => $branchwise_datas->amount,
+                            'note' => $branchwise_datas->note,
+                            'unique_key' => $branchwise_datas->unique_key,
+                            'id' => $branchwise_datas->id,
+                            'branch_id' => $branchwise_datas->branch_id,
+                            'heading' => date('d-M-Y', strtotime($expencereport_fromdate)) . ' - Report',
+                        );
+                    }
+                }else{
 
-                $expense_data[] = array(
-                    'branch_name' => $branch_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'amount' => $branchwise_datas->amount,
-                    'note' => $branchwise_datas->note,
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'id' => $branchwise_datas->id,
-                    'branch_id' => $branchwise_datas->branch_id,
-                    'heading' => 'Date - Filter Data',
-                );
+                    $expense_data[] = array(
+                        'branch_name' => '',
+                        'date' => '',
+                        'time' => '',
+                        'amount' => '',
+                        'note' => '',
+                        'unique_key' => '',
+                        'id' => '',
+                        'branch_id' => '',
+                        'heading' => date('d-M-Y', strtotime($expencereport_fromdate)) . ' - Report',
+                    );
+                }
+        
             }
-        }else{
 
-            $expense_data[] = array(
-                'branch_name' => '',
-                'date' => '',
-                'time' => '',
-                'amount' => '',
-                'note' => '',
-                'unique_key' => '',
-                'id' => '',
-                'branch_id' => '',
-                'heading' => 'Date - Filter Data',
-            );
+            if($expencereport_todate){
+                $branchwise_report = Expence::where('date', '=', $expencereport_todate)->where('soft_delete', '!=', 1)->get();
+                $expense_data = [];
+                if($branchwise_report != ''){
+                    foreach ($branchwise_report as $key => $branchwise_datas) {
+                        $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+        
+        
+                        $expense_data[] = array(
+                            'branch_name' => $branch_name->name,
+                            'date' => $branchwise_datas->date,
+                            'time' => $branchwise_datas->time,
+                            'amount' => $branchwise_datas->amount,
+                            'note' => $branchwise_datas->note,
+                            'unique_key' => $branchwise_datas->unique_key,
+                            'id' => $branchwise_datas->id,
+                            'branch_id' => $branchwise_datas->branch_id,
+                            'heading' => date('d-M-Y', strtotime($expencereport_todate)) . ' - Report',
+                        );
+                    }
+                }else{
+
+                    $expense_data[] = array(
+                        'branch_name' => '',
+                        'date' => '',
+                        'time' => '',
+                        'amount' => '',
+                        'note' => '',
+                        'unique_key' => '',
+                        'id' => '',
+                        'branch_id' => '',
+                        'heading' => date('d-M-Y', strtotime($expencereport_todate)) . ' - Report',
+                    );
+                }
+            }
+
+            
         }
+
 
 
 
         if($expencereport_fromdate && $expencereport_branch){
+            $GetBranch = Branch::findOrFail($expencereport_branch);
 
             $branchwise_report = Expence::where('date', '=', $expencereport_fromdate)->where('branch_id', '=', $expencereport_branch)->where('soft_delete', '!=', 1)->get();
             $expense_data = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+            if($branchwise_report != ''){
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
 
 
-                $expense_data[] = array(
-                    'branch_name' => $branch_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'amount' => $branchwise_datas->amount,
-                    'note' => $branchwise_datas->note,
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'id' => $branchwise_datas->id,
-                    'branch_id' => $branchwise_datas->branch_id,
-                    'heading' => '(Date & Branch) - Filter Data',
-                );
-            }
-        }else{
-
-            $expense_data[] = array(
-                'branch_name' => '',
-                'date' => '',
-                'time' => '',
-                'amount' => '',
-                'note' => '',
-                'unique_key' => '',
-                'id' => '',
-                'branch_id' => '',
-                'heading' => '(Date & Branch) - Filter Data',
-            );
-        }
-
-
-
-        if($expencereport_todate && $expencereport_branch){
-
-            $branchwise_report = Expence::where('date', '=', $expencereport_todate)->where('branch_id', '=', $expencereport_branch)->where('soft_delete', '!=', 1)->get();
-            $expense_data = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-
+                    $expense_data[] = array(
+                        'branch_name' => $branch_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'amount' => $branchwise_datas->amount,
+                        'note' => $branchwise_datas->note,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'id' => $branchwise_datas->id,
+                        'branch_id' => $branchwise_datas->branch_id,
+                        'heading' => date('d-M-Y', strtotime($expencereport_fromdate)) . ' - ' . $GetBranch->name . '(Branch)'
+                    );
+                }
+            }else{
 
                 $expense_data[] = array(
-                    'branch_name' => $branch_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'amount' => $branchwise_datas->amount,
-                    'note' => $branchwise_datas->note,
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'id' => $branchwise_datas->id,
-                    'branch_id' => $branchwise_datas->branch_id,
-                    'heading' => '(Date & Branch) - Filter Data',
+                    'branch_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'amount' => '',
+                    'note' => '',
+                    'unique_key' => '',
+                    'id' => '',
+                    'branch_id' => '',
+                    'heading' => date('d-M-Y', strtotime($expencereport_fromdate)) . ' - ' . $GetBranch->name . '(Branch)'
                 );
             }
-        }else{
-
-            $expense_data[] = array(
-                'branch_name' => '',
-                'date' => '',
-                'time' => '',
-                'amount' => '',
-                'note' => '',
-                'unique_key' => '',
-                'id' => '',
-                'branch_id' => '',
-                'heading' => '(Date & Branch) - Filter Data',
-            );
         }
-
-
-
-        if($expencereport_fromdate && $expencereport_todate && $expencereport_branch){
-
-            $branchwise_report = Expence::whereBetween('date', [$expencereport_fromdate, $expencereport_todate])->where('branch_id', '=', $expencereport_branch)->where('soft_delete', '!=', 1)->get();
-            $expense_data = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-
-
-                $expense_data[] = array(
-                    'branch_name' => $branch_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'amount' => $branchwise_datas->amount,
-                    'note' => $branchwise_datas->note,
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'id' => $branchwise_datas->id,
-                    'branch_id' => $branchwise_datas->branch_id,
-                    'heading' => '(From Date - To Date & Branch) - Filter Data',
-                );
-            }
-        }else{
-
-            $expense_data[] = array(
-                'branch_name' => '',
-                'date' => '',
-                'time' => '',
-                'amount' => '',
-                'note' => '',
-                'unique_key' => '',
-                'id' => '',
-                'branch_id' => '',
-                'heading' => '(From Date - To Date & Branch) - Filter Data',
-            );
-        }
-
 
 
         if($expencereport_fromdate && $expencereport_todate){
 
             $branchwise_report = Expence::whereBetween('date', [$expencereport_fromdate, $expencereport_todate])->where('soft_delete', '!=', 1)->get();
             $expense_data = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+            if($branchwise_report != ''){
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
 
+
+                    $expense_data[] = array(
+                        'branch_name' => $branch_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'amount' => $branchwise_datas->amount,
+                        'note' => $branchwise_datas->note,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'id' => $branchwise_datas->id,
+                        'branch_id' => $branchwise_datas->branch_id,
+                        'heading' => date('d-M-Y', strtotime($expencereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($expencereport_todate))
+                    );
+                }
+            }else{
 
                 $expense_data[] = array(
-                    'branch_name' => $branch_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'amount' => $branchwise_datas->amount,
-                    'note' => $branchwise_datas->note,
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'id' => $branchwise_datas->id,
-                    'branch_id' => $branchwise_datas->branch_id,
-                    'heading' => '(From Date - To Date) - Filter Data',
+                    'branch_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'amount' => '',
+                    'note' => '',
+                    'unique_key' => '',
+                    'id' => '',
+                    'branch_id' => '',
+                    'heading' => date('d-M-Y', strtotime($expencereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($expencereport_todate))
                 );
             }
-        }else{
-
-            $expense_data[] = array(
-                'branch_name' => '',
-                'date' => '',
-                'time' => '',
-                'amount' => '',
-                'note' => '',
-                'unique_key' => '',
-                'id' => '',
-                'branch_id' => '',
-                'heading' => '(From Date - To Date & Branch) - Filter Data',
-            );
         }
 
+
+
+
+        if($expencereport_todate && $expencereport_branch){
+            $GetBranch = Branch::findOrFail($expencereport_branch);
+
+            $branchwise_report = Expence::where('date', '=', $expencereport_todate)->where('branch_id', '=', $expencereport_branch)->where('soft_delete', '!=', 1)->get();
+            $expense_data = [];
+            if($branchwise_report != ''){
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+
+
+                    $expense_data[] = array(
+                        'branch_name' => $branch_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'amount' => $branchwise_datas->amount,
+                        'note' => $branchwise_datas->note,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'id' => $branchwise_datas->id,
+                        'branch_id' => $branchwise_datas->branch_id,
+                        'heading' => date('d-M-Y', strtotime($expencereport_todate)) . ' - ' . $GetBranch->name . '(Branch)'
+                    );
+                }
+            }else{
+
+                $expense_data[] = array(
+                    'branch_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'amount' => '',
+                    'note' => '',
+                    'unique_key' => '',
+                    'id' => '',
+                    'branch_id' => '',
+                    'heading' => date('d-M-Y', strtotime($expencereport_todate)) . ' - ' . $GetBranch->name . '(Branch)'
+                );
+            }
+        }
+
+
+
+        if($expencereport_fromdate && $expencereport_todate && $expencereport_branch){
+            $GetBranch = Branch::findOrFail($expencereport_branch);
+
+            $branchwise_report = Expence::whereBetween('date', [$expencereport_fromdate, $expencereport_todate])->where('branch_id', '=', $expencereport_branch)->where('soft_delete', '!=', 1)->get();
+            $expense_data = [];
+            if($branchwise_report != ''){
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+
+
+                    $expense_data[] = array(
+                        'branch_name' => $branch_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'amount' => $branchwise_datas->amount,
+                        'note' => $branchwise_datas->note,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'id' => $branchwise_datas->id,
+                        'branch_id' => $branchwise_datas->branch_id,
+                        'heading' => $GetBranch->name . ' Branch - (' . date('d-M-Y', strtotime($expencereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($expencereport_todate)) . ')'
+                    );
+                }
+            }else{
+
+                $expense_data[] = array(
+                    'branch_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'amount' => '',
+                    'note' => '',
+                    'unique_key' => '',
+                    'id' => '',
+                    'branch_id' => '',
+                    'heading' => $GetBranch->name . ' Branch - (' . date('d-M-Y', strtotime($expencereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($expencereport_todate)) . ')'
+                );
+            }
+        }
+
+
+
+        
 
 
         return view('page.backend.expence.report', compact('branch', 'expense_data', 'today', 'timenow'));

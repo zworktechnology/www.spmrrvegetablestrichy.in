@@ -63,17 +63,11 @@
             <div class="card">
                 
                     
-                        <h4 class="purchase_report_heading" style="margin-left: 3%;margin-top: 2%;">
+                        <h4 class="purchase_report_heading" style="margin-left: 3%;margin-top: 2%;font-weight: 600;color: #c12171;">
                         @foreach ($purchase_data as $keydata => $purchase)
-                        @if ($purchase['unique_key'] != '')
-
                             @if($keydata == 0)
                             {{ $purchase['heading'] }}
                             @endif
-
-
-                        
-                        @endif
                         @endforeach
                         </h4>
                     

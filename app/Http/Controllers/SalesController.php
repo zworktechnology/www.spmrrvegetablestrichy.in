@@ -107,11 +107,11 @@ class SalesController extends Controller
 
     public function datefilter(Request $request) { 
 
-        $today = Carbon::now()->format('Y-m-d');
-        $from_date = $request->get('from_date');
+        
+        $today = $request->get('from_date');
 
 
-        $data = Sales::where('date', '=', $from_date)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $data = Sales::where('date', '=', $today)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $Sales_data = [];
         $sales_terms = [];
         foreach ($data as $key => $datas) {
@@ -558,60 +558,63 @@ class SalesController extends Controller
         $Customer = Customer::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
         if($salesreport_branch != ""){
+            $GetBranch = Branch::findOrFail($salesreport_branch);
 
             $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $Sales_data = [];
-            $sales_terms = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-                $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+            if($branchwise_report != ''){
+                $sales_terms = [];
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
-                foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
-                    $sales_terms[] = array(
-                        'bag' => $SalesProducts_arrdata->bag,
-                        'kgs' => $SalesProducts_arrdata->kgs,
-                        'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
-                        'total_price' => $SalesProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'sales_id' => $SalesProducts_arrdata->sales_id,
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bag,
+                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+                    
+
+
+                    $Sales_data[] = array(
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'heading' => $GetBranch->name . ' - Branch',
 
                     );
                 }
-                
-
+            }else{
 
                 $Sales_data[] = array(
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'customer_name' => $customer_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'gross_amount' => $branchwise_datas->gross_amount,
-                    'bill_no' => $branchwise_datas->bill_no,
-                    'id' => $branchwise_datas->id,
-                    'sales_terms' => $sales_terms,
-                    'heading' => 'Branch - Filter Data',
-
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'heading' => $GetBranch->name . ' - Branch',
                 );
             }
-        }else{
-
-            $Sales_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'customer_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'sales_terms' => '',
-                'heading' => 'Branch wise Filter Data - No Data',
-            );
         }
 
 
@@ -619,60 +622,63 @@ class SalesController extends Controller
 
 
         if($salesreport_customer != ""){
+            $GetCustomer = Customer::findOrFail($salesreport_customer);
 
             $branchwise_report = Sales::where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $Sales_data = [];
-            $sales_terms = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-                $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+            if($branchwise_report != ''){
+                $sales_terms = [];
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
-                foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
-                    $sales_terms[] = array(
-                        'bag' => $SalesProducts_arrdata->bag,
-                        'kgs' => $SalesProducts_arrdata->kgs,
-                        'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
-                        'total_price' => $SalesProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'sales_id' => $SalesProducts_arrdata->sales_id,
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bag,
+                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+                    
+
+
+                    $Sales_data[] = array(
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'heading' => $GetCustomer->name . ' - ' . '(Customer)',
 
                     );
                 }
-                
-
+            }else{
 
                 $Sales_data[] = array(
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'customer_name' => $customer_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'gross_amount' => $branchwise_datas->gross_amount,
-                    'bill_no' => $branchwise_datas->bill_no,
-                    'id' => $branchwise_datas->id,
-                    'sales_terms' => $sales_terms,
-                    'heading' => 'Customer - Filter Data',
-
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'heading' => $GetCustomer->name . ' - ' . '(Customer)',
                 );
             }
-        }else{
-
-            $Sales_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'customer_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'sales_terms' => '',
-                'heading' => 'Customer wise Filter Data - No Data',
-            );
         }
 
 
@@ -683,57 +689,59 @@ class SalesController extends Controller
 
             $branchwise_report = Sales::where('date', '=', $salesreport_fromdate)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $Sales_data = [];
-            $sales_terms = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-                $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+            if($branchwise_report != ''){
+                $sales_terms = [];
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
-                foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
-                    $sales_terms[] = array(
-                        'bag' => $SalesProducts_arrdata->bag,
-                        'kgs' => $SalesProducts_arrdata->kgs,
-                        'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
-                        'total_price' => $SalesProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'sales_id' => $SalesProducts_arrdata->sales_id,
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bag,
+                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+                    
+
+
+                    $Sales_data[] = array(
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - Report',
 
                     );
                 }
-                
-
+            }else{
 
                 $Sales_data[] = array(
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'customer_name' => $customer_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'gross_amount' => $branchwise_datas->gross_amount,
-                    'bill_no' => $branchwise_datas->bill_no,
-                    'id' => $branchwise_datas->id,
-                    'sales_terms' => $sales_terms,
-                    'heading' => 'From Date - Filter Data',
-
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - Report',
                 );
             }
-        }else{
-
-            $Sales_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'customer_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'sales_terms' => '',
-                'heading' => 'From Date wise Filter Data - No Data',
-            );
         }
 
 
@@ -743,119 +751,123 @@ class SalesController extends Controller
 
             $branchwise_report = Sales::where('date', '=', $salesreport_todate)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $Sales_data = [];
-            $sales_terms = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-                $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+            if($branchwise_report != ''){
+                $sales_terms = [];
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
-                foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
-                    $sales_terms[] = array(
-                        'bag' => $SalesProducts_arrdata->bag,
-                        'kgs' => $SalesProducts_arrdata->kgs,
-                        'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
-                        'total_price' => $SalesProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'sales_id' => $SalesProducts_arrdata->sales_id,
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bag,
+                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+                    
+
+
+                    $Sales_data[] = array(
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - Report',
 
                     );
                 }
-                
-
+            }else{
 
                 $Sales_data[] = array(
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'customer_name' => $customer_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'gross_amount' => $branchwise_datas->gross_amount,
-                    'bill_no' => $branchwise_datas->bill_no,
-                    'id' => $branchwise_datas->id,
-                    'sales_terms' => $sales_terms,
-                    'heading' => 'To Date - Filter Data',
-
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - Report',
                 );
             }
-        }else{
-
-            $Sales_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'customer_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'sales_terms' => '',
-                'heading' => 'To Date wise Filter Data - No Data',
-            );
+    
         }
 
 
-
         if($salesreport_fromdate && $salesreport_customer){
-
+            $GetCustomer = Customer::findOrFail($salesreport_customer);
 
             $branchwise_report = Sales::where('date', '=', $salesreport_fromdate)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $Sales_data = [];
-            $sales_terms = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-                $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+            if($branchwise_report != ''){
+                $sales_terms = [];
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
-                foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
-                    $sales_terms[] = array(
-                        'bag' => $SalesProducts_arrdata->bag,
-                        'kgs' => $SalesProducts_arrdata->kgs,
-                        'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
-                        'total_price' => $SalesProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'sales_id' => $SalesProducts_arrdata->sales_id,
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bag,
+                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+                    
+
+
+                    $Sales_data[] = array(
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - Customer(' . $GetCustomer->name . ')'
 
                     );
                 }
-                
-
+            }else{
 
                 $Sales_data[] = array(
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'customer_name' => $customer_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'gross_amount' => $branchwise_datas->gross_amount,
-                    'bill_no' => $branchwise_datas->bill_no,
-                    'id' => $branchwise_datas->id,
-                    'sales_terms' => $sales_terms,
-                    'heading' => '(From Date & Customer) - Filter Data',
-
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - Customer(' . $GetCustomer->name . ')'
                 );
             }
 
 
-        }else{
-
-            $Sales_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'customer_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'sales_terms' => '',
-                'heading' => '(From Date & Customer) - Filter Data - No Data',
-            );
         }
 
 
@@ -867,122 +879,126 @@ class SalesController extends Controller
 
             $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $Sales_data = [];
-            $sales_terms = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-                $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+            if($branchwise_report != ''){
+                $sales_terms = [];
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
-                foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
-                    $sales_terms[] = array(
-                        'bag' => $SalesProducts_arrdata->bag,
-                        'kgs' => $SalesProducts_arrdata->kgs,
-                        'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
-                        'total_price' => $SalesProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'sales_id' => $SalesProducts_arrdata->sales_id,
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bag,
+                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+                    
+
+
+                    $Sales_data[] = array(
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate))
 
                     );
                 }
-                
-
+            }else{
 
                 $Sales_data[] = array(
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'customer_name' => $customer_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'gross_amount' => $branchwise_datas->gross_amount,
-                    'bill_no' => $branchwise_datas->bill_no,
-                    'id' => $branchwise_datas->id,
-                    'sales_terms' => $sales_terms,
-                    'heading' => '(From Date & To Date) - Filter Data',
-
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate))
                 );
             }
+    
 
 
-        }else{
-
-            $Sales_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'customer_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'sales_terms' => '',
-                'heading' => '(From Date & To Date) - Filter Data - No Data',
-            );
         }
 
 
 
-
         if($salesreport_todate && $salesreport_customer){
-
+            $GetCustomer = Customer::findOrFail($salesreport_customer);
 
             $branchwise_report = Sales::where('date', '=', $salesreport_todate)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $Sales_data = [];
-            $sales_terms = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-                $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+            if($branchwise_report != ''){
+                $sales_terms = [];
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
-                foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
-                    $sales_terms[] = array(
-                        'bag' => $SalesProducts_arrdata->bag,
-                        'kgs' => $SalesProducts_arrdata->kgs,
-                        'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
-                        'total_price' => $SalesProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'sales_id' => $SalesProducts_arrdata->sales_id,
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bag,
+                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+                    
+
+
+                    $Sales_data[] = array(
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - Customer(' . $GetCustomer->name . ')'
 
                     );
                 }
-                
-
+            }else{
 
                 $Sales_data[] = array(
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'customer_name' => $customer_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'gross_amount' => $branchwise_datas->gross_amount,
-                    'bill_no' => $branchwise_datas->bill_no,
-                    'id' => $branchwise_datas->id,
-                    'sales_terms' => $sales_terms,
-                    'heading' => '(To Date & Customer) - Filter Data',
-
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - Customer(' . $GetCustomer->name . ')'
                 );
             }
 
 
-        }else{
-
-            $Sales_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'customer_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'sales_terms' => '',
-                'heading' => '(To Date & Customer) - Filter Data - No Data',
-            );
         }
 
 
@@ -991,312 +1007,327 @@ class SalesController extends Controller
 
         if($salesreport_branch && $salesreport_customer){
 
+            $GetBranch = Branch::findOrFail($salesreport_branch);
+            $GetCustomer = Customer::findOrFail($salesreport_customer);
 
             $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $Sales_data = [];
-            $sales_terms = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-                $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+            if($branchwise_report != ''){
+                $sales_terms = [];
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
-                foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
-                    $sales_terms[] = array(
-                        'bag' => $SalesProducts_arrdata->bag,
-                        'kgs' => $SalesProducts_arrdata->kgs,
-                        'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
-                        'total_price' => $SalesProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'sales_id' => $SalesProducts_arrdata->sales_id,
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bag,
+                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+                    
+
+
+                    $Sales_data[] = array(
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'heading' => $GetBranch->name . '(Branch) - Customer(' . $GetCustomer->name . ')'
 
                     );
                 }
-                
-
+            }else{
 
                 $Sales_data[] = array(
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'customer_name' => $customer_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'gross_amount' => $branchwise_datas->gross_amount,
-                    'bill_no' => $branchwise_datas->bill_no,
-                    'id' => $branchwise_datas->id,
-                    'sales_terms' => $sales_terms,
-                    'heading' => '(Branch & Customer) - Filter Data',
-
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'heading' => $GetBranch->name . '(Branch) - Customer(' . $GetCustomer->name . ')'
                 );
             }
 
 
-        }else{
-
-            $Sales_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'customer_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'sales_terms' => '',
-                'heading' => '(Branch & Customer) - Filter Data - No Data',
-            );
         }
 
 
 
         if($salesreport_branch && $salesreport_fromdate){
-
+            $GetBranch = Branch::findOrFail($salesreport_branch);
 
             $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('date', '=', $salesreport_fromdate)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $Sales_data = [];
-            $sales_terms = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-                $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+            if($branchwise_report != ''){
+                $sales_terms = [];
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
-                foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
-                    $sales_terms[] = array(
-                        'bag' => $SalesProducts_arrdata->bag,
-                        'kgs' => $SalesProducts_arrdata->kgs,
-                        'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
-                        'total_price' => $SalesProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'sales_id' => $SalesProducts_arrdata->sales_id,
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bag,
+                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+                    
+
+
+                    $Sales_data[] = array(
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . $GetBranch->name . '(Branch)'
 
                     );
                 }
-                
-
+            }else{
 
                 $Sales_data[] = array(
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'customer_name' => $customer_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'gross_amount' => $branchwise_datas->gross_amount,
-                    'bill_no' => $branchwise_datas->bill_no,
-                    'id' => $branchwise_datas->id,
-                    'sales_terms' => $sales_terms,
-                    'heading' => '(Branch & From Date) - Filter Data',
-
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . $GetBranch->name . '(Branch)'
                 );
             }
 
 
-        }else{
-
-            $Sales_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'customer_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'sales_terms' => '',
-                'heading' => '(Branch & From Date) - Filter Data - No Data',
-            );
         }
 
 
 
 
         if($salesreport_branch && $salesreport_todate){
-
+            $GetBranch = Branch::findOrFail($salesreport_branch);
 
             $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('date', '=', $salesreport_todate)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $Sales_data = [];
-            $sales_terms = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-                $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+            if($branchwise_report != ''){
+                $sales_terms = [];
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
-                foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
-                    $sales_terms[] = array(
-                        'bag' => $SalesProducts_arrdata->bag,
-                        'kgs' => $SalesProducts_arrdata->kgs,
-                        'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
-                        'total_price' => $SalesProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'sales_id' => $SalesProducts_arrdata->sales_id,
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bag,
+                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+                    
+
+
+                    $Sales_data[] = array(
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - ' . $GetBranch->name . '(Branch)'
 
                     );
                 }
-                
-
+            }else{
 
                 $Sales_data[] = array(
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'customer_name' => $customer_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'gross_amount' => $branchwise_datas->gross_amount,
-                    'bill_no' => $branchwise_datas->bill_no,
-                    'id' => $branchwise_datas->id,
-                    'sales_terms' => $sales_terms,
-                    'heading' => '(Branch & To Date) - Filter Data',
-
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - ' . $GetBranch->name . '(Branch)'
                 );
             }
 
 
-        }else{
-
-            $Sales_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'customer_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'sales_terms' => '',
-                'heading' => '(Branch & To Date) - Filter Data - No Data',
-            );
         }
 
 
 
 
         if($salesreport_fromdate && $salesreport_todate && $salesreport_branch){
+            $GetBrach = Branch::findOrFail($salesreport_branch);
 
             $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $Sales_data = [];
-            $sales_terms = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-                $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+            if($branchwise_report != ''){
+                $sales_terms = [];
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
-                foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
-                    $sales_terms[] = array(
-                        'bag' => $SalesProducts_arrdata->bag,
-                        'kgs' => $SalesProducts_arrdata->kgs,
-                        'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
-                        'total_price' => $SalesProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'sales_id' => $SalesProducts_arrdata->sales_id,
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bag,
+                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+                    
+
+
+                    $Sales_data[] = array(
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'heading' => $GetBrach->name . ' Branch - (' . date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate)) . ')'
 
                     );
                 }
-                
-
+            }else{
 
                 $Sales_data[] = array(
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'customer_name' => $customer_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'gross_amount' => $branchwise_datas->gross_amount,
-                    'bill_no' => $branchwise_datas->bill_no,
-                    'id' => $branchwise_datas->id,
-                    'sales_terms' => $sales_terms,
-                    'heading' => '(From Date & To Date & Branch) - Filter Data',
-
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'heading' => $GetBrach->name . ' Branch - (' . date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate)) . ')'
                 );
             }
 
 
-        }else{
-
-            $Sales_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'customer_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'sales_terms' => '',
-                'heading' => '(From Date & To Date & Branch) - Filter Data - No Data',
-            );
         }
 
 
 
         if($salesreport_fromdate && $salesreport_todate && $salesreport_customer){
 
+            $GetCustomer = Customer::findOrFail($salesreport_customer);
+
             $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $Sales_data = [];
-            $sales_terms = [];
-            foreach ($branchwise_report as $key => $branchwise_datas) {
-                $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-                $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+            if($branchwise_report != ''){
+                $sales_terms = [];
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
-                foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
-                    $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
-                    $sales_terms[] = array(
-                        'bag' => $SalesProducts_arrdata->bag,
-                        'kgs' => $SalesProducts_arrdata->kgs,
-                        'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
-                        'total_price' => $SalesProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'sales_id' => $SalesProducts_arrdata->sales_id,
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bag,
+                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+                    
+
+
+                    $Sales_data[] = array(
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'heading' => $GetCustomer->name . ' (Customer) - (' . date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate)) . ')'
 
                     );
                 }
-                
-
+            }else{
 
                 $Sales_data[] = array(
-                    'unique_key' => $branchwise_datas->unique_key,
-                    'branch_name' => $branch_name->name,
-                    'customer_name' => $customer_name->name,
-                    'date' => $branchwise_datas->date,
-                    'time' => $branchwise_datas->time,
-                    'gross_amount' => $branchwise_datas->gross_amount,
-                    'bill_no' => $branchwise_datas->bill_no,
-                    'id' => $branchwise_datas->id,
-                    'sales_terms' => $sales_terms,
-                    'heading' => '(From Date & To Date & Customer) - Filter Data',
-
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'heading' => $GetCustomer->name . ' (Customer) - (' . date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate)) . ')'
                 );
             }
+    
 
 
-        }else{
-
-            $Sales_data[] = array(
-                'unique_key' => '',
-                'branch_name' => '',
-                'customer_name' => '',
-                'date' => '',
-                'time' => '',
-                'gross_amount' => '',
-                'bill_no' => '',
-                'id' => '',
-                'sales_terms' => '',
-                'heading' => '(From Date & To Date & Customer) - Filter Data - No Data',
-            );
         }
-
 
 
 
