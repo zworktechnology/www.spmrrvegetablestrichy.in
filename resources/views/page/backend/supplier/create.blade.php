@@ -46,8 +46,8 @@
                     <hr>
                     <div class="col-lg-12 button-align">
                         <button type="submit" class="btn btn-submit me-2">Submit</button>
-                        <a href="{{ route('supplier.index') }}"><button type="button" class="btn btn-cancel" data-bs-dismiss="modal"
-                            aria-label="Close">Cancel</button></a>
+                        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal"
+                            aria-label="Close">Cancel</button>
                     </div>
                 </div>
             </form>

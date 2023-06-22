@@ -84,7 +84,7 @@ class CustomerController extends Controller
 
                 $tot_balance_Arr[] = array(
                     'customer_name' => $Customer_arra->name,
-                    'branch_name' => $alldata_branchs->name,
+                    'branch_name' => $alldata_branchs->shop_name,
                     'customer_id' => $Customer_arra->id,
                     'balance_amount' => $tot_balace
                 );
