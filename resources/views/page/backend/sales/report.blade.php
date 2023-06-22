@@ -61,22 +61,33 @@
             </div>
 
             <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>From Date <span style="color: red">16.06.2023</span></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>To Date <span style="color: red">16.06.2023</span></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Branch <span style="color: red">16.06.2023</span></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Customer <span style="color: red">16.06.2023</span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-
-                        <h4 class="sales_report_heading" style="margin-left: 3%;margin-top: 2%;font-weight: 600;color: #c12171;">
-                        @foreach ($Sales_data as $keydata => $sales_data_arr)
-                        @if ($sales_data_arr['unique_key'] != '')
-
-                            @if($keydata == 0)
-                            {{ $sales_data_arr['heading'] }}
-                            @endif
-
-
-
-                        @endif
-                        @endforeach
-                        </h4>
-
+            <div class="card">
                 <div class="card-body">
                     <div class="row">
                         @if ($Sales_data != '')
