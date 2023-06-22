@@ -6,26 +6,26 @@
         <div class="modal-body">
         <form autocomplete="off" method="POST"
                     action="{{ route('bank.edit', ['unique_key' => $bankdata->unique_key]) }}" enctype="multipart/form-data">
-                   
+
                    @csrf
                 <div class="row">
                     <div class="col-lg-12 col-sm-12 col-12">
                         <div class="form-group">
-                            <label>Name</label>
+                            <label>Name <span style="color: red;">*</span></label>
                             <input type="text" name="name" id="name" placeholder="Bank Name" value="{{ $bankdata->name }}">
                         </div>
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Details</label>
-                            
+
                             <textarea type="text" name="details" placeholder="Enter your Bank Details">{{ $bankdata->details }}</textarea>
                         </div>
                     </div>
-                    
-                    
-                   
-                    <div class="col-lg-12 col-sm-6 col-12">
+
+
+
+                    <div class="col-lg-12 col-sm-6 col-12" hidden>
                         <div class="form-group">
                             <label>Status</label>
                             <div class="input-group">
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-12 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12" hidden>
                         <div class="form-group">
                             <label style="color:white">Status</label>
                             <div class="input-group">
@@ -63,8 +63,7 @@
             </form>
         </div>
 
-        
+
     </div><!-- /.modal-content -->
 </div>
 
- 

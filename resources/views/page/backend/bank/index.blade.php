@@ -6,7 +6,7 @@
             <div class="page-title">
                 <h4>Bank</h4>
             </div>
-            <div class="page-btn">             
+            <div class="page-btn">
                <button type="button" class="btn btn-primary waves-effect waves-light btn-added" data-bs-toggle="modal"
                     data-bs-target=".bank-modal-xl">Add Bank</button>
             </div>
@@ -20,7 +20,6 @@
                             <tr>
                                 <th>Sl. No</th>
                                 <th>Bank</th>
-                                <th>Status</th>
                                 <th>action</th>
                             </tr>
                         </thead>
@@ -29,11 +28,6 @@
                                 <tr>
                                     <td>{{ ++$keydata }}</td>
                                     <td>{{ $bankdata->name }}</td>
-                                    @if ($bankdata->status == 0)
-                                        <td><span class="badges bg-lightgreen">Active</span></td>
-                                    @else
-                                        <td><span class="badges bg-lightred">De-Active</span></td>
-                                    @endif
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
                                             <li>

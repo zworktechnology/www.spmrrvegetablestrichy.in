@@ -6,12 +6,12 @@
         <div class="modal-body">
         <form autocomplete="off" method="POST"
                     action="{{ route('supplier.edit', ['unique_key' => $suppliertdata['unique_key']]) }}" enctype="multipart/form-data">
-                   
+
                    @csrf
                 <div class="row">
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Name</label>
+                            <label>Name <span style="color: red;">*</span></label>
                             <input type="text" name="name" placeholder="Enter Supplier name" value="{{ $suppliertdata['name'] }}">
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                             <input type="text" name="shop_contact_number" placeholder="Enter Shop Contact Number" value="{{ $suppliertdata['shop_contact_number'] }}">
                         </div>
                     </div>
-                    <div class="col-lg-12 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12" hidden>
                         <div class="form-group">
                             <label>Status</label>
                             <div class="input-group">
@@ -58,7 +58,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-12 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12" hidden>
                         <div class="form-group">
                             <label style="color:white">Status</label>
                             <div class="input-group">
@@ -83,8 +83,7 @@
             </form>
         </div>
 
-        
+
     </div><!-- /.modal-content -->
 </div>
 
- 

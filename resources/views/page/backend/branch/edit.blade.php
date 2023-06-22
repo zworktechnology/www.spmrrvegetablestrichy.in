@@ -11,21 +11,21 @@
                 <div class="row">
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Name</label>
+                            <label>Name <span style="color: red;">*</span></label>
                             <input type="text" name="name" placeholder="Enter manager name"
                                 value="{{ $branchdata->name }}">
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Shop Name</label>
+                            <label>Shop Name <span style="color: red;">*</span></label>
                             <input type="text" name="shop_name" placeholder="Enter shop name"
                                 value="{{ $branchdata->shop_name }}">
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Phone Number</label>
+                            <label>Phone Number <span style="color: red;">*</span></label>
                             <input type="text" name="contact_number" placeholder="Enter shop phone number"
                                 value="{{ $branchdata->contact_number }}">
                         </div>
@@ -53,7 +53,7 @@
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Address</label>
+                            <label>Address <span style="color: red;">*</span></label>
                             <textarea type="text" name="address" placeholder="Enter your shop address">{!! $branchdata->address !!}</textarea>
                         </div>
                     </div>
@@ -66,39 +66,13 @@
                     </div>
                     <div class="col-lg-5 col-sm-5 col-12">
                         <div class="form-group">
-                            <label>logo</label>
+                            <label>logo <span style="color: red;">*</span></label>
                             <div class="image-upload">
                                 <input type="file" name="logo" value="{{ $branchdata->logo }}">
                                 <div class="image-uploads">
                                     <img src="{{ asset('assets/backend/img/icons/upload.svg') }}" alt="img">
                                     <h4>Drag and drop a logo to upload</h4>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label>Status</label>
-                            <div class="input-group">
-                                <div class="input-group-text">
-                                    <input class="form-check-input" type="radio" value="0"
-                                        {{ $branchdata->status == 0 ? 'checked' : '' }}
-                                        aria-label="Radio button for following text input" name="status">
-                                </div>
-                                <input type="text" class="form-control" value="Active">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label style="color:white">Status</label>
-                            <div class="input-group">
-                                <div class="input-group-text">
-                                    <input class="form-check-input" type="radio" value="1"
-                                        {{ $branchdata->status == 1 ? 'checked' : '' }}
-                                        aria-label="Radio button for following text input" name="status">
-                                </div>
-                                <input type="text" class="form-control" value="De-Active">
                             </div>
                         </div>
                     </div>

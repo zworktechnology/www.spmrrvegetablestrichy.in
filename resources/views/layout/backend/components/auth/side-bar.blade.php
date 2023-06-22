@@ -27,11 +27,11 @@
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">User Management</h6>
                     <ul>
-                        <li class="{{ Route::is('customer.index', 'customer.store') ? 'active' : '' }}">
-                            <a href="{{ route('customer.index') }}"><i data-feather="user"></i><span>Customers</span></a>
-                        </li>
                         <li class="{{ Route::is('supplier.index') ? 'active' : '' }}">
                             <a href="{{ route('supplier.index') }}"><i data-feather="users"></i><span>Supliers</span></a>
+                        </li>
+                        <li class="{{ Route::is('customer.index', 'customer.store') ? 'active' : '' }}">
+                            <a href="{{ route('customer.index') }}"><i data-feather="user"></i><span>Customers</span></a>
                         </li>
                         @hasrole('Super-Admin')
                         <li class="{{ Route::is('invite.index', 'invite.store') ? 'active' : '' }}">

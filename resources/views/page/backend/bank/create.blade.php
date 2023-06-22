@@ -9,8 +9,8 @@
                 <div class="row">
                     <div class="col-lg-12 col-sm-12 col-12">
                         <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" name="name" id="name" placeholder="Bank Name">
+                            <label>Name <span style="color: red;">*</span></label>
+                            <input type="text" name="name" id="name" placeholder="Bank Name" required>
                         </div>
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
@@ -19,7 +19,7 @@
                             <textarea type="text" name="details" placeholder="Enter your Bank Details"></textarea>
                         </div>
                     </div>
-                   
+
                     <hr>
                     <div class="col-lg-12 button-align">
                         <button type="submit" class="btn btn-submit me-2">Submit</button>

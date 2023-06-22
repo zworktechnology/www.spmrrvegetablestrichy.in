@@ -20,12 +20,9 @@
                             <tr>
                                 <th>Sl. No</th>
                                 <th>Name</th>
-                                <th>Mobile</th>
-                                <th>Shop Name</th>
                                 <th>Total Sale</th>
                                 <th>Total Paid</th>
                                 <th>Total Balance</th>
-                                <th>Status</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -34,16 +31,9 @@
                                 <tr>
                                     <td>{{ ++$keydata }}</td>
                                     <td>{{ $customertdata['name'] }}</td>
-                                    <td>{{ $customertdata['contact_number'] }}</td>
-                                    <td>{{ $customertdata['shop_name'] }}</td>
                                     <td>₹ {{ $customertdata['total_sale_amt'] }}</td>
                                     <td>₹ {{ $customertdata['total_paid'] }}</td>
                                     <td>₹ {{ $customertdata['balance_amount'] }}</td>
-                                    @if ($customertdata['status'] == 0)
-                                        <td><span class="badges bg-lightgreen">Active</span></td>
-                                    @else
-                                        <td><span class="badges bg-lightred">De-Active</span></td>
-                                    @endif
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
                                             <li>
@@ -58,7 +48,7 @@
                                             </li>
 
                                             <li>
-                                                <a href="#customercheckbalance{{ $customertdata['unique_key'] }}" data-bs-toggle="modal" 
+                                                <a href="#customercheckbalance{{ $customertdata['unique_key'] }}" data-bs-toggle="modal"
                                                     data-id="{{ $customertdata['id'] }}"
                                                     data-bs-target=".customercheckbalance-modal-xl{{ $customertdata['unique_key'] }}" class="badges bg-lightred customercheckbalance" style="color: white">Check Balance</a>
                                             </li>

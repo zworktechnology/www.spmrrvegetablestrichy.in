@@ -9,14 +9,14 @@
                 <div class="row">
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" name="name" placeholder="Enter manager name">
+                            <label>Name <span style="color: red;">*</span></label>
+                            <input type="text" name="name" placeholder="Enter manager name" required>
                         </div>
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Role</label>
-                            <select class="select" name="role_id">
+                            <label>Role <span style="color: red;">*</span></label>
+                            <select class="select" name="role_id" required>
                                 <option value="" disabled selected hidden>
                                     Choose Role</option>
                                 @foreach ($role as $roles)
@@ -27,14 +27,14 @@
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Email Address</label>
-                            <input type="text" name="email" placeholder="Enter manager email address">
+                            <label>Email Address <span style="color: red;">*</span></label>
+                            <input type="text" name="email" placeholder="Enter manager email address" required>
                         </div>
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Conatct Number</label>
-                            <input type="text" name="contact_number" placeholder="Enter manager conatct number">
+                            <label>Conatct Number <span style="color: red;">*</span></label>
+                            <input type="text" name="contact_number" placeholder="Enter manager conatct number" required>
                         </div>
                     </div>
                     <hr>
