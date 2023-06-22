@@ -579,7 +579,6 @@ class PurchaseController extends Controller
     {
         $purchase_id = request()->get('purchase_id');
         $get_Purchase = Purchase::where('soft_delete', '!=', 1)
-                                    ->where('status', '!=', 1)
                                     ->where('id', '=', $purchase_id)
                                     ->get();
         $output = [];

@@ -1313,7 +1313,6 @@ class SalesController extends Controller
     {
         $sales_id = request()->get('sales_id');
         $get_Sales = Sales::where('soft_delete', '!=', 1)
-                                    ->where('status', '!=', 1)
                                     ->where('id', '=', $sales_id)
                                     ->get();
         $output = [];
