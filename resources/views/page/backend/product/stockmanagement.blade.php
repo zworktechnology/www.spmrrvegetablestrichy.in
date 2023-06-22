@@ -6,10 +6,6 @@
             <div class="page-title">
                 <h4>Stock Management</h4>
             </div>
-            <div class="page-btn">
-                <button type="button" class="btn btn-primary waves-effect waves-light btn-added" data-bs-toggle="modal"
-                    data-bs-target=".product-modal-xl">Add Product</button>
-            </div>
         </div>
 
 
@@ -26,13 +22,13 @@
             </div>
             @foreach ($branch_data as $keydata => $allbranches)
             <div class="col-lg-2 col-sm-4 col-6">
-                
+
                     <div class="dash-widget">
                         <div class="dash-widgetcontent">
                             <h6 style="font-weight: bold;">
-                            
+
                             <a href="#branch_view{{ $allbranches->id }}" data-bs-toggle="modal"data-id="{{ $allbranches->id }}"
-                            data-bs-target=".branch_view-modal-xl{{ $allbranches->id }}" style="color:black">{{ $allbranches->name }}</a>
+                            data-bs-target=".branch_view-modal-xl{{ $allbranches->id }}" style="color:black">{{ $allbranches->shop_name }}</a>
 
                             </h6>
                         </div>
@@ -112,7 +108,7 @@
                      </div>
                   </div>
             </div>
-        
+
          </div>
 
         <div class="modal fade product-modal-xl" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="productLargeModalLabel"

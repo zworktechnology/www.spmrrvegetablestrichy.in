@@ -17,10 +17,27 @@
                             <a href="{{ route('purchase.index') }}"><i data-feather="shopping-bag"></i><span>Purchase</span></a>
                         </li>
                         <li class="{{ Route::is('sales.index', 'sales.store') ? 'active' : '' }}">
-                            <a href="{{ route('sales.index') }}"><i data-feather="shopping-bag"></i><span>Sales</span></a>
+                            <a href="{{ route('sales.index') }}"><i data-feather="shopping-cart"></i><span>Sales</span></a>
                         </li>
                         <li class="{{ Route::is('expence.index', 'expence.store') ? 'active' : '' }}">
-                            <a href="{{ route('expence.index') }}"><i data-feather="shopping-bag"></i><span>Expence</span></a>
+                            <a href="{{ route('expence.index') }}"><i data-feather="corner-up-left"></i><span>Expence</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">Report</h6>
+                    <ul>
+                        <li class="{{ Route::is('purchase.report') ? 'active' : '' }}">
+                            <a href="{{ route('purchase.report') }}"><i data-feather="pie-chart"></i><span>Purchase Report</span></a>
+                        </li>
+                        <li class="{{ Route::is('sales.report') ? 'active' : '' }}">
+                            <a href="{{ route('sales.report') }}"><i data-feather="bar-chart-2"></i><span>Sales Report</span></a>
+                        </li>
+                        <li class="{{ Route::is('expence.report') ? 'active' : '' }}">
+                            <a href="{{ route('expence.report') }}"><i data-feather="credit-card"></i><span>Expense Report</span></a>
+                        </li>
+                        <li class="{{ Route::is('stockmanagement.index') ? 'active' : '' }}">
+                            <a href="{{ route('stockmanagement.index') }}"><i data-feather="database"></i><span>Stock</span></a>
                         </li>
                     </ul>
                 </li>
@@ -55,23 +72,6 @@
 
                         <li class="{{ Route::is('product.index', 'product.store', 'product.edit') ? 'active' : '' }}">
                             <a href="{{ route('product.index') }}"><i data-feather="box"></i><span>Product</span></a>
-                        </li>
-                        <li class="{{ Route::is('stockmanagement.index', 'product.store', 'product.edit') ? 'active' : '' }}">
-                            <a href="{{ route('stockmanagement.index') }}"><i data-feather="box"></i><span>Stock Management</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="submenu-open">
-                    <h6 class="submenu-hdr">Report</h6>
-                    <ul>
-                        <li class="{{ Route::is('purchase.report') ? 'active' : '' }}">
-                            <a href="{{ route('purchase.report') }}"><i data-feather="map"></i><span>Purchase Report</span></a>
-                        </li>
-                        <li class="{{ Route::is('sales.report') ? 'active' : '' }}">
-                            <a href="{{ route('sales.report') }}"><i data-feather="map"></i><span>Sales Report</span></a>
-                        </li>
-                        <li class="{{ Route::is('expence.report') ? 'active' : '' }}">
-                            <a href="{{ route('expence.report') }}"><i data-feather="map"></i><span>Expense Report</span></a>
                         </li>
                     </ul>
                 </li>
