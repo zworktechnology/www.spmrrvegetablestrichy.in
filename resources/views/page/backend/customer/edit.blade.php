@@ -52,7 +52,7 @@
                                 value="{{ $customertdata['shop_contact_number'] }}">
                         </div>
                     </div>
-                    <div class="col-lg-12 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12" hidden>
                         <div class="form-group">
                             <label>Status</label>
                             <div class="input-group">
@@ -65,7 +65,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-12 col-sm-6 col-12">
+                    <div class="col-lg-12 col-sm-6 col-12" hidden>
                         <div class="form-group">
                             <label style="color:white">Status</label>
                             <div class="input-group">
@@ -81,10 +81,8 @@
                     <hr>
                     <div class="col-lg-12 button-align">
                         <button type="submit" class="btn btn-submit me-2">Update</button>
-                        <a href="{{ route('customer.index') }}">
                             <button type="button" class="btn btn-cancel" data-bs-dismiss="modal"
                                 aria-label="Close">Cancel</button>
-                        </a>
                     </div>
                 </div>
             </form>
