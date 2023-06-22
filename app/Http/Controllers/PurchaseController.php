@@ -134,7 +134,7 @@ class PurchaseController extends Controller
         $timenow = Carbon::now()->format('H:i');
 
 
-        $last_purchaseid = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->latest('id')->first();
+        $last_purchaseid = Purchase::where('soft_delete', '!=', 1)->latest('id')->first();
         if($last_purchaseid != ''){
             $billno = $last_purchaseid->bill_no + 1;
         }else {
@@ -505,7 +505,7 @@ class PurchaseController extends Controller
 
 
 
-        $data = Purchase::where('date', '=', $today)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $data = Purchase::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
         $purchase_data = [];
         $terms = [];
         foreach ($data as $key => $datas) {
@@ -563,7 +563,7 @@ class PurchaseController extends Controller
         $supplier_id = request()->get('supplier_id');
         $branch_id = request()->get('branch_id');
 
-        $get_OldBalance = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('supplier_id', '=', $supplier_id)->where('branch_id', '=', $branch_id)->latest('id')->first();
+        $get_OldBalance = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $supplier_id)->where('branch_id', '=', $branch_id)->latest('id')->first();
         if($get_OldBalance != ""){
             $userData['data'] = $get_OldBalance->balance_amount;
         }else {
@@ -664,7 +664,7 @@ class PurchaseController extends Controller
             $GetBranch = Branch::findOrFail($purchasereport_branch);
             $purchase_data = [];
 
-            $branchwise_report = Purchase::where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $branchwise_report = Purchase::where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->get();
             if($branchwise_report != ''){
 
                
@@ -730,7 +730,7 @@ class PurchaseController extends Controller
         if($purchasereport_supplier){
             $GetSupplier = Supplier::findOrFail($purchasereport_supplier);
 
-            $supplierwise_report = Purchase::where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $supplierwise_report = Purchase::where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->get();
             $purchase_data = [];
 
             if($supplierwise_report != ''){
@@ -798,7 +798,7 @@ class PurchaseController extends Controller
 
         if($purchasereport_fromdate != ""){
 
-            $fromdate_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $fromdate_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('soft_delete', '!=', 1)->get();
             $purchase_data = [];
             if($fromdate_report != ''){
                 $fromdate_terms = [];
@@ -867,7 +867,7 @@ class PurchaseController extends Controller
 
         if($purchasereport_todate != ""){
 
-            $todate_report = Purchase::where('date', '=', $purchasereport_todate)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $todate_report = Purchase::where('date', '=', $purchasereport_todate)->where('soft_delete', '!=', 1)->get();
             $purchase_data = [];
             if($todate_report != ''){
                 $todate_terms = [];
@@ -934,7 +934,7 @@ class PurchaseController extends Controller
         if($purchasereport_fromdate && $purchasereport_supplier){
             $GetSupplier = Supplier::findOrFail($purchasereport_supplier);
 
-            $datefilter_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $datefilter_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->get();
             $purchase_data = [];
             if($datefilter_report != ''){
                 $todate_terms = [];
@@ -999,7 +999,7 @@ class PurchaseController extends Controller
 
         if($purchasereport_todate && $purchasereport_supplier){
             $GetSupplier = Supplier::findOrFail($purchasereport_supplier);
-            $datefilter_report = Purchase::where('date', '=', $purchasereport_todate)->where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $datefilter_report = Purchase::where('date', '=', $purchasereport_todate)->where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->get();
 
 
             $purchase_data = [];
@@ -1067,7 +1067,7 @@ class PurchaseController extends Controller
             $GetSupplier = Supplier::findOrFail($purchasereport_supplier);
             $GetBrach = Branch::findOrFail($purchasereport_branch);
 
-            $datefilter_report = Purchase::where('branch_id', '=', $purchasereport_branch)->where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $datefilter_report = Purchase::where('branch_id', '=', $purchasereport_branch)->where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->get();
 
             $purchase_data = [];
             if($datefilter_report != ''){
@@ -1132,7 +1132,7 @@ class PurchaseController extends Controller
 
         if($purchasereport_fromdate && $purchasereport_branch){
             $GetBrach = Branch::findOrFail($purchasereport_branch);
-            $datefilter_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $datefilter_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->get();
 
             $purchase_data = [];
             if($datefilter_report != ''){
@@ -1194,7 +1194,7 @@ class PurchaseController extends Controller
 
         if($purchasereport_todate && $purchasereport_branch){
             $GetBrach = Branch::findOrFail($purchasereport_branch);
-            $datefilter_report = Purchase::where('date', '=', $purchasereport_todate)->where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $datefilter_report = Purchase::where('date', '=', $purchasereport_todate)->where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->get();
 
             $purchase_data = [];
             if($datefilter_report != ''){
@@ -1261,7 +1261,7 @@ class PurchaseController extends Controller
         if($purchasereport_fromdate && $purchasereport_todate){
 
 
-            $datefilter_report = Purchase::whereBetween('date', [$purchasereport_fromdate, $purchasereport_todate])->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $datefilter_report = Purchase::whereBetween('date', [$purchasereport_fromdate, $purchasereport_todate])->where('soft_delete', '!=', 1)->get();
             $purchase_data = [];
             if($datefilter_report != ''){
                 $todate_terms = [];
@@ -1327,8 +1327,7 @@ class PurchaseController extends Controller
             $GetBrach = Branch::findOrFail($purchasereport_branch);
             $datefilter_report = Purchase::whereBetween('date', [$purchasereport_fromdate, $purchasereport_todate])
                                             ->where('branch_id', '=', $purchasereport_branch)
-                                            ->where('soft_delete', '!=', 1)
-                                            ->where('status', '!=', 1)->get();
+                                            ->where('soft_delete', '!=', 1)->get();
             $purchase_data = [];
             if($datefilter_report != ''){
                 $todate_terms = [];
@@ -1392,8 +1391,7 @@ class PurchaseController extends Controller
 
             $datefilter_report = Purchase::whereBetween('date', [$purchasereport_fromdate, $purchasereport_todate])
                                                     ->where('supplier_id', '=', $purchasereport_supplier)
-                                                    ->where('soft_delete', '!=', 1)
-                                                    ->where('status', '!=', 1)->get();
+                                                    ->where('soft_delete', '!=', 1)->get();
                 $purchase_data = [];
                 if($datefilter_report != ''){
                         $todate_terms = [];

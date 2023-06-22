@@ -166,7 +166,7 @@ class SalesController extends Controller
         $timenow = Carbon::now()->format('H:i');
 
 
-        $last_salesid = Sales::where('soft_delete', '!=', 1)->where('status', '!=', 1)->latest('id')->first();
+        $last_salesid = Sales::where('soft_delete', '!=', 1)->latest('id')->first();
         if($last_salesid != ''){
             $salesbillno = $last_salesid->bill_no + 1;
         }else {
@@ -510,7 +510,7 @@ class SalesController extends Controller
         if($salesreport_branch != ""){
             $GetBranch = Branch::findOrFail($salesreport_branch);
 
-            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -574,7 +574,7 @@ class SalesController extends Controller
         if($salesreport_customer != ""){
             $GetCustomer = Customer::findOrFail($salesreport_customer);
 
-            $branchwise_report = Sales::where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $branchwise_report = Sales::where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -637,7 +637,7 @@ class SalesController extends Controller
 
         if($salesreport_fromdate != ""){
 
-            $branchwise_report = Sales::where('date', '=', $salesreport_fromdate)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $branchwise_report = Sales::where('date', '=', $salesreport_fromdate)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -699,7 +699,7 @@ class SalesController extends Controller
 
         if($salesreport_todate != ""){
 
-            $branchwise_report = Sales::where('date', '=', $salesreport_todate)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $branchwise_report = Sales::where('date', '=', $salesreport_todate)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -761,7 +761,7 @@ class SalesController extends Controller
         if($salesreport_fromdate && $salesreport_customer){
             $GetCustomer = Customer::findOrFail($salesreport_customer);
 
-            $branchwise_report = Sales::where('date', '=', $salesreport_fromdate)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $branchwise_report = Sales::where('date', '=', $salesreport_fromdate)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -827,7 +827,7 @@ class SalesController extends Controller
         if($salesreport_fromdate && $salesreport_todate){
 
 
-            $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -892,7 +892,7 @@ class SalesController extends Controller
         if($salesreport_todate && $salesreport_customer){
             $GetCustomer = Customer::findOrFail($salesreport_customer);
 
-            $branchwise_report = Sales::where('date', '=', $salesreport_todate)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $branchwise_report = Sales::where('date', '=', $salesreport_todate)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -960,7 +960,7 @@ class SalesController extends Controller
             $GetBranch = Branch::findOrFail($salesreport_branch);
             $GetCustomer = Customer::findOrFail($salesreport_customer);
 
-            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -1024,7 +1024,7 @@ class SalesController extends Controller
         if($salesreport_branch && $salesreport_fromdate){
             $GetBranch = Branch::findOrFail($salesreport_branch);
 
-            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('date', '=', $salesreport_fromdate)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('date', '=', $salesreport_fromdate)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -1089,7 +1089,7 @@ class SalesController extends Controller
         if($salesreport_branch && $salesreport_todate){
             $GetBranch = Branch::findOrFail($salesreport_branch);
 
-            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('date', '=', $salesreport_todate)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('date', '=', $salesreport_todate)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -1154,7 +1154,7 @@ class SalesController extends Controller
         if($salesreport_fromdate && $salesreport_todate && $salesreport_branch){
             $GetBrach = Branch::findOrFail($salesreport_branch);
 
-            $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -1219,7 +1219,7 @@ class SalesController extends Controller
 
             $GetCustomer = Customer::findOrFail($salesreport_customer);
 
-            $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -1299,7 +1299,7 @@ class SalesController extends Controller
         $sales_customerid = request()->get('sales_customerid');
         $sales_branch_id = request()->get('sales_branch_id');
 
-        $get_OldBalanceforSales = Sales::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->latest('id')->first();
+        $get_OldBalanceforSales = Sales::where('soft_delete', '!=', 1)->where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->latest('id')->first();
         if($get_OldBalanceforSales != ""){
             $userData['data'] = $get_OldBalanceforSales->balance_amount;
         }else {
