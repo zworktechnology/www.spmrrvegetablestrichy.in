@@ -47,16 +47,10 @@
                </div>
                <div class="col-lg-3 col-sm-3 col-12">
                   <div class="form-group">
-                     <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank<span style="color: red;">*</span></label>
-                     <select class="select" name="bank_id" id="bank_id">
-                        <option value="" disabled selected hiddden>Select Bank</option>
-                        @foreach ($bank as $banks)
-                           <option value="{{ $banks->id }}"@if ($banks->id === $PurchaseData->bank_id) selected='selected' @endif>{{ $banks->name }}</option>
-                        @endforeach
-                     </select>
+                     <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span style="color: red;">*</span></label>
+                     <input type="time" name="time" placeholder="" value="{{ $PurchaseData->time }}">
                   </div>
                </div>
-
             </div>
 
             <br/>
@@ -82,7 +76,7 @@
                               @foreach ($productlist as $products)
                                  @if ($products->id == $Purchase_Products->productlist_id)
                                     <input type="text"class="form-control" name="product_name[]" value="{{ $products->name }}" readonly>
-                                    <input type="hidden" id="product_id" name="product_id[]" value="{{ $Purchase_Products->id }}" />
+                                    <input type="hidden" id="product_id" name="product_id[]" value="{{ $Purchase_Products->productlist_id }}" />
                                  @endif
                               @endforeach
                            </td>

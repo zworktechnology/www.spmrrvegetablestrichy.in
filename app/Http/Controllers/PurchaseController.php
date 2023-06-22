@@ -180,7 +180,6 @@ class PurchaseController extends Controller
             $data->date = $request->get('date');
             $data->time = $request->get('time');
             $data->bill_no = $invoiceno;
-            $data->bank_id = $request->get('bank_id');
             $data->save();
 
             $insertedId = $data->id;
@@ -288,6 +287,7 @@ class PurchaseController extends Controller
         $Purchase_Data->supplier_id = $request->get('supplier_id');
         $Purchase_Data->branch_id = $request->get('branch_id');
         $Purchase_Data->date = $request->get('date');
+        $Purchase_Data->time = $request->get('time');
         $Purchase_Data->bank_id = $request->get('bank_id');
         $Purchase_Data->update();
 
@@ -453,6 +453,7 @@ class PurchaseController extends Controller
 
         $Purchase_Data = Purchase::where('unique_key', '=', $unique_key)->first();
 
+        $Purchase_Data->bank_id = $request->get('bank_id');
         $Purchase_Data->total_amount = $request->get('total_amount');
         $Purchase_Data->note = $request->get('extracost_note');
         $Purchase_Data->extra_cost = $request->get('extracost');
@@ -463,6 +464,8 @@ class PurchaseController extends Controller
         $Purchase_Data->balance_amount = $request->get('pending_amount');
         $Purchase_Data->status = 1;
         $Purchase_Data->update();
+
+
         $PurchaseId = $Purchase_Data->id;
 
         // Purchase Products Table
@@ -590,6 +593,8 @@ class PurchaseController extends Controller
             $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->skip(1)->take(1)->first();
             $userData['data'] = $secondlastrow->balance_amount;
 
+        }else {
+            $userData['data'] = 0;
         }
 
        

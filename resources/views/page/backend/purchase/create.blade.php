@@ -9,38 +9,16 @@
          </div>
       </div>
 
-      <div class="card">
-         <div class="card-body">
-         <form autocomplete="off" method="POST" action="{{ route('purchase.store') }}" enctype="multipart/form-data">
-            @csrf
-            <div class="row">
-               <div class="col-lg-3 col-sm-3 col-12">
-                  <div class="form-group">
-                     <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Supplier<span style="color: red;">*</span> </label>
-                     <select class="select" name="supplier_id" id="supplier_id" required>
-                        <option value="" disabled selected hiddden>Select Supplier</option>
-                           @foreach ($supplier as $suppliers)
-                              <option value="{{ $suppliers->id }}">{{ $suppliers->name }}</option>
-                           @endforeach
-                     </select>
-                  </div>
-               </div>
+     
 
         <div class="card">
             <div class="card-body">
                 <form autocomplete="off" method="POST" action="{{ route('purchase.store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-lg-4 col-sm-4 col-12">
-                            <div class="form-group">
-                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bill No<span
-                                        style="color: red;">*</span></label>
-                                <input type="text" name="billno" placeholder="Bill No" id="billno"
-                                    value="{{ $billno }}" style="background-color: #e9ecef;" readonly>
-                            </div>
-                        </div>
+                        
 
-                        <div class="col-lg-4 col-sm-4 col-12">
+                        <div class="col-lg-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Date<span
                                         style="color: red;">*</span></label>
@@ -48,7 +26,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-4 col-sm-4 col-12">
+                        <div class="col-lg-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span
                                         style="color: red;">*</span></label>

@@ -207,7 +207,6 @@ class SalesController extends Controller
             $data->date = $request->get('sales_date');
             $data->time = $request->get('sales_time');
             $data->bill_no = $invoiceno;
-            $data->bank_id = $request->get('sales_bank_id');
             $data->save();
     
             $insertedId = $data->id;
@@ -446,7 +445,8 @@ class SalesController extends Controller
 
 
         $Sales_Data = Sales::where('unique_key', '=', $unique_key)->first();
-
+        
+        $Sales_Data->bank_id = $request->get('sales_bank_id');
         $Sales_Data->total_amount = $request->get('sales_total_amount');
         $Sales_Data->note = $request->get('sales_extracost_note');
         $Sales_Data->extra_cost = $request->get('sales_extracost');

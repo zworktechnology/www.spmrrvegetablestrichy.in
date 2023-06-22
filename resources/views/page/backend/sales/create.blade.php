@@ -49,7 +49,7 @@
                   </div>
                </div>
 
-               <div class="col-lg-3 col-sm-6 col-12" hidden>
+               <div class="col-lg-3 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span style="color: red;">*</span></label>
                      <input type="time" name="sales_time" placeholder="" value="{{ $timenow }}">
@@ -58,17 +58,7 @@
 
 
 
-               <div class="col-lg-3 col-sm-6 col-12">
-                  <div class="form-group">
-                     <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank<span style="color: red;">*</span></label>
-                     <select class="select" name="sales_bank_id" id="sales_bank_id">
-                        <option value="" disabled selected hiddden>Select Bank</option>
-                        @foreach ($bank as $banks)
-                           <option value="{{ $banks->id }}">{{ $banks->name }}</option>
-                        @endforeach
-                     </select>
-                  </div>
-               </div>
+               
 
             </div>
 

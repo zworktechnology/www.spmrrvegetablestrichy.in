@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('time')->nullable();
             $table->string('bill_no')->nullable();
 
-            $table->unsignedBigInteger('bank_id');
+            $table->unsignedBigInteger('bank_id')->nullable();
             $table->foreign('bank_id')->references('id')->on('banks')->onDelete('cascade');
             
             $table->string('total_amount')->nullable();
