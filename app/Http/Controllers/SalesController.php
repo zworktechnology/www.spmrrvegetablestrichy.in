@@ -546,6 +546,7 @@ class SalesController extends Controller
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
                         'heading' => $GetBranch->name . ' - Branch',
 
                     );
@@ -562,6 +563,7 @@ class SalesController extends Controller
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
+                    'status' => '',
                     'heading' => $GetBranch->name . ' - Branch',
                 );
             }
@@ -610,6 +612,7 @@ class SalesController extends Controller
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
                         'heading' => $GetCustomer->name . ' - ' . '(Customer)',
 
                     );
@@ -626,6 +629,7 @@ class SalesController extends Controller
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
+                    'status' => '',
                     'heading' => $GetCustomer->name . ' - ' . '(Customer)',
                 );
             }
@@ -673,6 +677,7 @@ class SalesController extends Controller
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
                         'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - Report',
 
                     );
@@ -689,6 +694,7 @@ class SalesController extends Controller
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
+                    'status' => '',
                     'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - Report',
                 );
             }
@@ -735,6 +741,7 @@ class SalesController extends Controller
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
                         'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - Report',
 
                     );
@@ -751,6 +758,7 @@ class SalesController extends Controller
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
+                    'status' => '',
                     'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - Report',
                 );
             }
@@ -797,6 +805,7 @@ class SalesController extends Controller
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
                         'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - Customer(' . $GetCustomer->name . ')'
 
                     );
@@ -813,6 +822,7 @@ class SalesController extends Controller
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
+                    'status' => '',
                     'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - Customer(' . $GetCustomer->name . ')'
                 );
             }
@@ -863,6 +873,7 @@ class SalesController extends Controller
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
                         'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate))
 
                     );
@@ -879,6 +890,7 @@ class SalesController extends Controller
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
+                    'status' => '',
                     'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate))
                 );
             }
@@ -928,6 +940,7 @@ class SalesController extends Controller
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
                         'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - Customer(' . $GetCustomer->name . ')'
 
                     );
@@ -944,6 +957,7 @@ class SalesController extends Controller
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
+                    'status' => '',
                     'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - Customer(' . $GetCustomer->name . ')'
                 );
             }
@@ -996,6 +1010,7 @@ class SalesController extends Controller
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
                         'heading' => $GetBranch->name . '(Branch) - Customer(' . $GetCustomer->name . ')'
 
                     );
@@ -1012,6 +1027,7 @@ class SalesController extends Controller
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
+                    'status' => '',
                     'heading' => $GetBranch->name . '(Branch) - Customer(' . $GetCustomer->name . ')'
                 );
             }
@@ -1060,6 +1076,7 @@ class SalesController extends Controller
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
                         'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . $GetBranch->name . '(Branch)'
 
                     );
@@ -1076,6 +1093,7 @@ class SalesController extends Controller
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
+                    'status' => '',
                     'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . $GetBranch->name . '(Branch)'
                 );
             }
@@ -1125,6 +1143,7 @@ class SalesController extends Controller
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
                         'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - ' . $GetBranch->name . '(Branch)'
 
                     );
@@ -1141,6 +1160,7 @@ class SalesController extends Controller
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
+                    'status' => '',
                     'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - ' . $GetBranch->name . '(Branch)'
                 );
             }
@@ -1190,6 +1210,7 @@ class SalesController extends Controller
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
                         'heading' => $GetBrach->name . ' Branch - (' . date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate)) . ')'
 
                     );
@@ -1206,6 +1227,7 @@ class SalesController extends Controller
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
+                    'status' => '',
                     'heading' => $GetBrach->name . ' Branch - (' . date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate)) . ')'
                 );
             }
@@ -1255,6 +1277,7 @@ class SalesController extends Controller
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
                         'heading' => $GetCustomer->name . ' (Customer) - (' . date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate)) . ')'
 
                     );
@@ -1271,6 +1294,7 @@ class SalesController extends Controller
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
+                    'status' => '',
                     'heading' => $GetCustomer->name . ' (Customer) - (' . date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate)) . ')'
                 );
             }
