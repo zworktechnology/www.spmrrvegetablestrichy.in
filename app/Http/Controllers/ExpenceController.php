@@ -24,7 +24,7 @@ class ExpenceController extends Controller
             $branch_name = Branch::findOrFail($datas->branch_id);
 
             $expense_data[] = array(
-                'branch_name' => $branch_name->name,
+                'branch_name' => $branch_name->shop_name,
                 'date' => $datas->date,
                 'time' => $datas->time,
                 'amount' => $datas->amount,
@@ -61,15 +61,15 @@ class ExpenceController extends Controller
             );
         }
 
-       
+
 
         return view('page.backend.expence.index', compact('expense_data', 'branch', 'today', 'timenow'));
     }
 
 
-    public function datefilter(Request $request) 
+    public function datefilter(Request $request)
     {
-        
+
         $today = $request->get('from_date');
 
 
@@ -170,7 +170,7 @@ class ExpenceController extends Controller
 
 
 
-    public function report_view(Request $request) 
+    public function report_view(Request $request)
     {
         $expencereport_fromdate = $request->get('expencereport_fromdate');
         $expencereport_todate = $request->get('expencereport_todate');
@@ -233,8 +233,8 @@ class ExpenceController extends Controller
                 if($branchwise_report != ''){
                     foreach ($branchwise_report as $key => $branchwise_datas) {
                         $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-        
-        
+
+
                         $expense_data[] = array(
                             'branch_name' => $branch_name->name,
                             'date' => $branchwise_datas->date,
@@ -261,7 +261,7 @@ class ExpenceController extends Controller
                         'heading' => date('d-M-Y', strtotime($expencereport_fromdate)) . ' - Report',
                     );
                 }
-        
+
             }
 
             if($expencereport_todate){
@@ -270,8 +270,8 @@ class ExpenceController extends Controller
                 if($branchwise_report != ''){
                     foreach ($branchwise_report as $key => $branchwise_datas) {
                         $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
-        
-        
+
+
                         $expense_data[] = array(
                             'branch_name' => $branch_name->name,
                             'date' => $branchwise_datas->date,
@@ -300,7 +300,7 @@ class ExpenceController extends Controller
                 }
             }
 
-            
+
         }
 
 
@@ -465,11 +465,11 @@ class ExpenceController extends Controller
 
 
 
-        
+
 
 
         return view('page.backend.expence.report', compact('branch', 'expense_data', 'today', 'timenow'));
     }
 
-    
+
 }
