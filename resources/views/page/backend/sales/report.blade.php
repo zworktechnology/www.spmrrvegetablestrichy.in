@@ -41,7 +41,7 @@
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
-                                <label>Choose Customer</label>
+                                <label>Customer</label>
                                 <select class="select" name="salesreport_customer" id="salesreport_customer">
                                     <option value=""  selected >Select Customer</option>
                                     @foreach ($Customer as $Customers)
@@ -61,8 +61,8 @@
             </div>
 
             <div class="card">
-                
-                    
+
+
                         <h4 class="sales_report_heading" style="margin-left: 3%;margin-top: 2%;font-weight: 600;color: #c12171;">
                         @foreach ($Sales_data as $keydata => $sales_data_arr)
                         @if ($sales_data_arr['unique_key'] != '')
@@ -72,11 +72,11 @@
                             @endif
 
 
-                        
+
                         @endif
                         @endforeach
                         </h4>
-                    
+
                 <div class="card-body">
                     <div class="row">
                         @if ($Sales_data != '')
@@ -121,7 +121,7 @@
 
                                                                 </li>
                                                                 <li>
-                                                                    
+
                                                                     @if ($Sales_datas['status'] == 0)
                                                                         <a href="{{ route('sales.invoice', ['unique_key' => $Sales_datas['unique_key']]) }}"
                                                                             class="badges bg-lightgreen" style="color: white">Invoice</a>

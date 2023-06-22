@@ -41,7 +41,7 @@
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
-                                <label>Choose Supplier</label>
+                                <label>Supplier</label>
                                 <select class="select" name="purchasereport_supplier" id="purchasereport_supplier">
                                     <option value=""  selected >Select Supplier</option>
                                     @foreach ($supplier as $suppliers)
@@ -61,8 +61,8 @@
             </div>
 
             <div class="card">
-                
-                    
+
+
                         <h4 class="purchase_report_heading" style="margin-left: 3%;margin-top: 2%;font-weight: 600;color: #c12171;">
                         @foreach ($purchase_data as $keydata => $purchase)
                         @if ($purchase['unique_key'] != '')
@@ -72,7 +72,7 @@
                             @endif
                         @endforeach
                         </h4>
-                    
+
                 <div class="card-body">
                     <div class="row">
                         @if ($purchase_data != '')
@@ -121,7 +121,7 @@
                                                                 class="badges bg-lightred purchaseview" style="color: white">View</a>
 
                                                         </li>
-                                                        
+
                                                         <li>
                                                         @if ($purchasedata['status'] == 0)
                                                             <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
@@ -131,7 +131,7 @@
                                                                 class="badges bg-green" style="color: white">Generated Invoice</a>
                                                         @endif
                                                         </li>
-                                                        
+
                                                     </ul>
                                                     </td>
                                                 </tr>
