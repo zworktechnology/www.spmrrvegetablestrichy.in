@@ -69,11 +69,13 @@
                                     <td>{{ $Sales_datas['gross_amount'] }}</td>
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
+                                            @if ($Sales_datas['status'] == 0)
                                             <li>
 
                                                 <a href="{{ route('sales.edit', ['unique_key' => $Sales_datas['unique_key']]) }}"
                                                     class="badges bg-lightyellow" style="color: white">Edit</a>
                                             </li>
+                                            @endif
                                             <li>
                                                 <a href="#salesview{{ $Sales_datas['unique_key'] }}" data-bs-toggle="modal"
                                                     data-id="{{ $Sales_datas['id'] }}"
@@ -82,9 +84,16 @@
 
                                             </li>
                                             <li>
-                                                <a href="{{ route('sales.invoice', ['unique_key' => $Sales_datas['unique_key']]) }}"
-                                                    class="badges bg-lightgreen" style="color: white">Invoice</a>
+                                                
+                                                @if ($Sales_datas['status'] == 0)
+                                                    <a href="{{ route('sales.invoice', ['unique_key' => $Sales_datas['unique_key']]) }}"
+                                                        class="badges bg-lightgreen" style="color: white">Invoice</a>
+                                                @elseif ($Sales_datas['status'] == 1)
+                                                    <a href="{{ route('sales.print_view', ['unique_key' => $Sales_datas['unique_key']]) }}"
+                                                        class="badges bg-green" style="color: white">Generated Invoice</a>
+                                                @endif
                                             </li>
+                                            
 
                                         </ul>
                                     </td>

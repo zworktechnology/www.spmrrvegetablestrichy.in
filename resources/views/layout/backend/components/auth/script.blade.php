@@ -25,6 +25,10 @@
 <script src="{{ asset('assets/backend/js/custom/purchase_create.js') }}"></script>
 
 <script>
+
+$(".purchaseclose").click(function() {
+            window.location.reload();
+        });
 // PURCHASE
 
    var j = 1;
@@ -47,9 +51,7 @@
                     '<option value="bag">Bag</option><option value="kg">Kg</option>' +
                     '</select></td>' +
                     '<td><input type="text" class="form-control count" id="count" name="count[]" placeholder="count" value="" required /></td>' +
-                    '<td><input type="text" class="form-control price_per_kg" id="price_per_kg" name="price_per_kg[]" placeholder="Price Per count" value="" required /></td>' +
-                    '<td class="text-end"><input type="text" class="form-control total_price" id="total_price" readonly style="background-color: #e9ecef;" name="total_price[]" placeholder="" value="" required /></td>' +
-                    '<td><button style="width: 100px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-tr" type="button" >Remove</button></td>' +
+                    '<td><button style="width: 35px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-tr" type="button" >-</button></td>' +
                     '</tr>'
                 );
 
@@ -450,9 +452,7 @@ $(document).ready(function() {
                     '<option value="bag">Bag</option><option value="kg">Kg</option>' +
                     '</select></td>' +
                     '<td><input type="text" class="form-control sales_count" id="sales_count" name="sales_count[]" placeholder="count" value="" required /></td>' +
-                    '<td><input type="text" class="form-control sales_priceperkg" id="sales_priceperkg" name="sales_priceperkg[]" placeholder="Price Per Count" value="" required /></td>' +
-                    '<td class="text-end"><input type="text" class="form-control sales_total_price" id="sales_total_price" readonly style="background-color: #e9ecef;" name="sales_total_price[]" placeholder="" value="" required /></td>' +
-                    '<td><button style="width: 100px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-salestr" type="button" >Remove</button></td>' +
+                    '<td><button style="width: 35px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-salestr" type="button" >-</button></td>' +
                     '</tr>'
                 );
 
@@ -718,5 +718,37 @@ $(document).on('click', '.remove-salestr', function() {
                 $(".payable_amount").val('');
             }
         });
+
+
+    function purchasesubmitForm(btn) {
+        // disable the button
+        btn.disabled = true;
+        // submit the form
+        btn.form.submit();
+    }
+
+    function purchasesaveprint(btn) {
+        // disable the button
+        btn.disabled = true;
+        // submit the form
+        btn.form.submit();
+    }
+
+
+    function salessubmitForm(btn) {
+        // disable the button
+        btn.disabled = true;
+        // submit the form
+        btn.form.submit();
+    }
+
+
+    function salessaveprintForm(btn) {
+        // disable the button
+        btn.disabled = true;
+        // submit the form
+        btn.form.submit();
+    }
+
 
 </script>

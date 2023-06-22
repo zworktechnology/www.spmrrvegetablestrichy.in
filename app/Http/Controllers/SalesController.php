@@ -21,7 +21,7 @@ class SalesController extends Controller
     {
 
         $today = Carbon::now()->format('Y-m-d');
-        $data = Sales::where('date', '=', $today)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $data = Sales::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
         $Sales_data = [];
         $sales_terms = [];
         foreach ($data as $key => $datas) {
@@ -55,6 +55,7 @@ class SalesController extends Controller
                 'bill_no' => $datas->bill_no,
                 'id' => $datas->id,
                 'sales_terms' => $sales_terms,
+                'status' => $datas->status,
             );
         }
 
@@ -66,7 +67,7 @@ class SalesController extends Controller
     public function branchdata($branch_id)
     {
         $today = Carbon::now()->format('Y-m-d');
-        $branchwise_data = Sales::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $branchwise_data = Sales::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
         $Sales_data = [];
         $sales_terms = [];
         foreach ($branchwise_data as $key => $branchwise_datas) {
@@ -99,6 +100,7 @@ class SalesController extends Controller
                 'bill_no' => $branchwise_datas->bill_no,
                 'id' => $branchwise_datas->id,
                 'sales_terms' => $sales_terms,
+                'status' => $branchwise_datas->status,
             );
         }
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -111,7 +113,7 @@ class SalesController extends Controller
         $today = $request->get('from_date');
 
 
-        $data = Sales::where('date', '=', $today)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $data = Sales::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
         $Sales_data = [];
         $sales_terms = [];
         foreach ($data as $key => $datas) {
@@ -145,6 +147,7 @@ class SalesController extends Controller
                 'bill_no' => $datas->bill_no,
                 'id' => $datas->id,
                 'sales_terms' => $sales_terms,
+                'status' => $datas->status,
             );
         }
 
@@ -178,10 +181,6 @@ class SalesController extends Controller
     {
         // Sales Table
 
-        $sales_save = $request->get('sales_submit');
-        $sales_saveandprint = $request->get('sales_saveandprint');
-        if($sales_save == 'Save'){
-
 
             $randomkey = Str::random(5);
 
@@ -194,14 +193,6 @@ class SalesController extends Controller
             $data->time = $request->get('sales_time');
             $data->bill_no = $request->get('sales_billno');
             $data->bank_id = $request->get('sales_bank_id');
-            $data->total_amount = $request->get('sales_total_amount');
-            $data->note = $request->get('sales_extracost_note');
-            $data->extra_cost = $request->get('sales_extracost');
-            $data->gross_amount = $request->get('sales_gross_amount');
-            $data->old_balance = $request->get('sales_old_balance');
-            $data->grand_total = $request->get('sales_grand_total');
-            $data->paid_amount = $request->get('salespayable_amount');
-            $data->balance_amount = $request->get('sales_pending_amount');
             $data->save();
     
             $insertedId = $data->id;
@@ -217,8 +208,6 @@ class SalesController extends Controller
                 $SalesProduct->productlist_id = $sales_product_id;
                 $SalesProduct->bagorkg = $request->sales_bagorkg[$key];
                 $SalesProduct->count = $request->sales_count[$key];
-                $SalesProduct->price_per_kg = $request->sales_priceperkg[$key];
-                $SalesProduct->total_price = $request->sales_total_price[$key];
                 $SalesProduct->save();
     
                 $product_ids = $request->sales_product_id[$key];
@@ -255,94 +244,7 @@ class SalesController extends Controller
     
             return redirect()->route('sales.index')->with('add', 'Sales Data added successfully!');
 
-        }
-        if($sales_saveandprint == 'Save & Print'){
-
-
-
-            $randomkey = Str::random(5);
-
-            $data = new Sales();
-    
-            $data->unique_key = $randomkey;
-            $data->customer_id = $request->get('sales_customerid');
-            $data->branch_id = $request->get('sales_branch_id');
-            $data->date = $request->get('sales_date');
-            $data->time = $request->get('sales_time');
-            $data->bill_no = $request->get('sales_billno');
-            $data->bank_id = $request->get('sales_bank_id');
-            $data->total_amount = $request->get('sales_total_amount');
-            $data->note = $request->get('sales_extracost_note');
-            $data->extra_cost = $request->get('sales_extracost');
-            $data->gross_amount = $request->get('sales_gross_amount');
-            $data->old_balance = $request->get('sales_old_balance');
-            $data->grand_total = $request->get('sales_grand_total');
-            $data->paid_amount = $request->get('salespayable_amount');
-            $data->balance_amount = $request->get('sales_pending_amount');
-            $data->save();
-    
-            $insertedId = $data->id;
-    
-            // Purchase Products Table
-            foreach ($request->get('sales_product_id') as $key => $sales_product_id) {
-    
-                $salesprandomkey = Str::random(5);
-    
-                $SalesProduct = new SalesProduct;
-                $SalesProduct->unique_key = $salesprandomkey;
-                $SalesProduct->sales_id = $insertedId;
-                $SalesProduct->productlist_id = $sales_product_id;
-                $SalesProduct->bagorkg = $request->sales_bagorkg[$key];
-                $SalesProduct->count = $request->sales_count[$key];
-                $SalesProduct->price_per_kg = $request->sales_priceperkg[$key];
-                $SalesProduct->total_price = $request->sales_total_price[$key];
-                $SalesProduct->save();
-    
-                $product_ids = $request->sales_product_id[$key];
-    
-    
-                $sales_branch_id = $request->get('sales_branch_id');
-                $product_Data = Product::where('productlist_id', '=', $product_ids)->where('branchtable_id', '=', $sales_branch_id)->first();
-                
-                if($product_Data != ""){
-                    if($sales_branch_id == $product_Data->branchtable_id){
-    
-                        $bag_count = $product_Data->available_stockin_bag;
-                        $kg_count = $product_Data->available_stockin_kilograms;
         
-                        if($request->sales_bagorkg[$key] == 'bag'){
-                            $totalbag_count = $bag_count - $request->sales_count[$key];
-                            $totalkg_count = $kg_count - 0;
-                        }else if($request->sales_bagorkg[$key] == 'kg'){
-                            $totalkg_count = $kg_count - $request->sales_count[$key];
-                            $totalbag_count = $bag_count - 0;
-                        }
-        
-                        DB::table('products')->where('productlist_id', $product_ids)->where('branchtable_id', $sales_branch_id)->update([
-                            'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
-                        ]);
-                    }
-                }
-                
-    
-            }
-
-
-
-            $SalesData = Sales::where('unique_key', '=', $randomkey)->first();
-
-            $customer_idname = Customer::where('id', '=', $SalesData->customer_id)->first();
-            $branchname = Branch::where('id', '=', $SalesData->branch_id)->first();
-            $bankname = Bank::where('id', '=', $SalesData->bank_id)->first();
-
-            $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-            $SalesProduct_darta = SalesProduct::where('sales_id', '=', $SalesData->id)->get();
-    
-            return redirect()->route('sales.print_view', ['SalesData' => $SalesData, 'customer_idname' => $customer_idname, 'branchname' => $branchname, 'bankname' => $bankname, 'productlist' => $productlist, 'SalesProduct_darta' => $SalesProduct_darta, 'unique_key' => $randomkey])->with('add', 'Sales Data added successfully!');
-
-
-
-        }
         
 
 
@@ -357,11 +259,11 @@ class SalesController extends Controller
         $customer_idname = Customer::where('id', '=', $SalesData->customer_id)->first();
             $branchname = Branch::where('id', '=', $SalesData->branch_id)->first();
             $bankname = Bank::where('id', '=', $SalesData->bank_id)->first();
-
+            $customer_upper = strtoupper($customer_idname->name);
             $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $SalesProduct_darta = SalesProduct::where('sales_id', '=', $SalesData->id)->get();
 
-        return view('page.backend.sales.print_view', compact('SalesData', 'customer_idname', 'branchname', 'bankname', 'SalesProduct_darta', 'productlist'));
+        return view('page.backend.sales.print_view', compact('customer_upper', 'SalesData', 'customer_idname', 'branchname', 'bankname', 'SalesProduct_darta', 'productlist'));
     }
 
 
@@ -395,14 +297,6 @@ class SalesController extends Controller
         $Sales_Data->time = $request->get('sales_time');
         $Sales_Data->bill_no = $request->get('sales_billno');
         $Sales_Data->bank_id = $request->get('sales_bank_id');
-        $Sales_Data->total_amount = $request->get('sales_total_amount');
-        $Sales_Data->note = $request->get('sales_extracost_note');
-        $Sales_Data->extra_cost = $request->get('sales_extracost');
-        $Sales_Data->gross_amount = $request->get('sales_gross_amount');
-        $Sales_Data->old_balance = $request->get('sales_old_balance');
-        $Sales_Data->grand_total = $request->get('sales_grand_total');
-        $Sales_Data->paid_amount = $request->get('salespayable_amount');
-        $Sales_Data->balance_amount = $request->get('sales_pending_amount');
         $Sales_Data->update();
 
         $SalesId = $Sales_Data->id;
@@ -461,11 +355,9 @@ class SalesController extends Controller
                 $productlist_id = $request->sales_product_id[$key];
                 $bagorkg = $request->sales_bagorkg[$key];
                 $count = $request->sales_count[$key];
-                $price_per_kg = $request->sales_priceperkg[$key];
-                $total_price = $request->sales_total_price[$key];
 
                 DB::table('sales_products')->where('id', $ids)->update([
-                    'sales_id' => $Sales_Id,  'productlist_id' => $updatesales_product_id,  'bagorkg' => $bagorkg,  'count' => $count, 'price_per_kg' => $price_per_kg, 'total_price' => $total_price
+                    'sales_id' => $Sales_Id,  'productlist_id' => $updatesales_product_id,  'bagorkg' => $bagorkg,  'count' => $count
                 ]);
 
             } else if ($sales_detail_id == '') {
@@ -480,8 +372,6 @@ class SalesController extends Controller
                     $SalesProduct->productlist_id = $request->sales_product_id[$key];
                     $SalesProduct->bagorkg = $request->sales_bagorkg[$key];
                     $SalesProduct->count = $request->sales_count[$key];
-                    $SalesProduct->price_per_kg = $request->sales_priceperkg[$key];
-                    $SalesProduct->total_price = $request->sales_total_price[$key];
                     $SalesProduct->save();
 
 
@@ -515,6 +405,66 @@ class SalesController extends Controller
 
                 }
             }
+        }
+
+        return redirect()->route('sales.index')->with('update', 'Updated Sales information has been added to your list.');
+
+    }
+
+
+    public function invoice($unique_key)
+    {
+        $SalesData = Sales::where('unique_key', '=', $unique_key)->first();
+        $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $customer = Customer::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $bank = Bank::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $SalesProducts = SalesProduct::where('sales_id', '=', $SalesData->id)->get();
+
+        return view('page.backend.sales.invoice', compact('productlist', 'branch', 'customer', 'bank', 'SalesData', 'SalesProducts'));
+    }
+
+
+    public function invoice_update(Request $request, $unique_key)
+    {
+
+        $branch_id = $request->get('sales_branch_id');
+
+
+        $Sales_Data = Sales::where('unique_key', '=', $unique_key)->first();
+
+        $Sales_Data->total_amount = $request->get('sales_total_amount');
+        $Sales_Data->note = $request->get('sales_extracost_note');
+        $Sales_Data->extra_cost = $request->get('sales_extracost');
+        $Sales_Data->gross_amount = $request->get('sales_gross_amount');
+        $Sales_Data->old_balance = $request->get('sales_old_balance');
+        $Sales_Data->grand_total = $request->get('sales_grand_total');
+        $Sales_Data->paid_amount = $request->get('salespayable_amount');
+        $Sales_Data->balance_amount = $request->get('sales_pending_amount');
+        $Sales_Data->status = 1;
+        $Sales_Data->update();
+
+        $SalesId = $Sales_Data->id;
+
+        // Purchase Products Table
+
+        
+
+        foreach ($request->get('sales_detail_id') as $key => $sales_detail_id) {
+            if ($sales_detail_id > 0) {
+
+                $updatesales_product_id = $request->sales_product_id[$key];
+
+                $ids = $sales_detail_id;
+                $Sales_Id = $SalesId;
+                $price_per_kg = $request->sales_priceperkg[$key];
+                $total_price = $request->sales_total_price[$key];
+
+                DB::table('sales_products')->where('id', $ids)->update([
+                    'sales_id' => $Sales_Id,  'productlist_id' => $updatesales_product_id, 'price_per_kg' => $price_per_kg, 'total_price' => $total_price
+                ]);
+
+            } 
         }
 
         return redirect()->route('sales.index')->with('update', 'Updated Sales information has been added to your list.');

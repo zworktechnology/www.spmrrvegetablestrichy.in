@@ -8961,6 +8961,10 @@ span.select2-container.select2-container--default.select2-container--open {
     background: #28c76f
 }
 
+.badges.bg-green {
+    background: #141432
+}
+
 .badges.bg-lightred {
     background: #ea5455
 }
@@ -9033,7 +9037,6 @@ span.select2-container.select2-container--default.select2-container--open {
     font-weight: 500;
     padding: 10px;
     border-right: 1px solid #f8f8f8;
-    background: #fafbfe
 }
 
 .total-order ul li h5 {

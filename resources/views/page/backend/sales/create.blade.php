@@ -14,8 +14,16 @@
          <form autocomplete="off" method="POST" action="{{ route('sales.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="row">
+               <div class="col-lg-3 col-sm-6 col-12">
+                  <div class="form-group">
+                     <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bill No<span style="color: red;">*</span></label>
+                     <input type="text" name="sales_billno" placeholder="Bill No" id="sales_billno" value="{{ $salesbillno }}" style="background-color: #e9ecef;" readonly>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
 
-               <div class="col-lg-16 col-sm-6 col-12">
+               <div class="col-lg-3 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">From Branch<span style="color: red;">*</span></label>
                      <select class="select sales_branch_id" name="sales_branch_id" id="sales_branch_id">
@@ -27,7 +35,7 @@
                   </div>
                </div>
             
-               <div class="col-lg-16 col-sm-6 col-12">
+               <div class="col-lg-3 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">To Customer<span style="color: red;">*</span> </label>
                      <select class="select" name="sales_customerid" id="sales_customerid">
@@ -41,14 +49,14 @@
 
                
 
-               <div class="col-lg-6 col-sm-6 col-12">
+               <div class="col-lg-3 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Date<span style="color: red;">*</span></label>
                      <input type="date" name="sales_date" placeholder="" value="{{ $today }}">
                   </div>
                </div>
 
-               <div class="col-lg-6 col-sm-6 col-12">
+               <div class="col-lg-3 col-sm-6 col-12" hidden>
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span style="color: red;">*</span></label>
                      <input type="time" name="sales_time" placeholder="" value="{{ $timenow }}">
@@ -56,14 +64,8 @@
                </div>
 
                
-               <div class="col-lg-16 col-sm-6 col-12">
-                  <div class="form-group">
-                     <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bill No<span style="color: red;">*</span></label>
-                     <input type="text" name="sales_billno" placeholder="Bill No" id="sales_billno" value="{{ $salesbillno }}" style="background-color: #e9ecef;" readonly>
-                  </div>
-               </div>
-
-               <div class="col-lg-16 col-sm-6 col-12">
+               
+               <div class="col-lg-3 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank<span style="color: red;">*</span></label>
                      <select class="select" name="sales_bank_id" id="sales_bank_id">
@@ -87,8 +89,6 @@
                            <th style="font-size:15px; width:28%;">Product</th>
                            <th style="font-size:15px; width:12%;">Bag / Kg</th>
                            <th style="font-size:15px; width:12%;">Count </th>
-                           <th style="font-size:15px; width:18%;">Price / Count</th>
-                           <th style="font-size:15px; width:20%;">Amount</th>
                            
                         </tr>
                      </thead>
@@ -110,47 +110,10 @@
                               </select>
                            </td>
                            <td><input type="text" class="form-control sales_count" id="sales_count" name="sales_count[]" placeholder="count" value="" required /></td>
-                           <td><input type="text" class="form-control sales_priceperkg" id="sales_priceperkg" name="sales_priceperkg[]" placeholder="Price Per Count" value="" required /></td>
-                           <td class="text-end"><input type="text" class="form-control sales_total_price" readonly id="sales_total_price"  style="background-color: #e9ecef;" name="sales_total_price[]" placeholder="" value="" required /></td>
                            <td>
-                              <button style="width: 100px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
-                              type="button" id="addsalesproductfields" value="Add">Add</button>
+                              <button style="width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
+                              type="button" id="addsalesproductfields" value="Add">+</button>
                            </td>
-                        </tr>
-                     </tbody>
-                     <tbody>
-                        <tr>
-                           <td></td>
-                           <td></td>
-                           <td></td>
-                           <td style="font-size:15px;color: black;" class="text-end">Total</td>
-                           <td><input type="text" class="form-control sales_total_amount" id="sales_total_amount" name="sales_total_amount" readonly style="background-color: #e9ecef;" /></td>
-                           
-                        </tr>
-                        <tr>
-                           <td colspan="3"><input type="text" class="form-control" id="sales_extracost_note" placeholder="Note" name="sales_extracost_note" /></td>
-                           <td style="font-size:15px;color: black;" class="text-end">Extra Cost<span style="color: red;">*</span></td>
-                           <td><input type="text" class="form-control sales_extracost" id="sales_extracost" placeholder="Extra Cost" name="sales_extracost" value="0"/></td>
-                        </tr>
-                        <tr>
-                           <td colspan="4" class="text-end" style="font-size:15px;color: black;">Gross Amount</td>
-                           <td><input type="text" class="form-control sales_gross_amount" id="sales_gross_amount" placeholder="Gross Amount" readonly style="background-color: #e9ecef;" name="sales_gross_amount"/></td>
-                        </tr>
-                        <tr>
-                           <td colspan="4" class="text-end" style="font-size:15px;color: red;">Old Balance</td>
-                           <td><input type="text" class="form-control sales_old_balance" id="sales_old_balance" placeholder="Old Balance" readonly value="0" style="background-color: #e9ecef;" name="sales_old_balance"/></td>
-                        </tr>
-                        <tr>
-                           <td colspan="4" class="text-end" style="font-size:15px;color: green;">Grand Total</td>
-                           <td><input type="text" class="form-control sales_grand_total" id="sales_grand_total" readonly placeholder="Grand Total" style="background-color: #e9ecef;" name="sales_grand_total"/></td>
-                        </tr>
-                        <tr>
-                           <td colspan="4" class="text-end" style="font-size:15px;color: black;">Payable Amount<span style="color: red;">*</span></td>
-                           <td><input type="text" class="form-control salespayable_amount" name="salespayable_amount" placeholder="Payable Amount" id="salespayable_amount" required></td>
-                        </tr>
-                        <tr>
-                           <td colspan="4" class="text-end" style="font-size:15px;color: black;">Pending Amount</td>
-                           <td><input type="text" class="form-control sales_pending_amount" name="sales_pending_amount" readonly style="background-color: #e9ecef;" placeholder="Pending Amount" id="sales_pending_amount"></td>
                         </tr>
                      </tbody>
                   </table>
@@ -161,8 +124,7 @@
 
             
             <div class="modal-footer">
-            <input type="submit" class="btn btn-primary" name="sales_submit" value="Save" />
-               <input type="submit" class="btn btn-success sales_saveandprint" name="sales_saveandprint" value="Save & Print" />
+            <input type="submit" class="btn btn-primary" onclick="salessubmitForm(this);"/>
                <a href="{{ route('sales.index') }}" class="btn btn-danger" value="">Cancel</a>
             </div>
          </form>

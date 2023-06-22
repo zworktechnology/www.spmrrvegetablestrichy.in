@@ -171,6 +171,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/update/{unique_key}', [PurchaseController::class, 'update'])->name('purchase.update');
         // INVOICE
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchase/invoice/{unique_key}', [PurchaseController::class, 'invoice'])->name('purchase.invoice');
+        // INVOICE UPDATE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/invoice_update/{unique_key}', [PurchaseController::class, 'invoice_update'])->name('purchase.invoice_update');
         // DELETE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/delete/{unique_key}', [PurchaseController::class, 'delete'])->name('purchase.delete');
         // VIEW
@@ -200,6 +202,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/sales/update/{unique_key}', [SalesController::class, 'update'])->name('sales.update');
         // INVOICE
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/sales/invoice/{unique_key}', [SalesController::class, 'invoice'])->name('sales.invoice');
+        // INVOICE UPDATE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/sales/invoice_update/{unique_key}', [SalesController::class, 'invoice_update'])->name('sales.invoice_update');
         // DELETE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/sales/delete/{unique_key}', [SalesController::class, 'delete'])->name('sales.delete');
         // INDEX BRANCH WISE

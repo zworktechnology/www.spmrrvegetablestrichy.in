@@ -10,7 +10,7 @@
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" name="name" placeholder="Enter manager name">
+                            <input type="text" name="name" placeholder="Enter Branch name">
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">

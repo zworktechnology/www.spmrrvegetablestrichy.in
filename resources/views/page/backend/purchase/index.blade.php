@@ -72,11 +72,12 @@
                                     <td>{{ $purchasedata['gross_amount'] }}</td>
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
+                                            @if ($purchasedata['status'] == 0)
                                             <li>
-
                                                 <a href="{{ route('purchase.edit', ['unique_key' => $purchasedata['unique_key']]) }}"
                                                     class="badges bg-lightyellow" style="color: white">Edit</a>
                                             </li>
+                                            @endif
                                             <li hidden>
                                                 <a href="#delete{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
                                                     data-id="{{ $purchasedata['unique_key'] }}"
@@ -90,10 +91,17 @@
                                                     class="badges bg-lightred purchaseview" style="color: white">View</a>
 
                                             </li>
+                                            
                                             <li>
+                                            @if ($purchasedata['status'] == 0)
                                                 <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
                                                     class="badges bg-lightgreen" style="color: white">Invoice</a>
+                                            @elseif ($purchasedata['status'] == 1)
+                                                <a href="{{ route('purchase.print_view', ['unique_key' => $purchasedata['unique_key']]) }}"
+                                                    class="badges bg-green" style="color: white">Generated Invoice</a>
+                                            @endif
                                             </li>
+                                            
                                         </ul>
                                     </td>
                                 </tr>
