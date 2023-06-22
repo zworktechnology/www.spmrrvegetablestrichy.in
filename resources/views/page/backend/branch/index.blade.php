@@ -20,9 +20,9 @@
                             <tr>
                                 <th>Sl. No</th>
                                 <th>Name</th>
+                                <th>Shop Name</th>
                                 <th>Address</th>
                                 <th>Contact Number</th>
-                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -31,13 +31,9 @@
                                 <tr>
                                     <td>{{ ++$keydata }}</td>
                                     <td>{{ $branchdata->name }}</td>
+                                    <td>{{ $branchdata->shop_name }}</td>
                                     <td>{!! $branchdata->address !!}</td>
                                     <td>{{ $branchdata->contact_number }}</td>
-                                    @if ($branchdata->status == 0)
-                                        <td><span class="badges bg-lightgreen">Active</span></td>
-                                    @else
-                                        <td><span class="badges bg-lightred">De-Active</span></td>
-                                    @endif
                                     <td style="display: flex;">
                                         <ul class="list-unstyled hstack gap-1 mb-0">
                                             <li>

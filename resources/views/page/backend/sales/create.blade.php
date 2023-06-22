@@ -29,12 +29,12 @@
                      <select class="select sales_branch_id" name="sales_branch_id" id="sales_branch_id">
                         <option value="" disabled selected hiddden>Select Branch</option>
                            @foreach ($branch as $branches)
-                              <option value="{{ $branches->id }}">{{ $branches->name }}</option>
+                              <option value="{{ $branches->id }}">{{ $branches->shop_name }}</option>
                            @endforeach
                      </select>
                   </div>
                </div>
-            
+
                <div class="col-lg-3 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">To Customer<span style="color: red;">*</span> </label>
@@ -47,7 +47,7 @@
                   </div>
                </div>
 
-               
+
 
                <div class="col-lg-3 col-sm-6 col-12">
                   <div class="form-group">
@@ -63,8 +63,8 @@
                   </div>
                </div>
 
-               
-               
+
+
                <div class="col-lg-3 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank<span style="color: red;">*</span></label>
@@ -89,7 +89,7 @@
                            <th style="font-size:15px; width:28%;">Product</th>
                            <th style="font-size:15px; width:12%;">Bag / Kg</th>
                            <th style="font-size:15px; width:12%;">Count </th>
-                           
+
                         </tr>
                      </thead>
                      <tbody id="sales_productfields">
@@ -122,7 +122,7 @@
 
                <br/><br/>
 
-            
+
             <div class="modal-footer">
             <input type="submit" class="btn btn-primary" onclick="salessubmitForm(this);"/>
                <a href="{{ route('sales.index') }}" class="btn btn-danger" value="">Cancel</a>
@@ -130,7 +130,7 @@
          </form>
 
 
-            
+
 
 
 

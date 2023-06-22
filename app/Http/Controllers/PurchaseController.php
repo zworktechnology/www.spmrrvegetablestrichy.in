@@ -46,7 +46,7 @@ class PurchaseController extends Controller
 
             $purchase_data[] = array(
                 'unique_key' => $datas->unique_key,
-                'branch_name' => $branch_name->name,
+                'branch_name' => $branch_name->shop_name,
                 'supplier_name' => $supplier_name->name,
                 'date' => $datas->date,
                 'time' => $datas->time,
@@ -107,7 +107,7 @@ class PurchaseController extends Controller
 
             $purchase_data[] = array(
                 'unique_key' => $branchwise_datas->unique_key,
-                'branch_name' => $branch_name->name,
+                'branch_name' => $branch_name->shop_name,
                 'supplier_name' => $supplier_name->name,
                 'date' => $branchwise_datas->date,
                 'time' => $branchwise_datas->time,
@@ -148,7 +148,7 @@ class PurchaseController extends Controller
     public function store(Request $request)
     {
         // Purchase Table
-        
+
 
 
             $randomkey = Str::random(5);
@@ -238,7 +238,7 @@ class PurchaseController extends Controller
 
             return redirect()->route('purchase.index')->with('add', 'Purchase Data added successfully!');
 
-        
+
 
 
 
@@ -436,7 +436,7 @@ class PurchaseController extends Controller
 
 
         $Purchase_Data = Purchase::where('unique_key', '=', $unique_key)->first();
-        
+
         $Purchase_Data->total_amount = $request->get('total_amount');
         $Purchase_Data->note = $request->get('extracost_note');
         $Purchase_Data->extra_cost = $request->get('extracost');
@@ -451,7 +451,7 @@ class PurchaseController extends Controller
 
         // Purchase Products Table
 
-        
+
 
         foreach ($request->get('purchase_detail_id') as $key => $purchase_detail_id) {
             if ($purchase_detail_id > 0) {
@@ -467,7 +467,7 @@ class PurchaseController extends Controller
                     'purchase_id' => $purchaseID, 'price_per_kg' => $price_per_kg, 'total_price' => $total_price
                 ]);
 
-            } 
+            }
         }
 
         return redirect()->route('purchase.index')->with('update', 'Updated Purchase information has been added to your list.');
@@ -500,7 +500,7 @@ class PurchaseController extends Controller
 
     public function datefilter(Request $request) {
 
-        
+
         $today = $request->get('from_date');
 
 
@@ -529,7 +529,7 @@ class PurchaseController extends Controller
 
             $purchase_data[] = array(
                 'unique_key' => $datas->unique_key,
-                'branch_name' => $branch_name->name,
+                'branch_name' => $branch_name->shop_name,
                 'supplier_name' => $supplier_name->name,
                 'date' => $datas->date,
                 'time' => $datas->time,
@@ -573,7 +573,7 @@ class PurchaseController extends Controller
     }
 
 
-    
+
 
     public function getPurchaseview()
     {
@@ -652,7 +652,7 @@ class PurchaseController extends Controller
         $purchasereport_todate = $request->get('purchasereport_todate');
         $purchasereport_branch = $request->get('purchasereport_branch');
         $purchasereport_supplier = $request->get('purchasereport_supplier');
-        
+
 
 
         $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -667,16 +667,16 @@ class PurchaseController extends Controller
             $branchwise_report = Purchase::where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->get();
             if($branchwise_report != ''){
 
-               
+
                 $terms = [];
                 foreach ($branchwise_report as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
                     $supplier_name = Supplier::findOrFail($branchwise_datas->supplier_id);
-    
-    
+
+
                     $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $branchwise_datas->id)->get();
                     foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
-    
+
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                         $terms[] = array(
                             'bag' => $PurchaseProducts_arrdata->bag,
@@ -685,15 +685,15 @@ class PurchaseController extends Controller
                             'total_price' => $PurchaseProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
                             'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
-    
+
                         );
                     }
-    
-    
-    
+
+
+
                     $purchase_data[] = array(
                         'unique_key' => $branchwise_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
@@ -703,7 +703,7 @@ class PurchaseController extends Controller
                         'terms' => $terms,
                         'status' => $branchwise_datas->status,
                         'heading' => $branch_name->name . ' - Branch',
-    
+
                     );
                 }
             }else {
@@ -719,11 +719,11 @@ class PurchaseController extends Controller
                     'id' => '',
                     'terms' => '',
                     'status' => '',
-                    
+
                 );
             }
-            
-            
+
+
         }
 
 
@@ -762,7 +762,7 @@ class PurchaseController extends Controller
 
                     $purchase_data[] = array(
                         'unique_key' => $supplierwise_report_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
                         'date' => $supplierwise_report_datas->date,
                         'time' => $supplierwise_report_datas->time,
@@ -832,7 +832,7 @@ class PurchaseController extends Controller
 
                     $purchase_data[] = array(
                         'unique_key' => $fromdate_report_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
                         'date' => $fromdate_report_datas->date,
                         'time' => $fromdate_report_datas->time,
@@ -903,7 +903,7 @@ class PurchaseController extends Controller
 
                     $purchase_data[] = array(
                         'unique_key' => $todate_report_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
                         'date' => $todate_report_datas->date,
                         'time' => $todate_report_datas->time,
@@ -972,7 +972,7 @@ class PurchaseController extends Controller
 
                     $purchase_data[] = array(
                         'unique_key' => $datefilter_report_arr->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
                         'date' => $datefilter_report_arr->date,
                         'time' => $datefilter_report_arr->time,
@@ -1041,7 +1041,7 @@ class PurchaseController extends Controller
 
                         $purchase_data[] = array(
                             'unique_key' => $datefilter_report_arr->unique_key,
-                            'branch_name' => $branch_name->name,
+                            'branch_name' => $branch_name->shop_name,
                             'supplier_name' => $supplier_name->name,
                             'date' => $datefilter_report_arr->date,
                             'time' => $datefilter_report_arr->time,
@@ -1110,7 +1110,7 @@ class PurchaseController extends Controller
 
                     $purchase_data[] = array(
                         'unique_key' => $datefilter_report_arr->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
                         'date' => $datefilter_report_arr->date,
                         'time' => $datefilter_report_arr->time,
@@ -1174,7 +1174,7 @@ class PurchaseController extends Controller
 
                     $purchase_data[] = array(
                         'unique_key' => $datefilter_report_arr->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
                         'date' => $datefilter_report_arr->date,
                         'time' => $datefilter_report_arr->time,
@@ -1239,7 +1239,7 @@ class PurchaseController extends Controller
 
                     $purchase_data[] = array(
                         'unique_key' => $datefilter_report_arr->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
                         'date' => $datefilter_report_arr->date,
                         'time' => $datefilter_report_arr->time,
@@ -1308,7 +1308,7 @@ class PurchaseController extends Controller
 
                     $purchase_data[] = array(
                         'unique_key' => $datefilter_report_arr->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
                         'date' => $datefilter_report_arr->date,
                         'time' => $datefilter_report_arr->time,
@@ -1375,7 +1375,7 @@ class PurchaseController extends Controller
 
                     $purchase_data[] = array(
                         'unique_key' => $datefilter_report_arr->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
                         'date' => $datefilter_report_arr->date,
                         'time' => $datefilter_report_arr->time,
@@ -1417,16 +1417,16 @@ class PurchaseController extends Controller
                 $purchase_data = [];
                 if($datefilter_report != ''){
                         $todate_terms = [];
-    
+
                     foreach ($datefilter_report as $key => $datefilter_report_arr) {
-        
+
                         $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
                         $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
-        
-        
+
+
                         $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                         foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
-        
+
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                             $todate_terms[] = array(
                             'bag' => $PurchaseProducts_arrdata->bag,
@@ -1435,14 +1435,14 @@ class PurchaseController extends Controller
                             'total_price' => $PurchaseProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
                             'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
-        
+
                             );
                         }
-        
-        
+
+
                             $purchase_data[] = array(
                                 'unique_key' => $datefilter_report_arr->unique_key,
-                                'branch_name' => $branch_name->name,
+                                'branch_name' => $branch_name->shop_name,
                                 'supplier_name' => $supplier_name->name,
                                 'date' => $datefilter_report_arr->date,
                                 'time' => $datefilter_report_arr->time,
@@ -1453,10 +1453,10 @@ class PurchaseController extends Controller
                                 'status' => $datefilter_report_arr->status,
                                 'heading' => $GetSupplier->name . ' (Supplier) - (' . date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($purchasereport_todate)) . ')'
                             );
-        
+
                     }
                 }else{
-    
+
                     $purchase_data[] = array(
                         'unique_key' => '',
                         'branch_name' => '',

@@ -42,7 +42,7 @@
                     <a href="{{ route('expence.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
                         <div class="dash-widget">
                             <div class="dash-widgetcontent">
-                                <h6 style="font-weight: bold;">{{ $allbranches->name }}</h6>
+                                <h6 style="font-weight: bold;">{{ $allbranches->shop_name }}</h6>
                             </div>
                         </div>
                     </a>

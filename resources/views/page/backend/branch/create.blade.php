@@ -9,20 +9,20 @@
                 <div class="row">
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" name="name" placeholder="Enter Branch name">
+                            <label>Name <span style="color: red;">*</span></label>
+                            <input type="text" name="name" placeholder="Enter Branch name" required>
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Shop Name</label>
-                            <input type="text" name="shop_name" placeholder="Enter shop name">
+                            <label>Shop Name <span style="color: red;">*</span></label>
+                            <input type="text" name="shop_name" placeholder="Enter shop name" required>
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Phone Number</label>
-                            <input type="text" name="contact_number" placeholder="Enter shop phone number">
+                            <label>Phone Number <span style="color: red;">*</span></label>
+                            <input type="text" name="contact_number" placeholder="Enter shop phone number" required>
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
@@ -45,13 +45,13 @@
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Address</label>
-                            <textarea type="text" name="address" placeholder="Enter your shop address"></textarea>
+                            <label>Address <span style="color: red;">*</span></label>
+                            <textarea type="text" name="address" placeholder="Enter your shop address" required></textarea>
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>logo</label>
+                            <label>logo <span style="color: red;" required>*</span></label>
                             <div class="image-upload">
                                 <input type="file" name="logo">
                                 <div class="image-uploads">

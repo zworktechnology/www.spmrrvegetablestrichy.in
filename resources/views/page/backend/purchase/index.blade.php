@@ -39,7 +39,7 @@
                     <a href="{{ route('purchase.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
                         <div class="dash-widget">
                             <div class="dash-widgetcontent">
-                                <h6 style="font-weight: bold;">{{ $allbranches->name }}</h6>
+                                <h6 style="font-weight: bold;">{{ $allbranches->shop_name }}</h6>
                             </div>
                         </div>
                     </a>
@@ -91,7 +91,7 @@
                                                     class="badges bg-lightred purchaseview" style="color: white">View</a>
 
                                             </li>
-                                            
+
                                             <li>
                                             @if ($purchasedata['status'] == 0)
                                                 <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
@@ -101,7 +101,7 @@
                                                     class="badges bg-green" style="color: white">Generated Invoice</a>
                                             @endif
                                             </li>
-                                            
+
                                         </ul>
                                     </td>
                                 </tr>
