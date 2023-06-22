@@ -44,6 +44,8 @@ class PurchaseController extends Controller
 
             }
 
+
+
             $purchase_data[] = array(
                 'unique_key' => $datas->unique_key,
                 'branch_name' => $branch_name->name,
@@ -70,14 +72,8 @@ class PurchaseController extends Controller
         $timenow = Carbon::now()->format('H:i');
 
 
-        $last_purchaseid = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->latest('id')->first();
-        if($last_purchaseid != ''){
-            $billno = $last_purchaseid->bill_no + 1;
-        }else {
-            $billno = 1;
-        }
-
-        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'today', 'productlist', 'branch', 'supplier', 'timenow', 'bank', 'billno'));
+       
+        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'today', 'productlist', 'branch', 'supplier', 'timenow', 'bank'));
     }
 
 
@@ -134,13 +130,8 @@ class PurchaseController extends Controller
         $timenow = Carbon::now()->format('H:i');
 
 
-        $last_purchaseid = Purchase::where('soft_delete', '!=', 1)->latest('id')->first();
-        if($last_purchaseid != ''){
-            $billno = $last_purchaseid->bill_no + 1;
-        }else {
-            $billno = 1;
-        }
-        return view('page.backend.purchase.create', compact('productlist', 'branch', 'supplier', 'today', 'timenow', 'bank', 'billno'));
+        
+        return view('page.backend.purchase.create', compact('productlist', 'branch', 'supplier', 'today', 'timenow', 'bank'));
     }
 
 
@@ -154,8 +145,32 @@ class PurchaseController extends Controller
             $randomkey = Str::random(5);
 
             $supplier_id = $request->get('supplier_id');
-            $branchdata_s = $request->get('branch_id');
 
+
+            $bill_branchid = $request->get('branch_id');
+            $bill_date = $request->get('date');
+            $s_bill_no = 1;
+
+            // Branch
+            $GetBranch = Branch::findOrFail($bill_branchid);
+            $Branch_Name = $GetBranch->name;
+            $first_three_letter = substr($Branch_Name, 0, 3);
+            $branch_upper = strtoupper($first_three_letter);
+
+            //Date
+            $billreport_date = date('dmY', strtotime($bill_date));
+
+
+            $lastreport_OFBranch = Purchase::where('branch_id', '=', $bill_branchid)->where('date', '=', $bill_date)->latest('id')->first();
+            if($lastreport_OFBranch != '')
+            {
+                $added_billno = substr ($lastreport_OFBranch->bill_no, -5);
+                $invoiceno = $branch_upper . $billreport_date . 'P0000' . ($added_billno) + 1;
+            } else {
+                $invoiceno = $branch_upper . $billreport_date . 'P0000' . $s_bill_no;
+            }
+
+            
 
             $data = new Purchase();
 
@@ -164,7 +179,7 @@ class PurchaseController extends Controller
             $data->branch_id = $request->get('branch_id');
             $data->date = $request->get('date');
             $data->time = $request->get('time');
-            $data->bill_no = $request->get('billno');
+            $data->bill_no = $invoiceno;
             $data->bank_id = $request->get('bank_id');
             $data->save();
 
@@ -273,7 +288,6 @@ class PurchaseController extends Controller
         $Purchase_Data->supplier_id = $request->get('supplier_id');
         $Purchase_Data->branch_id = $request->get('branch_id');
         $Purchase_Data->date = $request->get('date');
-        $Purchase_Data->bill_no = $request->get('billno');
         $Purchase_Data->bank_id = $request->get('bank_id');
         $Purchase_Data->update();
 
@@ -426,6 +440,8 @@ class PurchaseController extends Controller
         $bank = Bank::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $PurchaseData->id)->get();
 
+
+
         return view('page.backend.purchase.invoice', compact('productlist', 'branch', 'supplier', 'bank', 'PurchaseData', 'PurchaseProducts'));
     }
 
@@ -560,15 +576,24 @@ class PurchaseController extends Controller
 
     public function getoldbalance()
     {
-        $supplier_id = request()->get('supplier_id');
-        $branch_id = request()->get('branch_id');
+        $invoice_supplier = request()->get('invoice_supplier');
+        $invoice_branchid = request()->get('invoice_branchid');
 
-        $get_OldBalance = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $supplier_id)->where('branch_id', '=', $branch_id)->latest('id')->first();
-        if($get_OldBalance != ""){
+        
+
+        $last_idrow = Purchase::where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->latest('id')->first();
+
+        if($last_idrow->balance_amount != NULL){
             $userData['data'] = $get_OldBalance->balance_amount;
-        }else {
-            $userData['data'] = 'null';
+
+        }else if($last_idrow->balance_amount == NULL){
+            $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->skip(1)->take(1)->first();
+            $userData['data'] = $secondlastrow->balance_amount;
+
         }
+
+       
+        
         echo json_encode($userData);
     }
 

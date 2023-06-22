@@ -16,14 +16,6 @@
             <div class="row">
                <div class="col-lg-3 col-sm-3 col-12">
                   <div class="form-group">
-                     <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bill No<span style="color: red;">*</span></label>
-                     <input type="text" name="billno" placeholder="Bill No" id="billno" value="{{ $billno }}" style="background-color: #e9ecef;" readonly>
-                  </div>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-lg-3 col-sm-3 col-12">
-                  <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Supplier<span style="color: red;">*</span> </label>
                      <select class="select" name="supplier_id" id="supplier_id" required>
                         <option value="" disabled selected hiddden>Select Supplier</option>

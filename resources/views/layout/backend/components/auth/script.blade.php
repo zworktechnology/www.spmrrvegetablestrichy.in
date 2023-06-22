@@ -82,17 +82,20 @@ $(".purchaseclose").click(function() {
                 });
         });
 
-        $('#branch_id').on('change', function() {
-            var branch_id = this.value;
-            var supplier_id = $("#supplier_id").val();
+
+        $(document).on("blur", "input[name*=price_per_kg]", function() { 
+            var invoice_supplier = $(".invoice_supplier").val();
+            var invoice_branchid = $(".invoice_branchid").val();
+
+            console.log(invoice_branchid);
             $('.old_balance').html('');
             $.ajax({
             url: '/getoldbalance/',
             type: 'get',
             data: {
                         _token: "{{ csrf_token() }}",
-                        supplier_id: supplier_id,
-                        branch_id: branch_id
+                        invoice_supplier: invoice_supplier,
+                        invoice_branchid: invoice_branchid
                     },
             dataType: 'json',
                 success: function(response) {
@@ -108,32 +111,7 @@ $(".purchaseclose").click(function() {
             });
         });
 
-
-        $('#supplier_id').on('change', function() {
-            var supplier_id = this.value;
-            var branch_id = $("#branch_id").val();
-            $('.old_balance').html('');
-                $.ajax({
-                    url: '/getoldbalance/',
-                    type: 'get',
-                    data: {
-                            _token: "{{ csrf_token() }}",
-                            supplier_id: supplier_id,
-                            branch_id: branch_id
-                        },
-                    dataType: 'json',
-                    success: function(response) {
-                        console.log(response['data']);
-                        var value = 0;
-                        if(response['data'] > 0){
-                            $(".old_balance").val(response['data']);
-                        }else {
-                            $(".old_balance").val(value);
-                        }
-                        
-                    }
-                });
-        });
+       
 
 
 
@@ -486,9 +464,9 @@ $(document).ready(function() {
 
 
 
-    $('#sales_branch_id').on('change', function() {
-            var sales_branch_id = this.value;
-            var sales_customerid = $("#sales_customerid").val();
+    $(document).on("blur", "input[name*=sales_priceperkg]", function() { 
+            var sales_branch_id = $(".sales_branch_id").val();
+            var sales_customerid = $(".sales_customerid").val();
             $('.sales_old_balance').html('');
             $.ajax({
             url: '/getoldbalanceforSales/',
@@ -513,31 +491,7 @@ $(document).ready(function() {
         });
 
 
-        $('#sales_customerid').on('change', function() {
-            var sales_customerid = this.value;
-            var sales_branch_id = $("#sales_branch_id").val();
-            $('.sales_old_balance').html('');
-            $.ajax({
-            url: '/getoldbalanceforSales/',
-            type: 'get',
-            data: {
-                        _token: "{{ csrf_token() }}",
-                        sales_customerid: sales_customerid,
-                        sales_branch_id: sales_branch_id
-                    },
-            dataType: 'json',
-                success: function(response) {
-                    console.log(response['data']);
-                    var value = 0;
-                    if(response['data'] > 0){
-                        $(".sales_old_balance").val(response['data']);
-                    }else {
-                        $(".sales_old_balance").val(value);
-                    }
-                    
-                }
-            });
-        });
+        
 });
 
 

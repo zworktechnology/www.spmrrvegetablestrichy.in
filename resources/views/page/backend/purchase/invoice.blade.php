@@ -27,7 +27,7 @@
                <div class="col-lg-3 col-sm-3 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Supplier<span style="color: red;">*</span> </label>
-                     <select class="select" name="supplier_id" id="supplier_id" disabled>
+                     <select class="select invoice_supplier" name="supplier_id" id="supplier_id" disabled>
                         <option value="" disabled selected hiddden>Select Supplier</option>
                            @foreach ($supplier as $suppliers)
                               <option value="{{ $suppliers->id }}"@if ($suppliers->id === $PurchaseData->supplier_id) selected='selected' @endif>{{ $suppliers->name }}</option>
@@ -39,7 +39,7 @@
                <div class="col-lg-3 col-sm-3 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Branch<span style="color: red;">*</span></label>
-                     <select class="select" name="branch_id" id="branch_id" disabled>
+                     <select class="select invoice_branchid" name="branch_id" id="branch_id" disabled>
                         <option value="" disabled selected hiddden>Select Branch</option>
                            @foreach ($branch as $branches)
                               <option value="{{ $branches->id }}"@if ($branches->id === $PurchaseData->branch_id) selected='selected' @endif>{{ $branches->name }}</option>

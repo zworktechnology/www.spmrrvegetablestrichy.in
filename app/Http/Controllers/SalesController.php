@@ -164,15 +164,7 @@ class SalesController extends Controller
         $bank = Bank::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $today = Carbon::now()->format('Y-m-d');
         $timenow = Carbon::now()->format('H:i');
-
-
-        $last_salesid = Sales::where('soft_delete', '!=', 1)->latest('id')->first();
-        if($last_salesid != ''){
-            $salesbillno = $last_salesid->bill_no + 1;
-        }else {
-            $salesbillno = 1;
-        }
-        return view('page.backend.sales.create', compact('productlist', 'branch', 'customer', 'today', 'timenow', 'bank', 'salesbillno'));
+        return view('page.backend.sales.create', compact('productlist', 'branch', 'customer', 'today', 'timenow', 'bank'));
     }
 
 
@@ -180,6 +172,29 @@ class SalesController extends Controller
     public function store(Request $request)
     {
         // Sales Table
+
+            $sales_branch_id = $request->get('sales_branch_id');
+            $sales_date = $request->get('sales_date');
+            $s_bill_no = 1;
+
+            // Branch
+            $GetBranch = Branch::findOrFail($sales_branch_id);
+            $Branch_Name = $GetBranch->name;
+            $first_three_letter = substr($Branch_Name, 0, 3);
+            $branch_upper = strtoupper($first_three_letter);
+
+            //Date
+            $billreport_date = date('dmY', strtotime($sales_date));
+
+
+            $lastreport_OFBranch = Sales::where('branch_id', '=', $sales_branch_id)->where('date', '=', $sales_date)->latest('id')->first();
+            if($lastreport_OFBranch != '')
+            {
+                $added_billno = substr ($lastreport_OFBranch->bill_no, -5);
+                $invoiceno = $branch_upper . $billreport_date . 'S0000' . ($added_billno) + 1;
+            } else {
+                $invoiceno = $branch_upper . $billreport_date . 'S0000' . $s_bill_no;
+            }
 
 
             $randomkey = Str::random(5);
@@ -191,7 +206,7 @@ class SalesController extends Controller
             $data->branch_id = $request->get('sales_branch_id');
             $data->date = $request->get('sales_date');
             $data->time = $request->get('sales_time');
-            $data->bill_no = $request->get('sales_billno');
+            $data->bill_no = $invoiceno;
             $data->bank_id = $request->get('sales_bank_id');
             $data->save();
     
@@ -295,7 +310,6 @@ class SalesController extends Controller
         $Sales_Data->branch_id = $request->get('sales_branch_id');
         $Sales_Data->date = $request->get('sales_date');
         $Sales_Data->time = $request->get('sales_time');
-        $Sales_Data->bill_no = $request->get('sales_billno');
         $Sales_Data->bank_id = $request->get('sales_bank_id');
         $Sales_Data->update();
 
@@ -1323,11 +1337,16 @@ class SalesController extends Controller
         $sales_customerid = request()->get('sales_customerid');
         $sales_branch_id = request()->get('sales_branch_id');
 
-        $get_OldBalanceforSales = Sales::where('soft_delete', '!=', 1)->where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->latest('id')->first();
-        if($get_OldBalanceforSales != ""){
-            $userData['data'] = $get_OldBalanceforSales->balance_amount;
-        }else {
-            $userData['data'] = 'null';
+
+        $last_idrow = Sales::where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->latest('id')->first();
+
+        if($last_idrow->balance_amount != NULL){
+            $userData['data'] = $get_OldBalance->balance_amount;
+
+        }else if($last_idrow->balance_amount == NULL){
+            $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->skip(1)->take(1)->first();
+            $userData['data'] = $secondlastrow->balance_amount;
+
         }
         echo json_encode($userData);
     }

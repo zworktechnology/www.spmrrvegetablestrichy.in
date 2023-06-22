@@ -38,7 +38,7 @@
                <div class="col-lg-3 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">To Customer<span style="color: red;">*</span> </label>
-                     <select class="select" name="sales_customerid" id="sales_customerid" disabled>
+                     <select class="select sales_customerid" name="sales_customerid" id="sales_customerid" disabled>
                         <option value="" disabled selected hiddden>Select Customer</option>
                            @foreach ($customer as $customer_array)
                               <option value="{{ $customer_array->id }}"@if ($customer_array->id === $SalesData->customer_id) selected='selected' @endif>{{ $customer_array->name }}</option>

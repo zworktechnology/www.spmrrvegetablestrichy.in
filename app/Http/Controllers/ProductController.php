@@ -12,9 +12,22 @@ class ProductController extends Controller
 {
     public function index()
     {
+        
+        $productlistdata = Productlist::where('soft_delete', '!=', 1)->get();
+        
+
+        
+
+        return view('page.backend.product.index', compact('productlistdata'));
+    }
+
+
+    public function stockmanagement() 
+    {
         $data = Product::where('soft_delete', '!=', 1)->get();
         $branch_data = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $productlistdata = Productlist::where('soft_delete', '!=', 1)->get();
+
         $product_data = [];
         foreach ($data as $key => $datas) {
             $branch = Branch::findOrFail($datas->branchtable_id);
@@ -64,9 +77,8 @@ class ProductController extends Controller
                     
         }
 
-        
 
-        return view('page.backend.product.index', compact('branch_data', 'product_data', 'productlistdata', 'bag_array', 'kg_array'));
+        return view('page.backend.product.stockmanagement', compact('branch_data', 'product_data', 'bag_array', 'kg_array', 'productlistdata'));
     }
 
 

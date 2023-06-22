@@ -17,14 +17,6 @@
             <div class="row">
                <div class="col-lg-3 col-sm-6 col-12">
                   <div class="form-group">
-                     <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bill No<span style="color: red;">*</span></label>
-                     <input type="text" name="sales_billno" placeholder="Bill No" id="sales_billno" value="{{ $SalesData->bill_no }}" style="background-color: #e9ecef;" readonly>
-                  </div>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-lg-3 col-sm-6 col-12">
-                  <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">From Branch<span style="color: red;">*</span></label>
                      <select class="select sales_branch_id" name="sales_branch_id" id="sales_branch_id">
                         <option value="" disabled selected hiddden>Select Branch</option>

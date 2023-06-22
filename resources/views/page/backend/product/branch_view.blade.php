@@ -2,7 +2,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="branch_viewLargeModalLabel{{ $allbranches->id }}">{{ $allbranches->name }} - Branch</h5>
-            <a href="{{ route('product.index') }}"><button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <a href="{{ route('stockmanagement.index') }}"><button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button></a>
         </div>

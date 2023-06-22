@@ -56,6 +56,9 @@
                         <li class="{{ Route::is('product.index', 'product.store', 'product.edit') ? 'active' : '' }}">
                             <a href="{{ route('product.index') }}"><i data-feather="box"></i><span>Product</span></a>
                         </li>
+                        <li class="{{ Route::is('stockmanagement.index', 'product.store', 'product.edit') ? 'active' : '' }}">
+                            <a href="{{ route('stockmanagement.index') }}"><i data-feather="box"></i><span>Stock Management</span></a>
+                        </li>
                     </ul>
                 </li>
                 <li class="submenu-open">

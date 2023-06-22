@@ -154,6 +154,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/product/edit/{unique_key}', [ProductController::class, 'edit'])->name('product.edit');
         // DELETE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/product/delete/{unique_key}', [ProductController::class, 'delete'])->name('product.delete');
+        // STOCK
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/stockmanagement', [ProductController::class, 'stockmanagement'])->name('stockmanagement.index');
     });
 
 
