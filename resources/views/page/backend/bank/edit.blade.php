@@ -4,15 +4,16 @@
             <h5 class="modal-title" id="bankeditLargeModalLabel{{ $bankdata->unique_key }}">Update Bank Details</h5>
         </div>
         <div class="modal-body">
-        <form autocomplete="off" method="POST"
-                    action="{{ route('bank.edit', ['unique_key' => $bankdata->unique_key]) }}" enctype="multipart/form-data">
+            <form autocomplete="off" method="POST"
+                action="{{ route('bank.edit', ['unique_key' => $bankdata->unique_key]) }}" enctype="multipart/form-data">
 
-                   @csrf
+                @csrf
                 <div class="row">
                     <div class="col-lg-12 col-sm-12 col-12">
                         <div class="form-group">
                             <label>Name <span style="color: red;">*</span></label>
-                            <input type="text" name="name" id="name" placeholder="Bank Name" value="{{ $bankdata->name }}">
+                            <input type="text" name="name" id="name" placeholder="Bank Name"
+                                value="{{ $bankdata->name }}">
                         </div>
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
@@ -54,10 +55,8 @@
                     <hr>
                     <div class="col-lg-12 button-align">
                         <button type="submit" class="btn btn-submit me-2">Update</button>
-                        <a href="{{ route('bank.index') }}">
-                            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal"
-                                aria-label="Close">Cancel</button>
-                        </a>
+                        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal"
+                            aria-label="Close">Cancel</button>
                     </div>
                 </div>
             </form>
@@ -66,4 +65,3 @@
 
     </div><!-- /.modal-content -->
 </div>
-

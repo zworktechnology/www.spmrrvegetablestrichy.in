@@ -27,7 +27,7 @@ class SupplierController extends Controller
             if($total_purchase_amt != ""){
                 $tot_purchaseAmount = $total_purchase_amt;
             }else {
-                $tot_purchaseAmount = '';
+                $tot_purchaseAmount = '0';
             }
 
 
@@ -35,14 +35,14 @@ class SupplierController extends Controller
             if($total_paid != ""){
                 $total_paid_Amount = $total_paid;
             }else {
-                $total_paid_Amount = '';
+                $total_paid_Amount = '0';
             }
 
 
             if($tot_bal != ""){
                 $total_balance = $tot_bal->balance_amount;
             }else {
-                $total_balance = '';
+                $total_balance = '0';
             }
 
 
@@ -79,11 +79,11 @@ class SupplierController extends Controller
                     $tot_balace = $get_all_balance->balance_amount;
                 }else {
                     $tot_balace = 0;
-                }                        
+                }
 
                 $tot_balance_Arr[] = array(
                     'Supplier_name' => $Supplier_arra->name,
-                    'branch_name' => $alldata_branchs->name,
+                    'branch_name' => $alldata_branchs->shop_name,
                     'Supplier_id' => $Supplier_arra->id,
                     'balance_amount' => $tot_balace
                 );
@@ -171,7 +171,7 @@ class SupplierController extends Controller
 
                 $supplier_output[] = array(
                     'balance_amount' => $get_all_balance->balance_amount,
-                    'branch' => $get_all_branch->name,
+                    'branch' => $get_all_branch->shop_name,
                 );
            }
 

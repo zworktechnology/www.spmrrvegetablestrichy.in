@@ -26,7 +26,7 @@ class CustomerController extends Controller
             if($total_sale_amt != ""){
                 $tot_saleAmount = $total_sale_amt;
             }else {
-                $tot_saleAmount = '';
+                $tot_saleAmount = '0';
             }
 
 
@@ -34,14 +34,14 @@ class CustomerController extends Controller
             if($total_paid != ""){
                 $total_paid_Amount = $total_paid;
             }else {
-                $total_paid_Amount = '';
+                $total_paid_Amount = '0';
             }
 
 
             if($tot_bal != ""){
                 $total_balance = $tot_bal->balance_amount;
             }else {
-                $total_balance = '';
+                $total_balance = '0';
             }
 
 
@@ -80,11 +80,11 @@ class CustomerController extends Controller
                     $tot_balace = $get_all_balance->balance_amount;
                 }else {
                     $tot_balace = 0;
-                }                        
+                }
 
                 $tot_balance_Arr[] = array(
                     'customer_name' => $Customer_arra->name,
-                    'branch_name' => $alldata_branchs->name,
+                    'branch_name' => $alldata_branchs->shop_name,
                     'customer_id' => $Customer_arra->id,
                     'balance_amount' => $tot_balace
                 );

@@ -11,7 +11,7 @@ class BranchController extends Controller
 {
     public function index()
     {
-        $data = Branch::all();
+        $data = Branch::where('soft_delete', '!=', 1)->get()->all();
 
         return view('page.backend.branch.index', compact('data'));
     }
@@ -53,7 +53,6 @@ class BranchController extends Controller
         $data->mail_address = $request->get('mail_address');
         $data->web_address = $request->get('web_address');
         $data->gst_number = $request->get('gst_number');
-        $data->status = $request->get('status');
 
         $data->update();
 

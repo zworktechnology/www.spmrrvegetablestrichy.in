@@ -9,20 +9,20 @@
                 <div class="row">
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Date</label>
-                            <input type="date" name="date" value="{{ $today }}">
+                            <label>Date <span style="color: red;">*</span></label>
+                            <input type="date" name="date" value="{{ $today }}" required>
                         </div>
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Time</label>
-                            <input type="time" name="time" value="{{ $timenow }}">
+                            <label>Time <span style="color: red;">*</span></label>
+                            <input type="time" name="time" value="{{ $timenow }}" required>
                         </div>
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Branch</label>
-                            <select class="select" name="branch_id">
+                            <label>Branch <span style="color: red;">*</span></label>
+                            <select class="select" name="branch_id" required>
                                 <option value="" disabled selected hiddden>Select Branch</option>
                                    @foreach ($branch as $branches)
                                       <option value="{{ $branches->id }}">{{ $branches->shop_name }}</option>
@@ -32,21 +32,21 @@
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Amount</label>
-                            <input type="text" name="amount" placeholder="Enter Amount">
+                            <label>Amount <span style="color: red;">*</span></label>
+                            <input type="text" name="amount" placeholder="Enter Amount" required>
                         </div>
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Note</label>
-                            <input type="text" name="note" placeholder="Enter Note">
+                            <label>Note <span style="color: red;">*</span></label>
+                            <input type="text" name="note" placeholder="Enter Note" required>
                         </div>
                     </div>
                     <hr>
                     <div class="col-lg-12 button-align">
                         <button type="submit" class="btn btn-submit me-2">Submit</button>
-                        <a href="{{ route('expence.index') }}"><button type="button" class="btn btn-cancel" data-bs-dismiss="modal"
-                            aria-label="Close">Cancel</button></a>
+                        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal"
+                            aria-label="Close">Cancel</button>
                     </div>
                 </div>
             </form>

@@ -32,7 +32,7 @@
                                 <label>Branch</label>
                                 <select class="select purchasereport_branch" name="purchasereport_branch"
                                     id="purchasereport_branch">
-                                    <option value=""  selected >Select Branch</option>
+                                    <option value="" selected>Select Branch</option>
                                     @foreach ($branch as $branches)
                                         <option value="{{ $branches->id }}">{{ $branches->name }}</option>
                                     @endforeach
@@ -41,9 +41,9 @@
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
-                                <label>Choose Supplier</label>
+                                <label>Supplier</label>
                                 <select class="select" name="purchasereport_supplier" id="purchasereport_supplier">
-                                    <option value=""  selected >Select Supplier</option>
+                                    <option value="" selected>Select Supplier</option>
                                     @foreach ($supplier as $suppliers)
                                         <option value="{{ $suppliers->id }}">{{ $suppliers->name }}</option>
                                     @endforeach
@@ -60,19 +60,35 @@
                 </div>
             </div>
 
+
             <div class="card">
-                
-                    
-                        <h4 class="purchase_report_heading" style="margin-left: 3%;margin-top: 2%;font-weight: 600;color: #c12171;">
-                        @foreach ($purchase_data as $keydata => $purchase)
-                        @if ($purchase['unique_key'] != '')
-                            @if($keydata == 0)
-                            {{ $purchase['heading'] }}
-                            @endif
-                            @endif
-                        @endforeach
-                        </h4>
-                    
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>From Date <span style="color: red">16.06.2023</span></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>To Date <span style="color: red">16.06.2023</span></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Branch <span style="color: red">16.06.2023</span></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Supplier <span style="color: red">16.06.2023</span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
                 <div class="card-body">
                     <div class="row">
                         @if ($purchase_data != '')
@@ -85,7 +101,6 @@
                                             <th>Supplier</th>
                                             <th>Branch</th>
                                             <th>Total</th>
-                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -99,41 +114,6 @@
                                                     <td>{{ $purchasedata['supplier_name'] }}</td>
                                                     <td>{{ $purchasedata['branch_name'] }}</td>
                                                     <td>{{ $purchasedata['gross_amount'] }}</td>
-                                                    <td>
-
-                                                    <ul class="list-unstyled hstack gap-1 mb-0">
-                                                        @if ($purchasedata['status'] == 0)
-                                                        <li>
-                                                            <a href="{{ route('purchase.edit', ['unique_key' => $purchasedata['unique_key']]) }}"
-                                                                class="badges bg-lightyellow" style="color: white">Edit</a>
-                                                        </li>
-                                                        @endif
-                                                        <li hidden>
-                                                            <a href="#delete{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
-                                                                data-id="{{ $purchasedata['unique_key'] }}"
-                                                                data-bs-target=".purchasedelete-modal-xl{{ $purchasedata['unique_key'] }}"
-                                                                class="badges bg-lightgrey" style="color: white">Delete</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#purchaseview{{ $purchasedata['unique_key'] }}"
-                                                                data-bs-toggle="modal" data-id="{{ $purchasedata['id'] }}"
-                                                                data-bs-target=".purchaseview-modal-xl{{ $purchasedata['unique_key'] }}"
-                                                                class="badges bg-lightred purchaseview" style="color: white">View</a>
-
-                                                        </li>
-                                                        
-                                                        <li>
-                                                        @if ($purchasedata['status'] == 0)
-                                                            <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
-                                                                class="badges bg-lightgreen" style="color: white">Invoice</a>
-                                                        @elseif ($purchasedata['status'] == 1)
-                                                            <a href="{{ route('purchase.print_view', ['unique_key' => $purchasedata['unique_key']]) }}"
-                                                                class="badges bg-green" style="color: white">Generated Invoice</a>
-                                                        @endif
-                                                        </li>
-                                                        
-                                                    </ul>
-                                                    </td>
                                                 </tr>
 
                                                 <div class="modal fade purchaseview-modal-xl{{ $purchasedata['unique_key'] }}"
@@ -151,8 +131,6 @@
                                                 </div>
                                             @endif
                                         @endforeach
-
-
                                     </tbody>
                                 </table>
                             </div>

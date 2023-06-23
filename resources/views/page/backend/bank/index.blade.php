@@ -20,7 +20,7 @@
                             <tr>
                                 <th>Sl. No</th>
                                 <th>Bank</th>
-                                <th>action</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>

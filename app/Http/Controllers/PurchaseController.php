@@ -72,7 +72,7 @@ class PurchaseController extends Controller
         $timenow = Carbon::now()->format('H:i');
 
 
-       
+
         return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'today', 'productlist', 'branch', 'supplier', 'timenow', 'bank'));
     }
 
@@ -130,7 +130,7 @@ class PurchaseController extends Controller
         $timenow = Carbon::now()->format('H:i');
 
 
-        
+
         return view('page.backend.purchase.create', compact('productlist', 'branch', 'supplier', 'today', 'timenow', 'bank'));
     }
 
@@ -170,7 +170,7 @@ class PurchaseController extends Controller
                 $invoiceno = $branch_upper . $billreport_date . 'P0000' . $s_bill_no;
             }
 
-            
+
 
             $data = new Purchase();
 
@@ -582,7 +582,7 @@ class PurchaseController extends Controller
         $invoice_supplier = request()->get('invoice_supplier');
         $invoice_branchid = request()->get('invoice_branchid');
 
-        
+
 
         $last_idrow = Purchase::where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->latest('id')->first();
 
@@ -597,8 +597,8 @@ class PurchaseController extends Controller
             $userData['data'] = 0;
         }
 
-       
-        
+
+
         echo json_encode($userData);
     }
 
@@ -683,11 +683,8 @@ class PurchaseController extends Controller
         $purchasereport_branch = $request->get('purchasereport_branch');
         $purchasereport_supplier = $request->get('purchasereport_supplier');
 
-
-
         $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-
 
         if($purchasereport_branch){
 
@@ -718,8 +715,6 @@ class PurchaseController extends Controller
 
                         );
                     }
-
-
 
                     $purchase_data[] = array(
                         'unique_key' => $branchwise_datas->unique_key,

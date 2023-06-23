@@ -12,17 +12,17 @@ class ProductController extends Controller
 {
     public function index()
     {
-        
-        $productlistdata = Productlist::where('soft_delete', '!=', 1)->get();
-        
 
-        
+        $productlistdata = Productlist::where('soft_delete', '!=', 1)->get();
+
+
+
 
         return view('page.backend.product.index', compact('productlistdata'));
     }
 
 
-    public function stockmanagement() 
+    public function stockmanagement()
     {
         $data = Product::where('soft_delete', '!=', 1)->get();
         $branch_data = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -37,7 +37,7 @@ class ProductController extends Controller
                 'product' => $datas->name,
                 'available_stockin_bag' => $datas->available_stockin_bag,
                 'available_stockin_kilograms' => $datas->available_stockin_kilograms,
-                'branch' => $branch->name,
+                'branch' => $branch->shop_name,
                 'status' => $datas->status,
                 'branchtable_id' => $datas->branchtable_id,
                 'description' => $datas->description,
@@ -47,7 +47,7 @@ class ProductController extends Controller
         }
 
 
-        
+
         $bag_array = [];
         $Product_arr = Product::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         foreach ($Product_arr as $key => $Product_arrys) {
@@ -59,7 +59,7 @@ class ProductController extends Controller
                     'branch_id' => $Product_arrys->branchtable_id,
                 );
             }
-                    
+
         }
 
 
@@ -74,7 +74,7 @@ class ProductController extends Controller
                     'branch_id' => $Product_arrys->branchtable_id,
                 );
             }
-                    
+
         }
 
 
@@ -83,7 +83,7 @@ class ProductController extends Controller
 
 
 
-    
+
 
     public function store(Request $request)
     {
@@ -97,7 +97,7 @@ class ProductController extends Controller
         $data->description = $request->get('description');
         $data->available_stockin_bag = $request->get('available_stockin_bag');
         $data->available_stockin_kilograms = $request->get('available_stockin_kilograms');
-        
+
         $data->save();
 
 
@@ -132,8 +132,5 @@ class ProductController extends Controller
 
         return redirect()->route('product.index')->with('soft_destroy', 'Successfully deleted the product !');
     }
-
-
-    
 
 }

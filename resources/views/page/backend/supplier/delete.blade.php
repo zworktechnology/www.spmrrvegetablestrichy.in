@@ -21,9 +21,8 @@
                     @method('PUT')
                     @csrf
                     <button type="submit" class="btn btn-danger">Yes, Delete it</button>
-                </form>
-                <a href="{{ route('supplier.index') }}"><button type="button" class="btn btn-secondary"
-                    data-bs-dismiss="modal">Cancel</button></a>
+                </form><button type="button" class="btn btn-secondary"
+                    data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>

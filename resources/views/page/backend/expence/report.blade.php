@@ -15,13 +15,13 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-lg-3 col-sm-6 col-12">
+                        <div class="col-lg-4 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>From Date</label>
                                 <input type="date" name="expencereport_fromdate" id="expencereport_fromdate">
                             </div>
                         </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
+                        <div class="col-lg-4 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>To Date</label>
                                 <input type="date" name="expencereport_todate" id="expencereport_todate">
@@ -50,23 +50,28 @@
             </div>
 
             <div class="card">
-                
-                    
-                        <h4 class="expense_report_heading" style="margin-left: 3%;margin-top: 2%;font-weight: 600;color: #c12171;">
-                        @foreach ($expense_data as $keydata => $expense_datass)
-                        @if ($expense_datass['unique_key'] != '')
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>From Date <span style="color: red">16.06.2023</span></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>To Date <span style="color: red">16.06.2023</span></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Branch <span style="color: red">16.06.2023</span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                            @if($keydata == 0)
-                            {{ $expense_datass['heading'] }}
-                            @endif
-
-
-                        
-                        @endif
-                        @endforeach
-                        </h4>
-                    
-                        
+            <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table customerdatanew">
@@ -121,7 +126,7 @@
                             @endforeach
                         </tbody>
                     </table>
-               
+
             </div>
         </div>
 
