@@ -9,16 +9,14 @@
          </div>
       </div>
 
-     
+
 
         <div class="card">
             <div class="card-body">
                 <form autocomplete="off" method="POST" action="{{ route('purchase.store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        
-
-                        <div class="col-lg-6 col-sm-6 col-12">
+                        <div class="col-lg-3 col-sm-3 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Date<span
                                         style="color: red;">*</span></label>
@@ -26,16 +24,15 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-6 col-sm-6 col-12">
+                        <div class="col-lg-3 col-sm-3 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span
                                         style="color: red;">*</span></label>
                                 <input type="time" name="time" placeholder="" value="{{ $timenow }}" required>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-12">
+
+                        <div class="col-lg-3 col-sm-3 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Supplier<span
                                         style="color: red;">*</span> </label>
@@ -48,7 +45,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-6 col-sm-6 col-12">
+                        <div class="col-lg-3 col-sm-3 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Branch<span
                                         style="color: red;">*</span></label>
@@ -60,7 +57,6 @@
                                 </select>
                             </div>
                         </div>
-
                     </div>
 
                     <br />
@@ -70,10 +66,10 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th style="font-size:15px; width:28%;">Product</th>
-                                        <th style="font-size:15px; width:12%;">Bag / Kg</th>
-                                        <th style="font-size:15px; width:12%;">Count </th>
-                                        <th style="font-size:15px; width:12%;">Action </th>
+                                        <th style="font-size:15px; width:40%;">Product</th>
+                                        <th style="font-size:15px; width:25%;">Bag / Kg</th>
+                                        <th style="font-size:15px; width:25%;">Count </th>
+                                        <th style="font-size:15px; width:10%;">Action </th>
                                     </tr>
                                 </thead>
                                 <tbody id="product_fields">

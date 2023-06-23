@@ -47,7 +47,7 @@ class SalesController extends Controller
 
             $Sales_data[] = array(
                 'unique_key' => $datas->unique_key,
-                'branch_name' => $branch_name->name,
+                'branch_name' => $branch_name->shop_name,
                 'customer_name' => $customer_name->name,
                 'date' => $datas->date,
                 'time' => $datas->time,
@@ -107,9 +107,9 @@ class SalesController extends Controller
         return view('page.backend.sales.index', compact('Sales_data', 'allbranch', 'branch_id', 'today'));
     }
 
-    public function datefilter(Request $request) { 
+    public function datefilter(Request $request) {
 
-        
+
         $today = $request->get('from_date');
 
 
@@ -200,7 +200,7 @@ class SalesController extends Controller
             $randomkey = Str::random(5);
 
             $data = new Sales();
-    
+
             $data->unique_key = $randomkey;
             $data->customer_id = $request->get('sales_customerid');
             $data->branch_id = $request->get('sales_branch_id');
@@ -208,14 +208,14 @@ class SalesController extends Controller
             $data->time = $request->get('sales_time');
             $data->bill_no = $invoiceno;
             $data->save();
-    
+
             $insertedId = $data->id;
-    
+
             // Purchase Products Table
             foreach ($request->get('sales_product_id') as $key => $sales_product_id) {
-    
+
                 $salesprandomkey = Str::random(5);
-    
+
                 $SalesProduct = new SalesProduct;
                 $SalesProduct->unique_key = $salesprandomkey;
                 $SalesProduct->sales_id = $insertedId;
@@ -223,19 +223,19 @@ class SalesController extends Controller
                 $SalesProduct->bagorkg = $request->sales_bagorkg[$key];
                 $SalesProduct->count = $request->sales_count[$key];
                 $SalesProduct->save();
-    
+
                 $product_ids = $request->sales_product_id[$key];
-    
-    
+
+
                 $sales_branch_id = $request->get('sales_branch_id');
                 $product_Data = Product::where('productlist_id', '=', $product_ids)->where('branchtable_id', '=', $sales_branch_id)->first();
-                
+
                 if($product_Data != ""){
                     if($sales_branch_id == $product_Data->branchtable_id){
-    
+
                         $bag_count = $product_Data->available_stockin_bag;
                         $kg_count = $product_Data->available_stockin_kilograms;
-        
+
 
                         if($request->sales_bagorkg[$key] == 'bag'){
                             $totalbag_count = $bag_count - $request->sales_count[$key];
@@ -245,21 +245,21 @@ class SalesController extends Controller
                             $totalbag_count = $bag_count - 0;
                         }
 
-                        
-        
+
+
                         DB::table('products')->where('productlist_id', $product_ids)->where('branchtable_id', $sales_branch_id)->update([
                             'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
                         ]);
                     }
                 }
-                
-    
+
+
             }
-    
+
             return redirect()->route('sales.index')->with('add', 'Sales Data added successfully!');
 
-        
-        
+
+
 
 
 
@@ -391,11 +391,11 @@ class SalesController extends Controller
 
                     $Product_id = $request->sales_product_id[$key];
                     $product_Data = Product::where('productlist_id', '=', $Product_id)->where('branchtable_id', '=', $branch_id)->first();
-            
+
                     if($product_Data != ""){
 
                         if($branch_id == $product_Data->branchtable_id){
-        
+
                             $bag_count = $product_Data->available_stockin_bag;
                             $kg_count = $product_Data->available_stockin_kilograms;
 
@@ -406,15 +406,15 @@ class SalesController extends Controller
                                 $totalkg_count = $kg_count - $request->sales_count[$key];
                                 $totalbag_count = $bag_count - 0;
                             }
-            
-                            
-            
+
+
+
                             DB::table('products')->where('productlist_id', $Product_id)->where('branchtable_id', $branch_id)->update([
                                 'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
                             ]);
                         }
                     }
-                    
+
 
                 }
             }
@@ -445,7 +445,7 @@ class SalesController extends Controller
 
 
         $Sales_Data = Sales::where('unique_key', '=', $unique_key)->first();
-        
+
         $Sales_Data->bank_id = $request->get('sales_bank_id');
         $Sales_Data->total_amount = $request->get('sales_total_amount');
         $Sales_Data->note = $request->get('sales_extracost_note');
@@ -462,7 +462,7 @@ class SalesController extends Controller
 
         // Purchase Products Table
 
-        
+
 
         foreach ($request->get('sales_detail_id') as $key => $sales_detail_id) {
             if ($sales_detail_id > 0) {
@@ -478,7 +478,7 @@ class SalesController extends Controller
                     'sales_id' => $Sales_Id,  'productlist_id' => $updatesales_product_id, 'price_per_kg' => $price_per_kg, 'total_price' => $total_price
                 ]);
 
-            } 
+            }
         }
 
         return redirect()->route('sales.index')->with('update', 'Updated Sales information has been added to your list.');
@@ -547,7 +547,7 @@ class SalesController extends Controller
 
                         );
                     }
-                    
+
 
 
                     $Sales_data[] = array(
@@ -613,7 +613,7 @@ class SalesController extends Controller
 
                         );
                     }
-                    
+
 
 
                     $Sales_data[] = array(
@@ -678,7 +678,7 @@ class SalesController extends Controller
 
                         );
                     }
-                    
+
 
 
                     $Sales_data[] = array(
@@ -742,7 +742,7 @@ class SalesController extends Controller
 
                         );
                     }
-                    
+
 
 
                     $Sales_data[] = array(
@@ -776,7 +776,7 @@ class SalesController extends Controller
                     'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - Report',
                 );
             }
-    
+
         }
 
 
@@ -806,7 +806,7 @@ class SalesController extends Controller
 
                         );
                     }
-                    
+
 
 
                     $Sales_data[] = array(
@@ -874,7 +874,7 @@ class SalesController extends Controller
 
                         );
                     }
-                    
+
 
 
                     $Sales_data[] = array(
@@ -908,7 +908,7 @@ class SalesController extends Controller
                     'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate))
                 );
             }
-    
+
 
 
         }
@@ -941,7 +941,7 @@ class SalesController extends Controller
 
                         );
                     }
-                    
+
 
 
                     $Sales_data[] = array(
@@ -1011,7 +1011,7 @@ class SalesController extends Controller
 
                         );
                     }
-                    
+
 
 
                     $Sales_data[] = array(
@@ -1077,7 +1077,7 @@ class SalesController extends Controller
 
                         );
                     }
-                    
+
 
 
                     $Sales_data[] = array(
@@ -1144,7 +1144,7 @@ class SalesController extends Controller
 
                         );
                     }
-                    
+
 
 
                     $Sales_data[] = array(
@@ -1211,7 +1211,7 @@ class SalesController extends Controller
 
                         );
                     }
-                    
+
 
 
                     $Sales_data[] = array(
@@ -1278,7 +1278,7 @@ class SalesController extends Controller
 
                         );
                     }
-                    
+
 
 
                     $Sales_data[] = array(
@@ -1312,7 +1312,7 @@ class SalesController extends Controller
                     'heading' => $GetCustomer->name . ' (Customer) - (' . date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate)) . ')'
                 );
             }
-    
+
 
 
         }
@@ -1342,16 +1342,16 @@ class SalesController extends Controller
         if($last_idrow != ""){
             if($last_idrow->balance_amount != NULL){
                 $userData['data'] = $last_idrow->balance_amount;
-    
+
             }else if($last_idrow->balance_amount == NULL){
                 $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->skip(1)->take(1)->first();
                 $userData['data'] = $secondlastrow->balance_amount;
-    
+
             }
         }else {
             $userData['data'] = 0;
         }
-        
+
         echo json_encode($userData);
     }
 
@@ -1400,7 +1400,7 @@ class SalesController extends Controller
                 array('status' => 'false')
             );
         }
-        
+
     }
 
 }

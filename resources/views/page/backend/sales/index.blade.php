@@ -63,7 +63,7 @@
                                 <tr>
                                     <td>#{{ $Sales_datas['bill_no'] }}</td>
                                     <td>{{ date('d M Y', strtotime($Sales_datas['date'])) }} -
-                                        {{ date('h:i A', strtotime($Sales_datas['date'])) }}</td>
+                                        {{ date('h:i A', strtotime($Sales_datas['time'])) }}</td>
                                     <td>{{ $Sales_datas['customer_name'] }}</td>
                                     <td>{{ $Sales_datas['branch_name'] }}</td>
                                     <td>{{ $Sales_datas['gross_amount'] }}</td>

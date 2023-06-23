@@ -13,7 +13,7 @@
             @method('PUT')
             @csrf
                 <div class="row">
-                    <div class="col-lg-3 col-sm-3 col-12">
+                    <div class="col-lg-4 col-sm-4 col-12">
                         <div class="form-group">
                             <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Supplier<span style="color: red;">*</span> </label>
                             <select class="select form-control invoice_supplier" name="supplier_id" id="supplier_id" disabled>
@@ -25,7 +25,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-3 col-sm-3 col-12">
+                    <div class="col-lg-4 col-sm-4 col-12">
                         <div class="form-group">
                             <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Branch<span style="color: red;">*</span></label>
                             <select class="select form-control invoice_branchid" name="branch_id" id="branch_id" disabled>
@@ -36,37 +36,39 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="col-lg-4 col-sm-4 col-12">
+                        <div class="form-group">
+                            <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bill No<span
+                                    style="color: red;">*</span></label>
+                            <input type="text" name="billno" placeholder="Bill No" id="billno"
+                                value="{{ $PurchaseData->bill_no }}" style="background-color: #e9ecef;" readonly>
+                        </div>
+                    </div>
                 </div>
 
 
                     <div class="row">
-                        <div class="col-lg-3 col-sm-4 col-12">
-                            <div class="form-group">
-                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bill No<span
-                                        style="color: red;">*</span></label>
-                                <input type="text" name="billno" placeholder="Bill No" id="billno"
-                                    value="{{ $PurchaseData->bill_no }}" style="background-color: #e9ecef;" readonly>
-                            </div>
-                        </div>
 
 
-                        <div class="col-lg-3 col-sm-4 col-12">
+
+                        <div class="col-lg-4 col-sm-4 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Date<span
                                         style="color: red;">*</span></label>
                                 <input type="date" name="date" placeholder="" value="{{ $PurchaseData->date }}"
-                                    disabled>
+                                    disabled style="background-color: #e9ecef;">
                             </div>
                         </div>
 
-                        <div class="col-lg-3 col-sm-4 col-12">
+                        <div class="col-lg-4 col-sm-4 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span
                                         style="color: red;">*</span></label>
-                                <input type="time" name="time" placeholder="" value="{{ $PurchaseData->time }}" disabled>
+                                <input type="time" name="time" placeholder="" value="{{ $PurchaseData->time }}" disabled style="background-color: #e9ecef;">
                             </div>
                         </div>
-                        <div class="col-lg-3 col-sm-4 col-12">
+                        <div class="col-lg-4 col-sm-4 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank<span
                                         style="color: red;">*</span></label>
@@ -81,13 +83,13 @@
                             </div>
                         </div>
                     </div>
-                   
-                        
 
-                        
-                        
 
-                   
+
+
+
+
+
                     <br />
 
 
