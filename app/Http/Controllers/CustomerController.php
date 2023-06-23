@@ -18,9 +18,31 @@ class CustomerController extends Controller
         foreach ($data as $key => $datas) {
             $Customer_name = Customer::findOrFail($datas->id);
 
-            $total_sale_amt = Sales::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('customer_id', '=', $datas->id)->sum('grand_total');
-            $total_paid = Sales::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('customer_id', '=', $datas->id)->sum('paid_amount');
-            $tot_bal = Sales::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('customer_id', '=', $datas->id)->latest('id')->first();
+            $total_sale_amt = Sales::where('soft_delete', '!=', 1)->where('customer_id', '=', $datas->id)->sum('grand_total');
+            $total_paid = Sales::where('soft_delete', '!=', 1)->where('customer_id', '=', $datas->id)->sum('paid_amount');
+
+
+
+            $tot_bal = Sales::where('soft_delete', '!=', 1)->where('customer_id', '=', $datas->id)->latest('id')->first();
+            if($tot_bal != ""){
+
+                if($tot_bal->balance_amount != NULL){
+                    $total_balance = $tot_bal->balance_amount;
+    
+                }else if($tot_bal->balance_amount == NULL){
+                    $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $datas->id)->skip(1)->take(1)->first();
+                    if($secondlastrow != ""){
+                        $total_balance = $secondlastrow->balance_amount;
+                    }else {
+                        $total_balance = 0;
+                    }
+                    
+    
+                }
+            }else {
+                $total_balance = 0;
+            }
+
 
 
             if($total_sale_amt != ""){
@@ -37,12 +59,6 @@ class CustomerController extends Controller
                 $total_paid_Amount = '0';
             }
 
-
-            if($tot_bal != ""){
-                $total_balance = $tot_bal->balance_amount;
-            }else {
-                $total_balance = '0';
-            }
 
 
             $customerarr_data[] = array(
@@ -70,14 +86,26 @@ class CustomerController extends Controller
             foreach ($Customer_array as $key => $Customer_arra) {
 
 
-                $get_all_balance = Sales::where('soft_delete', '!=', 1)
-                                        ->where('status', '!=', 1)
-                                        ->where('customer_id', '=', $Customer_arra->id)
-                                        ->where('branch_id', '=', $alldata_branchs->id)
-                                        ->latest('id')
-                                        ->first();
-                if($get_all_balance != ""){
-                    $tot_balace = $get_all_balance->balance_amount;
+                $last_idrow = Sales::where('soft_delete', '!=', 1)
+                                ->where('customer_id', '=', $Customer_arra->id)
+                                ->where('branch_id', '=', $alldata_branchs->id)
+                                ->latest('id')
+                                ->first();
+
+                if($last_idrow != ""){
+                    if($last_idrow->balance_amount != NULL){
+                        $tot_balace = $last_idrow->balance_amount;
+
+                    }else if($last_idrow->balance_amount == null){
+                        $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $Customer_arra->id)->where('branch_id', '=', $alldata_branchs->id)->skip(1)->take(1)->first();
+                        
+                        if($secondlastrow != ""){
+                            $tot_balace = $secondlastrow->balance_amount;
+                        }else {
+                            $tot_balace = 0;
+                        }
+                    }
+
                 }else {
                     $tot_balace = 0;
                 }

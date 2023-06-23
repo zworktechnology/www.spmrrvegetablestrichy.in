@@ -13,16 +13,38 @@ class SupplierController extends Controller
     public function index()
     {
 
-
-
         $data = Supplier::where('soft_delete', '!=', 1)->get();
         $supplierarr_data = [];
         foreach ($data as $key => $datas) {
             $supplier_name = Supplier::findOrFail($datas->id);
 
-            $total_purchase_amt = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('supplier_id', '=', $datas->id)->sum('grand_total');
-            $total_paid = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('supplier_id', '=', $datas->id)->sum('paid_amount');
-            $tot_bal = Purchase::where('soft_delete', '!=', 1)->where('status', '!=', 1)->where('supplier_id', '=', $datas->id)->latest('id')->first();
+            $total_purchase_amt = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $datas->id)->sum('grand_total');
+            $total_paid = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $datas->id)->sum('paid_amount');
+            
+
+
+
+            $tot_bal = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $datas->id)->latest('id')->first();
+            if($tot_bal != ""){
+
+                if($tot_bal->balance_amount != NULL){
+                    $total_balance = $tot_bal->balance_amount;
+    
+                }else if($tot_bal->balance_amount == NULL){
+                    $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $datas->id)->skip(1)->take(1)->first();
+                    if($secondlastrow != ""){
+                        $total_balance = $secondlastrow->balance_amount;
+                    }else {
+                        $total_balance = 0;
+                    }
+                    
+    
+                }
+            }else {
+                $total_balance = 0;
+            }
+
+
 
             if($total_purchase_amt != ""){
                 $tot_purchaseAmount = $total_purchase_amt;
@@ -38,12 +60,6 @@ class SupplierController extends Controller
                 $total_paid_Amount = '0';
             }
 
-
-            if($tot_bal != ""){
-                $total_balance = $tot_bal->balance_amount;
-            }else {
-                $total_balance = '0';
-            }
 
 
             $supplierarr_data[] = array(
@@ -69,17 +85,33 @@ class SupplierController extends Controller
             foreach ($Supplier_array as $key => $Supplier_arra) {
 
 
-                $get_all_balance = Purchase::where('soft_delete', '!=', 1)
-                                        ->where('status', '!=', 1)
-                                        ->where('supplier_id', '=', $Supplier_arra->id)
-                                        ->where('branch_id', '=', $alldata_branchs->id)
-                                        ->latest('id')
-                                        ->first();
-                if($get_all_balance != ""){
-                    $tot_balace = $get_all_balance->balance_amount;
+        $last_idrow = Purchase::where('soft_delete', '!=', 1)
+                                ->where('supplier_id', '=', $Supplier_arra->id)
+                                ->where('branch_id', '=', $alldata_branchs->id)
+                                ->latest('id')
+                                ->first();
+
+        if($last_idrow != ""){
+            if($last_idrow->balance_amount != NULL){
+                $tot_balace = $last_idrow->balance_amount;
+
+            }else if($last_idrow->balance_amount == null){
+                $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $Supplier_arra->id)->where('branch_id', '=', $alldata_branchs->id)->skip(1)->take(1)->first();
+                
+                if($secondlastrow != ""){
+                    $tot_balace = $secondlastrow->balance_amount;
                 }else {
                     $tot_balace = 0;
                 }
+            }
+
+        }else {
+            $tot_balace = 0;
+        }
+
+
+
+       
 
                 $tot_balance_Arr[] = array(
                     'Supplier_name' => $Supplier_arra->name,

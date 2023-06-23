@@ -20,10 +20,10 @@
             <div style="">
                <h4 class="py-1" style="font-size:23px;color: black; font-weight:800">{{ $supplier_upper }}</h4>
                <div class="row">
-                  <div class="col-lg-2  col-sm-3 col-3">
+                  <div class="col-lg-3  col-sm-4 col-5">
                   <span style="font-size:17px" >Bill No. &nbsp; &nbsp; &nbsp;<span style="font-weight:600"># {{ $PurchaseData->bill_no}}</span></span>
                   </div>
-                  <div class="col-lg-8  col-sm-6 col-6"></div>
+                  <div class="col-lg-7  col-sm-5 col-4"></div>
                   <div class="col-lg-2  col-sm-3 col-3">
                   <span style="font-size:17px" >Date: &nbsp;<span style="font-weight:600">{{ date('d-m-Y', strtotime($PurchaseData->date))}}</span></span>
                   </div>

@@ -179,7 +179,7 @@ class SalesController extends Controller
 
             // Branch
             $GetBranch = Branch::findOrFail($sales_branch_id);
-            $Branch_Name = $GetBranch->name;
+            $Branch_Name = $GetBranch->shop_name;
             $first_three_letter = substr($Branch_Name, 0, 3);
             $branch_upper = strtoupper($first_three_letter);
 
@@ -1339,15 +1339,19 @@ class SalesController extends Controller
 
 
         $last_idrow = Sales::where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->latest('id')->first();
-
-        if($last_idrow->balance_amount != NULL){
-            $userData['data'] = $get_OldBalance->balance_amount;
-
-        }else if($last_idrow->balance_amount == NULL){
-            $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->skip(1)->take(1)->first();
-            $userData['data'] = $secondlastrow->balance_amount;
-
+        if($last_idrow != ""){
+            if($last_idrow->balance_amount != NULL){
+                $userData['data'] = $last_idrow->balance_amount;
+    
+            }else if($last_idrow->balance_amount == NULL){
+                $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->skip(1)->take(1)->first();
+                $userData['data'] = $secondlastrow->balance_amount;
+    
+            }
+        }else {
+            $userData['data'] = 0;
         }
+        
         echo json_encode($userData);
     }
 

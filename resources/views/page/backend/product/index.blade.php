@@ -44,7 +44,7 @@
                                                     <li>
                                                         <a href="#delete{{ $productlist_array->unique_key }}" data-bs-toggle="modal"
                                                             data-id="{{ $productlist_array->unique_key }}"
-                                                            data-bs-target=".bankdelete-modal-xl{{ $productlist_array->unique_key }}"
+                                                            data-bs-target=".productdelete-modal-xl{{ $productlist_array->unique_key }}"
                                                             class="badges bg-lightgrey" style="color: white">Delete</a>
                                                     </li>
                                                 </ul>
@@ -59,9 +59,9 @@
                                             @include('page.backend.product.productlistedit')
                                         </div>
 
-                                        <div class="modal fade bankdelete-modal-xl{{ $productlist_array->unique_key }}"
+                                        <div class="modal fade productdelete-modal-xl{{ $productlist_array->unique_key }}"
                                             tabindex="-1" role="dialog"data-bs-backdrop="static"
-                                            aria-labelledby="bankdeleteLargeModalLabel{{ $productlist_array->unique_key }}"
+                                            aria-labelledby="productdeleteLargeModalLabel{{ $productlist_array->unique_key }}"
                                             aria-hidden="true">
                                             @include('page.backend.product.delete')
                                         </div>

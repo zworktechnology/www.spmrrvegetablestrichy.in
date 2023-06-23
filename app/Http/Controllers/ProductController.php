@@ -124,7 +124,7 @@ class ProductController extends Controller
 
     public function delete($unique_key)
     {
-        $data = Product::where('unique_key', '=', $unique_key)->first();
+        $data = Productlist::where('unique_key', '=', $unique_key)->first();
 
         $data->soft_delete = 1;
 

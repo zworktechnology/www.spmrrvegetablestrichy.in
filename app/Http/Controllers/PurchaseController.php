@@ -153,7 +153,7 @@ class PurchaseController extends Controller
 
             // Branch
             $GetBranch = Branch::findOrFail($bill_branchid);
-            $Branch_Name = $GetBranch->name;
+            $Branch_Name = $GetBranch->shop_name;
             $first_three_letter = substr($Branch_Name, 0, 3);
             $branch_upper = strtoupper($first_three_letter);
 
@@ -585,14 +585,16 @@ class PurchaseController extends Controller
 
 
         $last_idrow = Purchase::where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->latest('id')->first();
+        if($last_idrow != ""){
 
-        if($last_idrow->balance_amount != NULL){
-            $userData['data'] = $get_OldBalance->balance_amount;
-
-        }else if($last_idrow->balance_amount == NULL){
-            $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->skip(1)->take(1)->first();
-            $userData['data'] = $secondlastrow->balance_amount;
-
+            if($last_idrow->balance_amount != NULL){
+                $userData['data'] = $last_idrow->balance_amount;
+    
+            }else if($last_idrow->balance_amount == NULL){
+                $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->skip(1)->take(1)->first();
+                $userData['data'] = $secondlastrow->balance_amount;
+    
+            }
         }else {
             $userData['data'] = 0;
         }
@@ -727,7 +729,9 @@ class PurchaseController extends Controller
                         'id' => $branchwise_datas->id,
                         'terms' => $terms,
                         'status' => $branchwise_datas->status,
-                        'heading' => $branch_name->name . ' - Branch',
+                        'branchheading' => $branch_name->name,
+                        'supplierheading' => '',
+                        'fromdateheading' => '',
 
                     );
                 }
@@ -744,6 +748,9 @@ class PurchaseController extends Controller
                     'id' => '',
                     'terms' => '',
                     'status' => '',
+                    'branchheading' => '',
+                    'supplierheading' => '',
+                    'fromdateheading' => '',
 
                 );
             }
@@ -796,7 +803,9 @@ class PurchaseController extends Controller
                         'id' => $supplierwise_report_datas->id,
                         'terms' => $supplier_terms,
                         'status' => $supplierwise_report_datas->status,
-                        'heading' => $GetSupplier->name . ' - Supplier',
+                        'branchheading' => '',
+                        'supplierheading' => $GetSupplier->name,
+                        'fromdateheading' => '',
                     );
 
 
@@ -815,7 +824,9 @@ class PurchaseController extends Controller
                     'id' => '',
                     'terms' => '',
                     'status' => '',
-                    'heading' => $GetSupplier->name . ' - Supplier',
+                    'branchheading' => '',
+                    'supplierheading' => $GetSupplier->name,
+                    'fromdateheading' => '',
                 );
             }
 
@@ -866,7 +877,9 @@ class PurchaseController extends Controller
                         'id' => $fromdate_report_datas->id,
                         'terms' => $fromdate_terms,
                         'status' => $fromdate_report_datas->status,
-                        'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - Report',
+                        'branchheading' => '',
+                        'supplierheading' => '',
+                        'fromdateheading' => date('d-M-Y', strtotime($purchasereport_fromdate)),
                     );
 
 
@@ -885,7 +898,9 @@ class PurchaseController extends Controller
                     'id' => '',
                     'terms' => '',
                     'status' => '',
-                    'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)),
+                    'branchheading' => '',
+                    'supplierheading' => '',
+                    'fromdateheading' => date('d-M-Y', strtotime($purchasereport_fromdate)),
                 );
             }
 
