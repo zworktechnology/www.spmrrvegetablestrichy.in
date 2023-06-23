@@ -203,7 +203,9 @@ class ExpenceController extends Controller
                         'unique_key' => $branchwise_datas->unique_key,
                         'id' => $branchwise_datas->id,
                         'branch_id' => $branchwise_datas->branch_id,
-                        'heading' => $getBranch->name . ' - Branch',
+                        'branchheading' => $getBranch->name,
+                        'fromdateheading' => '',
+                        'todateheading' => '',
                     );
                 }
             }else{
@@ -217,7 +219,9 @@ class ExpenceController extends Controller
                     'unique_key' => '',
                     'id' => '',
                     'branch_id' => '',
-                    'heading' => $getBranch->name . ' - Branch',
+                    'branchheading' => $getBranch->name,
+                    'fromdateheading' => '',
+                    'todateheading' => '',
                 );
             }
         }
@@ -244,7 +248,9 @@ class ExpenceController extends Controller
                             'unique_key' => $branchwise_datas->unique_key,
                             'id' => $branchwise_datas->id,
                             'branch_id' => $branchwise_datas->branch_id,
-                            'heading' => date('d-M-Y', strtotime($expencereport_fromdate)) . ' - Report',
+                            'branchheading' => '',
+                            'fromdateheading' => date('d-M-Y', strtotime($expencereport_fromdate)),
+                            'todateheading' => '',
                         );
                     }
                 }else{
@@ -258,7 +264,9 @@ class ExpenceController extends Controller
                         'unique_key' => '',
                         'id' => '',
                         'branch_id' => '',
-                        'heading' => date('d-M-Y', strtotime($expencereport_fromdate)) . ' - Report',
+                        'branchheading' => '',
+                        'fromdateheading' => date('d-M-Y', strtotime($expencereport_fromdate)),
+                        'todateheading' => '',
                     );
                 }
 
@@ -281,7 +289,9 @@ class ExpenceController extends Controller
                             'unique_key' => $branchwise_datas->unique_key,
                             'id' => $branchwise_datas->id,
                             'branch_id' => $branchwise_datas->branch_id,
-                            'heading' => date('d-M-Y', strtotime($expencereport_todate)) . ' - Report',
+                            'branchheading' => '',
+                            'fromdateheading' => '',
+                            'todateheading' => date('d-M-Y', strtotime($expencereport_todate)),
                         );
                     }
                 }else{
@@ -295,7 +305,9 @@ class ExpenceController extends Controller
                         'unique_key' => '',
                         'id' => '',
                         'branch_id' => '',
-                        'heading' => date('d-M-Y', strtotime($expencereport_todate)) . ' - Report',
+                        'branchheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => date('d-M-Y', strtotime($expencereport_todate)),
                     );
                 }
             }
@@ -325,7 +337,9 @@ class ExpenceController extends Controller
                         'unique_key' => $branchwise_datas->unique_key,
                         'id' => $branchwise_datas->id,
                         'branch_id' => $branchwise_datas->branch_id,
-                        'heading' => date('d-M-Y', strtotime($expencereport_fromdate)) . ' - ' . $GetBranch->name . '(Branch)'
+                        'branchheading' => $GetBranch->name,
+                        'fromdateheading' => date('d-M-Y', strtotime($expencereport_fromdate)),
+                        'todateheading' => '',
                     );
                 }
             }else{
@@ -339,7 +353,9 @@ class ExpenceController extends Controller
                     'unique_key' => '',
                     'id' => '',
                     'branch_id' => '',
-                    'heading' => date('d-M-Y', strtotime($expencereport_fromdate)) . ' - ' . $GetBranch->name . '(Branch)'
+                    'branchheading' => $GetBranch->name,
+                    'fromdateheading' => date('d-M-Y', strtotime($expencereport_fromdate)),
+                    'todateheading' => '',
                 );
             }
         }
@@ -363,7 +379,9 @@ class ExpenceController extends Controller
                         'unique_key' => $branchwise_datas->unique_key,
                         'id' => $branchwise_datas->id,
                         'branch_id' => $branchwise_datas->branch_id,
-                        'heading' => date('d-M-Y', strtotime($expencereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($expencereport_todate))
+                        'branchheading' => '',
+                        'fromdateheading' => date('d-M-Y', strtotime($expencereport_fromdate)),
+                        'todateheading' => date('d-M-Y', strtotime($expencereport_todate)),
                     );
                 }
             }else{
@@ -377,7 +395,9 @@ class ExpenceController extends Controller
                     'unique_key' => '',
                     'id' => '',
                     'branch_id' => '',
-                    'heading' => date('d-M-Y', strtotime($expencereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($expencereport_todate))
+                    'branchheading' => '',
+                    'fromdateheading' => date('d-M-Y', strtotime($expencereport_fromdate)),
+                    'todateheading' => date('d-M-Y', strtotime($expencereport_todate)),
                 );
             }
         }
@@ -404,7 +424,9 @@ class ExpenceController extends Controller
                         'unique_key' => $branchwise_datas->unique_key,
                         'id' => $branchwise_datas->id,
                         'branch_id' => $branchwise_datas->branch_id,
-                        'heading' => date('d-M-Y', strtotime($expencereport_todate)) . ' - ' . $GetBranch->name . '(Branch)'
+                        'branchheading' => $GetBranch->name,
+                        'fromdateheading' => '',
+                        'todateheading' => date('d-M-Y', strtotime($expencereport_todate)),
                     );
                 }
             }else{
@@ -418,7 +440,9 @@ class ExpenceController extends Controller
                     'unique_key' => '',
                     'id' => '',
                     'branch_id' => '',
-                    'heading' => date('d-M-Y', strtotime($expencereport_todate)) . ' - ' . $GetBranch->name . '(Branch)'
+                    'branchheading' => $GetBranch->name,
+                    'fromdateheading' => '',
+                    'todateheading' => date('d-M-Y', strtotime($expencereport_todate)),
                 );
             }
         }
@@ -444,7 +468,9 @@ class ExpenceController extends Controller
                         'unique_key' => $branchwise_datas->unique_key,
                         'id' => $branchwise_datas->id,
                         'branch_id' => $branchwise_datas->branch_id,
-                        'heading' => $GetBranch->name . ' Branch - (' . date('d-M-Y', strtotime($expencereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($expencereport_todate)) . ')'
+                        'branchheading' => $GetBranch->name,
+                        'fromdateheading' => date('d-M-Y', strtotime($expencereport_fromdate)),
+                        'todateheading' => date('d-M-Y', strtotime($expencereport_todate)),
                     );
                 }
             }else{
@@ -458,7 +484,9 @@ class ExpenceController extends Controller
                     'unique_key' => '',
                     'id' => '',
                     'branch_id' => '',
-                    'heading' => $GetBranch->name . ' Branch - (' . date('d-M-Y', strtotime($expencereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($expencereport_todate)) . ')'
+                    'branchheading' => $GetBranch->name,
+                    'fromdateheading' => date('d-M-Y', strtotime($expencereport_fromdate)),
+                    'todateheading' => date('d-M-Y', strtotime($expencereport_todate)),
                 );
             }
         }

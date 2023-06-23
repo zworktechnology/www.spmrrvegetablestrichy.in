@@ -76,7 +76,7 @@
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
-                                <label>To Date :<span style="color: red">16.06.2023</span></label>
+                                <label>To Date :<span style="color: red">{{ $purchase['todateheading'] }}</span></label>
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">

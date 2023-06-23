@@ -526,7 +526,7 @@ class SalesController extends Controller
 
             $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
-            if($branchwise_report != ''){
+            if($branchwise_report != ""){
                 $sales_terms = [];
                 foreach ($branchwise_report as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
@@ -561,7 +561,10 @@ class SalesController extends Controller
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
                         'status' => $branchwise_datas->status,
-                        'heading' => $GetBranch->name . ' - Branch',
+                        'branchheading' => $GetBranch->name,
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => '',
 
                     );
                 }
@@ -578,7 +581,10 @@ class SalesController extends Controller
                     'id' => '',
                     'sales_terms' => '',
                     'status' => '',
-                    'heading' => $GetBranch->name . ' - Branch',
+                    'branchheading' => $GetBranch->name,
+                    'customerheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => '',
                 );
             }
         }
@@ -627,7 +633,10 @@ class SalesController extends Controller
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
                         'status' => $branchwise_datas->status,
-                        'heading' => $GetCustomer->name . ' - ' . '(Customer)',
+                        'branchheading' => '',
+                        'customerheading' => $GetCustomer->name,
+                        'fromdateheading' => '',
+                        'todateheading' => '',
 
                     );
                 }
@@ -644,7 +653,11 @@ class SalesController extends Controller
                     'id' => '',
                     'sales_terms' => '',
                     'status' => '',
-                    'heading' => $GetCustomer->name . ' - ' . '(Customer)',
+                    'branchheading' => '',
+                    'customerheading' => $GetCustomer->name,
+                    'fromdateheading' => '',
+                    'todateheading' => '',
+
                 );
             }
         }
@@ -692,7 +705,10 @@ class SalesController extends Controller
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
                         'status' => $branchwise_datas->status,
-                        'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - Report',
+                        'branchheading' => '',
+                        'customerheading' => '',
+                        'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
+                        'todateheading' => '',
 
                     );
                 }
@@ -709,7 +725,10 @@ class SalesController extends Controller
                     'id' => '',
                     'sales_terms' => '',
                     'status' => '',
-                    'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - Report',
+                    'branchheading' => '',
+                    'customerheading' => '',
+                    'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
+                    'todateheading' => '',
                 );
             }
         }
@@ -756,7 +775,10 @@ class SalesController extends Controller
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
                         'status' => $branchwise_datas->status,
-                        'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - Report',
+                        'branchheading' => '',
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
 
                     );
                 }
@@ -773,7 +795,10 @@ class SalesController extends Controller
                     'id' => '',
                     'sales_terms' => '',
                     'status' => '',
-                    'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - Report',
+                    'branchheading' => '',
+                    'customerheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
                 );
             }
 
@@ -820,7 +845,10 @@ class SalesController extends Controller
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
                         'status' => $branchwise_datas->status,
-                        'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - Customer(' . $GetCustomer->name . ')'
+                        'branchheading' => '',
+                        'customerheading' => $GetCustomer->name,
+                        'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
+                        'todateheading' => '',
 
                     );
                 }
@@ -837,7 +865,10 @@ class SalesController extends Controller
                     'id' => '',
                     'sales_terms' => '',
                     'status' => '',
-                    'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - Customer(' . $GetCustomer->name . ')'
+                    'branchheading' => '',
+                    'customerheading' => $GetCustomer->name,
+                    'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
+                    'todateheading' => '',
                 );
             }
 
@@ -888,7 +919,10 @@ class SalesController extends Controller
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
                         'status' => $branchwise_datas->status,
-                        'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate))
+                        'branchheading' => '',
+                        'customerheading' => '',
+                        'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
+                        'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
 
                     );
                 }
@@ -905,7 +939,11 @@ class SalesController extends Controller
                     'id' => '',
                     'sales_terms' => '',
                     'status' => '',
-                    'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate))
+                    'branchheading' => '',
+                    'customerheading' => '',
+                    'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
+                    'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+
                 );
             }
 
@@ -955,7 +993,10 @@ class SalesController extends Controller
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
                         'status' => $branchwise_datas->status,
-                        'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - Customer(' . $GetCustomer->name . ')'
+                        'branchheading' => '',
+                        'customerheading' => $GetCustomer->name,
+                        'fromdateheading' => '',
+                        'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
 
                     );
                 }
@@ -972,7 +1013,10 @@ class SalesController extends Controller
                     'id' => '',
                     'sales_terms' => '',
                     'status' => '',
-                    'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - Customer(' . $GetCustomer->name . ')'
+                    'branchheading' => '',
+                    'customerheading' => $GetCustomer->name,
+                    'fromdateheading' => '',
+                    'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
                 );
             }
 
@@ -1025,7 +1069,10 @@ class SalesController extends Controller
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
                         'status' => $branchwise_datas->status,
-                        'heading' => $GetBranch->name . '(Branch) - Customer(' . $GetCustomer->name . ')'
+                        'branchheading' => $GetBranch->name,
+                        'customerheading' => $GetCustomer->name,
+                        'fromdateheading' => '',
+                        'todateheading' => '',
 
                     );
                 }
@@ -1042,7 +1089,10 @@ class SalesController extends Controller
                     'id' => '',
                     'sales_terms' => '',
                     'status' => '',
-                    'heading' => $GetBranch->name . '(Branch) - Customer(' . $GetCustomer->name . ')'
+                    'branchheading' => $GetBranch->name,
+                    'customerheading' => $GetCustomer->name,
+                    'fromdateheading' => '',
+                    'todateheading' => '',
                 );
             }
 
@@ -1091,7 +1141,10 @@ class SalesController extends Controller
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
                         'status' => $branchwise_datas->status,
-                        'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . $GetBranch->name . '(Branch)'
+                        'branchheading' => $GetBranch->name,
+                        'customerheading' => '',
+                        'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
+                        'todateheading' => '',
 
                     );
                 }
@@ -1108,7 +1161,10 @@ class SalesController extends Controller
                     'id' => '',
                     'sales_terms' => '',
                     'status' => '',
-                    'heading' => date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . $GetBranch->name . '(Branch)'
+                    'branchheading' => $GetBranch->name,
+                    'customerheading' => '',
+                    'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
+                    'todateheading' => '',
                 );
             }
 
@@ -1158,7 +1214,10 @@ class SalesController extends Controller
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
                         'status' => $branchwise_datas->status,
-                        'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - ' . $GetBranch->name . '(Branch)'
+                        'branchheading' => $GetBranch->name,
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
 
                     );
                 }
@@ -1175,7 +1234,10 @@ class SalesController extends Controller
                     'id' => '',
                     'sales_terms' => '',
                     'status' => '',
-                    'heading' => date('d-M-Y', strtotime($salesreport_todate)) . ' - ' . $GetBranch->name . '(Branch)'
+                    'branchheading' => $GetBranch->name,
+                    'customerheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
                 );
             }
 
@@ -1225,7 +1287,10 @@ class SalesController extends Controller
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
                         'status' => $branchwise_datas->status,
-                        'heading' => $GetBrach->name . ' Branch - (' . date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate)) . ')'
+                        'branchheading' => $GetBranch->name,
+                        'customerheading' => '',
+                        'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
+                        'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
 
                     );
                 }
@@ -1242,7 +1307,10 @@ class SalesController extends Controller
                     'id' => '',
                     'sales_terms' => '',
                     'status' => '',
-                    'heading' => $GetBrach->name . ' Branch - (' . date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate)) . ')'
+                    'branchheading' => $GetBranch->name,
+                    'customerheading' => '',
+                    'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
+                    'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
                 );
             }
 
@@ -1292,7 +1360,10 @@ class SalesController extends Controller
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
                         'status' => $branchwise_datas->status,
-                        'heading' => $GetCustomer->name . ' (Customer) - (' . date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate)) . ')'
+                        'branchheading' => '',
+                        'customerheading' => $GetCustomer->name,
+                        'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
+                        'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
 
                     );
                 }
@@ -1309,7 +1380,86 @@ class SalesController extends Controller
                     'id' => '',
                     'sales_terms' => '',
                     'status' => '',
-                    'heading' => $GetCustomer->name . ' (Customer) - (' . date('d-M-Y', strtotime($salesreport_fromdate)) . ' - ' . date('d-M-Y', strtotime($salesreport_todate)) . ')'
+                    'branchheading' => '',
+                    'customerheading' => $GetCustomer->name,
+                    'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
+                    'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+                );
+            }
+    
+
+
+        }
+
+
+
+
+        if($salesreport_fromdate && $salesreport_todate && $salesreport_customer && $salesreport_branch){
+
+            $GetCustomer = Customer::findOrFail($salesreport_customer);
+            $GetBrach = Branch::findOrFail($salesreport_branch);
+
+            $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('customer_id', '=', $salesreport_customer)->where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->get();
+            $Sales_data = [];
+            if($branchwise_report != ''){
+                $sales_terms = [];
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bag,
+                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+                    
+
+
+                    $Sales_data[] = array(
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
+                        'branchheading' => $GetBrach->name,
+                        'customerheading' => $GetCustomer->name,
+                        'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
+                        'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+
+                    );
+                }
+            }else{
+
+                $Sales_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'status' => '',
+                    'branchheading' => $GetBrach->name,
+                    'customerheading' => $GetCustomer->name,
+                    'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
+                    'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
                 );
             }
 

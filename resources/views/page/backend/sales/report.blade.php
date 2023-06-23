@@ -63,26 +63,33 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
+                    @foreach ($Sales_data as $keydata => $Sales_datas)
+                        @if ($Sales_datas['unique_key'] != '')
+
+                        @if($keydata == 0)
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
-                                <label>From Date <span style="color: red">16.06.2023</span></label>
+                                <label>From Date :<span style="color: red">{{ $Sales_datas['fromdateheading'] }}</span></label>
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
-                                <label>To Date <span style="color: red">16.06.2023</span></label>
+                                <label>To Date :<span style="color: red">{{ $Sales_datas['todateheading'] }}</span></label>
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
-                                <label>Branch <span style="color: red">16.06.2023</span></label>
+                                <label>Branch :<span style="color: red"> {{ $Sales_datas['branchheading'] }}</span></label>
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
-                                <label>Customer <span style="color: red">16.06.2023</span></label>
+                                <label>Customer : <span style="color: red">{{ $Sales_datas['customerheading'] }}</span></label>
                             </div>
                         </div>
+                        @endif
+                        @endif
+                    @endforeach
                     </div>
                 </div>
             </div>
