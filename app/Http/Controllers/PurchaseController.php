@@ -732,6 +732,7 @@ class PurchaseController extends Controller
                         'branchheading' => $branch_name->name,
                         'supplierheading' => '',
                         'fromdateheading' => '',
+                        'todateheading' => '',
 
                     );
                 }
@@ -751,6 +752,7 @@ class PurchaseController extends Controller
                     'branchheading' => '',
                     'supplierheading' => '',
                     'fromdateheading' => '',
+                    'todateheading' => '',
 
                 );
             }
@@ -806,6 +808,7 @@ class PurchaseController extends Controller
                         'branchheading' => '',
                         'supplierheading' => $GetSupplier->name,
                         'fromdateheading' => '',
+                        'todateheading' => '',
                     );
 
 
@@ -827,6 +830,7 @@ class PurchaseController extends Controller
                     'branchheading' => '',
                     'supplierheading' => $GetSupplier->name,
                     'fromdateheading' => '',
+                    'todateheading' => '',
                 );
             }
 
@@ -880,6 +884,7 @@ class PurchaseController extends Controller
                         'branchheading' => '',
                         'supplierheading' => '',
                         'fromdateheading' => date('d-M-Y', strtotime($purchasereport_fromdate)),
+                        'todateheading' => '',
                     );
 
 
@@ -901,6 +906,7 @@ class PurchaseController extends Controller
                     'branchheading' => '',
                     'supplierheading' => '',
                     'fromdateheading' => date('d-M-Y', strtotime($purchasereport_fromdate)),
+                    'todateheading' => '',
                 );
             }
 
@@ -952,7 +958,10 @@ class PurchaseController extends Controller
                         'id' => $todate_report_datas->id,
                         'terms' => $todate_terms,
                         'status' => $todate_report_datas->status,
-                        'heading' => date('d-M-Y', strtotime($purchasereport_todate)) . ' - Report',
+                        'branchheading' => '',
+                        'supplierheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => date('d-M-Y', strtotime($purchasereport_todate)),
                     );
 
                 }
@@ -970,7 +979,10 @@ class PurchaseController extends Controller
                     'id' => '',
                     'terms' => '',
                     'status' => '',
-                    'heading' => date('d-M-Y', strtotime($purchasereport_todate)) . ' - Report',
+                    'branchheading' => '',
+                    'supplierheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => '',
                 );
             }
         }
@@ -1021,7 +1033,10 @@ class PurchaseController extends Controller
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
                         'status' => $datefilter_report_arr->status,
-                        'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - Supplier(' . $GetSupplier->name . ')'
+                        'branchheading' => '',
+                        'supplierheading' => $GetSupplier->name,
+                        'fromdateheading' => date('d-M-Y', strtotime($purchasereport_fromdate)),
+                        'todateheading' => '',
                     );
 
                 }
@@ -1038,7 +1053,10 @@ class PurchaseController extends Controller
                     'id' => '',
                     'terms' => '',
                     'status' => '',
-                    'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - Supplier(' . $GetSupplier->name . ')'
+                    'branchheading' => '',
+                    'supplierheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => '',
                 );
             }
 
@@ -1090,7 +1108,10 @@ class PurchaseController extends Controller
                             'id' => $datefilter_report_arr->id,
                             'terms' => $todate_terms,
                             'status' => $datefilter_report_arr->status,
-                            'heading' => date('d-M-Y', strtotime($purchasereport_todate)) . ' - Supplier(' . $GetSupplier->name . ')'
+                            'branchheading' => '',
+                            'supplierheading' => $GetSupplier->name,
+                            'fromdateheading' => '',
+                            'todateheading' => date('d-M-Y', strtotime($purchasereport_todate)),
                         );
 
                     }
@@ -1107,7 +1128,10 @@ class PurchaseController extends Controller
                     'id' => '',
                     'terms' => '',
                     'status' => '',
-                    'heading' => date('d-M-Y', strtotime($purchasereport_todate)) . ' - Supplier(' . $GetSupplier->name . ')'
+                    'branchheading' => '',
+                    'supplierheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => '',
                 );
             }
         }
@@ -1159,7 +1183,10 @@ class PurchaseController extends Controller
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
                         'status' => $datefilter_report_arr->status,
-                        'heading' => $GetBrach->name . '(Branch) - Supplier(' . $GetSupplier->name . ')'
+                        'branchheading' => $GetBrach->name,
+                        'supplierheading' => $GetSupplier->name,
+                        'fromdateheading' => '',
+                        'todateheading' => '',
                     );
 
                 }
@@ -1176,7 +1203,10 @@ class PurchaseController extends Controller
                     'id' => '',
                     'terms' => '',
                     'status' => '',
-                    'heading' => $GetBrach->name . '(Branch) - Supplier(' . $GetSupplier->name . ')'
+                    'branchheading' => '',
+                    'supplierheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => '',
                 );
             }
 
@@ -1223,7 +1253,10 @@ class PurchaseController extends Controller
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
                         'status' => $datefilter_report_arr->status,
-                        'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . $GetBrach->name . '(Branch)'
+                        'branchheading' => $GetBrach->name,
+                        'supplierheading' => '',
+                        'fromdateheading' => date('d-M-Y', strtotime($purchasereport_fromdate)),
+                        'todateheading' => '',
                     );
 
                 }
@@ -1240,7 +1273,10 @@ class PurchaseController extends Controller
                     'id' => '',
                     'terms' => '',
                     'status' => '',
-                    'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . $GetBrach->name . '(Branch)'
+                    'branchheading' => '',
+                    'supplierheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => '',
                 );
             }
         }
@@ -1288,7 +1324,10 @@ class PurchaseController extends Controller
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
                         'status' => $datefilter_report_arr->status,
-                        'heading' => date('d-M-Y', strtotime($purchasereport_todate)) . ' - ' . $GetBrach->name . '(Branch)'
+                        'branchheading' => $GetBrach->name,
+                        'supplierheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => date('d-M-Y', strtotime($purchasereport_todate)),
                     );
 
                 }
@@ -1305,7 +1344,10 @@ class PurchaseController extends Controller
                     'id' => '',
                     'terms' => '',
                     'status' => '',
-                    'heading' => date('d-M-Y', strtotime($purchasereport_todate)) . ' - ' . $GetBrach->name . '(Branch)'
+                    'branchheading' => '',
+                    'supplierheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => '',
                 );
             }
 
@@ -1357,7 +1399,10 @@ class PurchaseController extends Controller
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
                         'status' => $datefilter_report_arr->status,
-                        'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($purchasereport_todate))
+                        'branchheading' => '',
+                        'supplierheading' => '',
+                        'fromdateheading' => date('d-M-Y', strtotime($purchasereport_fromdate)),
+                        'todateheading' => date('d-M-Y', strtotime($purchasereport_todate)),
                     );
 
                 }
@@ -1374,7 +1419,10 @@ class PurchaseController extends Controller
                     'id' => '',
                     'terms' => '',
                     'status' => '',
-                    'heading' => date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($purchasereport_todate))
+                    'branchheading' => '',
+                    'supplierheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => '',
                 );
             }
 
@@ -1424,7 +1472,10 @@ class PurchaseController extends Controller
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
                         'status' => $datefilter_report_arr->status,
-                        'heading' => $GetBrach->name . ' Branch - (' . date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($purchasereport_todate)) . ')'
+                        'branchheading' => $GetBrach->name,
+                        'supplierheading' => '',
+                        'fromdateheading' => date('d-M-Y', strtotime($purchasereport_fromdate)),
+                        'todateheading' => date('d-M-Y', strtotime($purchasereport_todate)),
                     );
 
                 }
@@ -1441,7 +1492,10 @@ class PurchaseController extends Controller
                     'id' => '',
                     'terms' => '',
                     'status' => '',
-                    'heading' => $GetBrach->name . ' Branch - (' . date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($purchasereport_todate)) . ')'
+                    'branchheading' => '',
+                    'supplierheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => '',
                 );
             }
         }
@@ -1491,7 +1545,10 @@ class PurchaseController extends Controller
                                 'id' => $datefilter_report_arr->id,
                                 'terms' => $todate_terms,
                                 'status' => $datefilter_report_arr->status,
-                                'heading' => $GetSupplier->name . ' (Supplier) - (' . date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($purchasereport_todate)) . ')'
+                                'branchheading' => '',
+                                'supplierheading' => $GetSupplier->name,
+                                'fromdateheading' => date('d-M-Y', strtotime($purchasereport_fromdate)),
+                                'todateheading' => date('d-M-Y', strtotime($purchasereport_todate)),
                             );
 
                     }
@@ -1508,11 +1565,91 @@ class PurchaseController extends Controller
                         'id' => '',
                         'terms' => '',
                         'status' => '',
-                        'heading' => $GetSupplier->name . ' (Supplier) - (' . date('d-M-Y', strtotime($purchasereport_fromdate)) . ' - ' . date('d-M-Y', strtotime($purchasereport_todate)) . ')'
+                        'branchheading' => '',
+                        'supplierheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => '',
                     );
                 }
 
             }
+
+
+
+
+            if($purchasereport_fromdate && $purchasereport_todate && $purchasereport_supplier && $purchasereport_branch){
+
+                $GetSupplier = Supplier::findOrFail($purchasereport_supplier);
+                $GetBrach = Branch::findOrFail($purchasereport_branch);
+                $datefilter_report = Purchase::whereBetween('date', [$purchasereport_fromdate, $purchasereport_todate])
+                                                        ->where('supplier_id', '=', $purchasereport_supplier)
+                                                        ->where('branch_id', '=', $purchasereport_branch)
+                                                        ->where('soft_delete', '!=', 1)->get();
+                    $purchase_data = [];
+                    if($datefilter_report != ''){
+                            $todate_terms = [];
+    
+                        foreach ($datefilter_report as $key => $datefilter_report_arr) {
+    
+                            $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
+                            $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
+    
+    
+                            $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                            foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+    
+                            $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                                $todate_terms[] = array(
+                                'bag' => $PurchaseProducts_arrdata->bag,
+                                'kgs' => $PurchaseProducts_arrdata->kgs,
+                                'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                                'total_price' => $PurchaseProducts_arrdata->total_price,
+                                'product_name' => $productlist_ID->name,
+                                'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+    
+                                );
+                            }
+    
+    
+                                $purchase_data[] = array(
+                                    'unique_key' => $datefilter_report_arr->unique_key,
+                                    'branch_name' => $branch_name->shop_name,
+                                    'supplier_name' => $supplier_name->name,
+                                    'date' => $datefilter_report_arr->date,
+                                    'time' => $datefilter_report_arr->time,
+                                    'gross_amount' => $datefilter_report_arr->gross_amount,
+                                    'bill_no' => $datefilter_report_arr->bill_no,
+                                    'id' => $datefilter_report_arr->id,
+                                    'terms' => $todate_terms,
+                                    'status' => $datefilter_report_arr->status,
+                                    'branchheading' => $GetBrach->name,
+                                    'supplierheading' => $GetSupplier->name,
+                                    'fromdateheading' => date('d-M-Y', strtotime($purchasereport_fromdate)),
+                                    'todateheading' => date('d-M-Y', strtotime($purchasereport_todate)),
+                                );
+    
+                        }
+                    }else{
+    
+                        $purchase_data[] = array(
+                            'unique_key' => '',
+                            'branch_name' => '',
+                            'supplier_name' => '',
+                            'date' => '',
+                            'time' => '',
+                            'gross_amount' => '',
+                            'bill_no' => '',
+                            'id' => '',
+                            'terms' => '',
+                            'status' => '',
+                            'branchheading' => '',
+                            'supplierheading' => '',
+                            'fromdateheading' => '',
+                            'todateheading' => '',
+                        );
+                    }
+    
+                }
 
 
         return view('page.backend.purchase.report', compact('purchasereport_fromdate', 'branch', 'supplier', 'purchasereport_todate','purchasereport_branch', 'purchasereport_supplier', 'purchase_data'));

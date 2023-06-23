@@ -52,21 +52,29 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
+                    @foreach ($expense_data as $keydata => $expense_datas)
+                        @if ($expense_datas['unique_key'] != '')
+
+                        @if($keydata == 0)
                         <div class="col-lg-4 col-sm-6 col-12">
                             <div class="form-group">
-                                <label>From Date <span style="color: red">16.06.2023</span></label>
+                                <label>From Date <span style="color: red">{{ $expense_datas['fromdateheading'] }}</span></label>
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-6 col-12">
                             <div class="form-group">
-                                <label>To Date <span style="color: red">16.06.2023</span></label>
+                                <label>To Date <span style="color: red">{{ $expense_datas['todateheading'] }}</span></label>
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-6 col-12">
                             <div class="form-group">
-                                <label>Branch <span style="color: red">16.06.2023</span></label>
+                                <label>Branch <span style="color: red">{{ $expense_datas['branchheading'] }}</span></label>
                             </div>
                         </div>
+                        
+                        @endif
+                        @endif
+                    @endforeach
                     </div>
                 </div>
             </div>
