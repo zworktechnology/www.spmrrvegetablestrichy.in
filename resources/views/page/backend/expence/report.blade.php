@@ -34,7 +34,7 @@
                                     id="expencereport_branch">
                                     <option value=""  selected >Select Branch</option>
                                     @foreach ($branch as $branches)
-                                        <option value="{{ $branches->id }}">{{ $branches->name }}</option>
+                                        <option value="{{ $branches->id }}">{{ $branches->shop_name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -71,7 +71,7 @@
                                 <label>Branch <span style="color: red">{{ $expense_datas['branchheading'] }}</span></label>
                             </div>
                         </div>
-                        
+
                         @endif
                         @endif
                     @endforeach

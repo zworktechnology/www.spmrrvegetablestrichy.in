@@ -203,7 +203,7 @@ class ExpenceController extends Controller
                         'unique_key' => $branchwise_datas->unique_key,
                         'id' => $branchwise_datas->id,
                         'branch_id' => $branchwise_datas->branch_id,
-                        'branchheading' => $getBranch->name,
+                        'branchheading' => $getBranch->shop_name,
                         'fromdateheading' => '',
                         'todateheading' => '',
                     );
@@ -219,7 +219,7 @@ class ExpenceController extends Controller
                     'unique_key' => '',
                     'id' => '',
                     'branch_id' => '',
-                    'branchheading' => $getBranch->name,
+                    'branchheading' => $getBranch->shop_name,
                     'fromdateheading' => '',
                     'todateheading' => '',
                 );
@@ -337,7 +337,7 @@ class ExpenceController extends Controller
                         'unique_key' => $branchwise_datas->unique_key,
                         'id' => $branchwise_datas->id,
                         'branch_id' => $branchwise_datas->branch_id,
-                        'branchheading' => $GetBranch->name,
+                        'branchheading' => $GetBranch->shop_name,
                         'fromdateheading' => date('d-M-Y', strtotime($expencereport_fromdate)),
                         'todateheading' => '',
                     );
@@ -353,7 +353,7 @@ class ExpenceController extends Controller
                     'unique_key' => '',
                     'id' => '',
                     'branch_id' => '',
-                    'branchheading' => $GetBranch->name,
+                    'branchheading' => $GetBranch->shop_name,
                     'fromdateheading' => date('d-M-Y', strtotime($expencereport_fromdate)),
                     'todateheading' => '',
                 );
@@ -424,7 +424,7 @@ class ExpenceController extends Controller
                         'unique_key' => $branchwise_datas->unique_key,
                         'id' => $branchwise_datas->id,
                         'branch_id' => $branchwise_datas->branch_id,
-                        'branchheading' => $GetBranch->name,
+                        'branchheading' => $GetBranch->shop_name,
                         'fromdateheading' => '',
                         'todateheading' => date('d-M-Y', strtotime($expencereport_todate)),
                     );
@@ -440,7 +440,7 @@ class ExpenceController extends Controller
                     'unique_key' => '',
                     'id' => '',
                     'branch_id' => '',
-                    'branchheading' => $GetBranch->name,
+                    'branchheading' => $GetBranch->shop_name,
                     'fromdateheading' => '',
                     'todateheading' => date('d-M-Y', strtotime($expencereport_todate)),
                 );
@@ -468,7 +468,7 @@ class ExpenceController extends Controller
                         'unique_key' => $branchwise_datas->unique_key,
                         'id' => $branchwise_datas->id,
                         'branch_id' => $branchwise_datas->branch_id,
-                        'branchheading' => $GetBranch->name,
+                        'branchheading' => $GetBranch->shop_name,
                         'fromdateheading' => date('d-M-Y', strtotime($expencereport_fromdate)),
                         'todateheading' => date('d-M-Y', strtotime($expencereport_todate)),
                     );
@@ -484,7 +484,7 @@ class ExpenceController extends Controller
                     'unique_key' => '',
                     'id' => '',
                     'branch_id' => '',
-                    'branchheading' => $GetBranch->name,
+                    'branchheading' => $GetBranch->shop_name,
                     'fromdateheading' => date('d-M-Y', strtotime($expencereport_fromdate)),
                     'todateheading' => date('d-M-Y', strtotime($expencereport_todate)),
                 );

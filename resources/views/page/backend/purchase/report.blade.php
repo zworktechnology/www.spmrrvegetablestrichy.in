@@ -34,7 +34,7 @@
                                     id="purchasereport_branch">
                                     <option value="" selected>Select Branch</option>
                                     @foreach ($branch as $branches)
-                                        <option value="{{ $branches->id }}">{{ $branches->name }}</option>
+                                        <option value="{{ $branches->id }}">{{ $branches->shop_name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -61,7 +61,7 @@
             </div>
 
 
-                
+
             <div class="card">
                 <div class="card-body">
                     <div class="row">

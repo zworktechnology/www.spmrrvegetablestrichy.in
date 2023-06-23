@@ -589,11 +589,11 @@ class PurchaseController extends Controller
 
             if($last_idrow->balance_amount != NULL){
                 $userData['data'] = $last_idrow->balance_amount;
-    
+
             }else if($last_idrow->balance_amount == NULL){
                 $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->skip(1)->take(1)->first();
                 $userData['data'] = $secondlastrow->balance_amount;
-    
+
             }
         }else {
             $userData['data'] = 0;
@@ -729,7 +729,7 @@ class PurchaseController extends Controller
                         'id' => $branchwise_datas->id,
                         'terms' => $terms,
                         'status' => $branchwise_datas->status,
-                        'branchheading' => $branch_name->name,
+                        'branchheading' => $branch_name->shop_name,
                         'supplierheading' => '',
                         'fromdateheading' => '',
                         'todateheading' => '',
@@ -1183,7 +1183,7 @@ class PurchaseController extends Controller
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
                         'status' => $datefilter_report_arr->status,
-                        'branchheading' => $GetBrach->name,
+                        'branchheading' => $GetBrach->shop_name,
                         'supplierheading' => $GetSupplier->name,
                         'fromdateheading' => '',
                         'todateheading' => '',
@@ -1253,7 +1253,7 @@ class PurchaseController extends Controller
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
                         'status' => $datefilter_report_arr->status,
-                        'branchheading' => $GetBrach->name,
+                        'branchheading' => $GetBrach->shop_name,
                         'supplierheading' => '',
                         'fromdateheading' => date('d-M-Y', strtotime($purchasereport_fromdate)),
                         'todateheading' => '',
@@ -1324,7 +1324,7 @@ class PurchaseController extends Controller
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
                         'status' => $datefilter_report_arr->status,
-                        'branchheading' => $GetBrach->name,
+                        'branchheading' => $GetBrach->shop_name,
                         'supplierheading' => '',
                         'fromdateheading' => '',
                         'todateheading' => date('d-M-Y', strtotime($purchasereport_todate)),
@@ -1472,7 +1472,7 @@ class PurchaseController extends Controller
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
                         'status' => $datefilter_report_arr->status,
-                        'branchheading' => $GetBrach->name,
+                        'branchheading' => $GetBrach->shop_name,
                         'supplierheading' => '',
                         'fromdateheading' => date('d-M-Y', strtotime($purchasereport_fromdate)),
                         'todateheading' => date('d-M-Y', strtotime($purchasereport_todate)),
@@ -1588,16 +1588,16 @@ class PurchaseController extends Controller
                     $purchase_data = [];
                     if($datefilter_report != ''){
                             $todate_terms = [];
-    
+
                         foreach ($datefilter_report as $key => $datefilter_report_arr) {
-    
+
                             $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
                             $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
-    
-    
+
+
                             $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                             foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
-    
+
                             $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                                 $todate_terms[] = array(
                                 'bag' => $PurchaseProducts_arrdata->bag,
@@ -1606,11 +1606,11 @@ class PurchaseController extends Controller
                                 'total_price' => $PurchaseProducts_arrdata->total_price,
                                 'product_name' => $productlist_ID->name,
                                 'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
-    
+
                                 );
                             }
-    
-    
+
+
                                 $purchase_data[] = array(
                                     'unique_key' => $datefilter_report_arr->unique_key,
                                     'branch_name' => $branch_name->shop_name,
@@ -1622,15 +1622,15 @@ class PurchaseController extends Controller
                                     'id' => $datefilter_report_arr->id,
                                     'terms' => $todate_terms,
                                     'status' => $datefilter_report_arr->status,
-                                    'branchheading' => $GetBrach->name,
+                                    'branchheading' => $GetBrach->shop_name,
                                     'supplierheading' => $GetSupplier->name,
                                     'fromdateheading' => date('d-M-Y', strtotime($purchasereport_fromdate)),
                                     'todateheading' => date('d-M-Y', strtotime($purchasereport_todate)),
                                 );
-    
+
                         }
                     }else{
-    
+
                         $purchase_data[] = array(
                             'unique_key' => '',
                             'branch_name' => '',
@@ -1648,7 +1648,7 @@ class PurchaseController extends Controller
                             'todateheading' => '',
                         );
                     }
-    
+
                 }
 
 
