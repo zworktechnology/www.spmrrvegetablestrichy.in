@@ -310,7 +310,7 @@ class PurchaseController extends Controller
 
                 $getPurchaseOld = PurchaseProduct::where('id', '=', $differents_id)->first();
 
-                $product_Data = Product::where('soft_delete', '!=', 1)->where('productlist_id', '=', $getPurchaseOld->productlist_id)->where('branchtable_id', '=', $Purchase_Data->branch_id)->first();
+                $product_Data = Product::where('soft_delete', '!=', 1)->where('productlist_id', '=', $getPurchaseOld->productlist_id)->where('branchtable_id', '=', $branch_id)->first();
                 if($branch_id == $product_Data->branchtable_id){
 
                         $bag_count = $product_Data->available_stockin_bag;
