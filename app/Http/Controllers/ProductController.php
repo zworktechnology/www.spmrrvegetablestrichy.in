@@ -15,9 +15,6 @@ class ProductController extends Controller
 
         $productlistdata = Productlist::where('soft_delete', '!=', 1)->get();
 
-
-
-
         return view('page.backend.product.index', compact('productlistdata'));
     }
 

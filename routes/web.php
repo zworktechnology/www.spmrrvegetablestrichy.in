@@ -12,6 +12,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ExpenceController;
+use App\Http\Controllers\PurchasePaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -187,6 +188,20 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/report_view', [PurchaseController::class, 'report_view'])->name('purchase.report_view');
         // DATAE FILTER
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/datefilter', [PurchaseController::class, 'datefilter'])->name('purchase.datefilter');
+    });
+
+
+
+    // PURCHASE PAYMENT CONTROLLER
+    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+        // INDEX
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchasepayment', [PurchasePaymentController::class, 'index'])->name('purchasepayment.index');
+        // STORE
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/purchasepayment/store', [PurchasePaymentController::class, 'store'])->name('purchasepayment.store');
+        // EDIT
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/purchasepayment/edit/{unique_key}', [PurchasePaymentController::class, 'edit'])->name('purchasepayment.edit');
+        // DELETE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchasepayment/delete/{unique_key}', [PurchasePaymentController::class, 'delete'])->name('purchasepayment.delete');
     });
 
 

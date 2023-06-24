@@ -16,6 +16,9 @@
                         <li class="{{ Route::is('purchase.index', 'purchase.store') ? 'active' : '' }}">
                             <a href="{{ route('purchase.index') }}"><i data-feather="shopping-bag"></i><span>Purchase</span></a>
                         </li>
+                        <li class="{{ Route::is('purchasepayment.index', 'purchasepayment.store') ? 'active' : '' }}">
+                            <a href="{{ route('purchasepayment.index') }}"><i data-feather="shopping-bag"></i><span>Purchase - Payment</span></a>
+                        </li>
                         <li class="{{ Route::is('sales.index', 'sales.store') ? 'active' : '' }}">
                             <a href="{{ route('sales.index') }}"><i data-feather="shopping-cart"></i><span>Sales</span></a>
                         </li>

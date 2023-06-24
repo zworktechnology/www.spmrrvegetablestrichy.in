@@ -83,7 +83,7 @@
                               @foreach ($productlist as $products)
                                  @if ($products->id == $Sales_Products->productlist_id)
                                     <input type="text"class="form-control" name="product_name[]" value="{{ $products->name }}" readonly>
-                                    <input type="hidden" id="sales_product_id" name="sales_product_id[]" value="{{ $Sales_Products->id }}" />
+                                    <input type="hidden" id="sales_product_id" name="sales_product_id[]" value="{{ $Sales_Products->productlist_id }}" />
                                  @endif
                               @endforeach
                            </td>

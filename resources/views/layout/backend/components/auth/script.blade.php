@@ -111,6 +111,49 @@ $(".purchaseclose").click(function() {
             });
         });
 
+
+        $('.ppayment_branch_id').on('change', function() {
+            var branch_id = this.value;
+            var supplier_id = $(".ppayment_supplier_id").val();
+            $('.oldblance').html('');
+            $.ajax({
+            url: '/getoldbalanceforPayment/',
+            type: 'get',
+            data: {
+                        _token: "{{ csrf_token() }}",
+                        supplier_id: supplier_id,
+                        branch_id: branch_id
+                    },
+            dataType: 'json',
+                success: function(response) {
+                    console.log(response['data']);
+                    
+                    
+                }
+            });
+        });
+
+
+        $('.ppayment_supplier_id').on('change', function() {
+            var supplier_id = this.value;
+            var branch_id = $(".ppayment_branch_id").val();
+            $('.oldblance').html('');
+                $.ajax({
+                    url: '/getoldbalanceforPayment/',
+                    type: 'get',
+                    data: {
+                            _token: "{{ csrf_token() }}",
+                            supplier_id: supplier_id,
+                            branch_id: branch_id
+                        },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response['data']);
+                        
+                    }
+                });
+        });
+
        
 
 
