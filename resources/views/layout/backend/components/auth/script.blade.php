@@ -111,27 +111,12 @@ $(".purchaseclose").click(function() {
             });
         });
 
-
         $('.ppayment_branch_id').on('change', function() {
-            var branch_id = this.value;
-            var supplier_id = $(".ppayment_supplier_id").val();
-            $('.oldblance').html('');
-            $.ajax({
-            url: '/getoldbalanceforPayment/',
-            type: 'get',
-            data: {
-                        _token: "{{ csrf_token() }}",
-                        supplier_id: supplier_id,
-                        branch_id: branch_id
-                    },
-            dataType: 'json',
-                success: function(response) {
-                    console.log(response['data']);
-                    
-                    
-                }
-            });
         });
+
+
+
+        
 
 
         $('.ppayment_supplier_id').on('change', function() {
@@ -454,6 +439,38 @@ $(".purchaseclose").click(function() {
 
 // SALES
 
+    $('.sales_branch_id').on('change', function() {
+            var sales_branch_id = this.value;
+            //alert(sales_branch_id);
+                $.ajax({
+                    url: '/getbranchwiseProducts/',
+                    type: 'get',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        sales_branch_id: sales_branch_id,
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        var len = response.length;
+
+                        var selectedValues = new Array();
+
+                        if (len > 0) {
+                            for (var i = 0; i < len; i++) {
+                                
+                                    var id = response[i].productlistid;
+                                    var name = response[i].productlist_name;
+                                    var option = "<option value='" + id + "'>" + name +
+                                        "</option>";
+                                    selectedValues.push(option);
+                            }
+                        }
+                        $('#sales_product_id1').append(selectedValues);
+                    }
+                });
+        });
+
 var j = 1;
 var i = 1;
 
@@ -477,30 +494,32 @@ $(document).ready(function() {
                     '</tr>'
                 );
 
-
+                var sales_branch_id = $(".sales_branch_id").val();
                 $.ajax({
-                    url: '/getProducts/',
+                    url: '/getbranchwiseProducts/',
                     type: 'get',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        sales_branch_id: sales_branch_id,
+                    },
                     dataType: 'json',
                     success: function(response) {
-                        //console.log(response['data']);
-                        var len = response['data'].length;
+                        console.log(response);
+                        var len = response.length;
 
                         var selectedValues = new Array();
 
                         if (len > 0) {
                             for (var i = 0; i < len; i++) {
                                 
-                                    var id = response['data'][i].id;
-                                    var name = response['data'][i].name;
+                                    var id = response[i].productlistid;
+                                    var name = response[i].productlist_name;
                                     var option = "<option value='" + id + "'>" + name +
                                         "</option>";
                                     selectedValues.push(option);
                             }
-                        }
-                        ++j;
+                        }++j;
                         $('#sales_product_id' + j).append(selectedValues);
-                        //add_count.push(Object.keys(selectedValues).length);
                     }
                 });
     });

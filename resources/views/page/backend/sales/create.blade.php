@@ -58,7 +58,6 @@
                         </div>
 
                     </div>
-
                     <br />
 
                     <div class="row">
@@ -81,10 +80,6 @@
                                                 id="sales_product_id1"required>
                                                 <option value="" selected hidden class="text-muted">Select Product
                                                 </option>
-                                                @foreach ($productlist as $productlists)
-                                                    <option value="{{ $productlists->id }}">{{ $productlists->name }}
-                                                    </option>
-                                                @endforeach
                                             </select>
                                         </td>
                                         <td><select class=" form-control sales_bagorkg" name="sales_bagorkg[]"

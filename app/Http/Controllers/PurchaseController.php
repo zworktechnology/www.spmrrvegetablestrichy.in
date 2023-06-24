@@ -577,6 +577,8 @@ class PurchaseController extends Controller
         echo json_encode($userData);
     }
 
+    
+
     public function getoldbalance()
     {
         $invoice_supplier = request()->get('invoice_supplier');

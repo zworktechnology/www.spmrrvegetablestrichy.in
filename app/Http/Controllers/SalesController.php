@@ -1558,5 +1558,28 @@ class SalesController extends Controller
 
     }
 
+
+
+
+    public function getbranchwiseProducts()
+    {
+
+        $sales_branch_id = request()->get('sales_branch_id');
+
+        $GetProduct = Product::where('soft_delete', '!=', 1)->where('branchtable_id', '=', $sales_branch_id)->get();
+        $output = [];
+        foreach ($GetProduct as $key => $GetProducts) {
+            $ProductList = Productlist::findOrFail($GetProducts->productlist_id);
+
+
+            $output[] = array(
+                'productlistid' => $ProductList->id,
+                'productlist_name' => $ProductList->name,
+            );
+
+        }
+        echo json_encode($output);
+    }
+
 }
 
