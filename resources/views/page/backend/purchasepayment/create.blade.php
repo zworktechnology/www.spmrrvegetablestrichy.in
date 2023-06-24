@@ -49,7 +49,7 @@
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Amount</label>
+                            <label>Payable Amount</label>
                             <input type="text" name="amount" placeholder="Enter Amount">
                         </div>
                     </div>

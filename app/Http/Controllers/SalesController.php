@@ -310,7 +310,7 @@ class SalesController extends Controller
         $Sales_Data->date = $request->get('sales_date');
         $Sales_Data->time = $request->get('sales_time');
         $Sales_Data->bank_id = $request->get('sales_bank_id');
-        $Sales_Data->update();
+        //$Sales_Data->update();
 
         $SalesId = $Sales_Data->id;
 
@@ -345,16 +345,16 @@ class SalesController extends Controller
                             $totalbag_count = $bag_count + 0;
                         }
 
-                        DB::table('products')->where('productlist_id', $getPurchaseOld->productlist_id)->where('branchtable_id', $branch_id)->update([
-                            'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
-                        ]);
+                     //   DB::table('products')->where('productlist_id', $getPurchaseOld->productlist_id)->where('branchtable_id', $branch_id)->update([
+                      //      'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
+                      //  ]);
                     }
             }
         }
 
         if (!empty($different_ids)) {
             foreach ($different_ids as $key => $different_id) {
-                SalesProduct::where('id', $different_id)->delete();
+               // SalesProduct::where('id', $different_id)->delete();
             }
         }
 
@@ -369,9 +369,9 @@ class SalesController extends Controller
                 $bagorkg = $request->sales_bagorkg[$key];
                 $count = $request->sales_count[$key];
 
-                DB::table('sales_products')->where('id', $ids)->update([
-                    'sales_id' => $Sales_Id,  'productlist_id' => $updatesales_product_id,  'bagorkg' => $bagorkg,  'count' => $count
-                ]);
+                //DB::table('sales_products')->where('id', $ids)->update([
+               //     'sales_id' => $Sales_Id,  'productlist_id' => $updatesales_product_id,  'bagorkg' => $bagorkg,  'count' => $count
+               // ]);
 
             } else if ($sales_detail_id == '') {
                 if ($request->sales_product_id[$key] > 0) {
@@ -385,13 +385,13 @@ class SalesController extends Controller
                     $SalesProduct->productlist_id = $request->sales_product_id[$key];
                     $SalesProduct->bagorkg = $request->sales_bagorkg[$key];
                     $SalesProduct->count = $request->sales_count[$key];
-                    $SalesProduct->save();
+                    //$SalesProduct->save();
 
 
 
                     $Product_id = $request->sales_product_id[$key];
                     $product_Data = Product::where('productlist_id', '=', $Product_id)->where('branchtable_id', '=', $branch_id)->first();
-
+                    dd($product_Data);
                     if($product_Data != ""){
 
                         if($branch_id == $product_Data->branchtable_id){
@@ -409,9 +409,9 @@ class SalesController extends Controller
 
 
 
-                            DB::table('products')->where('productlist_id', $Product_id)->where('branchtable_id', $branch_id)->update([
-                                'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
-                            ]);
+                           // DB::table('products')->where('productlist_id', $Product_id)->where('branchtable_id', $branch_id)->update([
+                           //     'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
+                           // ]);
                         }
                     }
 
@@ -420,7 +420,7 @@ class SalesController extends Controller
             }
         }
 
-        return redirect()->route('sales.index')->with('update', 'Updated Sales information has been added to your list.');
+        //return redirect()->route('sales.index')->with('update', 'Updated Sales information has been added to your list.');
 
     }
 
@@ -1518,6 +1518,11 @@ class SalesController extends Controller
             $customer_namearr = Customer::where('id', '=', $get_Sales_data->customer_id)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->first();
             $branch_namearr = Branch::where('id', '=', $get_Sales_data->branch_id)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->first();
             $bank_namearr = Bank::where('id', '=', $get_Sales_data->bank_id)->where('soft_delete', '!=', 1)->where('status', '!=', 1)->first();
+            if($bank_namearr != ""){
+                $bank_name = $bank_namearr->name;
+            }else {
+                $bank_name = '';
+            }
 
             $output[] = array(
                 'sales_customername' => $customer_namearr->name,
@@ -1532,7 +1537,7 @@ class SalesController extends Controller
                 'sales_date' => date('d m Y', strtotime($get_Sales_data->date)),
                 'sales_time' => date('h:i A', strtotime($get_Sales_data->time)),
 
-                'sales_bank_namedata' => $bank_namearr->name,
+                'sales_bank_namedata' => $bank_name,
                 'sales_total_amount' => $get_Sales_data->total_amount,
                 'sales_extra_cost' => $get_Sales_data->extra_cost,
                 'sales_old_balance' => $get_Sales_data->old_balance,
@@ -1554,3 +1559,4 @@ class SalesController extends Controller
     }
 
 }
+

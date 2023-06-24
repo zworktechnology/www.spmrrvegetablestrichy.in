@@ -215,7 +215,7 @@ $(".purchaseclose").click(function() {
                 e.preventDefault();
                 var $this = $(this),
                 sales_id = $this.attr('data-id');
-                //alert(purchase_id);
+                //alert(sales_id);
 
                 $.ajax({
                     url: '/getSalesview/',
