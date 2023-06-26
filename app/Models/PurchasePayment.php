@@ -13,10 +13,13 @@ class PurchasePayment extends Model
     protected $fillable = [
         'unique_key',
         'branch_id',
+        'purchase_id',
         'supplier_id',
         'date',
         'time',
+        'oldblance',
         'amount',
+        'payment_pending',
         'soft_delete'
     ];
 }

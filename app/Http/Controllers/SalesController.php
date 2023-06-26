@@ -1575,10 +1575,21 @@ class SalesController extends Controller
             $output[] = array(
                 'productlistid' => $ProductList->id,
                 'productlist_name' => $ProductList->name,
+                'available_stockin_bag' => $GetProducts->available_stockin_bag,
+                'available_stockin_kilograms' => $GetProducts->available_stockin_kilograms,
             );
 
         }
         echo json_encode($output);
+    }
+
+    public function getProductsdetail()
+    {
+        $sales_product_id = request()->get('sales_product_id');
+        $sales_branch_id = request()->get('sales_branch_id');
+        
+        $GetProduct[] = Product::where('soft_delete', '!=', 1)->where('productlist_id', '=', $sales_product_id)->where('branchtable_id', '=', $sales_branch_id)->get();
+        echo json_encode($GetProduct);
     }
 
 }

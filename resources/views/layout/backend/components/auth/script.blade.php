@@ -82,13 +82,12 @@ $(".purchaseclose").click(function() {
                 });
         });
 
-
         $(document).on("blur", "input[name*=price_per_kg]", function() { 
             var invoice_supplier = $(".invoice_supplier").val();
             var invoice_branchid = $(".invoice_branchid").val();
 
             console.log(invoice_branchid);
-            $('.old_balance').html('');
+            $('.old_balance').val('');
             $.ajax({
             url: '/getoldbalance/',
             type: 'get',
@@ -99,30 +98,28 @@ $(".purchaseclose").click(function() {
                     },
             dataType: 'json',
                 success: function(response) {
-                    console.log(response['data']);
-                    var value = 0;
-                    if(response['data'] > 0){
-                        $(".old_balance").val(response['data']);
-                    }else {
-                        $(".old_balance").val(value);
-                    }
-                    
+                    console.log(response);
+                        var len = response.length;
+                        for (var i = 0; i < len; i++) {
+                            $(".old_balance").val(response[i].payment_pending);
+                        }
+                        
                 }
             });
         });
 
-        $('.ppayment_branch_id').on('change', function() {
-        });
+        
 
 
 
         
 
 
-        $('.ppayment_supplier_id').on('change', function() {
-            var supplier_id = this.value;
-            var branch_id = $(".ppayment_branch_id").val();
-            $('.oldblance').html('');
+        $('.ppayment_branch_id').on('change', function() {
+            var branch_id = this.value;
+            var supplier_id = $(".ppayment_supplier_id").val();
+            //alert(branch_id);
+            $('.oldblance').val('');
                 $.ajax({
                     url: '/getoldbalanceforPayment/',
                     type: 'get',
@@ -133,11 +130,29 @@ $(".purchaseclose").click(function() {
                         },
                     dataType: 'json',
                     success: function(response) {
-                        console.log(response['data']);
+                        //
+                        console.log(response);
+                        var len = response.length;
+                        for (var i = 0; i < len; i++) {
+                            $(".oldblance").val(response[i].payment_pending);
+                            $("#payment_purchase_id").val(response[i].payment_purchase_id);
+                        }
+                             
+                            
+                            
+                            
+                        
                         
                     }
                 });
         });
+
+        $(document).on("keyup", 'input.payment_payableamount', function() { 
+                var payment_payableamount = $(this).val();
+                var oldblance = $(".oldblance").val();
+                var payment_pending_amount = Number(oldblance) - Number(payment_payableamount);
+                $('.payment_pending').val(payment_pending_amount.toFixed(2));
+            });
 
        
 
@@ -473,7 +488,7 @@ $(".purchaseclose").click(function() {
 
 var j = 1;
 var i = 1;
-
+var k = 1;
 
 $(document).ready(function() {
 
@@ -485,11 +500,11 @@ $(document).ready(function() {
                     '<select class="select form-control sales_product_id"name="sales_product_id[]" id="sales_product_id' + i + '"required>' +
                     '<option value="" selected hidden class="text-muted">Select Product</option></select>' +
                     '</td>' +
-                    '<td><select class=" form-control sales_bagorkg" name="sales_bagorkg[]" id="sales_bagorkg"required>' +
+                    '<td><select class=" form-control sales_bagorkg" name="sales_bagorkg[]" id="sales_bagorkg' + i + '"required>' +
                     '<option value="" selected hidden class="text-muted">Select</option>' +
                     '<option value="bag">Bag</option><option value="kg">Kg</option>' +
                     '</select></td>' +
-                    '<td><input type="text" class="form-control sales_count" id="sales_count" name="sales_count[]" placeholder="count" value="" required /></td>' +
+                    '<td><input type="text" class="form-control sales_count" id="sales_count' + i + '" name="sales_count[]" placeholder="count" value="" required /></td>' +
                     '<td><button style="width: 35px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-salestr" type="button" >-</button></td>' +
                     '</tr>'
                 );
@@ -522,34 +537,37 @@ $(document).ready(function() {
                         $('#sales_product_id' + j).append(selectedValues);
                     }
                 });
+
     });
 
+               
 
 
-    $(document).on("blur", "input[name*=sales_priceperkg]", function() { 
+
+        $(document).on("blur", "input[name*=sales_priceperkg]", function() { 
             var sales_branch_id = $(".sales_branch_id").val();
             var sales_customerid = $(".sales_customerid").val();
-            $('.sales_old_balance').html('');
-            $.ajax({
-            url: '/getoldbalanceforSales/',
-            type: 'get',
-            data: {
-                        _token: "{{ csrf_token() }}",
-                        sales_customerid: sales_customerid,
-                        sales_branch_id: sales_branch_id
-                    },
-            dataType: 'json',
-                success: function(response) {
-                    console.log(response['data']);
-                    var value = 0;
-                    if(response['data'] > 0){
-                        $(".sales_old_balance").val(response['data']);
-                    }else {
-                        $(".sales_old_balance").val(value);
+                $('.sales_old_balance').html('');
+                $.ajax({
+                url: '/getoldbalanceforSales/',
+                type: 'get',
+                data: {
+                            _token: "{{ csrf_token() }}",
+                            sales_customerid: sales_customerid,
+                            sales_branch_id: sales_branch_id
+                        },
+                dataType: 'json',
+                    success: function(response) {
+                        console.log(response['data']);
+                        var value = 0;
+                        if(response['data'] > 0){
+                            $(".sales_old_balance").val(response['data']);
+                        }else {
+                            $(".sales_old_balance").val(value);
+                        }
+                        
                     }
-                    
-                }
-            });
+                });
         });
 
 

@@ -587,23 +587,106 @@ class PurchaseController extends Controller
 
 
         $last_idrow = Purchase::where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->latest('id')->first();
+        
         if($last_idrow != ""){
 
-            if($last_idrow->balance_amount != NULL){
-                $userData['data'] = $last_idrow->balance_amount;
+            if($last_idrow->payment_pending != NULL){
 
-            }else if($last_idrow->balance_amount == NULL){
-                $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->skip(1)->take(1)->first();
-                $userData['data'] = $secondlastrow->balance_amount;
+                $output[] = array(
+                    'payment_pending' => $last_idrow->payment_pending,
+                    'payment_purchase_id' => $last_idrow->id,
+                );
+            }else if($last_idrow->payment_pending == NULL){
 
+                if($last_idrow->balance_amount != NULL){
+                    
+                    $output[] = array(
+                        'payment_pending' => $last_idrow->balance_amount,
+                        'payment_purchase_id' => $last_idrow->id,
+                    );
+                }else if($last_idrow->balance_amount == NULL){
+
+                    $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->skip(1)->take(1)->first();
+                    if($secondlastrow->payment_pending != NULL){
+                        $output[] = array(
+                            'payment_pending' => $secondlastrow->payment_pending,
+                            'payment_purchase_id' => $secondlastrow->id,
+                        );
+                    }else {
+                        $output[] = array(
+                            'payment_pending' => $secondlastrow->balance_amount,
+                            'payment_purchase_id' => $secondlastrow->id,
+                        );
+                    }
+                    
+                }
+                
             }
         }else {
-            $userData['data'] = 0;
+            $output[] = array(
+                'payment_pending' => '',
+                'payment_purchase_id' => '',
+            );
+        }
+
+
+        echo json_encode($output);
+    }
+
+
+
+    public function getoldbalanceforPayment()
+    {
+        $supplier_id = request()->get('supplier_id');
+        $branch_id = request()->get('branch_id');
+
+
+
+        $last_idrow = Purchase::where('supplier_id', '=', $supplier_id)->where('branch_id', '=', $branch_id)->latest('id')->first();
+        if($last_idrow != ""){
+
+            if($last_idrow->payment_pending != NULL){
+
+                $output[] = array(
+                    'payment_pending' => $last_idrow->payment_pending,
+                    'payment_purchase_id' => $last_idrow->id,
+                );
+            }else if($last_idrow->payment_pending == NULL){
+
+                if($last_idrow->balance_amount != NULL){
+                    
+                    $output[] = array(
+                        'payment_pending' => $last_idrow->balance_amount,
+                        'payment_purchase_id' => $last_idrow->id,
+                    );
+                }else if($last_idrow->balance_amount == NULL){
+
+                    $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $supplier_id)->where('branch_id', '=', $branch_id)->skip(1)->take(1)->first();
+                    if($secondlastrow->payment_pending != NULL){
+                        $output[] = array(
+                            'payment_pending' => $secondlastrow->payment_pending,
+                            'payment_purchase_id' => $secondlastrow->id,
+                        );
+                    }else {
+                        $output[] = array(
+                            'payment_pending' => $secondlastrow->balance_amount,
+                            'payment_purchase_id' => $secondlastrow->id,
+                        );
+                    }
+                    
+                }
+                
+            }
+        }else {
+            $output[] = array(
+                'payment_pending' => '',
+                'payment_purchase_id' => '',
+            );
         }
 
 
 
-        echo json_encode($userData);
+        echo json_encode($output);
     }
 
 

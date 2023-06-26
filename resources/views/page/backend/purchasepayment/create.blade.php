@@ -6,6 +6,7 @@
         <div class="modal-body">
             <form autocomplete="off" method="POST" action="{{ route('purchasepayment.store') }}">
                 @csrf
+
                 <div class="row">
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
@@ -45,19 +46,20 @@
                         <div class="form-group">
                             <label>Old Balance</label>
                             <input type="text" name="oldblance" id="oldblance" readonly class="oldblance" style="color:red" placeholder="Enter Amount">
-                        </div>
+                            <input type="hidden" name="payment_purchase_id" id="payment_purchase_id" value=""/>
+                        </div> 
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Payable Amount</label>
-                            <input type="text" name="amount" placeholder="Enter Amount">
+                            <input type="text" name="payment_payableamount" id="payment_payableamount" class="payment_payableamount" placeholder="Enter Amount">
                         </div>
                     </div>
 
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Pending</label>
-                            <input type="text" name="pending" id="pending" readonly style="color:orange" class="pending" placeholder="Enter Amount">
+                            <input type="text" name="payment_pending" id="payment_pending" readonly style="color:#d91617;font-weight: 700;font-size: 17px;" class="payment_pending" placeholder="Enter Amount">
                         </div>
                     </div>
                     <hr>

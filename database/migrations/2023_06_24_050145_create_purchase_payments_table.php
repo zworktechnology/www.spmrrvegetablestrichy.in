@@ -24,9 +24,14 @@ return new class extends Migration
             $table->unsignedBigInteger('supplier_id');
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
 
+            $table->unsignedBigInteger('purchase_id');
+            $table->foreign('purchase_id')->references('id')->on('suppliers')->onDelete('cascade');
+
             $table->string('date');
             $table->string('time');
+            $table->string('oldblance');
             $table->string('amount');
+            $table->string('payment_pending');
 
             $table->boolean('soft_delete')->default(0);
             $table->timestamps();

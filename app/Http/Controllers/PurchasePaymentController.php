@@ -41,10 +41,22 @@ class PurchasePaymentController extends Controller
         $data->unique_key = $randomkey;
         $data->supplier_id = $request->get('supplier_id');
         $data->branch_id = $request->get('branch_id');
+        $data->purchase_id = $request->get('payment_purchase_id');
         $data->date = $request->get('date');
         $data->time = $request->get('time');
-        $data->amount = $request->get('amount');
+        $data->oldblance = $request->get('oldblance');
+        $data->amount = $request->get('payment_payableamount');
+        $data->payment_pending = $request->get('payment_pending');
         $data->save();
+
+        $payment_paid_amount = $request->get('payment_payableamount');
+        $payment_pending = $request->get('payment_pending');
+        $payment_purchase_id = $request->get('payment_purchase_id');
+
+
+        DB::table('purchases')->where('id', $payment_purchase_id)->update([
+            'payment_paid_amount' => $payment_paid_amount,  'payment_pending' => $payment_pending, 'purchase_payment_id' => $data->id
+        ]);
 
         return redirect()->route('purchasepayment.index')->with('add', 'Payment Data added successfully!');
     }

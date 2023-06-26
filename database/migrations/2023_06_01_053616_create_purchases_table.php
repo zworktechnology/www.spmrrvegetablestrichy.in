@@ -39,6 +39,12 @@ return new class extends Migration
             $table->string('grand_total')->nullable();
             $table->string('paid_amount')->nullable();
             $table->string('balance_amount')->nullable();
+
+            $table->unsignedBigInteger('purchase_payment_id')->nullable();
+            $table->foreign('purchase_payment_id')->references('id')->on('purchase_payments')->onDelete('cascade');
+            $table->string('payment_paid_amount')->nullable();
+            $table->string('payment_pending')->nullable();
+
             $table->string('paid_status')->nullable();
 
             $table->string('status')->default(0);

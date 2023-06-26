@@ -241,9 +241,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 Route::get('getProducts/', [PurchaseController::class, 'getProducts']);
 
 Route::get('/getoldbalance', [PurchaseController::class, 'getoldbalance']);
+Route::get('/getoldbalanceforPayment', [PurchaseController::class, 'getoldbalanceforPayment']);
+
 Route::get('/getoldbalanceforSales', [SalesController::class, 'getoldbalanceforSales']);
 Route::get('/getPurchaseview', [PurchaseController::class, 'getPurchaseview']);
 Route::get('/getSalesview', [SalesController::class, 'getSalesview']);
 Route::get('/getsupplierbalance', [SupplierController::class, 'getsupplierbalance']);
 Route::get('/getBranchName', [PurchaseController::class, 'getBranchName']);
 Route::get('/getbranchwiseProducts', [SalesController::class, 'getbranchwiseProducts']);
+Route::get('/getProductsdetail', [SalesController::class, 'getProductsdetail']);

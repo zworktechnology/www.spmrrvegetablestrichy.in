@@ -72,7 +72,7 @@
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank<span
                                         style="color: red;">*</span></label>
-                                <select class="select" name="bank_id" id="bank_id">
+                                <select class="select" name="bank_id" id="bank_id" required>
                                     <option value="" disabled selected hiddden>Select Bank</option>
                                     @foreach ($bank as $banks)
                                         <option
@@ -83,11 +83,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
-
-
 
 
                     <br />
