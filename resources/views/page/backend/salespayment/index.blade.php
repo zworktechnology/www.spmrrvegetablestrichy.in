@@ -4,12 +4,12 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Payment - Purchase</h4>
+                <h4>Payment - Sales</h4>
             </div>
             <div class="page-btn">
                 <div class="row">
                     <div style="display: flex;">
-                        <form autocomplete="off" method="POST" action="{{ route('purchasepayment.datefilter') }}">
+                        <form autocomplete="off" method="POST" action="{{ route('salespayment.datefilter') }}">
                             @method('PUT')
                             @csrf
                             <div style="display: flex">
@@ -20,7 +20,7 @@
                             </div>
                         </form>
                         <button type="button" class="btn btn-primary waves-effect waves-light btn-added"
-                            data-bs-toggle="modal" data-bs-target=".purchasepayment-modal-xl">Add Payment</button>
+                            data-bs-toggle="modal" data-bs-target=".salespayment-modal-xl">Add Sales</button>
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
         <div class="row">
 
             <div class="col-lg-2 col-sm-4 col-6">
-                <a href="{{ route('purchasepayment.index') }}" style="color: black">
+                <a href="{{ route('salespayment.index') }}" style="color: black">
                     <div class="dash-widget">
                         <div class="dash-widgetcontent">
                             <h6 style="font-weight: bold;">All</h6>
@@ -39,7 +39,7 @@
             </div>
             @foreach ($allbranch as $keydata => $allbranches)
                 <div class="col-lg-2 col-sm-4 col-6">
-                    <a href="{{ route('purchasepayment.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
+                    <a href="{{ route('salespayment.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
                         <div class="dash-widget">
                             <div class="dash-widgetcontent">
                                 <h6 style="font-weight: bold;">{{ $allbranches->shop_name }}</h6>
@@ -59,7 +59,7 @@
                                 <th>Sl. No</th>
                                 <th>Date</th>
                                 <th>Branch</th>
-                                <th>Supplier</th>
+                                <th>Customer</th>
                                 <th>Old Balance</th>
                                 <th>Paid</th>
                                 <th>Pending Amount</th>
@@ -72,7 +72,7 @@
                                     <td>{{ date('d M Y', strtotime($P_PaymentData->date)) }} -
                                         {{ date('h:i A', strtotime($P_PaymentData->time)) }}</td>
                                     <td>{{ $P_PaymentData->branch_id }}</td>
-                                    <td>{{$P_PaymentData->supplier_id }}</td>
+                                    <td>{{$P_PaymentData->customer_id }}</td>
                                     <td>{{$P_PaymentData->oldblance }}</td>
                                     <td>{{ $P_PaymentData->amount }}</td>
                                     <td>{{ $P_PaymentData->payment_pending }}</td>
@@ -83,7 +83,7 @@
                                             <li hidden>
                                                 <a href="#delete{{ $P_PaymentData->unique_key }}" data-bs-toggle="modal"
                                                     data-id="{{ $P_PaymentData->unique_key }}"
-                                                    data-bs-target=".p_paymentedelete-modal-xl{{ $P_PaymentData->unique_key }}"
+                                                    data-bs-target=".s_paymentedelete-modal-xl{{ $P_PaymentData->unique_key }}"
                                                     class="badges bg-danger" style="color: white">Delete</a>
                                             </li>
                                         </ul>
@@ -91,11 +91,11 @@
                                 </tr>
 
                               
-                                <div class="modal fade p_paymentedelete-modal-xl{{ $P_PaymentData->unique_key }}"
+                                <div class="modal fade s_paymentedelete-modal-xl{{ $P_PaymentData->unique_key }}"
                                     tabindex="-1" role="dialog"data-bs-backdrop="static"
-                                    aria-labelledby="p_paymentedeleteLargeModalLabel{{ $P_PaymentData->unique_key }}"
+                                    aria-labelledby="s_paymentedeleteLargeModalLabel{{ $P_PaymentData->unique_key }}"
                                     aria-hidden="true">
-                                    @include('page.backend.purchasepayment.delete')
+                                    @include('page.backend.salespayment.delete')
                                 </div>
                             @endforeach
                         </tbody>
@@ -104,9 +104,9 @@
             </div>
         </div>
 
-        <div class="modal fade purchasepayment-modal-xl" tabindex="-1" role="dialog" aria-labelledby="purchasepaymentLargeModalLabel"
+        <div class="modal fade salespayment-modal-xl" tabindex="-1" role="dialog" aria-labelledby="salespaymentLargeModalLabel"
             aria-hidden="true" data-bs-backdrop="static">
-            @include('page.backend.purchasepayment.create')
+            @include('page.backend.salespayment.create')
         </div>
 
 

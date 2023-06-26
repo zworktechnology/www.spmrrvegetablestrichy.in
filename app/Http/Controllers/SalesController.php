@@ -1490,19 +1490,48 @@ class SalesController extends Controller
 
         $last_idrow = Sales::where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->latest('id')->first();
         if($last_idrow != ""){
-            if($last_idrow->balance_amount != NULL){
-                $userData['data'] = $last_idrow->balance_amount;
 
-            }else if($last_idrow->balance_amount == NULL){
-                $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->skip(1)->take(1)->first();
-                $userData['data'] = $secondlastrow->balance_amount;
+            if($last_idrow->sales_paymentpending != NULL){
 
+                $output[] = array(
+                    'payment_pending' => $last_idrow->sales_paymentpending,
+                    'payment_sales_id' => $last_idrow->id,
+                );
+            }else if($last_idrow->sales_paymentpending == NULL){
+
+                if($last_idrow->balance_amount != NULL){
+                    
+                    $output[] = array(
+                        'payment_pending' => $last_idrow->balance_amount,
+                        'payment_sales_id' => $last_idrow->id,
+                    );
+                }else if($last_idrow->balance_amount == NULL){
+
+                    $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->skip(1)->take(1)->first();
+                    if($secondlastrow->sales_paymentpending != NULL){
+                        $output[] = array(
+                            'payment_pending' => $secondlastrow->sales_paymentpending,
+                            'payment_sales_id' => $secondlastrow->id,
+                        );
+                    }else {
+                        $output[] = array(
+                            'payment_pending' => $secondlastrow->balance_amount,
+                            'payment_sales_id' => $secondlastrow->id,
+                        );
+                    }
+                    
+                }
+                
             }
         }else {
-            $userData['data'] = 0;
+            $output[] = array(
+                'payment_pending' => '',
+                'payment_sales_id' => '',
+            );
         }
 
-        echo json_encode($userData);
+
+        echo json_encode($output);
     }
 
 
@@ -1591,6 +1620,63 @@ class SalesController extends Controller
         $GetProduct[] = Product::where('soft_delete', '!=', 1)->where('productlist_id', '=', $sales_product_id)->where('branchtable_id', '=', $sales_branch_id)->get();
         echo json_encode($GetProduct);
     }
+
+
+
+    public function oldbalanceforsalespayment()
+    {
+        $customer_id = request()->get('spayment_customer_id');
+        $branch_id = request()->get('spayment_branch_id');
+
+
+
+        $last_idrow = Sales::where('customer_id', '=', $customer_id)->where('branch_id', '=', $branch_id)->latest('id')->first();
+        if($last_idrow != ""){
+
+            if($last_idrow->sales_paymentpending != NULL){
+
+                $output[] = array(
+                    'payment_pending' => $last_idrow->sales_paymentpending,
+                    'payment_sales_id' => $last_idrow->id,
+                );
+            }else if($last_idrow->sales_paymentpending == NULL){
+
+                if($last_idrow->balance_amount != NULL){
+                    
+                    $output[] = array(
+                        'payment_pending' => $last_idrow->balance_amount,
+                        'payment_sales_id' => $last_idrow->id,
+                    );
+                }else if($last_idrow->balance_amount == NULL){
+
+                    $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $customer_id)->where('branch_id', '=', $branch_id)->skip(1)->take(1)->first();
+                    if($secondlastrow->sales_paymentpending != NULL){
+                        $output[] = array(
+                            'payment_pending' => $secondlastrow->sales_paymentpending,
+                            'payment_sales_id' => $secondlastrow->id,
+                        );
+                    }else {
+                        $output[] = array(
+                            'payment_pending' => $secondlastrow->balance_amount,
+                            'payment_sales_id' => $secondlastrow->id,
+                        );
+                    }
+                    
+                }
+                
+            }
+        }else {
+            $output[] = array(
+                'payment_pending' => '',
+                'payment_sales_id' => '',
+            );
+        }
+
+
+
+        echo json_encode($output);
+    }
+
 
 }
 

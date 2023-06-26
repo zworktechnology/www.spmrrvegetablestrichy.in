@@ -22,6 +22,9 @@
                         <li class="{{ Route::is('sales.index', 'sales.store') ? 'active' : '' }}">
                             <a href="{{ route('sales.index') }}"><i data-feather="shopping-cart"></i><span>Sales</span></a>
                         </li>
+                        <li class="{{ Route::is('salespayment.index', 'salespayment.store') ? 'active' : '' }}">
+                            <a href="{{ route('salespayment.index') }}"><i data-feather="shopping-bag"></i><span>Sales - Payment</span></a>
+                        </li>
                         <li class="{{ Route::is('expence.index', 'expence.store') ? 'active' : '' }}">
                             <a href="{{ route('expence.index') }}"><i data-feather="corner-up-left"></i><span>Expence</span></a>
                         </li>

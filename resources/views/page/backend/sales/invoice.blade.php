@@ -58,7 +58,7 @@
                <div class="col-lg-3 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank<span style="color: red;">*</span></label>
-                     <select class="select form-control" name="sales_bank_id" id="sales_bank_id">
+                     <select class="select form-control" name="sales_bank_id" id="sales_bank_id" required>
                         <option value="" disabled selected hiddden>Select Bank</option>
                         @foreach ($bank as $banks)
                            <option value="{{ $banks->id }}"@if ($banks->id === $SalesData->bank_id) selected='selected' @endif>{{ $banks->name }}</option>

@@ -108,7 +108,7 @@
                                             <th>Date & Time</th>
                                             <th>Supplier</th>
                                             <th>Branch</th>
-                                            <th>Total</th>
+                                            <th>Grand Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -137,12 +137,31 @@ $(".purchaseclose").click(function() {
                             $(".oldblance").val(response[i].payment_pending);
                             $("#payment_purchase_id").val(response[i].payment_purchase_id);
                         }
-                             
-                            
-                            
-                            
-                        
-                        
+                    }
+                });
+        });
+        $('.ppayment_supplier_id').on('change', function() {
+            var supplier_id = this.value;
+            var branch_id = $(".ppayment_branch_id").val();
+            //alert(branch_id);
+            $('.oldblance').val('');
+                $.ajax({
+                    url: '/getoldbalanceforPayment/',
+                    type: 'get',
+                    data: {
+                            _token: "{{ csrf_token() }}",
+                            supplier_id: supplier_id,
+                            branch_id: branch_id
+                        },
+                    dataType: 'json',
+                    success: function(response) {
+                        //
+                        console.log(response);
+                        var len = response.length;
+                        for (var i = 0; i < len; i++) {
+                            $(".oldblance").val(response[i].payment_pending);
+                            $("#payment_purchase_id").val(response[i].payment_purchase_id);
+                        }
                     }
                 });
         });
@@ -486,6 +505,68 @@ $(".purchaseclose").click(function() {
                 });
         });
 
+
+
+        $('.spayment_branch_id').on('change', function() {
+            var spayment_branch_id = this.value;
+            var spayment_customer_id = $(".spayment_customer_id").val();
+            //alert(branch_id);
+            $('.sales_oldblance').val('');
+                $.ajax({
+                    url: '/oldbalanceforsalespayment/',
+                    type: 'get',
+                    data: {
+                            _token: "{{ csrf_token() }}",
+                            spayment_customer_id: spayment_customer_id,
+                            spayment_branch_id: spayment_branch_id
+                        },
+                    dataType: 'json',
+                    success: function(response) {
+                        //
+                        console.log(response);
+                        var len = response.length;
+                        for (var i = 0; i < len; i++) {
+                            $(".sales_oldblance").val(response[i].payment_pending);
+                            $("#payment_sales_id").val(response[i].payment_sales_id);
+                        }
+                    }
+                });
+        });
+        $('.spayment_customer_id').on('change', function() {
+            var spayment_customer_id = this.value;
+            var spayment_branch_id = $(".spayment_branch_id").val();
+            //alert(branch_id);
+            $('.sales_oldblance').val('');
+                $.ajax({
+                    url: '/oldbalanceforsalespayment/',
+                    type: 'get',
+                    data: {
+                            _token: "{{ csrf_token() }}",
+                            spayment_customer_id: spayment_customer_id,
+                            spayment_branch_id: spayment_branch_id
+                        },
+                    dataType: 'json',
+                    success: function(response) {
+                        //
+                        console.log(response);
+                        var len = response.length;
+                        for (var i = 0; i < len; i++) {
+                            $(".sales_oldblance").val(response[i].payment_pending);
+                            $("#payment_sales_id").val(response[i].payment_sales_id);
+                        }
+                    }
+                });
+        });
+
+        $(document).on("keyup", 'input.spayment_payableamount', function() { 
+                var spayment_payableamount = $(this).val();
+                var sales_oldblance = $(".sales_oldblance").val();
+                var spayment_pending_amount = Number(sales_oldblance) - Number(spayment_payableamount);
+                $('.spayment_pending').val(spayment_pending_amount.toFixed(2));
+            });
+
+       
+
 var j = 1;
 var i = 1;
 var k = 1;
@@ -558,12 +639,10 @@ $(document).ready(function() {
                         },
                 dataType: 'json',
                     success: function(response) {
-                        console.log(response['data']);
-                        var value = 0;
-                        if(response['data'] > 0){
-                            $(".sales_old_balance").val(response['data']);
-                        }else {
-                            $(".sales_old_balance").val(value);
+                        console.log(response);
+                        var len = response.length;
+                        for (var i = 0; i < len; i++) {
+                            $(".sales_old_balance").val(response[i].payment_pending);
                         }
                         
                     }

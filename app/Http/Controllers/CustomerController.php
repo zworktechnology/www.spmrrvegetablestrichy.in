@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Purchase;
 use App\Models\Sales;
+use App\Models\Salespayment;
 use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -18,33 +19,8 @@ class CustomerController extends Controller
         foreach ($data as $key => $datas) {
             $Customer_name = Customer::findOrFail($datas->id);
 
-            $total_sale_amt = Sales::where('soft_delete', '!=', 1)->where('customer_id', '=', $datas->id)->sum('grand_total');
-            $total_paid = Sales::where('soft_delete', '!=', 1)->where('customer_id', '=', $datas->id)->sum('paid_amount');
-
-
-
-            $tot_bal = Sales::where('soft_delete', '!=', 1)->where('customer_id', '=', $datas->id)->latest('id')->first();
-            if($tot_bal != ""){
-
-                if($tot_bal->balance_amount != NULL){
-                    $total_balance = $tot_bal->balance_amount;
-    
-                }else if($tot_bal->balance_amount == NULL){
-                    $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $datas->id)->skip(1)->take(1)->first();
-                    if($secondlastrow != ""){
-                        $total_balance = $secondlastrow->balance_amount;
-                    }else {
-                        $total_balance = 0;
-                    }
-                    
-    
-                }
-            }else {
-                $total_balance = 0;
-            }
-
-
-
+            // Total Sale
+            $total_sale_amt = Sales::where('soft_delete', '!=', 1)->where('customer_id', '=', $datas->id)->sum('gross_amount');
             if($total_sale_amt != ""){
                 $tot_saleAmount = $total_sale_amt;
             }else {
@@ -52,14 +28,24 @@ class CustomerController extends Controller
             }
 
 
-
+            // Total Paid
+            $total_paid = Sales::where('soft_delete', '!=', 1)->where('customer_id', '=', $datas->id)->sum('paid_amount');
             if($total_paid != ""){
                 $total_paid_Amount = $total_paid;
             }else {
                 $total_paid_Amount = '0';
             }
+            $payment_total_paid = Salespayment::where('soft_delete', '!=', 1)->where('customer_id', '=', $datas->id)->sum('amount');
+            if($payment_total_paid != ""){
+                $total_payment_paid = $payment_total_paid;
+            }else {
+                $total_payment_paid = '0';
+            }
+            $total_amount_paid = $total_paid_Amount + $total_payment_paid;
 
 
+            // Total Balance
+            $total_balance = $tot_saleAmount - $total_amount_paid;
 
             $customerarr_data[] = array(
                 'unique_key' => $datas->unique_key,
@@ -69,7 +55,7 @@ class CustomerController extends Controller
                 'status' => $datas->status,
                 'id' => $datas->id,
                 'total_sale_amt' => $tot_saleAmount,
-                'total_paid' => $total_paid_Amount,
+                'total_paid' => $total_amount_paid,
                 'email_address' => $datas->email_address,
                 'shop_address' => $datas->shop_address,
                 'shop_contact_number' => $datas->shop_contact_number,
@@ -93,17 +79,25 @@ class CustomerController extends Controller
                                 ->first();
 
                 if($last_idrow != ""){
-                    if($last_idrow->balance_amount != NULL){
-                        $tot_balace = $last_idrow->balance_amount;
-
-                    }else if($last_idrow->balance_amount == null){
-                        $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $Customer_arra->id)->where('branch_id', '=', $alldata_branchs->id)->skip(1)->take(1)->first();
-                        
-                        if($secondlastrow != ""){
-                            $tot_balace = $secondlastrow->balance_amount;
-                        }else {
-                            $tot_balace = 0;
+                    if($last_idrow->sales_paymentpending != NULL){
+                        $tot_balace = $last_idrow->sales_paymentpending;
+        
+                    }else if($last_idrow->sales_paymentpending == NULL){
+        
+                        if($last_idrow->balance_amount != NULL){
+                            
+                            $tot_balace = $last_idrow->balance_amount;
+                        }else if($last_idrow->balance_amount == NULL){
+        
+                            $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $Customer_arra->id)->where('branch_id', '=', $alldata_branchs->id)->skip(1)->take(1)->first();
+                            if($secondlastrow->sales_paymentpending != NULL){
+                                $tot_balace = $secondlastrow->sales_paymentpending;
+                            }else {
+                                $tot_balace = $secondlastrow->balance_amount;
+                            }
+                            
                         }
+                        
                     }
 
                 }else {

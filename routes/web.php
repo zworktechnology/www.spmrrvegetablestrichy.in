@@ -13,6 +13,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ExpenceController;
 use App\Http\Controllers\PurchasePaymentController;
+use App\Http\Controllers\SalespaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -202,6 +203,24 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/purchasepayment/edit/{unique_key}', [PurchasePaymentController::class, 'edit'])->name('purchasepayment.edit');
         // DELETE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchasepayment/delete/{unique_key}', [PurchasePaymentController::class, 'delete'])->name('purchasepayment.delete');
+         // INDEX BRANCH WISE
+         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchasepayment/branchdata/{branch_id}', [PurchasePaymentController::class, 'branchdata'])->name('purchasepayment.branchdata');
+         // DATAE FILTER
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchasepayment/datefilter', [PurchasePaymentController::class, 'datefilter'])->name('purchasepayment.datefilter');
+    });
+
+
+    // SALES PAYMENT CONTROLLER
+    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+        // INDEX
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salespayment', [SalespaymentController::class, 'index'])->name('salespayment.index');
+        // STORE
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/salespayment/store', [SalespaymentController::class, 'store'])->name('salespayment.store');
+        // INDEX BRANCH WISE
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salespayment/branchdata/{branch_id}', [SalespaymentController::class, 'branchdata'])->name('salespayment.branchdata');
+        // DATAE FILTER
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/salespayment/datefilter', [SalespaymentController::class, 'datefilter'])->name('salespayment.datefilter');
+        
     });
 
 
@@ -242,6 +261,7 @@ Route::get('getProducts/', [PurchaseController::class, 'getProducts']);
 
 Route::get('/getoldbalance', [PurchaseController::class, 'getoldbalance']);
 Route::get('/getoldbalanceforPayment', [PurchaseController::class, 'getoldbalanceforPayment']);
+Route::get('/oldbalanceforsalespayment', [SalesController::class, 'oldbalanceforsalespayment']);
 
 Route::get('/getoldbalanceforSales', [SalesController::class, 'getoldbalanceforSales']);
 Route::get('/getPurchaseview', [PurchaseController::class, 'getPurchaseview']);

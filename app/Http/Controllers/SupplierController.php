@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use App\Models\Branch;
 use App\Models\Purchase;
+use App\Models\PurchasePayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -16,50 +17,37 @@ class SupplierController extends Controller
         $data = Supplier::where('soft_delete', '!=', 1)->get();
         $supplierarr_data = [];
         foreach ($data as $key => $datas) {
+
             $supplier_name = Supplier::findOrFail($datas->id);
-
-            $total_purchase_amt = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $datas->id)->sum('grand_total');
-            $total_paid = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $datas->id)->sum('paid_amount');
-            
-
-
-
-            $tot_bal = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $datas->id)->latest('id')->first();
-            if($tot_bal != ""){
-
-                if($tot_bal->balance_amount != NULL){
-                    $total_balance = $tot_bal->balance_amount;
-    
-                }else if($tot_bal->balance_amount == NULL){
-                    $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $datas->id)->skip(1)->take(1)->first();
-                    if($secondlastrow != ""){
-                        $total_balance = $secondlastrow->balance_amount;
-                    }else {
-                        $total_balance = 0;
-                    }
-                    
-    
-                }
-            }else {
-                $total_balance = 0;
-            }
-
-
-
+            // Grand total
+            $total_purchase_amt = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $datas->id)->sum('gross_amount');
             if($total_purchase_amt != ""){
                 $tot_purchaseAmount = $total_purchase_amt;
             }else {
                 $tot_purchaseAmount = '0';
             }
 
-
-
+            // Total Paid
+            $total_paid = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $datas->id)->sum('paid_amount');
             if($total_paid != ""){
                 $total_paid_Amount = $total_paid;
             }else {
                 $total_paid_Amount = '0';
             }
+            $payment_total_paid = PurchasePayment::where('soft_delete', '!=', 1)->where('supplier_id', '=', $datas->id)->sum('amount');
+            if($payment_total_paid != ""){
+                $total_payment_paid = $payment_total_paid;
+            }else {
+                $total_payment_paid = '0';
+            }
 
+            $total_amount_paid = $total_paid_Amount + $total_payment_paid;
+            
+
+
+            // Total Balance
+            $total_balance = $tot_purchaseAmount - $total_amount_paid;
+            
 
 
             $supplierarr_data[] = array(
@@ -70,7 +58,7 @@ class SupplierController extends Controller
                 'status' => $datas->status,
                 'id' => $datas->id,
                 'total_purchase_amt' => $tot_purchaseAmount,
-                'total_paid' => $total_paid_Amount,
+                'total_paid' => $total_amount_paid,
                 'email_address' => $datas->email_address,
                 'shop_address' => $datas->shop_address,
                 'shop_contact_number' => $datas->shop_contact_number,
@@ -92,19 +80,26 @@ class SupplierController extends Controller
                                 ->first();
 
         if($last_idrow != ""){
-            if($last_idrow->balance_amount != NULL){
-                $tot_balace = $last_idrow->balance_amount;
+            if($last_idrow->payment_pending != NULL){
+                $tot_balace = $last_idrow->payment_pending;
 
-            }else if($last_idrow->balance_amount == null){
-                $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $Supplier_arra->id)->where('branch_id', '=', $alldata_branchs->id)->skip(1)->take(1)->first();
-                
-                if($secondlastrow != ""){
-                    $tot_balace = $secondlastrow->balance_amount;
-                }else {
-                    $tot_balace = 0;
+            }else if($last_idrow->payment_pending == NULL){
+
+                if($last_idrow->balance_amount != NULL){
+                    
+                    $tot_balace = $last_idrow->balance_amount;
+                }else if($last_idrow->balance_amount == NULL){
+
+                    $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $Supplier_arra->id)->where('branch_id', '=', $alldata_branchs->id)->skip(1)->take(1)->first();
+                    if($secondlastrow->payment_pending != NULL){
+                        $tot_balace = $secondlastrow->payment_pending;
+                    }else {
+                        $tot_balace = $secondlastrow->balance_amount;
+                    }
+                    
                 }
+                
             }
-
         }else {
             $tot_balace = 0;
         }

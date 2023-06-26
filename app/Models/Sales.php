@@ -25,6 +25,9 @@ class Sales extends Model
         'grand_total',
         'paid_amount',
         'balance_amount',
+        'sales_payment_id',
+        'sales_paymentpaidamount',
+        'sales_paymentpending',
         'status',
         'soft_delete'
     ];
