@@ -108,6 +108,7 @@
                                             <th>Date & Time</th>
                                             <th>Supplier</th>
                                             <th>Branch</th>
+                                            <th>Products</th>
                                             <th>Grand Total</th>
                                         </tr>
                                     </thead>
@@ -121,6 +122,13 @@
                                                         {{ date('h:i A', strtotime($purchasedata['time'])) }}</td>
                                                     <td>{{ $purchasedata['supplier_name'] }}</td>
                                                     <td>{{ $purchasedata['branch_name'] }}</td>
+                                                    <td>
+                                                    @foreach ($purchasedata['terms'] as $index => $terms_array)
+                                                    @if ($terms_array['purchase_id'] == $purchasedata['id'])
+                                                    {{ $terms_array['product_name'] }},
+                                                    @endif
+                                                    @endforeach
+                                                    </td>
                                                     <td>{{ $purchasedata['gross_amount'] }}</td>
                                                 </tr>
 

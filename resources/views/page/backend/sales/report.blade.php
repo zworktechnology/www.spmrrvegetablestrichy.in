@@ -106,8 +106,8 @@
                                             <th>Date & Time</th>
                                             <th>Customer</th>
                                             <th>Branch</th>
+                                            <th>Products</th>
                                             <th>Grand Total</th>
-                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -120,45 +120,17 @@
                                                         {{ date('h:i A', strtotime($Sales_datas['time'])) }}</td>
                                                     <td>{{ $Sales_datas['customer_name'] }}</td>
                                                     <td>{{ $Sales_datas['branch_name'] }}</td>
-                                                    <td>{{ $Sales_datas['gross_amount'] }}</td>
                                                     <td>
-
-                                                        <ul class="list-unstyled hstack gap-1 mb-0">
-                                                        @if ($Sales_datas['status'] == 0)
-                                                                <li>
-
-                                                                    <a href="{{ route('sales.edit', ['unique_key' => $Sales_datas['unique_key']]) }}"
-                                                                        class="badges bg-lightyellow" style="color: white">Edit</a>
-                                                                </li>
-                                                                @endif
-                                                                <li>
-                                                                    <a href="#salesview{{ $Sales_datas['unique_key'] }}" data-bs-toggle="modal"
-                                                                        data-id="{{ $Sales_datas['id'] }}"
-                                                                        data-bs-target=".salesview-modal-xl{{ $Sales_datas['unique_key'] }}"
-                                                                        class="badges bg-lightred salesview" style="color: white">View</a>
-
-                                                                </li>
-                                                                <li>
-
-                                                                    @if ($Sales_datas['status'] == 0)
-                                                                        <a href="{{ route('sales.invoice', ['unique_key' => $Sales_datas['unique_key']]) }}"
-                                                                            class="badges bg-lightgreen" style="color: white">Invoice</a>
-                                                                    @elseif ($Sales_datas['status'] == 1)
-                                                                        <a href="{{ route('sales.print_view', ['unique_key' => $Sales_datas['unique_key']]) }}"
-                                                                            class="badges bg-green" style="color: white">Generated Invoice</a>
-                                                                    @endif
-                                                                </li>
-                                                        </ul>
+                                                    @foreach ($Sales_datas['sales_terms'] as $index => $terms_array)
+                                                    @if ($terms_array['sales_id'] == $Sales_datas['id'])
+                                                    {{ $terms_array['product_name'] }},
+                                                    @endif
+                                                    @endforeach
                                                     </td>
+                                                    <td>{{ $Sales_datas['gross_amount'] }}</td>
                                                 </tr>
 
-                                                <div class="modal fade salesview-modal-xl{{ $Sales_datas['unique_key'] }}"
-                                                      tabindex="-1" role="dialog" data-bs-backdrop="static"
-                                                      aria-labelledby="salesviewLargeModalLabel{{ $Sales_datas['unique_key'] }}"
-                                                      aria-hidden="true">
-                                                      @include('page.backend.sales.view')
-                                                </div>
-
+                                                
                                             @endif
                                         @endforeach
 
