@@ -106,7 +106,7 @@
                                             <th>Date & Time</th>
                                             <th>Customer</th>
                                             <th>Branch</th>
-                                            <th>Total</th>
+                                            <th>Grand Total</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>

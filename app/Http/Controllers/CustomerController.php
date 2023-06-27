@@ -167,4 +167,13 @@ class CustomerController extends Controller
         return redirect()->route('customer.index')->with('soft_destroy', 'Successfully deleted the customer !');
     }
 
+
+
+    public function getCustomers()
+    {
+        $GetCustomer = Customer::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->get();
+        $userData['data'] = $GetCustomer;
+        echo json_encode($userData);
+    }
+
 }

@@ -11,7 +11,7 @@
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Supplier <span style="color: red;">*</span></label>
-                            <select class="select ppayment_supplier_id" name="supplier_id" id="supplier_id" required>
+                            <select class="select form-control ppayment_supplier_id" name="supplier_id" id="supplier_id" required>
                                     <option value="" disabled selected hiddden>Select Supplier</option>
                                     @foreach ($supplier as $suppliers)
                                         <option value="{{ $suppliers->id }}">{{ $suppliers->name }}</option>
@@ -22,7 +22,7 @@
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Branch</label>
-                            <select class="select ppayment_branch_id" name="branch_id" id="branch_id" required>
+                            <select class="select form-control ppayment_branch_id" name="branch_id" id="branch_id" required>
                                     <option value="" disabled selected hiddden>Select Branch</option>
                                     @foreach ($allbranch as $branches)
                                         <option value="{{ $branches->id }}">{{ $branches->shop_name }}</option>

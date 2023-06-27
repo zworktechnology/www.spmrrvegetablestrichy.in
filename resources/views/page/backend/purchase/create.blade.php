@@ -76,7 +76,7 @@
                                     <tr>
                                         <td>
                                             <input type="hidden"id="purchase_detail_id"name="purchase_detail_id[]" />
-                                            <select class=" form-control product_id" name="product_id[]"
+                                            <select class=" form-control product_id select" name="product_id[]"
                                                 id="product_id1"required>
                                                 <option value="" selected hidden class="text-muted">Select Product
                                                 </option>

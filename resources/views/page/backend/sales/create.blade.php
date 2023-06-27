@@ -35,7 +35,7 @@
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Customer<span
                                         style="color: red;">*</span> </label>
-                                <select class="select" name="sales_customerid" id="sales_customerid">
+                                <select class="select " name="sales_customerid" id="sales_customerid" >
                                     <option value="" disabled selected hiddden>Select Customer</option>
                                     @foreach ($customer as $customer_array)
                                         <option value="{{ $customer_array->id }}">{{ $customer_array->name }}</option>

@@ -122,10 +122,10 @@ class PurchaseController extends Controller
 
     public function create()
     {
-        $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        $supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        $bank = Bank::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $productlist = Productlist::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $branch = Branch::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $supplier = Supplier::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $bank = Bank::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $today = Carbon::now()->format('Y-m-d');
         $timenow = Carbon::now()->format('H:i');
 
@@ -264,10 +264,10 @@ class PurchaseController extends Controller
     public function edit($unique_key)
     {
         $PurchaseData = Purchase::where('unique_key', '=', $unique_key)->first();
-        $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        $supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        $bank = Bank::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $productlist = Productlist::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $branch = Branch::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $supplier = Supplier::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $bank = Bank::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $PurchaseData->id)->get();
 
         return view('page.backend.purchase.edit', compact('productlist', 'branch', 'supplier', 'bank', 'PurchaseData', 'PurchaseProducts'));
@@ -572,7 +572,7 @@ class PurchaseController extends Controller
 
     public function getProducts()
     {
-        $GetProduct = productlist::where('soft_delete', '!=', 1)->get();
+        $GetProduct = productlist::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->get();
         $userData['data'] = $GetProduct;
         echo json_encode($userData);
     }

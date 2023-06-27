@@ -158,10 +158,10 @@ class SalesController extends Controller
 
     public function create()
     {
-        $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        $customer = Customer::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        $bank = Bank::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $productlist = Productlist::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $branch = Branch::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $customer = Customer::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $bank = Bank::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $today = Carbon::now()->format('Y-m-d');
         $timenow = Carbon::now()->format('H:i');
         return view('page.backend.sales.create', compact('productlist', 'branch', 'customer', 'today', 'timenow', 'bank'));
@@ -285,10 +285,10 @@ class SalesController extends Controller
     public function edit($unique_key)
     {
         $SalesData = Sales::where('unique_key', '=', $unique_key)->first();
-        $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        $customer = Customer::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        $bank = Bank::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $productlist = orderBy('name', 'ASC')->Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $branch = Branch::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $customer = Customer::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $bank = Bank::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $SalesProducts = SalesProduct::where('sales_id', '=', $SalesData->id)->get();
 
         return view('page.backend.sales.edit', compact('productlist', 'branch', 'customer', 'bank', 'SalesData', 'SalesProducts'));
