@@ -91,11 +91,14 @@ class SupplierController extends Controller
                 }else if($last_idrow->balance_amount == NULL){
 
                     $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $Supplier_arra->id)->where('branch_id', '=', $alldata_branchs->id)->skip(1)->take(1)->first();
-                    if($secondlastrow->payment_pending != NULL){
-                        $tot_balace = $secondlastrow->payment_pending;
-                    }else {
-                        $tot_balace = $secondlastrow->balance_amount;
+                    if($secondlastrow != ""){
+                        if($secondlastrow->payment_pending != NULL){
+                            $tot_balace = $secondlastrow->payment_pending;
+                        }else if($secondlastrow->payment_pending == NULL){
+                            $tot_balace = $secondlastrow->balance_amount;
+                        }
                     }
+                    
                     
                 }
                 

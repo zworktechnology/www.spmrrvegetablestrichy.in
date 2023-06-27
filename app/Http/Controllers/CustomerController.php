@@ -90,11 +90,14 @@ class CustomerController extends Controller
                         }else if($last_idrow->balance_amount == NULL){
         
                             $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $Customer_arra->id)->where('branch_id', '=', $alldata_branchs->id)->skip(1)->take(1)->first();
-                            if($secondlastrow->sales_paymentpending != NULL){
-                                $tot_balace = $secondlastrow->sales_paymentpending;
-                            }else {
-                                $tot_balace = $secondlastrow->balance_amount;
+                            if($secondlastrow != ""){
+                                if($secondlastrow->sales_paymentpending != NULL){
+                                    $tot_balace = $secondlastrow->sales_paymentpending;
+                                }else {
+                                    $tot_balace = $secondlastrow->balance_amount;
+                                }
                             }
+                            
                             
                         }
                         
