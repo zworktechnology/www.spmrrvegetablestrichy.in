@@ -20,7 +20,7 @@
                             </div>
                         </form>
                         <button type="button" class="btn btn-primary waves-effect waves-light btn-added"
-                            data-bs-toggle="modal" data-bs-target=".salespayment-modal-xl">Add Sales</button>
+                            data-bs-toggle="modal" data-bs-target=".salespayment-modal-xl">Add Sales Payment</button>
                     </div>
                 </div>
             </div>

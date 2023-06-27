@@ -165,9 +165,9 @@ class PurchaseController extends Controller
             if($lastreport_OFBranch != '')
             {
                 $added_billno = substr ($lastreport_OFBranch->bill_no, -5);
-                $invoiceno = $branch_upper . $billreport_date . 'P0000' . ($added_billno) + 1;
+                $invoiceno = $branch_upper . $billreport_date . 'P0' . ($added_billno) + 1;
             } else {
-                $invoiceno = $branch_upper . $billreport_date . 'P0000' . $s_bill_no;
+                $invoiceno = $branch_upper . $billreport_date . 'P0' . $s_bill_no;
             }
 
 
@@ -624,7 +624,7 @@ class PurchaseController extends Controller
             }
         }else {
             $output[] = array(
-                'payment_pending' => '',
+                'payment_pending' => '0',
                 'payment_purchase_id' => '',
             );
         }

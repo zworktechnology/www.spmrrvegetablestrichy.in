@@ -191,9 +191,9 @@ class SalesController extends Controller
             if($lastreport_OFBranch != '')
             {
                 $added_billno = substr ($lastreport_OFBranch->bill_no, -5);
-                $invoiceno = $branch_upper . $billreport_date . 'S0000' . ($added_billno) + 1;
+                $invoiceno = $branch_upper . $billreport_date . 'S0' . ($added_billno) + 1;
             } else {
-                $invoiceno = $branch_upper . $billreport_date . 'S0000' . $s_bill_no;
+                $invoiceno = $branch_upper . $billreport_date . 'S0' . $s_bill_no;
             }
 
 
@@ -206,7 +206,19 @@ class SalesController extends Controller
             $data->branch_id = $request->get('sales_branch_id');
             $data->date = $request->get('sales_date');
             $data->time = $request->get('sales_time');
+            
+            $data->bill_no = $request->get('sales_billno');
+            $data->bank_id = $request->get('sales_bank_id');
+            $data->total_amount = $request->get('sales_total_amount');
+            $data->note = $request->get('sales_extracost_note');
+            $data->extra_cost = $request->get('sales_extracost');
+            $data->gross_amount = $request->get('sales_gross_amount');
+            $data->old_balance = $request->get('sales_old_balance');
+            $data->grand_total = $request->get('sales_grand_total');
+            $data->paid_amount = $request->get('salespayable_amount');
+            $data->balance_amount = $request->get('sales_pending_amount');
             $data->bill_no = $invoiceno;
+            $data->status = 1;
             $data->save();
 
             $insertedId = $data->id;
@@ -222,6 +234,8 @@ class SalesController extends Controller
                 $SalesProduct->productlist_id = $sales_product_id;
                 $SalesProduct->bagorkg = $request->sales_bagorkg[$key];
                 $SalesProduct->count = $request->sales_count[$key];
+                $SalesProduct->price_per_kg = $request->sales_priceperkg[$key];
+                $SalesProduct->total_price = $request->sales_total_price[$key];
                 $SalesProduct->save();
 
                 $product_ids = $request->sales_product_id[$key];
@@ -256,6 +270,8 @@ class SalesController extends Controller
 
             }
 
+            
+
             return redirect()->route('sales.index')->with('add', 'Sales Data added successfully!');
 
 
@@ -285,7 +301,7 @@ class SalesController extends Controller
     public function edit($unique_key)
     {
         $SalesData = Sales::where('unique_key', '=', $unique_key)->first();
-        $productlist = orderBy('name', 'ASC')->Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $productlist = Productlist::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $branch = Branch::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $customer = Customer::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $bank = Bank::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -310,6 +326,15 @@ class SalesController extends Controller
         $Sales_Data->date = $request->get('sales_date');
         $Sales_Data->time = $request->get('sales_time');
         $Sales_Data->bank_id = $request->get('sales_bank_id');
+        
+        $Sales_Data->total_amount = $request->get('sales_total_amount');
+        $Sales_Data->note = $request->get('sales_extracost_note');
+        $Sales_Data->extra_cost = $request->get('sales_extracost');
+        $Sales_Data->gross_amount = $request->get('sales_gross_amount');
+        $Sales_Data->old_balance = $request->get('sales_old_balance');
+        $Sales_Data->grand_total = $request->get('sales_grand_total');
+        $Sales_Data->paid_amount = $request->get('salespayable_amount');
+        $Sales_Data->balance_amount = $request->get('sales_pending_amount');
         $Sales_Data->update();
 
         $SalesId = $Sales_Data->id;
@@ -368,9 +393,11 @@ class SalesController extends Controller
                 $productlist_id = $request->sales_product_id[$key];
                 $bagorkg = $request->sales_bagorkg[$key];
                 $count = $request->sales_count[$key];
+                $price_per_kg = $request->sales_priceperkg[$key];
+                $total_price = $request->sales_total_price[$key];
 
                 DB::table('sales_products')->where('id', $ids)->update([
-                    'sales_id' => $Sales_Id,  'productlist_id' => $updatesales_product_id,  'bagorkg' => $bagorkg,  'count' => $count
+                    'sales_id' => $Sales_Id,  'productlist_id' => $updatesales_product_id,  'bagorkg' => $bagorkg,  'count' => $count, 'price_per_kg' => $price_per_kg, 'total_price' => $total_price
                 ]);
 
             } else if ($sales_detail_id == '') {
@@ -385,6 +412,8 @@ class SalesController extends Controller
                     $SalesProduct->productlist_id = $request->sales_product_id[$key];
                     $SalesProduct->bagorkg = $request->sales_bagorkg[$key];
                     $SalesProduct->count = $request->sales_count[$key];
+                    $SalesProduct->price_per_kg = $request->sales_priceperkg[$key];
+                    $SalesProduct->total_price = $request->sales_total_price[$key];
                     $SalesProduct->save();
 
 
@@ -399,12 +428,15 @@ class SalesController extends Controller
                             $bag_count = $product_Data->available_stockin_bag;
                             $kg_count = $product_Data->available_stockin_kilograms;
 
-                            if($request->sales_bagorkg[$key] == 'bag'){
-                                $totalbag_count = $bag_count - $request->sales_count[$key];
-                                $totalkg_count = $kg_count - 0;
-                            }else if($request->bagorkg[$key] == 'kg'){
-                                $totalkg_count = $kg_count - $request->sales_count[$key];
-                                $totalbag_count = $bag_count - 0;
+
+                            if($request->sales_bagorkg[$key] != ""){
+                                if($request->sales_bagorkg[$key] == 'bag'){
+                                    $totalbag_count = $bag_count - $request->sales_count[$key];
+                                    $totalkg_count = $kg_count - 0;
+                                }else {
+                                    $totalkg_count = $kg_count - $request->sales_count[$key];
+                                    $totalbag_count = $bag_count - 0;
+                                }
                             }
 
 
@@ -1525,7 +1557,7 @@ class SalesController extends Controller
             }
         }else {
             $output[] = array(
-                'payment_pending' => '',
+                'payment_pending' => '0',
                 'payment_sales_id' => '',
             );
         }

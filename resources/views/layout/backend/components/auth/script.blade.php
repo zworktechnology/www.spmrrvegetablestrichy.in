@@ -586,6 +586,8 @@ $(document).ready(function() {
                     '<option value="bag">Bag</option><option value="kg">Kg</option>' +
                     '</select></td>' +
                     '<td><input type="text" class="form-control sales_count" id="sales_count' + i + '" name="sales_count[]" placeholder="count" value="" required /></td>' +
+                    '<td><input type="text" class="form-control sales_priceperkg" id="sales_priceperkg" name="sales_priceperkg[]" placeholder="Price Per Count" value="" required /></td>' +
+                    '<td class="text-end"><input type="text" class="form-control sales_total_price" id="sales_total_price" readonly style="background-color: #e9ecef;" name="sales_total_price[]" placeholder="" value="" required /></td>' +
                     '<td><button style="width: 35px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-salestr" type="button" >-</button></td>' +
                     '</tr>'
                 );

@@ -85,10 +85,7 @@
                                             </li>
                                             <li>
 
-                                                @if ($Sales_datas['status'] == 0)
-                                                    <a href="{{ route('sales.invoice', ['unique_key' => $Sales_datas['unique_key']]) }}"
-                                                        class="badges bg-lightgreen" style="color: white">Invoice</a>
-                                                @elseif ($Sales_datas['status'] == 1)
+                                                @if ($Sales_datas['status'] == 1)
                                                     <a href="{{ route('sales.print_view', ['unique_key' => $Sales_datas['unique_key']]) }}"
                                                         class="badges bg-green" style="color: white">Generated Invoice</a>
                                                 @endif

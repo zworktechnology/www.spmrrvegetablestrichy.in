@@ -15,7 +15,8 @@
             @method('PUT')
             @csrf
             <div class="row">
-               <div class="col-lg-3 col-sm-6 col-12">
+            
+               <div class="col-lg-16 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">From Branch<span style="color: red;">*</span></label>
                      <select class="select sales_branch_id" name="sales_branch_id" id="sales_branch_id">
@@ -27,7 +28,7 @@
                   </div>
                </div>
             
-               <div class="col-lg-3 col-sm-6 col-12">
+               <div class="col-lg-16 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">To Customer<span style="color: red;">*</span> </label>
                      <select class="select" name="sales_customerid" id="sales_customerid">
@@ -39,14 +40,14 @@
                   </div>
                </div>
 
-               <div class="col-lg-3 col-sm-6 col-12">
+               <div class="col-lg-6 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Date<span style="color: red;">*</span></label>
                      <input type="date" name="sales_date" placeholder="" value="{{ $SalesData->date }}">
                   </div>
                </div>
 
-               <div class="col-lg-3 col-sm-6 col-12">
+               <div class="col-lg-6 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span style="color: red;">*</span></label>
                      <input type="time" name="sales_time" placeholder="" value="{{ $SalesData->time }}">
@@ -54,9 +55,24 @@
                </div>
 
                
-               
+               <div class="col-lg-16 col-sm-6 col-12">
+                  <div class="form-group">
+                     <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bill No<span style="color: red;">*</span></label>
+                     <input type="text" name="sales_billno" placeholder="Bill No" id="sales_billno" value="{{ $SalesData->bill_no }}" style="background-color: #e9ecef;" readonly>
+                  </div>
+               </div>
 
-            
+               <div class="col-lg-16 col-sm-6 col-12">
+                  <div class="form-group">
+                     <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank<span style="color: red;">*</span></label>
+                     <select class="select" name="sales_bank_id" id="sales_bank_id">
+                        <option value="" disabled selected hiddden>Select Bank</option>
+                        @foreach ($bank as $banks)
+                           <option value="{{ $banks->id }}"@if ($banks->id === $SalesData->bank_id) selected='selected' @endif>{{ $banks->name }}</option>
+                        @endforeach
+                     </select>
+                  </div>
+               </div>
 
             </div>
 
@@ -72,6 +88,8 @@
                            <th style="font-size:15px; width:28%;">Product</th>
                            <th style="font-size:15px; width:12%;">Bag / Kg</th>
                            <th style="font-size:15px; width:12%;">Count </th>
+                           <th style="font-size:15px; width:18%;">Price / Count</th>
+                           <th style="font-size:15px; width:20%;">Amount</th>
                            
                         </tr>
                      </thead>
@@ -84,16 +102,52 @@
                                  @if ($products->id == $Sales_Products->productlist_id)
                                     <input type="text"class="form-control" name="product_name[]" value="{{ $products->name }}" readonly>
                                     <input type="hidden" id="sales_product_id" name="sales_product_id[]" value="{{ $Sales_Products->productlist_id }}" />
-                                    
                                  @endif
                               @endforeach
                            </td>
                            <td><input type="text" class="form-control" id="sales_bagorkg" readonly name="sales_bagorkg[]" placeholder="Bag" value="{{ $Sales_Products->bagorkg }}" required /></td>
                            <td><input type="text" class="form-control sales_count" id="sales_count" readonly name="sales_count[]" placeholder="kgs" value="{{ $Sales_Products->count }}" required /></td>
+                           <td><input type="text" class="form-control sales_priceperkg" readonly id="sales_priceperkg" name="sales_priceperkg[]" placeholder="Price Per Count" value="{{ $Sales_Products->price_per_kg }}" required /></td>
+                           <td class="text-end"><input type="text" class="form-control sales_total_price" readonly id="sales_total_price"  style="background-color: #e9ecef;" name="sales_total_price[]" placeholder="" value="{{ $Sales_Products->total_price }}" required /></td>
                            <td><button style="width: 35px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-salestr" type="button" >-</button>
                            </td>
                         </tr>
                         @endforeach
+                     </tbody>
+                     <tbody>
+                        <tr>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                           <td style="font-size:15px;color: black;" class="text-end">Total</td>
+                           <td><input type="text" class="form-control sales_total_amount" id="sales_total_amount" name="sales_total_amount" value="{{ $SalesData->total_amount }}" readonly style="background-color: #e9ecef;" /></td>
+                           
+                        </tr>
+                        <tr>
+                           <td colspan="3"><input type="text" class="form-control" id="sales_extracost_note" placeholder="Note" value="{{ $SalesData->note }}" name="sales_extracost_note" required/></td>
+                           <td style="font-size:15px;color: black;" class="text-end">Extra Cost<span style="color: red;">*</span></td>
+                           <td><input type="text" class="form-control sales_extracost" id="sales_extracost" placeholder="Extra Cost" name="sales_extracost" value="{{ $SalesData->extra_cost }}"/></td>
+                        </tr>
+                        <tr>
+                           <td colspan="4" class="text-end" style="font-size:15px;color: black;">Gross Amount</td>
+                           <td><input type="text" class="form-control sales_gross_amount" id="sales_gross_amount" placeholder="Gross Amount" value="{{ $SalesData->gross_amount }}" readonly style="background-color: #e9ecef;" name="sales_gross_amount"/></td>
+                        </tr>
+                        <tr>
+                           <td colspan="4" class="text-end" style="font-size:15px;color: red;">Old Balance</td>
+                           <td><input type="text" class="form-control sales_old_balance" id="sales_old_balance" placeholder="Old Balance" readonly value="{{ $SalesData->old_balance }}" style="background-color: #e9ecef;" name="sales_old_balance"/></td>
+                        </tr>
+                        <tr>
+                           <td colspan="4" class="text-end" style="font-size:15px;color: green;">Grand Total</td>
+                           <td><input type="text" class="form-control sales_grand_total" id="sales_grand_total" readonly placeholder="Grand Total" value="{{ $SalesData->grand_total }}" style="background-color: #e9ecef;" name="sales_grand_total"/></td>
+                        </tr>
+                        <tr>
+                           <td colspan="4" class="text-end" style="font-size:15px;color: black;">Payable Amount<span style="color: red;">*</span></td>
+                           <td><input type="text" class="form-control salespayable_amount" name="salespayable_amount" placeholder="Payable Amount" value="{{ $SalesData->paid_amount }}" id="salespayable_amount"></td>
+                        </tr>
+                        <tr>
+                           <td colspan="4" class="text-end" style="font-size:15px;color: black;">Pending Amount</td>
+                           <td><input type="text" class="form-control sales_pending_amount" name="sales_pending_amount" value="{{ $SalesData->balance_amount }}" readonly style="background-color: #e9ecef;" placeholder="Pending Amount" id="sales_pending_amount"></td>
+                        </tr>
                      </tbody>
                   </table>
                </div>
