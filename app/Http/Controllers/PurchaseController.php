@@ -195,7 +195,7 @@ class PurchaseController extends Controller
             $lastreport_OFBranch = Purchase::where('branch_id', '=', $bill_branchid)->where('date', '=', $bill_date)->latest('id')->first();
             if($lastreport_OFBranch != '')
             {
-                $added_billno = substr ($lastreport_OFBranch->bill_no, -5);
+                $added_billno = substr ($lastreport_OFBranch->bill_no, -2);
                 $invoiceno = $branch_upper . $billreport_date . 'P0' . ($added_billno) + 1;
             } else {
                 $invoiceno = $branch_upper . $billreport_date . 'P0' . $s_bill_no;

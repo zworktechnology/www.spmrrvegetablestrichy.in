@@ -190,7 +190,7 @@ class SalesController extends Controller
             $lastreport_OFBranch = Sales::where('branch_id', '=', $sales_branch_id)->where('date', '=', $sales_date)->latest('id')->first();
             if($lastreport_OFBranch != '')
             {
-                $added_billno = substr ($lastreport_OFBranch->bill_no, -5);
+                $added_billno = substr ($lastreport_OFBranch->bill_no, -2);
                 $invoiceno = $branch_upper . $billreport_date . 'S0' . ($added_billno) + 1;
             } else {
                 $invoiceno = $branch_upper . $billreport_date . 'S0' . $s_bill_no;
