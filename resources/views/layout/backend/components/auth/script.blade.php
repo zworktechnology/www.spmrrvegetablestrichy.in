@@ -487,7 +487,7 @@ $(".purchaseclose").click(function() {
 
                 
                 var total_amount = $(".total_amount").val();
-                var gross_amount = Number(total_amount) + Number(tot_comm_extracost);
+                var gross_amount = Number(total_amount) - Number(tot_comm_extracost);
                 $('.gross_amount').val(gross_amount.toFixed(2));
                 var old_balance = $(".old_balance").val();
                 var grand_total = Number(old_balance) + Number(gross_amount);
@@ -514,7 +514,7 @@ $(".purchaseclose").click(function() {
             var tot_comm_extracost = Number(totalExtraAmount) + Number(commission_amount);
             $(".tot_comm_extracost").val(tot_comm_extracost);
                 var total_amount = $(".total_amount").val();
-                var gross_amount = Number(total_amount) + Number(tot_comm_extracost);
+                var gross_amount = Number(total_amount) - Number(tot_comm_extracost);
                 $('.gross_amount').val(gross_amount.toFixed(2));
                 var old_balance = $(".old_balance").val();
                 var grand_total = Number(old_balance) + Number(gross_amount);
@@ -550,7 +550,7 @@ $(".purchaseclose").click(function() {
         $(".tot_comm_extracost").val(tot_comm_extracost);
 
                 var total_amount = $(".total_amount").val();
-                var gross_amount = Number(total_amount) + Number(tot_comm_extracost);
+                var gross_amount = Number(total_amount) - Number(tot_comm_extracost);
                 $('.gross_amount').val(gross_amount.toFixed(2));
                 var old_balance = $(".old_balance").val();
                 var grand_total = Number(old_balance) + Number(gross_amount);

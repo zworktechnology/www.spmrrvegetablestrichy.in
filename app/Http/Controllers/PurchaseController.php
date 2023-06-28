@@ -63,6 +63,7 @@ class PurchaseController extends Controller
 
             $purchase_data[] = array(
                 'unique_key' => $datas->unique_key,
+                'branch_id' => $datas->branch_id,
                 'branch_name' => $branch_name->shop_name,
                 'supplier_name' => $supplier_name->name,
                 'date' => $datas->date,
@@ -133,6 +134,7 @@ class PurchaseController extends Controller
 
             $purchase_data[] = array(
                 'unique_key' => $branchwise_datas->unique_key,
+                'branch_id' => $branch_id,
                 'branch_name' => $branch_name->shop_name,
                 'supplier_name' => $supplier_name->name,
                 'date' => $branchwise_datas->date,
@@ -147,6 +149,11 @@ class PurchaseController extends Controller
         }
         $today = Carbon::now()->format('Y-m-d');
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+
+        $branch_products = Purchase::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
+
+        
         return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'branch_id', 'today'));
     }
 
@@ -612,6 +619,7 @@ class PurchaseController extends Controller
 
             $purchase_data[] = array(
                 'unique_key' => $datas->unique_key,
+                'branch_id' => $datas->branch_id,
                 'branch_name' => $branch_name->shop_name,
                 'supplier_name' => $supplier_name->name,
                 'date' => $datas->date,
