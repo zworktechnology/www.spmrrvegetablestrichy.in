@@ -32,8 +32,13 @@ return new class extends Migration
             $table->foreign('bank_id')->references('id')->on('banks')->onDelete('cascade');
             
             $table->string('total_amount')->nullable();
+
+            $table->string('commission_ornet')->nullable();
+            $table->string('commission_percent')->nullable();
+            $table->string('commission_amount')->nullable();
+
             $table->string('note')->nullable();
-            $table->string('extra_cost')->nullable();
+            $table->string('tot_comm_extracost')->nullable();
             $table->string('gross_amount')->nullable();
             $table->string('old_balance')->nullable();
             $table->string('grand_total')->nullable();

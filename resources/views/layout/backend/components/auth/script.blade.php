@@ -82,37 +82,75 @@ $(".purchaseclose").click(function() {
                 });
         });
 
+        $("#addextranotefields").click(function() {
+            $("#extracost_tr").append(
+                    '<tr>' +
+                    '<td colspan="3"><input type="text" class="form-control" id="extracost_note" placeholder="Note" value="" name="extracost_note[]" required /></td>' +
+                    '<td style="font-size:15px;color: black;" class="text-end">Extra Cost<span style="color: red;">*</span></td>' +
+                    '<td><input type="text" class="form-control extracost" id="extracost" placeholder="Extra Cost" name="extracost[]" value="" /></td>' +
+                    '<td><button style="width: 35px;"class="py-1 text-white remove-extratr font-medium rounded-lg text-sm  text-center btn btn-danger" type="button" id="" value="Add">-</button></td>' +
+                    '</tr>'
+                );
+        });
+
+        $(document).on('click', '.remove-extratr', function() {
+            $(this).parents('tr').remove();
+        });
+
+
         $(document).on("blur", "input[name*=price_per_kg]", function() { 
             var invoice_supplier = $(".invoice_supplier").val();
             var invoice_branchid = $(".invoice_branchid").val();
 
             console.log(invoice_branchid);
+            console.log(invoice_supplier);
             $('.old_balance').val('');
             $.ajax({
             url: '/getoldbalance/',
             type: 'get',
-            data: {
-                        _token: "{{ csrf_token() }}",
+            data: {_token: "{{ csrf_token() }}",
                         invoice_supplier: invoice_supplier,
-                        invoice_branchid: invoice_branchid
+                        invoice_branchid: invoice_branchid,
                     },
             dataType: 'json',
                 success: function(response) {
                     console.log(response);
-                        var len = response.length;
-                        for (var i = 0; i < len; i++) {
-                            $(".old_balance").val(response[i].payment_pending);
-                        }
+                            $(".old_balance").val(response['data']);
+                        
                         
                 }
             });
         });
 
-        
+        $('.commission_ornet').on('change', function() {
+            var commission_ornet = this.value;
+            if(commission_ornet == 'commission'){
+                $("#commission_percent").show();
+            }else if(commission_ornet == 'netprice'){
+                $("#commission_percent").hide();
+                $(".commission_amount").val(0);
+            }
+        });
+        $(document).on("keyup", 'input.commission_percent', function() { 
+                var commission_percent = $(this).val();
+                var total_amount = $(".total_amount").val();
+                var commision_amount = (commission_percent / 100) * total_amount;
+                $('.commission_amount').val(commision_amount.toFixed(2));
+                $('.tot_comm_extracost').val(commision_amount);
 
+                var totalExtraAmount = 0;
+            $("input[name='extracost[]']").each(
+                                    function() {
+                                        //alert($(this).val());
+                                        totalExtraAmount = Number(totalExtraAmount) +
+                                            Number($(this).val());
+                                        $('.total_extracost').val(
+                                            totalExtraAmount);
+                                    });
+            var tot_comm_extracost = Number(totalExtraAmount) + Number(commision_amount);
+            $(".tot_comm_extracost").val(tot_comm_extracost);
+        });
 
-
-        
 
 
         $('.ppayment_branch_id').on('change', function() {
@@ -197,9 +235,11 @@ $(".purchaseclose").click(function() {
                         var len = response.length;
                         if (len > 0) {
                             for (var i = 0; i < len; i++) {
+                                var Totalextraamount = Number(response[i].tot_comm_extracost) - Number(response[i].commission_amount);
                                 $('.purchase_bill_no').html(response[i].purchase_bill_no);
                                 $('.purchase_total_amount').html(response[i].purchase_total_amount);
-                                $('.purchase_extra_cost').html(response[i].purchase_extra_cost);
+                                $('.purchase_commision').html(response[i].commission_amount);
+                                $('.purchase_extra_cost').html(Totalextraamount);
                                 $('.purchase_old_balance').html(response[i].purchase_old_balance);
                                 $('.purchase_grand_total').html(response[i].purchase_grand_total);
                                 $('.purchase_paid_amount').html(response[i].purchase_paid_amount);
@@ -364,7 +404,7 @@ $(".purchaseclose").click(function() {
     });
 
 
-      $(document).on("blur", "input[name*=count]", function() {
+        $(document).on("blur", "input[name*=count]", function() {
          var count = $(this).val();
          var price_per_kg = $(this).parents('tr').find('.price_per_kg').val();
          var total = count * price_per_kg;
@@ -413,9 +453,10 @@ $(".purchaseclose").click(function() {
                 var pending_amount = Number(grand_total) - Number(payable_amount);
                 $('.pending_amount').val(pending_amount.toFixed(2));
             });
-      });
+        });
 
-      $(document).on("blur", "input[name*=price_per_kg]", function() {
+
+        $(document).on("blur", "input[name*=price_per_kg]", function() {
          var price_per_kg = $(this).val();
          var count = $(this).parents('tr').find('.count').val();
          var total = count * price_per_kg;
@@ -431,9 +472,22 @@ $(".purchaseclose").click(function() {
                                             totalAmount);
                                     });
 
-                var extracost = $(".extracost").val();
+                        
+        var totalExtraAmount = 0;
+            $("input[name='extracost[]']").each(
+                                    function() {
+                                        totalExtraAmount = Number(totalExtraAmount) +
+                                            Number($(this).val());
+                                        $('.total_extracost').val(
+                                            totalExtraAmount);
+                                    });
+        var commission_amount = $(".commission_amount").val();
+        var tot_comm_extracost = Number(totalExtraAmount) + Number(commission_amount);
+        $(".tot_comm_extracost").val(tot_comm_extracost);
+
+                
                 var total_amount = $(".total_amount").val();
-                var gross_amount = Number(total_amount) + Number(extracost);
+                var gross_amount = Number(total_amount) + Number(tot_comm_extracost);
                 $('.gross_amount').val(gross_amount.toFixed(2));
                 var old_balance = $(".old_balance").val();
                 var grand_total = Number(old_balance) + Number(gross_amount);
@@ -445,10 +499,22 @@ $(".purchaseclose").click(function() {
                 $('.pending_amount').val(pending_amount.toFixed(2)); 
                 
                 
-            $(document).on("keyup", 'input.extracost', function() {   
+            $(document).on("blur", "input[name*=extracost]", function() {  
                 var extracost = $(this).val();
+                var totalExtraAmount = 0;
+                $("input[name='extracost[]']").each(
+                                    function() {
+                                        //alert($(this).val());
+                                        totalExtraAmount = Number(totalExtraAmount) +
+                                            Number($(this).val());
+                                        $('.total_extracost').val(
+                                            totalExtraAmount);
+                                    });
+            var commission_amount = $(".commission_amount").val();
+            var tot_comm_extracost = Number(totalExtraAmount) + Number(commission_amount);
+            $(".tot_comm_extracost").val(tot_comm_extracost);
                 var total_amount = $(".total_amount").val();
-                var gross_amount = Number(total_amount) + Number(extracost);
+                var gross_amount = Number(total_amount) + Number(tot_comm_extracost);
                 $('.gross_amount').val(gross_amount.toFixed(2));
                 var old_balance = $(".old_balance").val();
                 var grand_total = Number(old_balance) + Number(gross_amount);
@@ -465,7 +531,35 @@ $(".purchaseclose").click(function() {
                 var pending_amount = Number(grand_total) - Number(payable_amount);
                 $('.pending_amount').val(pending_amount.toFixed(2));
             });                    
-      });
+        });
+
+
+        $(document).on("blur", "input[name*=extracost]", function() {
+        var extracost = $(this).val();
+        var totalExtraAmount = 0;
+            $("input[name='extracost[]']").each(
+                                    function() {
+                                        //alert($(this).val());
+                                        totalExtraAmount = Number(totalExtraAmount) +
+                                            Number($(this).val());
+                                        $('.total_extracost').val(
+                                            totalExtraAmount);
+                                    });
+        var commission_amount = $(".commission_amount").val();
+        var tot_comm_extracost = Number(totalExtraAmount) + Number(commission_amount);
+        $(".tot_comm_extracost").val(tot_comm_extracost);
+
+                var total_amount = $(".total_amount").val();
+                var gross_amount = Number(total_amount) + Number(tot_comm_extracost);
+                $('.gross_amount').val(gross_amount.toFixed(2));
+                var old_balance = $(".old_balance").val();
+                var grand_total = Number(old_balance) + Number(gross_amount);
+                $('.grand_total').val(grand_total.toFixed(2));
+
+                var payable_amount = $(".payable_amount").val();
+                var pending_amount = Number(grand_total) - Number(payable_amount);
+                $('.pending_amount').val(pending_amount.toFixed(2));
+        });
 
 
    

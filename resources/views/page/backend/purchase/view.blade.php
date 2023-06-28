@@ -13,7 +13,7 @@
         <div class="card">
             <div class="card-body">
                <div style="padding-bottom: 25px;">
-               <h4>Bill No : #<span  class="purchase_bill_no"></span></h4>
+               <h6 >Bill No : #<span style="font-weight:700;" class="purchase_bill_no"></span></h6>
                   
             </div>
          <div class="invoice-box table-height" style="max-width: 1600px;width:100%;overflow: auto;padding: 0;font-size: 14px;line-height: 24px;color: #555;">
@@ -61,47 +61,79 @@
                      
                
                </div> 
-
-
                <div class="row">
+                  <div class="col-lg-1"></div>
+                  <div class="col-lg-9 col-9  col-sm-11">
+                  <h7 style="color:black;font-weight:700;">PRODUCTS</h7>
+                     <div class="row">
 
+                        
+                                 <div class="col-lg-3 col-sm-3 col-12 border">
+                                    <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 700;line-height: 35px; ">Product</span>
+                                 </div>
+                                 <div class="col-lg-2 col-sm-3 col-12 border">
+                                    <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 700;line-height: 35px; ">Bag / Kg</span>
+                                 </div>
+                                 <div class="col-lg-2 col-sm-3 col-12 border">
+                                    <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 700;line-height: 35px; ">Count</span>
+                                 </div>
+                                 <div class="col-lg-2 col-sm-3 col-12 border">
+                                    <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 700;line-height: 35px; ">Price / Count</span>
+                                 </div>
+                                 <div class="col-lg-3 col-sm-3 col-12 border">
+                                    <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 700;line-height: 35px; ">Amount</span>
+                                 </div>
+                     </div>
+                     <div class="row ">
+                           @foreach ($purchasedata['terms'] as $index => $term_arr)
+                              @if ($term_arr['purchase_id'] == $purchasedata['id'])
+                                 <div class="col-lg-3 col-sm-3 col-12 border">
+                                    <span class=""style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">{{ $term_arr['product_name'] }}</span>
+                                 </div>
+                                 <div class="col-lg-2 col-sm-3 col-12 border">
+                                    <span class=""style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">{{ $term_arr['bag'] }}</span>
+                                 </div>
+                                 <div class="col-lg-2 col-sm-3 col-12 border">
+                                    <span class=""style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">{{ $term_arr['kgs'] }}</span>
+                                 </div>
+                                 <div class="col-lg-2 col-sm-3 col-12 border">
+                                    <span class=""style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">{{ $term_arr['price_per_kg'] }}</span>
+                                 </div>
+                                 <div class="col-lg-3 col-sm-3 col-12 border">
+                                    <span class=""style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">{{ $term_arr['total_price'] }}</span>
+                                 </div>
+                              @endif
+                           @endforeach
+                     </div>
+                  </div>
+                  <div class="col-lg-1 col-1 col-sm-12"></div>
                   
-                           <div class="col-lg-3 col-sm-3 col-12 border">
-                              <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">Product</span>
+               </div><br/>
+               <div class="row">
+                  <div class="col-lg-1 col-1"></div>
+                  <div class="col-lg-9 col-9 col-sm-12">
+                  <h7 style="color:black;font-weight:700;">EXTRA COST</h7>
+                        <div class="row">
+                           <div class="col-lg-7 col-sm-7 col-7 border">
+                              <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 700;line-height: 35px; ">Note</span>
                            </div>
-                           <div class="col-lg-2 col-sm-3 col-12 border">
-                              <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">Bag / Kg</span>
+                           <div class="col-lg-5 col-sm-4 col-4 border">
+                              <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 700;line-height: 35px; ">Extracost</span>
                            </div>
-                           <div class="col-lg-2 col-sm-3 col-12 border">
-                              <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">Count</span>
+                        </div>
+                        <div class="row">
+                           @foreach ($purchasedata['Extracost_Arr'] as $index => $Extracost_Arr)
+                              @if ($Extracost_Arr['purchase_id'] == $purchasedata['id'])
+                           <div class="col-lg-7 col-sm-7 col-7 border">
+                              <span class=""style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">{{ $Extracost_Arr['extracost_note'] }}</span>
                            </div>
-                           <div class="col-lg-2 col-sm-3 col-12 border">
-                              <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">Price / Count</span>
+                           <div class="col-lg-5 col-sm-4 col-4 border">
+                              <span class=""style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">{{ $Extracost_Arr['extracost'] }}</span>
                            </div>
-                           <div class="col-lg-3 col-sm-3 col-12 border">
-                              <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">Amount</span>
-                           </div>
-               </div>
-               <div class="row ">
-                     @foreach ($purchasedata['terms'] as $index => $term_arr)
-                        @if ($term_arr['purchase_id'] == $purchasedata['id'])
-                           <div class="col-lg-3 col-sm-3 col-12 border">
-                              <span class=""style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">{{ $term_arr['product_name'] }}</span>
-                           </div>
-                           <div class="col-lg-2 col-sm-3 col-12 border">
-                              <span class=""style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">{{ $term_arr['bag'] }}</span>
-                           </div>
-                           <div class="col-lg-2 col-sm-3 col-12 border">
-                              <span class=""style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">{{ $term_arr['kgs'] }}</span>
-                           </div>
-                           <div class="col-lg-2 col-sm-3 col-12 border">
-                              <span class=""style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">{{ $term_arr['price_per_kg'] }}</span>
-                           </div>
-                           <div class="col-lg-3 col-sm-3 col-12 border">
-                              <span class=""style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">{{ $term_arr['total_price'] }}</span>
-                           </div>
-                        @endif
-                     @endforeach
+                           @endif
+                           @endforeach
+                        </div>
+                  </div>
                </div>
 <br/>
 
@@ -111,15 +143,19 @@
             <div class="col-lg-6 ">
                <div class="total-order w-100 max-widthauto mb-4">
                   <ul>
-                     <li>
+                     <li class="total">
                         <h4>Total</h4>
                         <h5 class="">₹ <span  class="purchase_total_amount"></span></h5>
                      </li>
-                     <li>
-                        <h4>Extra Cost </h4>
+                     <li class="total">
+                        <h4>Commission Amount </h4>
+                        <h5>₹ <span  class="purchase_commision"></span></h5>
+                     </li>
+                     <li class="total">
+                        <h4>Total Extra Cost </h4>
                         <h5>₹ <span  class="purchase_extra_cost"></span></h5>
                      </li>
-                     <li>
+                     <li class="total">
                         <h4>Old Balance</h4>
                         <h5>₹ <span  class="purchase_old_balance"></span></h5>
                      </li>
@@ -129,7 +165,7 @@
             <div class="col-lg-6 ">
                <div class="total-order w-100 max-widthauto mb-4">
                   <ul>
-                     <li>
+                     <li class="total">
                         <h4>Grand Total</h4>
                         <h5>₹ <span  class="purchase_grand_total"></span></h5>
                      </li>

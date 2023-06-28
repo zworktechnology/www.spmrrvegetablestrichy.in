@@ -79,8 +79,12 @@
                               <div class="total-order w-100 max-widthauto mb-4">
                                  <ul>
                                     <li>
+                                       <h4 style="font-size: 15px;color:blue;font-weight: 600;">Commission Amount</h4>
+                                       <h5 style="font-size: 15px;color:blue;font-weight: 600;">₹ <span  class="">{{ $PurchaseData->commission_amount}}</span></h5>
+                                    </li>
+                                    <li>
                                        <h4 style="font-size: 15px;color:green;font-weight: 600;">Extra Charge</h4>
-                                       <h5 style="font-size: 15px;color:green;font-weight: 600;">₹ <span  class="">{{ $PurchaseData->extra_cost}}</span></h5>
+                                       <h5 style="font-size: 15px;color:green;font-weight: 600;">₹ <span  class="">{{ $extracostamount}}</span></h5>
                                     </li>
                                     <li class="">
                                        <h4 style="font-size: 15px;color:blue;font-weight: 600;">Gross Amount</h4>

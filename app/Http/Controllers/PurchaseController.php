@@ -8,6 +8,7 @@ use App\Models\Branch;
 use App\Models\Supplier;
 use App\Models\Purchase;
 use App\Models\PurchaseProduct;
+use App\Models\PurchaseExtracost;
 use App\Models\Bank;
 use App\Models\Productlist;
 use Illuminate\Http\Request;
@@ -24,6 +25,7 @@ class PurchaseController extends Controller
         $data = Purchase::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
         $purchase_data = [];
         $terms = [];
+        $Extracost_Arr = [];
         foreach ($data as $key => $datas) {
             $branch_name = Branch::findOrFail($datas->branch_id);
             $supplier_name = Supplier::findOrFail($datas->supplier_id);
@@ -45,6 +47,19 @@ class PurchaseController extends Controller
             }
 
 
+            $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datas->id)->get();
+            foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+                
+                $Extracost_Arr[] = array(
+                    'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                    'extracost' => $PurchaseExtracosts_arr->extracost,
+                    'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                );
+
+            }
+
+
 
             $purchase_data[] = array(
                 'unique_key' => $datas->unique_key,
@@ -60,6 +75,7 @@ class PurchaseController extends Controller
                 'bank_id' => $datas->bank_id,
                 'status' => $datas->status,
                 'terms' => $terms,
+                'Extracost_Arr' => $Extracost_Arr,
             );
         }
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -81,6 +97,8 @@ class PurchaseController extends Controller
     {
         $branchwise_data = Purchase::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
         $purchase_data = [];
+        $terms = [];
+        $Extracost_Arr = [];
         foreach ($branchwise_data as $key => $branchwise_datas) {
             $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
             $supplier_name = Supplier::findOrFail($branchwise_datas->supplier_id);
@@ -101,6 +119,18 @@ class PurchaseController extends Controller
                 );
             }
 
+            $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datas->id)->get();
+            foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+                
+                $Extracost_Arr[] = array(
+                    'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                    'extracost' => $PurchaseExtracosts_arr->extracost,
+                    'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                );
+
+            }
+
             $purchase_data[] = array(
                 'unique_key' => $branchwise_datas->unique_key,
                 'branch_name' => $branch_name->shop_name,
@@ -112,6 +142,7 @@ class PurchaseController extends Controller
                 'id' => $branchwise_datas->id,
                 'terms' => $terms,
                 'status' => $branchwise_datas->status,
+                'Extracost_Arr' => $Extracost_Arr,
             );
         }
         $today = Carbon::now()->format('Y-m-d');
@@ -455,8 +486,12 @@ class PurchaseController extends Controller
 
         $Purchase_Data->bank_id = $request->get('bank_id');
         $Purchase_Data->total_amount = $request->get('total_amount');
-        $Purchase_Data->note = $request->get('extracost_note');
-        $Purchase_Data->extra_cost = $request->get('extracost');
+
+        $Purchase_Data->commission_ornet = $request->get('commission_ornet');
+        $Purchase_Data->commission_percent = $request->get('commission_percent');
+        $Purchase_Data->commission_amount = $request->get('commission_amount');
+
+        $Purchase_Data->tot_comm_extracost = $request->get('tot_comm_extracost');
         $Purchase_Data->gross_amount = $request->get('gross_amount');
         $Purchase_Data->old_balance = $request->get('old_balance');
         $Purchase_Data->grand_total = $request->get('grand_total');
@@ -489,6 +524,20 @@ class PurchaseController extends Controller
             }
         }
 
+
+        foreach ($request->get('extracost_note') as $key => $extracost_note) {
+            if ($extracost_note != "") {
+                $pecrandomkey = Str::random(5);
+
+                $PurchaseExtracost = new PurchaseExtracost;
+                $PurchaseExtracost->unique_key = $pecrandomkey;
+                $PurchaseExtracost->purchase_id = $PurchaseId;
+                $PurchaseExtracost->extracost_note = $extracost_note;
+                $PurchaseExtracost->extracost = $request->extracost[$key];
+                $PurchaseExtracost->save();
+            }
+        }
+
         return redirect()->route('purchase.index')->with('update', 'Updated Purchase information has been added to your list.');
 
     }
@@ -506,8 +555,9 @@ class PurchaseController extends Controller
 
         $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $PurchaseData->id)->get();
+        $extracostamount = $PurchaseData->tot_comm_extracost - $PurchaseData->commission_amount;
 
-        return view('page.backend.purchase.print_view', compact('PurchaseData', 'suppliername', 'branchname', 'bankname', 'PurchaseProducts', 'productlist', 'supplier_upper'));
+        return view('page.backend.purchase.print_view', compact('PurchaseData', 'suppliername', 'branchname', 'bankname', 'PurchaseProducts', 'productlist', 'supplier_upper', 'extracostamount'));
     }
 
 
@@ -527,6 +577,7 @@ class PurchaseController extends Controller
         $data = Purchase::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
         $purchase_data = [];
         $terms = [];
+        $Extracost_Arr = [];
         foreach ($data as $key => $datas) {
             $branch_name = Branch::findOrFail($datas->branch_id);
             $supplier_name = Supplier::findOrFail($datas->supplier_id);
@@ -546,6 +597,19 @@ class PurchaseController extends Controller
                 );
             }
 
+
+            $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datas->id)->get();
+            foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+                
+                $Extracost_Arr[] = array(
+                    'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                    'extracost' => $PurchaseExtracosts_arr->extracost,
+                    'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                );
+
+            }
+
             $purchase_data[] = array(
                 'unique_key' => $datas->unique_key,
                 'branch_name' => $branch_name->shop_name,
@@ -556,6 +620,7 @@ class PurchaseController extends Controller
                 'bill_no' => $datas->bill_no,
                 'id' => $datas->id,
                 'terms' => $terms,
+                'Extracost_Arr' => $Extracost_Arr,
                 'status' => $datas->status,
             );
         }
@@ -581,8 +646,10 @@ class PurchaseController extends Controller
 
     public function getoldbalance()
     {
+        
         $invoice_supplier = request()->get('invoice_supplier');
         $invoice_branchid = request()->get('invoice_branchid');
+
 
 
 
@@ -590,47 +657,38 @@ class PurchaseController extends Controller
         
         if($last_idrow != ""){
 
-            if($last_idrow->payment_pending != NULL){
+            if($last_idrow->payment_pending != ""){
 
-                $output[] = array(
-                    'payment_pending' => $last_idrow->payment_pending,
-                    'payment_purchase_id' => $last_idrow->id,
-                );
-            }else if($last_idrow->payment_pending == NULL){
+                $userData['data'] = $last_idrow->payment_pending;
+            }else if($last_idrow->payment_pending == ""){
 
-                if($last_idrow->balance_amount != NULL){
+                if($last_idrow->balance_amount != ""){
                     
-                    $output[] = array(
-                        'payment_pending' => $last_idrow->balance_amount,
-                        'payment_purchase_id' => $last_idrow->id,
-                    );
-                }else if($last_idrow->balance_amount == NULL){
+                    $userData['data'] = $last_idrow->balance_amount;
+                }else if($last_idrow->balance_amount == ""){
 
                     $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->skip(1)->take(1)->first();
-                    if($secondlastrow->payment_pending != NULL){
-                        $output[] = array(
-                            'payment_pending' => $secondlastrow->payment_pending,
-                            'payment_purchase_id' => $secondlastrow->id,
-                        );
+                    if($secondlastrow != ""){
+                        if($secondlastrow->payment_pending != ""){
+                            $userData['data'] = $secondlastrow->payment_pending;
+                        }else {
+                            $userData['data'] = $secondlastrow->balance_amount;
+                        }
                     }else {
-                        $output[] = array(
-                            'payment_pending' => $secondlastrow->balance_amount,
-                            'payment_purchase_id' => $secondlastrow->id,
-                        );
+                        $userData['data'] = 0;
                     }
                     
+                }else {
+                    $userData['data'] = 0;
                 }
                 
             }
         }else {
-            $output[] = array(
-                'payment_pending' => '0',
-                'payment_purchase_id' => '',
-            );
+            $userData['data'] = 0;
         }
 
 
-        echo json_encode($output);
+        echo json_encode($userData);
     }
 
 
@@ -720,7 +778,8 @@ class PurchaseController extends Controller
 
                 'bank_namedata' => $bank_namearr->name,
                 'purchase_total_amount' => $get_Purchase_data->total_amount,
-                'purchase_extra_cost' => $get_Purchase_data->extra_cost,
+                'commission_amount' => $get_Purchase_data->commission_amount,
+                'tot_comm_extracost' => $get_Purchase_data->tot_comm_extracost,
                 'purchase_old_balance' => $get_Purchase_data->old_balance,
                 'purchase_grand_total' => $get_Purchase_data->grand_total,
                 'purchase_paid_amount' => $get_Purchase_data->paid_amount,

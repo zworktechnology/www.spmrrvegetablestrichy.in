@@ -99,7 +99,7 @@
                                         <th style="font-size:15px; width:10%;">Bag / Kg</th>
                                         <th style="font-size:15px; width:10%;">Count </th>
                                         <th style="font-size:15px; width:20%;">Price / Count</th>
-                                        <th style="font-size:15px; width:20%;">Amount</th>
+                                        <th></th>
                                         <th style="font-size:15px; width:20%;">Amount</th>
 
                                     </tr>
@@ -137,33 +137,44 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
+
+                                <tbody><tr><td></td></tr></tbody>
+
                                 <tbody>
                                     <tr>
                                         <td colspan="3">
-                                            <select class="select form-control">
+                                            <select class="select form-control commission_ornet" name="commission_ornet" id="commission_ornet">
                                                 <option value="" disabled selected hiddden>Select Detail</option>
-                                                <option value="">Commission</option>
-                                                <option value="">Net Price</option>
+                                                <option value="commission">Commission</option>
+                                                <option value="netprice">Net Price</option>
                                             </select>
                                         </td>
-                                        <td><input type="text" class="form-control" /></td>
-                                        <td><input type="text" class="form-control" /></td>
+                                        <td><input type="text" style="display:none" value="0" class="form-control commission_percent" name="commission_percent" id="commission_percent"/></td>
+                                        <td><input type="text" class="form-control commission_amount" readonly  name="commission_amount" id="commission_amount" value=""/></td>
                                         <td></td>
                                     </tr>
+                                </tbody>
+                                <tbody id="extracost_tr">
                                     <tr>
-                                        <td colspan="3"><input type="text" class="form-control"
-                                                id="extracost_note" placeholder="Note" value="{{ $PurchaseData->note }}"
-                                                name="extracost_note" required /></td>
+                                        <td colspan="3"><input type="hidden" name="purchase_extracost_id"/>
+                                            <input type="text" class="form-control"
+                                                id="extracost_note" placeholder="Note" value=""
+                                                name="extracost_note[]" required /></td>
                                         <td style="font-size:15px;color: black;" class="text-end">Extra Cost<span
                                                 style="color: red;">*</span></td>
                                         <td><input type="text" class="form-control extracost" id="extracost"
-                                                placeholder="Extra Cost" name="extracost"
-                                                value="{{ $PurchaseData->extra_cost }}" /></td>
-                                        <td></td>
+                                                placeholder="Extra Cost" required name="extracost[]"
+                                                value="" /></td>
+                                        <td><button style="width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
+                                                type="button" id="addextranotefields" value="Add">+</button></td>
                                     </tr>
+                                </tbody>
+                                <tbody><tr><td></td></tr></tbody>
+                                <tbody>
                                     <tr>
                                         <td colspan="4" class="text-end" style="font-size:15px;color: black;">Total</td>
-                                        <td><input type="text" class="form-control" readonly
+                                        <td><input type="hidden" class="form-control total_extracost" value="" name="total_extracost" id="total_extracost" readonly />
+                                            <input type="text" class="form-control tot_comm_extracost" value="" readonly name="tot_comm_extracost"
                                             style="background-color: #e9ecef;"/></td>
                                         <td><input type="text" class="form-control total_amount" id="total_amount"
                                                 name="total_amount" value="{{ $PurchaseData->total_amount }}" readonly
