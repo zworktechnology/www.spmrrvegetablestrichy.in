@@ -16,17 +16,22 @@
                         <li class="{{ Route::is('purchase.index', 'purchase.store') ? 'active' : '' }}">
                             <a href="{{ route('purchase.index') }}"><i data-feather="shopping-bag"></i><span>Purchase</span></a>
                         </li>
-                        <li class="{{ Route::is('purchasepayment.index', 'purchasepayment.store') ? 'active' : '' }}">
-                            <a href="{{ route('purchasepayment.index') }}"><i data-feather="shopping-bag"></i><span>Purchase - Payment</span></a>
-                        </li>
                         <li class="{{ Route::is('sales.index', 'sales.store') ? 'active' : '' }}">
                             <a href="{{ route('sales.index') }}"><i data-feather="shopping-cart"></i><span>Sales</span></a>
                         </li>
-                        <li class="{{ Route::is('salespayment.index', 'salespayment.store') ? 'active' : '' }}">
-                            <a href="{{ route('salespayment.index') }}"><i data-feather="shopping-bag"></i><span>Sales - Payment</span></a>
-                        </li>
                         <li class="{{ Route::is('expence.index', 'expence.store') ? 'active' : '' }}">
                             <a href="{{ route('expence.index') }}"><i data-feather="corner-up-left"></i><span>Expence</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">Payment</h6>
+                    <ul>
+                        <li class="{{ Route::is('purchasepayment.index', 'purchasepayment.store') ? 'active' : '' }}">
+                            <a href="{{ route('purchasepayment.index') }}"><i data-feather="columns"></i></i><span>Purchase</span></a>
+                        </li>
+                        <li class="{{ Route::is('salespayment.index', 'salespayment.store') ? 'active' : '' }}">
+                            <a href="{{ route('salespayment.index') }}"><i data-feather="pen-tool"></i><span>Sales</span></a>
                         </li>
                     </ul>
                 </li>
@@ -48,23 +53,7 @@
                     </ul>
                 </li>
                 <li class="submenu-open">
-                    <h6 class="submenu-hdr">User Management</h6>
-                    <ul>
-                        <li class="{{ Route::is('supplier.index') ? 'active' : '' }}">
-                            <a href="{{ route('supplier.index') }}"><i data-feather="users"></i><span>Supliers</span></a>
-                        </li>
-                        <li class="{{ Route::is('customer.index', 'customer.store') ? 'active' : '' }}">
-                            <a href="{{ route('customer.index') }}"><i data-feather="user"></i><span>Customers</span></a>
-                        </li>
-                        @hasrole('Super-Admin')
-                        <li class="{{ Route::is('invite.index', 'invite.store') ? 'active' : '' }}">
-                            <a href="{{ route('invite.index') }}"><i data-feather="user-check"></i><span>Managers</span></a>
-                        </li>
-                        @endhasrole
-                    </ul>
-                </li>
-                <li class="submenu-open">
-                    <h6 class="submenu-hdr">Settings</h6>
+                    <h6 class="submenu-hdr">General</h6>
                     <ul>
                         <li class="{{ Route::is('branch.index', 'branch.store', 'branch.edit') ? 'active' : '' }}">
                             <a href="{{ route('branch.index') }}"><i data-feather="map"></i><span>Branch</span></a>
@@ -79,6 +68,22 @@
                         <li class="{{ Route::is('product.index', 'product.store', 'product.edit') ? 'active' : '' }}">
                             <a href="{{ route('product.index') }}"><i data-feather="box"></i><span>Product</span></a>
                         </li>
+                    </ul>
+                </li>
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">User Management</h6>
+                    <ul>
+                        <li class="{{ Route::is('supplier.index') ? 'active' : '' }}">
+                            <a href="{{ route('supplier.index') }}"><i data-feather="users"></i><span>Supliers</span></a>
+                        </li>
+                        <li class="{{ Route::is('customer.index', 'customer.store') ? 'active' : '' }}">
+                            <a href="{{ route('customer.index') }}"><i data-feather="user"></i><span>Customers</span></a>
+                        </li>
+                        @hasrole('Super-Admin')
+                        <li class="{{ Route::is('invite.index', 'invite.store') ? 'active' : '' }}">
+                            <a href="{{ route('invite.index') }}"><i data-feather="user-check"></i><span>Managers</span></a>
+                        </li>
+                        @endhasrole
                     </ul>
                 </li>
             </ul>
