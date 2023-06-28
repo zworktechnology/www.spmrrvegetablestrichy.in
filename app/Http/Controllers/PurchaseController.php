@@ -119,7 +119,7 @@ class PurchaseController extends Controller
                 );
             }
 
-            $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datas->id)->get();
+            $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $branchwise_datas->id)->get();
             foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
                 
                 $Extracost_Arr[] = array(
