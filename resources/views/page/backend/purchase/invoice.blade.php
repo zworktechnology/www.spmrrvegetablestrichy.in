@@ -4,7 +4,7 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Update Purchase Invoice</h4>
+                <h4>Pattial</h4>
             </div>
         </div>
         <div class="card">
@@ -14,6 +14,34 @@
                     enctype="multipart/form-data">
                     @method('PUT')
                     @csrf
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-4 col-12">
+                            <div class="form-group">
+                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Date<span
+                                        style="color: red;">*</span></label>
+                                <input type="date" name="date" placeholder="" value="{{ $PurchaseData->date }}"
+                                    disabled style="background-color: #e9ecef;">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-sm-4 col-12">
+                            <div class="form-group">
+                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span
+                                        style="color: red;">*</span></label>
+                                <input type="time" name="time" placeholder="" value="{{ $PurchaseData->time }}"
+                                    disabled style="background-color: #e9ecef;">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-sm-4 col-12">
+                            <div class="form-group">
+                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bill No<span
+                                        style="color: red;">*</span></label>
+                                <input type="text" name="billno" placeholder="Bill No" id="billno"
+                                    value="{{ $PurchaseData->bill_no }}" style="background-color: #e9ecef;" readonly>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-lg-4 col-sm-4 col-12">
                             <div class="form-group">
@@ -46,39 +74,12 @@
                                 </select>
                             </div>
                         </div>
-
-                        <div class="col-lg-4 col-sm-4 col-12">
-                            <div class="form-group">
-                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bill No<span
-                                        style="color: red;">*</span></label>
-                                <input type="text" name="billno" placeholder="Bill No" id="billno"
-                                    value="{{ $PurchaseData->bill_no }}" style="background-color: #e9ecef;" readonly>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-sm-4 col-12">
-                            <div class="form-group">
-                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Date<span
-                                        style="color: red;">*</span></label>
-                                <input type="date" name="date" placeholder="" value="{{ $PurchaseData->date }}"
-                                    disabled style="background-color: #e9ecef;">
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-sm-4 col-12">
-                            <div class="form-group">
-                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span
-                                        style="color: red;">*</span></label>
-                                <input type="time" name="time" placeholder="" value="{{ $PurchaseData->time }}"
-                                    disabled style="background-color: #e9ecef;">
-                            </div>
-                        </div>
+                        
                         <div class="col-lg-4 col-sm-4 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank<span
                                         style="color: red;">*</span></label>
-                                <select class="select" name="bank_id" id="bank_id" required>
+                                <select class="form-control js-example-basic-single select" name="bank_id" id="bank_id" required>
                                     <option value="" disabled selected hiddden>Select Bank</option>
                                     @foreach ($bank as $banks)
                                         <option
@@ -99,7 +100,7 @@
                                         <th style="font-size:15px; width:10%;">Bag / Kg</th>
                                         <th style="font-size:15px; width:10%;">Count </th>
                                         <th style="font-size:15px; width:20%;">Price / Count</th>
-                                        <th></th>
+                                        <th style="font-size:15px; width:20%;">Amount</th>
                                         <th style="font-size:15px; width:20%;">Amount</th>
 
                                     </tr>
@@ -133,7 +134,6 @@
                                                     name="total_price[]" placeholder=""required /></td>
 
                                             </td>
-
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -156,12 +156,13 @@
                                 </tbody>
                                 <tbody id="extracost_tr">
                                     <tr>
+                                        <td style="font-size:15px; color: black;" class="text-end">Extra Cost<span
+                                            style="color: red;">*</span></td>
                                         <td colspan="3"><input type="hidden" name="purchase_extracost_id"/>
                                             <input type="text" class="form-control"
                                                 id="extracost_note" placeholder="Note" value=""
                                                 name="extracost_note[]" required /></td>
-                                        <td style="font-size:15px;color: black;" class="text-end">Extra Cost<span
-                                                style="color: red;">*</span></td>
+                                        
                                         <td><input type="text" class="form-control extracost" id="extracost"
                                                 placeholder="Extra Cost" required name="extracost[]"
                                                 value="" /></td>
@@ -169,7 +170,6 @@
                                                 type="button" id="addextranotefields" value="Add">+</button></td>
                                     </tr>
                                 </tbody>
-                                <tbody><tr><td></td></tr></tbody>
                                 <tbody>
                                     <tr>
                                         <td colspan="4" class="text-end" style="font-size:15px;color: black;">Total</td>

@@ -13,12 +13,28 @@
                             @method('PUT')
                             @csrf
                             <div style="display: flex">
-                                <div style="margin-right: 10px;"><input type="date" name="from_date" required class="form-control from_date"
-                                        value="{{ $today }}"></div>
-                                <div style="margin-right: 10px;"><input type="submit" class="btn btn-success" value="Search" /></div>
+                                <div style="margin-right: 10px;"><input type="date" name="from_date" required
+                                        class="form-control from_date" value="{{ $today }}"></div>
+                                <div style="margin-right: 10px;"><input type="submit" class="btn btn-success"
+                                        value="Search" /></div>
                             </div>
                         </form>
-                        <a href="{{ route('purchase.create') }}" class="btn btn-added">Add Purchase</a>
+                        <a href="{{ route('purchase.create') }}" class="btn btn-added" style="margin-right: 10px;">Add
+                            Purchase</a>
+                        @foreach ($purchase_data as $keydata => $p_data)
+                            @if ($keydata == 0)
+                                <a href="#todaystock{{ $p_data['branch_id'] }}" data-bs-toggle="modal"
+                                    data-id="{{ $p_data['branch_id'] }}"
+                                    data-bs-target=".todaystock-modal-xl{{ $p_data['branch_id'] }}"
+                                    class="btn btn-added">Today Stock</a>
+
+                                <div class="modal fade todaystock-modal-xl{{ $p_data['branch_id'] }}"
+                                    tabindex="-1"role="dialog" data-bs-backdrop="static"
+                                    aria-labelledby="todaystockLargeModalLabel{{ $p_data['branch_id'] }}"aria-hidden="true">
+                                    @include('page.backend.purchase.todaystock')
+                                </div>
+                            @endif
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -46,17 +62,7 @@
                 </div>
             @endforeach
         </div>
-        @foreach ($purchase_data as $keydata => $p_data)
-        @if($keydata == 0)
-        <a href="#todaystock{{ $p_data['branch_id'] }}" data-bs-toggle="modal"data-id="{{ $p_data['branch_id'] }}"
-                            data-bs-target=".todaystock-modal-xl{{ $p_data['branch_id'] }}" class="btn btn-added btn-primary " style="color:black">Today Stock</a>
 
-            <div class="modal fade todaystock-modal-xl{{ $p_data['branch_id'] }}" tabindex="-1"role="dialog" data-bs-backdrop="static"
-             aria-labelledby="todaystockLargeModalLabel{{ $p_data['branch_id'] }}"aria-hidden="true">
-               @include('page.backend.purchase.todaystock')
-            </div>
-            @endif
-            @endforeach
 
         <div class="card">
             <div class="card-body">
@@ -65,9 +71,9 @@
                         <thead>
                             <tr>
                                 <th>Bill No</th>
-                                <th>Date & Time</th>
                                 <th>Supplier</th>
                                 <th>Branch</th>
+                                <th>Product Details</th>
                                 <th>Total</th>
                                 <th>Action</th>
                             </tr>
@@ -76,18 +82,17 @@
                             @foreach ($purchase_data as $keydata => $purchasedata)
                                 <tr>
                                     <td>#{{ $purchasedata['bill_no'] }}</td>
-                                    <td>{{ date('d M Y', strtotime($purchasedata['date'])) }} -
-                                        {{ date('h:i A', strtotime($purchasedata['time'])) }}</td>
                                     <td>{{ $purchasedata['supplier_name'] }}</td>
                                     <td>{{ $purchasedata['branch_name'] }}</td>
+                                    <td>ONION - 2 Bag</td>
                                     <td>{{ $purchasedata['gross_amount'] }}</td>
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
                                             @if ($purchasedata['status'] == 0)
-                                            <li>
-                                                <a href="{{ route('purchase.edit', ['unique_key' => $purchasedata['unique_key']]) }}"
-                                                    class="badges bg-lightyellow" style="color: white">Edit</a>
-                                            </li>
+                                                <li>
+                                                    <a href="{{ route('purchase.edit', ['unique_key' => $purchasedata['unique_key']]) }}"
+                                                        class="badges bg-lightyellow" style="color: white">Edit</a>
+                                                </li>
                                             @endif
                                             <li hidden>
                                                 <a href="#delete{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
@@ -104,13 +109,13 @@
                                             </li>
 
                                             <li>
-                                            @if ($purchasedata['status'] == 0)
-                                                <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
-                                                    class="badges bg-lightgreen" style="color: white">Invoice</a>
-                                            @elseif ($purchasedata['status'] == 1)
-                                                <a href="{{ route('purchase.print_view', ['unique_key' => $purchasedata['unique_key']]) }}"
-                                                    class="badges bg-green" style="color: white">Generated Invoice</a>
-                                            @endif
+                                                @if ($purchasedata['status'] == 0)
+                                                    <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
+                                                        class="badges bg-lightgreen" style="color: white">Pattial</a>
+                                                @elseif ($purchasedata['status'] == 1)
+                                                    <a href="{{ route('purchase.print_view', ['unique_key' => $purchasedata['unique_key']]) }}"
+                                                        class="badges bg-green" style="color: white">Generated Invoice</a>
+                                                @endif
                                             </li>
 
                                         </ul>
