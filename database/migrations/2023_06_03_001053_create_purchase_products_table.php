@@ -19,7 +19,10 @@ return new class extends Migration
 
             $table->unsignedBigInteger('purchase_id');
             $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');
-
+            $table->string('date')->nullable();
+            
+            $table->unsignedBigInteger('branch_id');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->unsignedBigInteger('productlist_id');
             $table->foreign('productlist_id')->references('id')->on('productlists')->onDelete('cascade');
 

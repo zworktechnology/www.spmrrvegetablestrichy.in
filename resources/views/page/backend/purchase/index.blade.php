@@ -21,20 +21,6 @@
                         </form>
                         <a href="{{ route('purchase.create') }}" class="btn btn-added" style="margin-right: 10px;">Add
                             Purchase</a>
-                        @foreach ($purchase_data as $keydata => $p_data)
-                            @if ($keydata == 0)
-                                <a href="#todaystock{{ $p_data['branch_id'] }}" data-bs-toggle="modal"
-                                    data-id="{{ $p_data['branch_id'] }}"
-                                    data-bs-target=".todaystock-modal-xl{{ $p_data['branch_id'] }}"
-                                    class="btn btn-added">Today Stock</a>
-
-                                <div class="modal fade todaystock-modal-xl{{ $p_data['branch_id'] }}"
-                                    tabindex="-1"role="dialog" data-bs-backdrop="static"
-                                    aria-labelledby="todaystockLargeModalLabel{{ $p_data['branch_id'] }}"aria-hidden="true">
-                                    @include('page.backend.purchase.todaystock')
-                                </div>
-                            @endif
-                        @endforeach
                     </div>
                 </div>
             </div>
@@ -65,7 +51,7 @@
                             <div class="modal fade todaystock-modal-xl{{ $allbranches->id }}" tabindex="-1"role="dialog" data-bs-backdrop="static"
                                 aria-labelledby="todaystockLargeModalLabel{{ $allbranches->id }}"aria-hidden="true">
                                 @include('page.backend.purchase.todaystock')
-                                </div>
+                            </div>
                 </div>
             @endforeach
         </div>

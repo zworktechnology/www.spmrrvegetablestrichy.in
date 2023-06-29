@@ -19,7 +19,9 @@ return new class extends Migration
 
             $table->unsignedBigInteger('sales_id');
             $table->foreign('sales_id')->references('id')->on('sales')->onDelete('cascade');
-
+            $table->string('date')->nullable();
+            $table->unsignedBigInteger('branch_id');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->unsignedBigInteger('productlist_id');
             $table->foreign('productlist_id')->references('id')->on('productlists')->onDelete('cascade');
 

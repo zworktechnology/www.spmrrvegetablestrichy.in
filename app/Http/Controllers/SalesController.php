@@ -10,6 +10,8 @@ use App\Models\Customer;
 use App\Models\Productlist;
 use App\Models\Sales;
 use App\Models\SalesProduct;
+use App\Models\Purchase;
+use App\Models\PurchaseProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -60,7 +62,118 @@ class SalesController extends Controller
         }
 
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        return view('page.backend.sales.index', compact('Sales_data','allbranch', 'today'));
+
+
+        $PSTodayStockArr = [];
+            $purchase_branchwise_data = Purchase::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
+            $sales_branchwise_data = Sales::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
+
+            if($purchase_branchwise_data != "" || $sales_branchwise_data != ""){
+
+                $Purchase_Branch = [];
+                foreach ($purchase_branchwise_data as $key => $purchase_Data) {
+                    $Purchase_Branch[] = $purchase_Data->branch_id;
+                }
+
+                $Sales_Branch = [];
+                foreach ($sales_branchwise_data as $key => $sales_Data) {
+                    $Sales_Branch[] = $sales_Data->branch_id;
+                }
+              
+                $Merge_Branch = array_merge($Purchase_Branch, $Sales_Branch);
+                foreach (array_unique($Merge_Branch) as $key => $Merge_Branchs) {
+
+
+                    $merge_PurchaseProduct = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->get();
+                    $purchase_Array = [];
+                    if($merge_PurchaseProduct != ""){
+                        foreach ($merge_PurchaseProduct as $key => $merge_PurchaseProducts) {
+                            $purchase_Array[] = $merge_PurchaseProducts->productlist_id;
+                        }
+                    }else {
+                        $purchase_Array[] = '';
+                    }
+
+
+                    $merge_salesProduct = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->get();
+                    $sales_Array = [];
+                    if($merge_salesProduct != ""){
+                        foreach ($merge_salesProduct as $key => $merge_salesProducts) {
+                            $sales_Array[] = $merge_salesProducts->productlist_id;
+                        }
+                    }else {
+                        $sales_Array[] = '';
+                    }
+
+
+                    $Merge_ProductlistId = array_merge($purchase_Array, $sales_Array);
+
+                    foreach (array_unique($Merge_ProductlistId) as $key => $Merge_Productlist) {
+                        $productlist_ID = Productlist::findOrFail($Merge_Productlist);
+
+
+
+                        $getPurchaseorNot = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
+                        $getSalesorNot = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
+
+                        $Pbagcount = '';
+                        $Pkgcount = '';
+                        if($getPurchaseorNot != ""){
+                            foreach ($getPurchaseorNot as $key => $getPurchaseorNots) {
+
+                                if($getPurchaseorNots->bagorkg == 'bag'){
+                                    $Pbagcount = $getPurchaseorNots->count;
+                                }else {
+                                    $Pbagcount = '';
+                                }
+                                if($getPurchaseorNots->bagorkg == 'kg'){
+                                    $Pkgcount = $getPurchaseorNots->count;
+                                }else {
+                                    $Pkgcount = '';
+                                }
+                            }
+                        }
+
+                        $Sbagcount = '';
+                        $Skgcount = '';
+                        if($getSalesorNot != ""){
+                            foreach ($getSalesorNot as $key => $getSalesorNots) {
+
+                                if($getSalesorNots->bagorkg == 'bag'){
+                                    $Sbagcount = $getSalesorNots->count;
+                                }else {
+                                    $Sbagcount = '';
+                                }
+                                if($getSalesorNots->bagorkg == 'kg'){
+                                    $Skgcount = $getSalesorNots->count;
+                                }else{
+                                    $Skgcount = '';
+                                }
+                            }
+                        }
+
+
+
+
+                        $PSTodayStockArr[] = array(
+                            'branch_id' => $Merge_Branchs,
+                            'product_name' => $productlist_ID->name,
+                            'Pbagcount' => $Pbagcount,
+                            'Pkgcount' => $Pkgcount,
+                            'Sbagcount' => $Sbagcount,
+                            'Skgcount' => $Skgcount,
+
+                        );
+                    }
+                    
+                }
+
+              
+            }
+
+
+
+        return view('page.backend.sales.index', compact('Sales_data','allbranch', 'today', 'PSTodayStockArr'));
     }
 
 
@@ -104,7 +217,117 @@ class SalesController extends Controller
             );
         }
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        return view('page.backend.sales.index', compact('Sales_data', 'allbranch', 'branch_id', 'today'));
+
+
+        $PSTodayStockArr = [];
+        $purchase_branchwise_data = Purchase::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
+        $sales_branchwise_data = Sales::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
+
+        if($purchase_branchwise_data != "" || $sales_branchwise_data != ""){
+
+            $Purchase_Branch = [];
+            foreach ($purchase_branchwise_data as $key => $purchase_Data) {
+                $Purchase_Branch[] = $purchase_Data->branch_id;
+            }
+
+            $Sales_Branch = [];
+            foreach ($sales_branchwise_data as $key => $sales_Data) {
+                $Sales_Branch[] = $sales_Data->branch_id;
+            }
+          
+            $Merge_Branch = array_merge($Purchase_Branch, $Sales_Branch);
+            foreach (array_unique($Merge_Branch) as $key => $Merge_Branchs) {
+
+
+                $merge_PurchaseProduct = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->get();
+                $purchase_Array = [];
+                if($merge_PurchaseProduct != ""){
+                    foreach ($merge_PurchaseProduct as $key => $merge_PurchaseProducts) {
+                        $purchase_Array[] = $merge_PurchaseProducts->productlist_id;
+                    }
+                }else {
+                    $purchase_Array[] = '';
+                }
+
+
+                $merge_salesProduct = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->get();
+                $sales_Array = [];
+                if($merge_salesProduct != ""){
+                    foreach ($merge_salesProduct as $key => $merge_salesProducts) {
+                        $sales_Array[] = $merge_salesProducts->productlist_id;
+                    }
+                }else {
+                    $sales_Array[] = '';
+                }
+
+
+                $Merge_ProductlistId = array_merge($purchase_Array, $sales_Array);
+
+                foreach (array_unique($Merge_ProductlistId) as $key => $Merge_Productlist) {
+                    $productlist_ID = Productlist::findOrFail($Merge_Productlist);
+
+
+
+                    $getPurchaseorNot = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
+                    $getSalesorNot = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
+
+                    $Pbagcount = '';
+                    $Pkgcount = '';
+                    if($getPurchaseorNot != ""){
+                        foreach ($getPurchaseorNot as $key => $getPurchaseorNots) {
+
+                            if($getPurchaseorNots->bagorkg == 'bag'){
+                                $Pbagcount = $getPurchaseorNots->count;
+                            }else {
+                                $Pbagcount = '';
+                            }
+                            if($getPurchaseorNots->bagorkg == 'kg'){
+                                $Pkgcount = $getPurchaseorNots->count;
+                            }else {
+                                $Pkgcount = '';
+                            }
+                        }
+                    }
+
+                    $Sbagcount = '';
+                    $Skgcount = '';
+                    if($getSalesorNot != ""){
+                        foreach ($getSalesorNot as $key => $getSalesorNots) {
+
+                            if($getSalesorNots->bagorkg == 'bag'){
+                                $Sbagcount = $getSalesorNots->count;
+                            }else {
+                                $Sbagcount = '';
+                            }
+                            if($getSalesorNots->bagorkg == 'kg'){
+                                $Skgcount = $getSalesorNots->count;
+                            }else{
+                                $Skgcount = '';
+                            }
+                        }
+                    }
+
+
+
+
+                    $PSTodayStockArr[] = array(
+                        'branch_id' => $Merge_Branchs,
+                        'product_name' => $productlist_ID->name,
+                        'Pbagcount' => $Pbagcount,
+                        'Pkgcount' => $Pkgcount,
+                        'Sbagcount' => $Sbagcount,
+                        'Skgcount' => $Skgcount,
+
+                    );
+                }
+                
+            }
+
+          
+        }
+
+
+        return view('page.backend.sales.index', compact('Sales_data', 'allbranch', 'branch_id', 'today', 'PSTodayStockArr'));
     }
 
     public function datefilter(Request $request) {
@@ -152,7 +375,118 @@ class SalesController extends Controller
         }
 
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        return view('page.backend.sales.index', compact('Sales_data','allbranch', 'today'));
+
+
+        $PSTodayStockArr = [];
+        $purchase_branchwise_data = Purchase::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
+        $sales_branchwise_data = Sales::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
+
+        if($purchase_branchwise_data != "" || $sales_branchwise_data != ""){
+
+            $Purchase_Branch = [];
+            foreach ($purchase_branchwise_data as $key => $purchase_Data) {
+                $Purchase_Branch[] = $purchase_Data->branch_id;
+            }
+
+            $Sales_Branch = [];
+            foreach ($sales_branchwise_data as $key => $sales_Data) {
+                $Sales_Branch[] = $sales_Data->branch_id;
+            }
+          
+            $Merge_Branch = array_merge($Purchase_Branch, $Sales_Branch);
+            foreach (array_unique($Merge_Branch) as $key => $Merge_Branchs) {
+
+
+                $merge_PurchaseProduct = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->get();
+                $purchase_Array = [];
+                if($merge_PurchaseProduct != ""){
+                    foreach ($merge_PurchaseProduct as $key => $merge_PurchaseProducts) {
+                        $purchase_Array[] = $merge_PurchaseProducts->productlist_id;
+                    }
+                }else {
+                    $purchase_Array[] = '';
+                }
+
+
+                $merge_salesProduct = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->get();
+                $sales_Array = [];
+                if($merge_salesProduct != ""){
+                    foreach ($merge_salesProduct as $key => $merge_salesProducts) {
+                        $sales_Array[] = $merge_salesProducts->productlist_id;
+                    }
+                }else {
+                    $sales_Array[] = '';
+                }
+
+
+                $Merge_ProductlistId = array_merge($purchase_Array, $sales_Array);
+
+                foreach (array_unique($Merge_ProductlistId) as $key => $Merge_Productlist) {
+                    $productlist_ID = Productlist::findOrFail($Merge_Productlist);
+
+
+
+                    $getPurchaseorNot = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
+                    $getSalesorNot = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
+
+                    $Pbagcount = '';
+                    $Pkgcount = '';
+                    if($getPurchaseorNot != ""){
+                        foreach ($getPurchaseorNot as $key => $getPurchaseorNots) {
+
+                            if($getPurchaseorNots->bagorkg == 'bag'){
+                                $Pbagcount = $getPurchaseorNots->count;
+                            }else {
+                                $Pbagcount = '';
+                            }
+                            if($getPurchaseorNots->bagorkg == 'kg'){
+                                $Pkgcount = $getPurchaseorNots->count;
+                            }else {
+                                $Pkgcount = '';
+                            }
+                        }
+                    }
+
+                    $Sbagcount = '';
+                    $Skgcount = '';
+                    if($getSalesorNot != ""){
+                        foreach ($getSalesorNot as $key => $getSalesorNots) {
+
+                            if($getSalesorNots->bagorkg == 'bag'){
+                                $Sbagcount = $getSalesorNots->count;
+                            }else {
+                                $Sbagcount = '';
+                            }
+                            if($getSalesorNots->bagorkg == 'kg'){
+                                $Skgcount = $getSalesorNots->count;
+                            }else{
+                                $Skgcount = '';
+                            }
+                        }
+                    }
+
+
+
+
+                    $PSTodayStockArr[] = array(
+                        'branch_id' => $Merge_Branchs,
+                        'product_name' => $productlist_ID->name,
+                        'Pbagcount' => $Pbagcount,
+                        'Pkgcount' => $Pkgcount,
+                        'Sbagcount' => $Sbagcount,
+                        'Skgcount' => $Skgcount,
+
+                    );
+                }
+                
+            }
+
+          
+        }
+
+
+
+        return view('page.backend.sales.index', compact('Sales_data','allbranch', 'today', 'PSTodayStockArr'));
 
     }
 
@@ -231,6 +565,8 @@ class SalesController extends Controller
                 $SalesProduct = new SalesProduct;
                 $SalesProduct->unique_key = $salesprandomkey;
                 $SalesProduct->sales_id = $insertedId;
+                $SalesProduct->date = $request->get('sales_date');
+                $SalesProduct->branch_id = $request->get('sales_branch_id');
                 $SalesProduct->productlist_id = $sales_product_id;
                 $SalesProduct->bagorkg = $request->sales_bagorkg[$key];
                 $SalesProduct->count = $request->sales_count[$key];
