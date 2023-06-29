@@ -1,7 +1,7 @@
 <div class="modal-dialog modal-xl">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="todaystockLargeModalLabel">{{ $allbranches->shop_name }}({{ date('d-m-Y', strtotime($today)) }}) - Stock</h5>
+            <h5 class="modal-title" id="todaystockLargeModalLabel"><span style="color:red">{{ date('d M Y', strtotime($today)) }}</span> - <span style="color:green">{{ $allbranches->shop_name }} BRANCH</span> </h5>
             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                <span aria-hidden="true">&times;</span>
             </button>

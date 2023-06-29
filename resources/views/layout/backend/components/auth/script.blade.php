@@ -963,6 +963,28 @@ $(document).on('click', '.remove-salestr', function() {
         });
 
 
+        $(document).on("keyup", 'input.payment_payableamount', function() {
+            var payment_payableamount = $(this).val();
+            var oldblance = $(".oldblance").val();
+
+            if (Number(payment_payableamount) > Number(oldblance)) {
+                alert('You are entering Maximum Amount of Total');
+                $(".payment_payableamount").val('');
+            }
+        });
+
+
+        $(document).on("keyup", 'input.spayment_payableamount', function() {
+            var spayment_payableamount = $(this).val();
+            var sales_oldblance = $(".sales_oldblance").val();
+
+            if (Number(spayment_payableamount) > Number(sales_oldblance)) {
+                alert('You are entering Maximum Amount of Total');
+                $(".spayment_payableamount").val('');
+            }
+        });
+
+
     function purchasesubmitForm(btn) {
         // disable the button
         btn.disabled = true;

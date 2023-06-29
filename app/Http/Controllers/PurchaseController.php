@@ -1200,18 +1200,68 @@ class PurchaseController extends Controller
     public function report() {
         $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        
+
+        $data = Purchase::where('soft_delete', '!=', 1)->get();
         $purchase_data = [];
-        $purchase_data[] = array(
-            'unique_key' => '',
-            'branch_name' => '',
-            'supplier_name' => '',
-            'date' => '',
-            'time' => '',
-            'gross_amount' => '',
-            'bill_no' => '',
-            'id' => '',
-            'terms' => '',
-        );
+        $terms = [];
+        $Extracost_Arr = [];
+        foreach ($data as $key => $datas) {
+            $branch_name = Branch::findOrFail($datas->branch_id);
+            $supplier_name = Supplier::findOrFail($datas->supplier_id);
+
+            $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+            foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                $terms[] = array(
+                    'bag' => $PurchaseProducts_arrdata->bagorkg,
+                    'kgs' => $PurchaseProducts_arrdata->count,
+                    'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                    'total_price' => $PurchaseProducts_arrdata->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                );
+
+            }
+
+
+            $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datas->id)->get();
+            foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+
+                $Extracost_Arr[] = array(
+                    'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                    'extracost' => $PurchaseExtracosts_arr->extracost,
+                    'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                );
+
+            }
+
+
+
+            $purchase_data[] = array(
+                'unique_key' => $datas->unique_key,
+                'branch_id' => $datas->branch_id,
+                'branch_name' => $branch_name->shop_name,
+                'supplier_name' => $supplier_name->name,
+                'date' => $datas->date,
+                'time' => $datas->time,
+                'gross_amount' => $datas->gross_amount,
+                'bill_no' => $datas->bill_no,
+                'id' => $datas->id,
+                'supplier_id' => $datas->supplier_id,
+                'bank_id' => $datas->bank_id,
+                'status' => $datas->status,
+                'terms' => $terms,
+                'Extracost_Arr' => $Extracost_Arr,
+                'branchheading' => $branch_name->shop_name,
+                'supplierheading' => $supplier_name->name,
+                'fromdateheading' => date('d-M-Y', strtotime($datas->date)),
+                'todateheading' => date('d-M-Y', strtotime($datas->date)),
+            );
+        }
 
 
 
@@ -1239,6 +1289,7 @@ class PurchaseController extends Controller
 
 
                 $terms = [];
+                $Extracost_Arr = [];
                 foreach ($branchwise_report as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
                     $supplier_name = Supplier::findOrFail($branchwise_datas->supplier_id);
@@ -1259,6 +1310,19 @@ class PurchaseController extends Controller
                         );
                     }
 
+
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $branchwise_datas->id)->get();
+                    foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+
+                        $Extracost_Arr[] = array(
+                            'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                            'extracost' => $PurchaseExtracosts_arr->extracost,
+                            'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                        );
+
+                    }
+
                     $purchase_data[] = array(
                         'unique_key' => $branchwise_datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
@@ -1269,6 +1333,7 @@ class PurchaseController extends Controller
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'terms' => $terms,
+                        'Extracost_Arr' => $Extracost_Arr,
                         'status' => $branchwise_datas->status,
                         'branchheading' => $branch_name->shop_name,
                         'supplierheading' => '',
@@ -1312,6 +1377,7 @@ class PurchaseController extends Controller
 
             if($supplierwise_report != ''){
                 $supplier_terms = [];
+                $Extracost_Arr = [];
 
                 foreach ($supplierwise_report as $key => $supplierwise_report_datas) {
 
@@ -1335,6 +1401,19 @@ class PurchaseController extends Controller
                     }
 
 
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $supplierwise_report_datas->id)->get();
+                    foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+
+                        $Extracost_Arr[] = array(
+                            'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                            'extracost' => $PurchaseExtracosts_arr->extracost,
+                            'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                        );
+
+                    }
+
+
                     $purchase_data[] = array(
                         'unique_key' => $supplierwise_report_datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
@@ -1345,6 +1424,7 @@ class PurchaseController extends Controller
                         'bill_no' => $supplierwise_report_datas->bill_no,
                         'id' => $supplierwise_report_datas->id,
                         'terms' => $supplier_terms,
+                        'Extracost_Arr' => $Extracost_Arr,
                         'status' => $supplierwise_report_datas->status,
                         'branchheading' => '',
                         'supplierheading' => $GetSupplier->name,
@@ -1387,6 +1467,7 @@ class PurchaseController extends Controller
             $purchase_data = [];
             if($fromdate_report != ''){
                 $fromdate_terms = [];
+                $Extracost_Arr = [];
 
                 foreach ($fromdate_report as $key => $fromdate_report_datas) {
 
@@ -1411,6 +1492,19 @@ class PurchaseController extends Controller
                     }
 
 
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $fromdate_report_datas->id)->get();
+                    foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+
+                        $Extracost_Arr[] = array(
+                            'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                            'extracost' => $PurchaseExtracosts_arr->extracost,
+                            'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                        );
+
+                    }
+
+
                     $purchase_data[] = array(
                         'unique_key' => $fromdate_report_datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
@@ -1421,6 +1515,7 @@ class PurchaseController extends Controller
                         'bill_no' => $fromdate_report_datas->bill_no,
                         'id' => $fromdate_report_datas->id,
                         'terms' => $fromdate_terms,
+                        'Extracost_Arr' => $Extracost_Arr,
                         'status' => $fromdate_report_datas->status,
                         'branchheading' => '',
                         'supplierheading' => '',
@@ -1464,6 +1559,7 @@ class PurchaseController extends Controller
             $purchase_data = [];
             if($todate_report != ''){
                 $todate_terms = [];
+                $Extracost_Arr = [];
 
 
                 foreach ($todate_report as $key => $todate_report_datas) {
@@ -1487,6 +1583,18 @@ class PurchaseController extends Controller
                         );
                     }
 
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $todate_report_datas->id)->get();
+                    foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+
+                        $Extracost_Arr[] = array(
+                            'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                            'extracost' => $PurchaseExtracosts_arr->extracost,
+                            'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                        );
+
+                    }
+
 
                     $purchase_data[] = array(
                         'unique_key' => $todate_report_datas->unique_key,
@@ -1498,6 +1606,7 @@ class PurchaseController extends Controller
                         'bill_no' => $todate_report_datas->bill_no,
                         'id' => $todate_report_datas->id,
                         'terms' => $todate_terms,
+                        'Extracost_Arr' => $Extracost_Arr,
                         'status' => $todate_report_datas->status,
                         'branchheading' => '',
                         'supplierheading' => '',
@@ -1539,6 +1648,7 @@ class PurchaseController extends Controller
             $purchase_data = [];
             if($datefilter_report != ''){
                 $todate_terms = [];
+                $Extracost_Arr = [];
 
 
                 foreach ($datefilter_report as $key => $datefilter_report_arr) {
@@ -1562,6 +1672,18 @@ class PurchaseController extends Controller
                         );
                     }
 
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                    foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+
+                        $Extracost_Arr[] = array(
+                            'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                            'extracost' => $PurchaseExtracosts_arr->extracost,
+                            'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                        );
+
+                    }
+
 
                     $purchase_data[] = array(
                         'unique_key' => $datefilter_report_arr->unique_key,
@@ -1573,6 +1695,7 @@ class PurchaseController extends Controller
                         'bill_no' => $datefilter_report_arr->bill_no,
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
+                        'Extracost_Arr' => $Extracost_Arr,
                         'status' => $datefilter_report_arr->status,
                         'branchheading' => '',
                         'supplierheading' => $GetSupplier->name,
@@ -1614,6 +1737,7 @@ class PurchaseController extends Controller
             $purchase_data = [];
             if($datefilter_report != ''){
                 $todate_terms = [];
+                $Extracost_Arr = [];
 
 
                     foreach ($datefilter_report as $key => $datefilter_report_arr) {
@@ -1638,6 +1762,19 @@ class PurchaseController extends Controller
                         }
 
 
+                        $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                    foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+
+                        $Extracost_Arr[] = array(
+                            'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                            'extracost' => $PurchaseExtracosts_arr->extracost,
+                            'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                        );
+
+                    }
+
+
                         $purchase_data[] = array(
                             'unique_key' => $datefilter_report_arr->unique_key,
                             'branch_name' => $branch_name->shop_name,
@@ -1648,6 +1785,7 @@ class PurchaseController extends Controller
                             'bill_no' => $datefilter_report_arr->bill_no,
                             'id' => $datefilter_report_arr->id,
                             'terms' => $todate_terms,
+                            'Extracost_Arr' => $Extracost_Arr,
                             'status' => $datefilter_report_arr->status,
                             'branchheading' => '',
                             'supplierheading' => $GetSupplier->name,
@@ -1689,6 +1827,7 @@ class PurchaseController extends Controller
             $purchase_data = [];
             if($datefilter_report != ''){
             $todate_terms = [];
+            $Extracost_Arr = [];
 
 
                 foreach ($datefilter_report as $key => $datefilter_report_arr) {
@@ -1712,6 +1851,18 @@ class PurchaseController extends Controller
                         );
                     }
 
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                    foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+
+                        $Extracost_Arr[] = array(
+                            'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                            'extracost' => $PurchaseExtracosts_arr->extracost,
+                            'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                        );
+
+                    }
+
 
                     $purchase_data[] = array(
                         'unique_key' => $datefilter_report_arr->unique_key,
@@ -1723,6 +1874,7 @@ class PurchaseController extends Controller
                         'bill_no' => $datefilter_report_arr->bill_no,
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
+                        'Extracost_Arr' => $Extracost_Arr,
                         'status' => $datefilter_report_arr->status,
                         'branchheading' => $GetBrach->shop_name,
                         'supplierheading' => $GetSupplier->name,
@@ -1762,6 +1914,7 @@ class PurchaseController extends Controller
             $purchase_data = [];
             if($datefilter_report != ''){
                 $todate_terms = [];
+                $Extracost_Arr = [];
 
                 foreach ($datefilter_report as $key => $datefilter_report_arr) {
 
@@ -1783,6 +1936,19 @@ class PurchaseController extends Controller
                         );
                     }
 
+
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                    foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+
+                        $Extracost_Arr[] = array(
+                            'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                            'extracost' => $PurchaseExtracosts_arr->extracost,
+                            'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                        );
+
+                    }
+
                     $purchase_data[] = array(
                         'unique_key' => $datefilter_report_arr->unique_key,
                         'branch_name' => $branch_name->shop_name,
@@ -1793,6 +1959,7 @@ class PurchaseController extends Controller
                         'bill_no' => $datefilter_report_arr->bill_no,
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
+                        'Extracost_Arr' => $Extracost_Arr,
                         'status' => $datefilter_report_arr->status,
                         'branchheading' => $GetBrach->shop_name,
                         'supplierheading' => '',
@@ -1832,6 +1999,7 @@ class PurchaseController extends Controller
             $purchase_data = [];
             if($datefilter_report != ''){
                 $todate_terms = [];
+                $Extracost_Arr = [];
 
                 foreach ($datefilter_report as $key => $datefilter_report_arr) {
 
@@ -1854,6 +2022,19 @@ class PurchaseController extends Controller
                     }
 
 
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                    foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+
+                        $Extracost_Arr[] = array(
+                            'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                            'extracost' => $PurchaseExtracosts_arr->extracost,
+                            'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                        );
+
+                    }
+
+
                     $purchase_data[] = array(
                         'unique_key' => $datefilter_report_arr->unique_key,
                         'branch_name' => $branch_name->shop_name,
@@ -1864,6 +2045,7 @@ class PurchaseController extends Controller
                         'bill_no' => $datefilter_report_arr->bill_no,
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
+                        'Extracost_Arr' => $Extracost_Arr,
                         'status' => $datefilter_report_arr->status,
                         'branchheading' => $GetBrach->shop_name,
                         'supplierheading' => '',
@@ -1906,6 +2088,7 @@ class PurchaseController extends Controller
             $purchase_data = [];
             if($datefilter_report != ''){
                 $todate_terms = [];
+                $Extracost_Arr = [];
 
                 foreach ($datefilter_report as $key => $datefilter_report_arr) {
 
@@ -1929,6 +2112,19 @@ class PurchaseController extends Controller
                     }
 
 
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                    foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+
+                        $Extracost_Arr[] = array(
+                            'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                            'extracost' => $PurchaseExtracosts_arr->extracost,
+                            'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                        );
+
+                    }
+
+
                     $purchase_data[] = array(
                         'unique_key' => $datefilter_report_arr->unique_key,
                         'branch_name' => $branch_name->shop_name,
@@ -1939,6 +2135,7 @@ class PurchaseController extends Controller
                         'bill_no' => $datefilter_report_arr->bill_no,
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
+                        'Extracost_Arr' => $Extracost_Arr,
                         'status' => $datefilter_report_arr->status,
                         'branchheading' => '',
                         'supplierheading' => '',
@@ -1980,6 +2177,7 @@ class PurchaseController extends Controller
             $purchase_data = [];
             if($datefilter_report != ''){
                 $todate_terms = [];
+                $Extracost_Arr = [];
 
                 foreach ($datefilter_report as $key => $datefilter_report_arr) {
 
@@ -2002,6 +2200,19 @@ class PurchaseController extends Controller
                         );
                     }
 
+
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                    foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+
+                        $Extracost_Arr[] = array(
+                            'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                            'extracost' => $PurchaseExtracosts_arr->extracost,
+                            'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                        );
+
+                    }
+
                     $purchase_data[] = array(
                         'unique_key' => $datefilter_report_arr->unique_key,
                         'branch_name' => $branch_name->shop_name,
@@ -2012,6 +2223,7 @@ class PurchaseController extends Controller
                         'bill_no' => $datefilter_report_arr->bill_no,
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
+                        'Extracost_Arr' => $Extracost_Arr,
                         'status' => $datefilter_report_arr->status,
                         'branchheading' => $GetBrach->shop_name,
                         'supplierheading' => '',
@@ -2052,6 +2264,7 @@ class PurchaseController extends Controller
                 $purchase_data = [];
                 if($datefilter_report != ''){
                         $todate_terms = [];
+                        $Extracost_Arr = [];
 
                     foreach ($datefilter_report as $key => $datefilter_report_arr) {
 
@@ -2075,6 +2288,19 @@ class PurchaseController extends Controller
                         }
 
 
+                        $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                    foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+
+                        $Extracost_Arr[] = array(
+                            'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                            'extracost' => $PurchaseExtracosts_arr->extracost,
+                            'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                        );
+
+                    }
+
+
                             $purchase_data[] = array(
                                 'unique_key' => $datefilter_report_arr->unique_key,
                                 'branch_name' => $branch_name->shop_name,
@@ -2085,6 +2311,7 @@ class PurchaseController extends Controller
                                 'bill_no' => $datefilter_report_arr->bill_no,
                                 'id' => $datefilter_report_arr->id,
                                 'terms' => $todate_terms,
+                                'Extracost_Arr' => $Extracost_Arr,
                                 'status' => $datefilter_report_arr->status,
                                 'branchheading' => '',
                                 'supplierheading' => $GetSupplier->name,
@@ -2129,6 +2356,7 @@ class PurchaseController extends Controller
                     $purchase_data = [];
                     if($datefilter_report != ''){
                             $todate_terms = [];
+                            $Extracost_Arr = [];
 
                         foreach ($datefilter_report as $key => $datefilter_report_arr) {
 
@@ -2151,6 +2379,18 @@ class PurchaseController extends Controller
                                 );
                             }
 
+                            $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
+                            foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+        
+                                $Extracost_Arr[] = array(
+                                    'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                                    'extracost' => $PurchaseExtracosts_arr->extracost,
+                                    'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+        
+                                );
+        
+                            }
+
 
                                 $purchase_data[] = array(
                                     'unique_key' => $datefilter_report_arr->unique_key,
@@ -2162,6 +2402,7 @@ class PurchaseController extends Controller
                                     'bill_no' => $datefilter_report_arr->bill_no,
                                     'id' => $datefilter_report_arr->id,
                                     'terms' => $todate_terms,
+                                    'Extracost_Arr' => $Extracost_Arr,
                                     'status' => $datefilter_report_arr->status,
                                     'branchheading' => $GetBrach->shop_name,
                                     'supplierheading' => $GetSupplier->name,
@@ -2191,6 +2432,14 @@ class PurchaseController extends Controller
                     }
 
                 }
+
+
+
+                
+
+
+
+          
 
 
         return view('page.backend.purchase.report', compact('purchasereport_fromdate', 'branch', 'supplier', 'purchasereport_todate','purchasereport_branch', 'purchasereport_supplier', 'purchase_data'));

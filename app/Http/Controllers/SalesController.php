@@ -857,19 +857,49 @@ class SalesController extends Controller
     public function report() {
         $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $Customer = Customer::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        
+
+        $data = Sales::where('soft_delete', '!=', 1)->get();
         $Sales_data = [];
-        $Sales_data[] = array(
-            'unique_key' => '',
-            'branch_name' => '',
-            'customer_name' => '',
-            'date' => '',
-            'time' => '',
-            'gross_amount' => '',
-            'bill_no' => '',
-            'id' => '',
-            'terms' => '',
-            'heading' => '',
-        );
+        $sales_terms = [];
+        foreach ($data as $key => $datas) {
+            $branch_name = Branch::findOrFail($datas->branch_id);
+            $customer_name = Customer::findOrFail($datas->customer_id);
+
+            $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->get();
+            foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                $sales_terms[] = array(
+                    'bag' => $SalesProducts_arrdata->bagorkg,
+                    'kgs' => $SalesProducts_arrdata->count,
+                    'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                    'total_price' => $SalesProducts_arrdata->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                );
+            }
+
+
+
+            $Sales_data[] = array(
+                'unique_key' => $datas->unique_key,
+                'branch_name' => $branch_name->shop_name,
+                'customer_name' => $customer_name->name,
+                'date' => $datas->date,
+                'time' => $datas->time,
+                'gross_amount' => $datas->gross_amount,
+                'bill_no' => $datas->bill_no,
+                'id' => $datas->id,
+                'sales_terms' => $sales_terms,
+                'status' => $datas->status,
+                'branchheading' => $branch_name->shop_name,
+                'customerheading' => $customer_name->name,
+                'fromdateheading' => date('d-M-Y', strtotime($datas->date)),
+                'todateheading' => date('d-M-Y', strtotime($datas->date)),
+            );
+        }
 
 
 
@@ -1833,6 +1863,9 @@ class SalesController extends Controller
 
 
         }
+
+
+        
 
 
 
