@@ -51,9 +51,9 @@
                         <thead>
                             <tr>
                                 <th>Bill No</th>
-                                <th>Date & Time</th>
                                 <th>Customer</th>
                                 <th>Branch</th>
+                                <th>Product Details</th>
                                 <th>Total</th>
                                 <th>Action</th>
                             </tr>
@@ -62,10 +62,9 @@
                             @foreach ($Sales_data as $keydata => $Sales_datas)
                                 <tr>
                                     <td>#{{ $Sales_datas['bill_no'] }}</td>
-                                    <td>{{ date('d M Y', strtotime($Sales_datas['date'])) }} -
-                                        {{ date('h:i A', strtotime($Sales_datas['time'])) }}</td>
                                     <td>{{ $Sales_datas['customer_name'] }}</td>
                                     <td>{{ $Sales_datas['branch_name'] }}</td>
+                                    <td>ONION - 4 BAG, TAMOTO - 4 KG</td>
                                     <td>{{ $Sales_datas['gross_amount'] }}</td>
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">

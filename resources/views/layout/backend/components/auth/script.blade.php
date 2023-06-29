@@ -1,5 +1,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 
+<script src="{{ asset('assets/backend/js/jquery-3.6.0.min.js') }}"></script>
+
 <script src="{{ asset('assets/backend/js/feather.min.js') }}"></script>
 
 <script src="{{ asset('assets/backend/js/jquery.slimscroll.min.js') }}"></script>
@@ -12,8 +14,6 @@
 <script src="{{ asset('assets/backend/plugins/apexchart/apexcharts.min.js') }}"></script>
 <script src="{{ asset('assets/backend/plugins/apexchart/chart-data.js') }}"></script>
 
-<script src="{{ asset('assets/backend/plugins/select2/js/select2.min.js') }}"></script>
-
 <script src="{{ asset('assets/backend/plugins/sweetalert/sweetalert2.all.min.js') }}"></script>
 <script src="{{ asset('assets/backend/plugins/sweetalert/sweetalerts.min.js') }}"></script>
 
@@ -24,11 +24,20 @@
 
 <script src="{{ asset('assets/backend/js/custom/purchase_create.js') }}"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2();
+    });
+</script>
+
 <script>
 
 $(".purchaseclose").click(function() {
-            window.location.reload();
-        });
+    window.location.reload();
+});
+
+
 // PURCHASE
 
    var j = 1;
@@ -43,7 +52,7 @@ $(".purchaseclose").click(function() {
                 $("#product_fields").append(
                     '<tr>' +
                     '<td class=""><input type="hidden"id="purchase_detail_id"name="purchase_detail_id[]" />' +
-                    '<select class="select form-control product_id"name="product_id[]" id="product_id' + i + '"required>' +
+                    '<select class="form-control js-example-basic-single product_id select"name="product_id[]" id="product_id' + i + '"required>' +
                     '<option value="" selected hidden class="text-muted">Select Product</option></select>' +
                     '</td>' +
                     '<td><select class=" form-control bagorkg" name="bagorkg[]" id="bagorkg1"required>' +
@@ -85,8 +94,8 @@ $(".purchaseclose").click(function() {
         $("#addextranotefields").click(function() {
             $("#extracost_tr").append(
                     '<tr>' +
-                    '<td colspan="3"><input type="text" class="form-control" id="extracost_note" placeholder="Note" value="" name="extracost_note[]" required /></td>' +
                     '<td style="font-size:15px;color: black;" class="text-end">Extra Cost<span style="color: red;">*</span></td>' +
+                    '<td colspan="3"><input type="text" class="form-control" id="extracost_note" placeholder="Note" value="" name="extracost_note[]" required /></td>' +
                     '<td><input type="text" class="form-control extracost" id="extracost" placeholder="Extra Cost" name="extracost[]" value="" /></td>' +
                     '<td><button style="width: 35px;"class="py-1 text-white remove-extratr font-medium rounded-lg text-sm  text-center btn btn-danger" type="button" id="" value="Add">-</button></td>' +
                     '</tr>'
@@ -672,7 +681,7 @@ $(document).ready(function() {
                 $("#sales_productfields").append(
                     '<tr>' +
                     '<td class=""><input type="hidden"id="sales_detail_id"name="sales_detail_id[]" />' +
-                    '<select class="select form-control sales_product_id"name="sales_product_id[]" id="sales_product_id' + i + '"required>' +
+                    '<select class="form-control js-example-basic-single select sales_product_id"name="sales_product_id[]" id="sales_product_id' + i + '"required>' +
                     '<option value="" selected hidden class="text-muted">Select Product</option></select>' +
                     '</td>' +
                     '<td><select class=" form-control sales_bagorkg" name="sales_bagorkg[]" id="sales_bagorkg' + i + '"required>' +

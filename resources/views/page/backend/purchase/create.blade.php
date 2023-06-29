@@ -24,7 +24,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-3 col-sm-3 col-12">
+                        <div class="col-lg-2 col-sm-2 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span
                                         style="color: red;">*</span></label>
@@ -36,7 +36,7 @@
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Supplier<span
                                         style="color: red;">*</span> </label>
-                                <select class="select" name="supplier_id" id="supplier_id" required>
+                                <select class="form-control js-example-basic-single select" name="supplier_id" id="supplier_id" required>
                                     <option value="" disabled selected hiddden>Select Supplier</option>
                                     @foreach ($supplier as $suppliers)
                                         <option value="{{ $suppliers->id }}">{{ $suppliers->name }}</option>
@@ -49,13 +49,19 @@
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Branch<span
                                         style="color: red;">*</span></label>
-                                <select class="select branch_id" name="branch_id" id="branch_id" required>
+                                <select class="form-control js-example-basic-single select branch_id" name="branch_id" id="branch_id" required>
                                     <option value="" disabled selected hiddden>Select Branch</option>
                                     @foreach ($branch as $branches)
                                         <option value="{{ $branches->id }}">{{ $branches->shop_name }}</option>
                                     @endforeach
                                 </select>
                             </div>
+                        </div>
+
+                        <div class="col-lg-1 col-sm-1 col-12">
+                            <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Action</label>
+                            <button style="margin-top:10px; width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
+                            type="button" id="addproductfields" value="Add">+</button>
                         </div>
                     </div>
 
@@ -76,7 +82,7 @@
                                     <tr>
                                         <td>
                                             <input type="hidden"id="purchase_detail_id"name="purchase_detail_id[]" />
-                                            <select class=" form-control product_id select" name="product_id[]"
+                                            <select class="form-control js-example-basic-single product_id select" name="product_id[]"
                                                 id="product_id1"required>
                                                 <option value="" selected hidden class="text-muted">Select Product
                                                 </option>
@@ -98,9 +104,7 @@
                                                 placeholder="count" value="" required />
                                         </td>
                                         <td>
-                                            <button
-                                                style="width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
-                                                type="button" id="addproductfields" value="Add">+</button>
+                                            <button style="width: 35px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-tr" type="button" >-</button>
                                         </td>
                                     </tr>
                                 </tbody>
