@@ -21,7 +21,7 @@
                      <select class="select sales_branch_id" name="sales_branch_id" id="sales_branch_id">
                         <option value="" disabled selected hiddden>Select Branch</option>
                            @foreach ($branch as $branches)
-                              <option value="{{ $branches->id }}">{{ $branches->name }}</option>
+                              <option value="{{ $branches->id }}">{{ $branches->shop_name }}</option>
                            @endforeach
                      </select>
                   </div>
