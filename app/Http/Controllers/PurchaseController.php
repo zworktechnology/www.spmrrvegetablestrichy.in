@@ -51,7 +51,7 @@ class PurchaseController extends Controller
 
             $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datas->id)->get();
             foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
-                
+
                 $Extracost_Arr[] = array(
                     'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
                     'extracost' => $PurchaseExtracosts_arr->extracost,
@@ -218,7 +218,7 @@ class PurchaseController extends Controller
             foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
                 $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                
+
                 $terms[] = array(
                     'bag' => $PurchaseProducts_arrdata->bagorkg,
                     'kgs' => $PurchaseProducts_arrdata->count,
@@ -232,7 +232,7 @@ class PurchaseController extends Controller
 
             $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $branchwise_datas->id)->get();
             foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
-                
+
                 $Extracost_Arr[] = array(
                     'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
                     'extracost' => $PurchaseExtracosts_arr->extracost,
@@ -869,7 +869,7 @@ class PurchaseController extends Controller
         $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        $bank = Bank::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $bank = Bank::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $PurchaseData->id)->get();
 
 
@@ -945,7 +945,8 @@ class PurchaseController extends Controller
 
 
 
-    public function print_view($unique_key) {
+    public function print_view($unique_key)
+    {
 
         $PurchaseData = Purchase::where('unique_key', '=', $unique_key)->first();
 
@@ -964,11 +965,66 @@ class PurchaseController extends Controller
 
     public function delete($unique_key)
     {
+        $today = Carbon::now()->format('Y-m-d');
+        $data = Purchase::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
+        $purchase_data = [];
+        $terms = [];
+        $Extracost_Arr = [];
+        foreach ($data as $key => $datas) {
+            $branch_name = Branch::findOrFail($datas->branch_id);
+            $supplier_name = Supplier::findOrFail($datas->supplier_id);
+
+            $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+            foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                $terms[] = array(
+                    'bag' => $PurchaseProducts_arrdata->bagorkg,
+                    'kgs' => $PurchaseProducts_arrdata->count,
+                    'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                    'total_price' => $PurchaseProducts_arrdata->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                );
+            }
+
+
+            $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datas->id)->get();
+            foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
+
+                $Extracost_Arr[] = array(
+                    'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+                    'extracost' => $PurchaseExtracosts_arr->extracost,
+                    'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+                );
+
+            }
+
+            $purchase_data[] = array(
+                'unique_key' => $datas->unique_key,
+                'branch_id' => $datas->branch_id,
+                'branch_name' => $branch_name->shop_name,
+                'supplier_name' => $supplier_name->name,
+                'date' => $datas->date,
+                'time' => $datas->time,
+                'gross_amount' => $datas->gross_amount,
+                'bill_no' => $datas->bill_no,
+                'id' => $datas->id,
+                'terms' => $terms,
+                'Extracost_Arr' => $Extracost_Arr,
+                'status' => $datas->status,
+            );
+        }
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+
+
+
+        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'today'));
+
     }
-
-
-
-    
 
 
 
@@ -979,11 +1035,11 @@ class PurchaseController extends Controller
         echo json_encode($userData);
     }
 
-    
+
 
     public function getoldbalance()
     {
-        
+
         $invoice_supplier = request()->get('invoice_supplier');
         $invoice_branchid = request()->get('invoice_branchid');
 
@@ -991,7 +1047,7 @@ class PurchaseController extends Controller
 
 
         $last_idrow = Purchase::where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->latest('id')->first();
-        
+
         if($last_idrow != ""){
 
             if($last_idrow->payment_pending != ""){
@@ -1000,7 +1056,7 @@ class PurchaseController extends Controller
             }else if($last_idrow->payment_pending == ""){
 
                 if($last_idrow->balance_amount != ""){
-                    
+
                     $userData['data'] = $last_idrow->balance_amount;
                 }else if($last_idrow->balance_amount == ""){
 
@@ -1014,11 +1070,11 @@ class PurchaseController extends Controller
                     }else {
                         $userData['data'] = 0;
                     }
-                    
+
                 }else {
                     $userData['data'] = 0;
                 }
-                
+
             }
         }else {
             $userData['data'] = 0;
@@ -1049,7 +1105,7 @@ class PurchaseController extends Controller
             }else if($last_idrow->payment_pending == NULL){
 
                 if($last_idrow->balance_amount != NULL){
-                    
+
                     $output[] = array(
                         'payment_pending' => $last_idrow->balance_amount,
                         'payment_purchase_id' => $last_idrow->id,
@@ -1068,9 +1124,9 @@ class PurchaseController extends Controller
                             'payment_purchase_id' => $secondlastrow->id,
                         );
                     }
-                    
+
                 }
-                
+
             }
         }else {
             $output[] = array(
@@ -2139,8 +2195,5 @@ class PurchaseController extends Controller
 
         return view('page.backend.purchase.report', compact('purchasereport_fromdate', 'branch', 'supplier', 'purchasereport_todate','purchasereport_branch', 'purchasereport_supplier', 'purchase_data'));
     }
-
-
-
 
 }

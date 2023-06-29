@@ -2,19 +2,19 @@
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="purchaseviewLargeModalLabel{{ $purchasedata['unique_key'] }}">Purchase Details</h5>
-            <a href="{{ route('purchase.index') }}"><button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
-        </button></a>
+        </button>
         </div>
         <div class="modal-body">
-            
-                
+
+
 
         <div class="card">
             <div class="card-body">
                <div style="padding-bottom: 25px;">
                <h6 >Bill No : #<span style="font-weight:700;" class="purchase_bill_no"></span></h6>
-                  
+
             </div>
          <div class="invoice-box table-height" style="max-width: 1600px;width:100%;overflow: auto;padding: 0;font-size: 14px;line-height: 24px;color: #555;">
                <div class="row">
@@ -56,18 +56,18 @@
 
 
 
-                  
-                  
-                     
-               
-               </div> 
+
+
+
+
+               </div>
                <div class="row">
                   <div class="col-lg-1"></div>
                   <div class="col-lg-9 col-9  col-sm-11">
                   <h7 style="color:black;font-weight:700;">PRODUCTS</h7>
                      <div class="row">
 
-                        
+
                                  <div class="col-lg-3 col-sm-3 col-12 border">
                                     <span class="" style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 700;line-height: 35px; ">Product</span>
                                  </div>
@@ -107,7 +107,7 @@
                      </div>
                   </div>
                   <div class="col-lg-1 col-1 col-sm-12"></div>
-                  
+
                </div><br/>
                <div class="row">
                   <div class="col-lg-1 col-1"></div>
