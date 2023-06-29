@@ -143,13 +143,22 @@
                                 <tbody>
                                     <tr>
                                         <td colspan="3">
-                                            <select class="select form-control commission_ornet" name="commission_ornet" id="commission_ornet">
-                                                <option value="" disabled selected hiddden>Select Detail</option>
-                                                <option value="commission">Commission</option>
-                                                <option value="netprice">Net Price</option>
-                                            </select>
+                                            
+
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input commission_ornet" type="radio" name="commission_ornet" id="commission" value="commission">
+                                                <label class="form-check-label" for="commission">
+                                                Commission
+                                                </label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input commission_ornet" type="radio" name="commission_ornet" id="netprice" value="netprice">
+                                                <label class="form-check-label" for="netprice">
+                                                Net Price
+                                                </label>
+                                            </div>
                                         </td>
-                                        <td><input type="text" style="display:none" value="0" class="form-control commission_percent" name="commission_percent" id="commission_percent"/></td>
+                                        <td><input type="text" style="display:none" value="" class="form-control commission_percent" name="commission_percent" id="commission_percent"/></td>
                                         <td><input type="text" class="form-control commission_amount" readonly  name="commission_amount" id="commission_amount" value=""/></td>
                                         <td></td>
                                     </tr>

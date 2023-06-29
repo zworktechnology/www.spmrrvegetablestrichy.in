@@ -20,7 +20,7 @@
                 <a href="{{ route('sales.create') }}" class="btn btn-added">Add Sales</a>
             </div>
         </div>
-        <div class="row">
+        <div class="row py-2" style="margin-bottom:10px;">
 
             <div class="col-lg-2 col-sm-4 col-6">
                 <a href="{{ route('sales.index') }}" style="color: black">
@@ -57,6 +57,7 @@
                     <table class="table  customerdatanew">
                         <thead>
                             <tr>
+                                <th>Date</th>
                                 <th>Bill No</th>
                                 <th>Customer</th>
                                 <th>Branch</th>
@@ -68,10 +69,17 @@
                         <tbody>
                             @foreach ($Sales_data as $keydata => $Sales_datas)
                                 <tr>
+                                    <td>{{ date('d-m-Y', strtotime($Sales_datas['date'])) }}</td>
                                     <td>#{{ $Sales_datas['bill_no'] }}</td>
                                     <td>{{ $Sales_datas['customer_name'] }}</td>
                                     <td>{{ $Sales_datas['branch_name'] }}</td>
-                                    <td>ONION - 4 BAG, TAMOTO - 4 KG</td>
+                                    <td>
+                                    @foreach ($Sales_datas['sales_terms'] as $index => $terms_array)
+                                                    @if ($terms_array['sales_id'] == $Sales_datas['id'])
+                                                    {{ $terms_array['product_name'] }} - {{ $terms_array['kgs'] }}{{ $terms_array['bag'] }},<br/>
+                                                    @endif
+                                                    @endforeach
+                                    </td>
                                     <td>{{ $Sales_datas['gross_amount'] }}</td>
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">

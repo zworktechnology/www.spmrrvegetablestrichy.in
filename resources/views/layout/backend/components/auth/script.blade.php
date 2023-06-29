@@ -107,29 +107,7 @@ $(".purchaseclose").click(function() {
         });
 
 
-        $(document).on("blur", "input[name*=price_per_kg]", function() { 
-            var invoice_supplier = $(".invoice_supplier").val();
-            var invoice_branchid = $(".invoice_branchid").val();
-
-            console.log(invoice_branchid);
-            console.log(invoice_supplier);
-            $('.old_balance').val('');
-            $.ajax({
-            url: '/getoldbalance/',
-            type: 'get',
-            data: {_token: "{{ csrf_token() }}",
-                        invoice_supplier: invoice_supplier,
-                        invoice_branchid: invoice_branchid,
-                    },
-            dataType: 'json',
-                success: function(response) {
-                    console.log(response);
-                            $(".old_balance").val(response['data']);
-                        
-                        
-                }
-            });
-        });
+       
 
         $('.commission_ornet').on('change', function() {
             var commission_ornet = this.value;
@@ -138,6 +116,7 @@ $(".purchaseclose").click(function() {
             }else if(commission_ornet == 'netprice'){
                 $("#commission_percent").hide();
                 $(".commission_amount").val(0);
+                $("#commission_percent").val(0);
             }
         });
         $(document).on("keyup", 'input.commission_percent', function() { 
@@ -482,7 +461,7 @@ $(".purchaseclose").click(function() {
                                     });
 
                         
-        var totalExtraAmount = 0;
+            var totalExtraAmount = 0;
             $("input[name='extracost[]']").each(
                                     function() {
                                         totalExtraAmount = Number(totalExtraAmount) +
@@ -490,9 +469,9 @@ $(".purchaseclose").click(function() {
                                         $('.total_extracost').val(
                                             totalExtraAmount);
                                     });
-        var commission_amount = $(".commission_amount").val();
-        var tot_comm_extracost = Number(totalExtraAmount) + Number(commission_amount);
-        $(".tot_comm_extracost").val(tot_comm_extracost);
+            var commission_amount = $(".commission_amount").val();
+            var tot_comm_extracost = Number(totalExtraAmount) + Number(commission_amount);
+            $(".tot_comm_extracost").val(tot_comm_extracost);
 
                 
                 var total_amount = $(".total_amount").val();
@@ -539,7 +518,35 @@ $(".purchaseclose").click(function() {
                 var grand_total = $(".grand_total").val();
                 var pending_amount = Number(grand_total) - Number(payable_amount);
                 $('.pending_amount').val(pending_amount.toFixed(2));
-            });                    
+            });     
+
+            
+            var invoice_supplier = $(".invoice_supplier").val();
+            var invoice_branchid = $(".invoice_branchid").val();
+
+            console.log(invoice_branchid);
+            console.log(invoice_supplier);
+            $('.old_balance').val('');
+            $.ajax({
+            url: '/getoldbalance/',
+            type: 'get',
+            data: {_token: "{{ csrf_token() }}",
+                        invoice_supplier: invoice_supplier,
+                        invoice_branchid: invoice_branchid,
+                    },
+            dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                            $(".old_balance").val(response['data']);
+                            var gross_amount = $(".gross_amount").val();
+                            var grand_total = Number(response['data']) + Number(gross_amount);
+                            $('.grand_total').val(grand_total.toFixed(2));
+
+                            var payable_amount = $(".payable_amount").val();
+                            var pending_amount = Number(grand_total) - Number(payable_amount);
+                            $('.pending_amount').val(pending_amount.toFixed(2));
+                }
+            });
         });
 
 
@@ -730,30 +737,7 @@ $(document).ready(function() {
 
 
 
-        $(document).on("blur", "input[name*=sales_priceperkg]", function() { 
-            var sales_branch_id = $(".sales_branch_id").val();
-            var sales_customerid = $(".sales_customerid").val();
-                $('.sales_old_balance').html('');
-                $.ajax({
-                url: '/getoldbalanceforSales/',
-                type: 'get',
-                data: {
-                            _token: "{{ csrf_token() }}",
-                            sales_customerid: sales_customerid,
-                            sales_branch_id: sales_branch_id
-                        },
-                dataType: 'json',
-                    success: function(response) {
-                        console.log(response);
-                        var len = response.length;
-                        for (var i = 0; i < len; i++) {
-                            $(".sales_old_balance").val(response[i].payment_pending);
-                        }
-                        
-                    }
-                });
-        });
-
+       
 
         
 });
@@ -849,6 +833,11 @@ $(document).on('click', '.remove-salestr', function() {
 
 
       $(document).on("blur", "input[name*=sales_priceperkg]", function() {
+
+            
+
+
+
          var sales_priceperkg = $(this).val();
          var sales_count = $(this).parents('tr').find('.sales_count').val();
          var sales_total = sales_count * sales_priceperkg;
@@ -897,6 +886,42 @@ $(document).on('click', '.remove-salestr', function() {
                 var sales_pending_amount = Number(sales_grand_total) - Number(salespayable_amount);
                 $('.sales_pending_amount').val(sales_pending_amount.toFixed(2));
             });   
+
+
+
+
+            var sales_branch_id = $(".sales_branch_id").val();
+            var sales_customerid = $(".sales_customerid").val();
+                $('.sales_old_balance').html('');
+                $.ajax({
+                url: '/getoldbalanceforSales/',
+                type: 'get',
+                data: {
+                            _token: "{{ csrf_token() }}",
+                            sales_customerid: sales_customerid,
+                            sales_branch_id: sales_branch_id
+                        },
+                dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        var len = response.length;
+                        for (var i = 0; i < len; i++) {
+                            $(".sales_old_balance").val(response[i].payment_pending);
+
+                            var sales_gross_amount = $(".sales_gross_amount").val();
+                            var sales_grand_total = Number(response[i].payment_pending) + Number(sales_gross_amount);
+                            $('.sales_grand_total').val(sales_grand_total.toFixed(2));
+
+                            var salespayable_amount = $(".salespayable_amount").val();
+                            var sales_pending_amount = Number(sales_grand_total) - Number(salespayable_amount);
+                            $('.sales_pending_amount').val(sales_pending_amount.toFixed(2));
+                        }
+                        
+                    }
+                });
+
+
+
       });
 
 

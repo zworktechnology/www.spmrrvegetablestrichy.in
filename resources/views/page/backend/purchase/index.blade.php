@@ -26,10 +26,10 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row py-2" style="margin-bottom:10px;">
             <div class="col-lg-2 col-sm-4 col-6">
                 <a href="{{ route('purchase.index') }}" style="color: black">
-                    <div class="dash-widget">
+                    <div class="dash-widget" style="margin-bottom:18px;">
                         <div class="dash-widgetcontent">
                             <h6 style="font-weight: bold;">All</h6>
                         </div>
@@ -65,6 +65,7 @@
                     <table class="table  customerdatanew">
                         <thead>
                             <tr>
+                                <th>Date</th>
                                 <th>Bill No</th>
                                 <th>Supplier</th>
                                 <th>Branch</th>
@@ -76,10 +77,17 @@
                         <tbody>
                             @foreach ($purchase_data as $keydata => $purchasedata)
                                 <tr>
+                                    <td>{{ date('d-m-Y', strtotime($purchasedata['date'])) }}</td>
                                     <td>#{{ $purchasedata['bill_no'] }}</td>
                                     <td>{{ $purchasedata['supplier_name'] }}</td>
                                     <td>{{ $purchasedata['branch_name'] }}</td>
-                                    <td>ONION - 2 Bag</td>
+                                    <td>
+                                    @foreach ($purchasedata['terms'] as $index => $terms_array)
+                                                    @if ($terms_array['purchase_id'] == $purchasedata['id'])
+                                                    {{ $terms_array['product_name'] }} - {{ $terms_array['kgs'] }}{{ $terms_array['bag'] }},<br/>
+                                                    @endif
+                                                    @endforeach
+                                    </td>
                                     <td>{{ $purchasedata['gross_amount'] }}</td>
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
@@ -109,7 +117,7 @@
                                                         class="badges bg-lightgreen" style="color: white">Pattial</a>
                                                 @elseif ($purchasedata['status'] == 1)
                                                     <a href="{{ route('purchase.print_view', ['unique_key' => $purchasedata['unique_key']]) }}"
-                                                        class="badges bg-green" style="color: white">Generated Invoice</a>
+                                                        class="badges bg-green" style="color: white">Invoice</a>
                                                 @endif
                                             </li>
 
