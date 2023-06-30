@@ -107,8 +107,8 @@ class SalesController extends Controller
         return view('page.backend.sales.index', compact('Sales_data', 'allbranch', 'branch_id', 'today'));
     }
 
-    public function datefilter(Request $request) {
-
+    public function datefilter(Request $request)
+    {
 
         $today = $request->get('from_date');
 
@@ -167,8 +167,6 @@ class SalesController extends Controller
         return view('page.backend.sales.create', compact('productlist', 'branch', 'customer', 'today', 'timenow', 'bank'));
     }
 
-
-
     public function store(Request $request)
     {
         // Sales Table
@@ -206,7 +204,7 @@ class SalesController extends Controller
             $data->branch_id = $request->get('sales_branch_id');
             $data->date = $request->get('sales_date');
             $data->time = $request->get('sales_time');
-            
+
             $data->bill_no = $request->get('sales_billno');
             $data->bank_id = $request->get('sales_bank_id');
             $data->total_amount = $request->get('sales_total_amount');
@@ -270,7 +268,7 @@ class SalesController extends Controller
 
             }
 
-            
+
 
             return redirect()->route('sales.index')->with('add', 'Sales Data added successfully!');
 
@@ -282,7 +280,8 @@ class SalesController extends Controller
     }
 
 
-    public function print_view($unique_key) {
+    public function print_view($unique_key)
+    {
 
         $SalesData = Sales::where('unique_key', '=', $unique_key)->first();
 
@@ -326,7 +325,7 @@ class SalesController extends Controller
         $Sales_Data->date = $request->get('sales_date');
         $Sales_Data->time = $request->get('sales_time');
         $Sales_Data->bank_id = $request->get('sales_bank_id');
-        
+
         $Sales_Data->total_amount = $request->get('sales_total_amount');
         $Sales_Data->note = $request->get('sales_extracost_note');
         $Sales_Data->extra_cost = $request->get('sales_extracost');
@@ -1532,7 +1531,7 @@ class SalesController extends Controller
             }else if($last_idrow->sales_paymentpending == NULL){
 
                 if($last_idrow->balance_amount != NULL){
-                    
+
                     $output[] = array(
                         'payment_pending' => $last_idrow->balance_amount,
                         'payment_sales_id' => $last_idrow->id,
@@ -1551,9 +1550,9 @@ class SalesController extends Controller
                             'payment_sales_id' => $secondlastrow->id,
                         );
                     }
-                    
+
                 }
-                
+
             }
         }else {
             $output[] = array(
@@ -1648,7 +1647,7 @@ class SalesController extends Controller
     {
         $sales_product_id = request()->get('sales_product_id');
         $sales_branch_id = request()->get('sales_branch_id');
-        
+
         $GetProduct[] = Product::where('soft_delete', '!=', 1)->where('productlist_id', '=', $sales_product_id)->where('branchtable_id', '=', $sales_branch_id)->get();
         echo json_encode($GetProduct);
     }
@@ -1674,7 +1673,7 @@ class SalesController extends Controller
             }else if($last_idrow->sales_paymentpending == NULL){
 
                 if($last_idrow->balance_amount != NULL){
-                    
+
                     $output[] = array(
                         'payment_pending' => $last_idrow->balance_amount,
                         'payment_sales_id' => $last_idrow->id,
@@ -1693,9 +1692,9 @@ class SalesController extends Controller
                             'payment_sales_id' => $secondlastrow->id,
                         );
                     }
-                    
+
                 }
-                
+
             }
         }else {
             $output[] = array(

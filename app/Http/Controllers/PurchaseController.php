@@ -574,7 +574,8 @@ class PurchaseController extends Controller
 
 
 
-    public function print_view($unique_key) {
+    public function print_view($unique_key)
+    {
 
         $PurchaseData = Purchase::where('unique_key', '=', $unique_key)->first();
 
@@ -593,15 +594,7 @@ class PurchaseController extends Controller
 
     public function delete($unique_key)
     {
-    }
-
-
-
-
-
-
-
-
+        $today = Carbon::now()->format('Y-m-d');
         $data = Purchase::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
         $purchase_data = [];
         $terms = [];
@@ -1827,8 +1820,5 @@ class PurchaseController extends Controller
 
         return view('page.backend.purchase.report', compact('purchasereport_fromdate', 'branch', 'supplier', 'purchasereport_todate','purchasereport_branch', 'purchasereport_supplier', 'purchase_data'));
     }
-
-
-
 
 }
