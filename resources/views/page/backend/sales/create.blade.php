@@ -42,7 +42,7 @@
                   </div>
                </div>
             
-               <div class="col-lg-3 col-sm-6 col-12">
+               <div class="col-lg-4 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Customer<span style="color: red;">*</span> </label>
                      <select class="form-control js-example-basic-single select sales_customerid" name="sales_customerid" id="sales_customerid">
@@ -54,7 +54,7 @@
                   </div>
                </div>
 
-               <div class="col-lg-4 col-sm-6 col-12">
+               <div class="col-lg-3 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank<span style="color: red;">*</span></label>
                      <select class="select" name="sales_bank_id" id="sales_bank_id">
