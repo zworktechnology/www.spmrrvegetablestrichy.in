@@ -128,7 +128,7 @@ class PurchaseController extends Controller
 
                     $Merge_ProductlistId = array_merge($purchase_Array, $sales_Array);
 
-                    foreach (array_unique($Merge_ProductlistId) as $key => $Merge_Productlist) {
+                    foreach (($Merge_ProductlistId) as $key => $Merge_Productlist) {
                         $productlist_ID = Productlist::findOrFail($Merge_Productlist);
 
 
@@ -305,7 +305,7 @@ class PurchaseController extends Controller
 
                     $Merge_ProductlistId = array_merge($purchase_Array, $sales_Array);
 
-                    foreach (array_unique($Merge_ProductlistId) as $key => $Merge_Productlist) {
+                    foreach (($Merge_ProductlistId) as $key => $Merge_Productlist) {
                         $productlist_ID = Productlist::findOrFail($Merge_Productlist);
 
 
@@ -478,7 +478,7 @@ class PurchaseController extends Controller
 
                     $Merge_ProductlistId = array_merge($purchase_Array, $sales_Array);
 
-                    foreach (array_unique($Merge_ProductlistId) as $key => $Merge_Productlist) {
+                    foreach (($Merge_ProductlistId) as $key => $Merge_Productlist) {
                         $productlist_ID = Productlist::findOrFail($Merge_Productlist);
 
 
