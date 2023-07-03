@@ -23,7 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
 
-            $table->unsignedBigInteger('sales_id');
+            $table->unsignedBigInteger('sales_id')->nullable();
             $table->foreign('sales_id')->references('id')->on('sales')->onDelete('cascade');
 
             $table->string('date');

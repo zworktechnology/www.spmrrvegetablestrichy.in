@@ -9,6 +9,7 @@ use App\Models\Purchase;
 use App\Models\PurchaseProduct;
 use App\Models\PurchasePayment;
 use App\Models\Productlist;
+use App\Models\BranchwiseBalance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -64,29 +65,51 @@ class PurchasePaymentController extends Controller
 
     public function store(Request $request)
     {
-        $randomkey = Str::random(5);
+        
 
-        $data = new PurchasePayment();
+        $supplier_id = $request->get('supplier_id');
+        $branch_id = $request->get('branch_id');
 
-        $data->unique_key = $randomkey;
-        $data->supplier_id = $request->get('supplier_id');
-        $data->branch_id = $request->get('branch_id');
-        $data->purchase_id = $request->get('payment_purchase_id');
-        $data->date = $request->get('date');
-        $data->time = $request->get('time');
-        $data->oldblance = $request->get('oldblance');
-        $data->amount = $request->get('payment_payableamount');
-        $data->payment_pending = $request->get('payment_pending');
-        $data->save();
-
-        $payment_paid_amount = $request->get('payment_payableamount');
-        $payment_pending = $request->get('payment_pending');
-        $payment_purchase_id = $request->get('payment_purchase_id');
+        
+        $PurchseData = BranchwiseBalance::where('supplier_id', '=', $supplier_id)->where('branch_id', '=', $branch_id)->first();
+        if($PurchseData != ""){
 
 
-        DB::table('purchases')->where('id', $payment_purchase_id)->update([
-            'payment_paid_amount' => $payment_paid_amount,  'payment_pending' => $payment_pending, 'purchase_payment_id' => $data->id
-        ]);
+            $randomkey = Str::random(5);
+
+            $data = new PurchasePayment();
+
+            $data->unique_key = $randomkey;
+            $data->supplier_id = $request->get('supplier_id');
+            $data->branch_id = $request->get('branch_id');
+            $data->purchase_id = $request->get('payment_purchase_id');
+            $data->date = $request->get('date');
+            $data->time = $request->get('time');
+            $data->oldblance = $request->get('oldblance');
+            $data->amount = $request->get('payment_payableamount');
+            $data->payment_pending = $request->get('payment_pending');
+            $data->save();
+
+            
+
+
+
+
+            $old_grossamount = $PurchseData->purchase_amount;
+            $old_paid = $PurchseData->purchase_paid;
+
+            $payment_paid_amount = $request->get('payment_payableamount');
+
+            $new_paid = $old_paid + $payment_paid_amount;
+            $new_balance = $old_grossamount - $new_paid;
+
+            DB::table('branchwise_balances')->where('supplier_id', $supplier_id)->where('branch_id', $branch_id)->update([
+                'purchase_paid' => $new_paid, 'purchase_balance' => $new_balance
+            ]);
+
+        }
+
+        
 
         return redirect()->route('purchasepayment.index')->with('add', 'Payment Data added successfully!');
     }

@@ -5,6 +5,7 @@ use App\Models\Customer;
 use App\Models\Purchase;
 use App\Models\Sales;
 use App\Models\Salespayment;
+use App\Models\BranchwiseBalance;
 use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -72,35 +73,16 @@ class CustomerController extends Controller
             foreach ($Customer_array as $key => $Customer_arra) {
 
 
-                $last_idrow = Sales::where('soft_delete', '!=', 1)
-                                ->where('customer_id', '=', $Customer_arra->id)
-                                ->where('branch_id', '=', $alldata_branchs->id)
-                                ->latest('id')
-                                ->first();
+                $last_idrow = BranchwiseBalance::where('customer_id', '=', $Customer_arra->id)->where('branch_id', '=', $alldata_branchs->id)->first();
 
                 if($last_idrow != ""){
-                    if($last_idrow->sales_paymentpending != NULL){
-                        $tot_balace = $last_idrow->sales_paymentpending;
+                    if($last_idrow->sales_balance != NULL){
+                        $tot_balace = $last_idrow->sales_balance;
         
-                    }else if($last_idrow->sales_paymentpending == NULL){
-        
-                        if($last_idrow->balance_amount != NULL){
-                            
-                            $tot_balace = $last_idrow->balance_amount;
-                        }else if($last_idrow->balance_amount == NULL){
-        
-                            $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $Customer_arra->id)->where('branch_id', '=', $alldata_branchs->id)->skip(1)->take(1)->first();
-                            if($secondlastrow != ""){
-                                if($secondlastrow->sales_paymentpending != NULL){
-                                    $tot_balace = $secondlastrow->sales_paymentpending;
-                                }else {
-                                    $tot_balace = $secondlastrow->balance_amount;
-                                }
-                            }
-                            
-                            
-                        }
-                        
+                    }else {
+
+                        $tot_balace = 0;
+                       
                     }
 
                 }else {

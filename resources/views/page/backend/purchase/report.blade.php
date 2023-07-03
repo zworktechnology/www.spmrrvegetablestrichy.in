@@ -125,7 +125,7 @@
                                                     <td>
                                                     @foreach ($purchasedata['terms'] as $index => $terms_array)
                                                     @if ($terms_array['purchase_id'] == $purchasedata['id'])
-                                                    {{ $terms_array['product_name'] }},
+                                                    {{ $terms_array['product_name'] }} - {{ $terms_array['kgs'] }}{{ $terms_array['bag'] }},<br/>
                                                     @endif
                                                     @endforeach
                                                     </td>

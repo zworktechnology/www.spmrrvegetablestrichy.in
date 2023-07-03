@@ -69,7 +69,7 @@
                                     @foreach ($branch as $branches)
                                         <option
                                             value="{{ $branches->id }}"@if ($branches->id === $PurchaseData->branch_id) selected='selected' @endif>
-                                            {{ $branches->name }}</option>
+                                            {{ $branches->shop_name }}</option>
                                     @endforeach
                                 </select>
                             </div>

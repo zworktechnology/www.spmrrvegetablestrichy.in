@@ -123,7 +123,7 @@
                                                     <td>
                                                     @foreach ($Sales_datas['sales_terms'] as $index => $terms_array)
                                                     @if ($terms_array['sales_id'] == $Sales_datas['id'])
-                                                    {{ $terms_array['product_name'] }},
+                                                    {{ $terms_array['product_name'] }} - {{ $terms_array['kgs'] }}{{ $terms_array['bag'] }},<br/>
                                                     @endif
                                                     @endforeach
                                                     </td>

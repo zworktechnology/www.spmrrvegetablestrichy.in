@@ -11,6 +11,7 @@ use App\Models\Sales;
 use App\Models\SalesProduct;
 use App\Models\PurchaseProduct;
 use App\Models\PurchaseExtracost;
+use App\Models\BranchwiseBalance;
 use App\Models\Bank;
 use App\Models\Productlist;
 use Illuminate\Http\Request;
@@ -84,10 +85,10 @@ class PurchaseController extends Controller
 
         
             $PSTodayStockArr = [];
-            $purchase_branchwise_data = Purchase::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
-            $sales_branchwise_data = Sales::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
+            $purchase_branchwise_data = PurchaseProduct::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
+            $sales_branchwise_data = SalesProduct::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
 
-            if($purchase_branchwise_data != "" || $sales_branchwise_data != ""){
+            
 
                 $Purchase_Branch = [];
                 foreach ($purchase_branchwise_data as $key => $purchase_Data) {
@@ -132,43 +133,45 @@ class PurchaseController extends Controller
 
 
 
-                        $getPurchaseorNot = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
-                        $getSalesorNot = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
+                        $getPurchaseorNotbag = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'bag')->first();
+                        $getPurchaseorNotkg = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'kg')->first();
+                        $getSalesorNotbag = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'bag')->first();
+                        $getSalesorNotkg = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'kg')->first();
 
-                        $Pbagcount = '';
-                        $Pkgcount = '';
-                        if($getPurchaseorNot != ""){
-                            foreach ($getPurchaseorNot as $key => $getPurchaseorNots) {
 
-                                if($getPurchaseorNots->bagorkg == 'bag'){
-                                    $Pbagcount = $getPurchaseorNots->count;
-                                }else {
-                                    $Pbagcount = '';
-                                }
-                                if($getPurchaseorNots->bagorkg == 'kg'){
-                                    $Pkgcount = $getPurchaseorNots->count;
-                                }else {
-                                    $Pkgcount = '';
-                                }
-                            }
+
+                        
+                        if($getPurchaseorNotbag != ""){
+                            
+                            $Pbagcount = $getPurchaseorNotbag->count;
+                            
+                        }else {
+                            $Pbagcount = '';
+                        }
+                        if($getPurchaseorNotkg != ""){
+                            
+                            $Pkgcount = $getPurchaseorNotkg->count;
+                            
+                        }else{
+                            $Pkgcount = '';
                         }
 
-                        $Sbagcount = '';
-                        $Skgcount = '';
-                        if($getSalesorNot != ""){
-                            foreach ($getSalesorNot as $key => $getSalesorNots) {
 
-                                if($getSalesorNots->bagorkg == 'bag'){
-                                    $Sbagcount = $getSalesorNots->count;
-                                }else {
-                                    $Sbagcount = '';
-                                }
-                                if($getSalesorNots->bagorkg == 'kg'){
-                                    $Skgcount = $getSalesorNots->count;
-                                }else{
-                                    $Skgcount = '';
-                                }
-                            }
+
+                       
+                        if($getSalesorNotbag != ""){
+                            
+                            $Sbagcount = $getSalesorNotbag->count;
+                            
+                        }else{
+                            $Sbagcount = '';
+                        }
+                        if($getSalesorNotkg != ""){
+                            
+                            $Skgcount = $getSalesorNotkg->count;
+                            
+                        }else{
+                            $Skgcount = '';
                         }
 
 
@@ -188,7 +191,7 @@ class PurchaseController extends Controller
                 }
 
               
-            }
+            
 
             
 
@@ -309,42 +312,36 @@ class PurchaseController extends Controller
 
 
 
-                        $getPurchaseorNot = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
-                        $getSalesorNot = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
+                        $getPurchaseorNotbag = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'bag')->get();
+                        $getPurchaseorNotkg = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'kg')->get();
+                        $getSalesorNotbag = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'bag')->get();
+                        $getSalesorNotkg = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'kg')->get();
+
+
 
                         $Pbagcount = '';
                         $Pkgcount = '';
-                        if($getPurchaseorNot != ""){
-                            foreach ($getPurchaseorNot as $key => $getPurchaseorNots) {
-
-                                if($getPurchaseorNots->bagorkg == 'bag'){
+                        if($getPurchaseorNotbag != ""){
+                            foreach ($getPurchaseorNotbag as $key => $getPurchaseorNots) {
                                     $Pbagcount = $getPurchaseorNots->count;
-                                }else {
-                                    $Pbagcount = '';
-                                }
-                                if($getPurchaseorNots->bagorkg == 'kg'){
-                                    $Pkgcount = $getPurchaseorNots->count;
-                                }else {
-                                    $Pkgcount = '';
-                                }
+                            }
+                        }
+                        if($getPurchaseorNotkg != ""){
+                            foreach ($getPurchaseorNotkg as $key => $getPurchaseorNotkgs) {
+                                $Pkgcount = $getPurchaseorNotkgs->count;
                             }
                         }
 
                         $Sbagcount = '';
                         $Skgcount = '';
-                        if($getSalesorNot != ""){
-                            foreach ($getSalesorNot as $key => $getSalesorNots) {
-
-                                if($getSalesorNots->bagorkg == 'bag'){
-                                    $Sbagcount = $getSalesorNots->count;
-                                }else {
-                                    $Sbagcount = '';
-                                }
-                                if($getSalesorNots->bagorkg == 'kg'){
-                                    $Skgcount = $getSalesorNots->count;
-                                }else{
-                                    $Skgcount = '';
-                                }
+                        if($getSalesorNotbag != ""){
+                            foreach ($getSalesorNotbag as $key => $getSalesorNotbags) {
+                                $Sbagcount = $getSalesorNotbags->count;
+                            }
+                        }
+                        if($getSalesorNotkg != ""){
+                            foreach ($getSalesorNotkg as $key => $getSalesorNotkgs) {
+                                $Skgcount = $getSalesorNotkgs->count;
                             }
                         }
 
@@ -482,46 +479,38 @@ class PurchaseController extends Controller
 
 
 
-                        $getPurchaseorNot = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
-                        $getSalesorNot = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
+                        $getPurchaseorNotbag = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'bag')->get();
+                        $getPurchaseorNotkg = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'kg')->get();
+                        $getSalesorNotbag = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'bag')->get();
+                        $getSalesorNotkg = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'kg')->get();
+
+
 
                         $Pbagcount = '';
                         $Pkgcount = '';
-                        if($getPurchaseorNot != ""){
-                            foreach ($getPurchaseorNot as $key => $getPurchaseorNots) {
-
-                                if($getPurchaseorNots->bagorkg == 'bag'){
+                        if($getPurchaseorNotbag != ""){
+                            foreach ($getPurchaseorNotbag as $key => $getPurchaseorNots) {
                                     $Pbagcount = $getPurchaseorNots->count;
-                                }else {
-                                    $Pbagcount = '';
-                                }
-                                if($getPurchaseorNots->bagorkg == 'kg'){
-                                    $Pkgcount = $getPurchaseorNots->count;
-                                }else {
-                                    $Pkgcount = '';
-                                }
+                            }
+                        }
+                        if($getPurchaseorNotkg != ""){
+                            foreach ($getPurchaseorNotkg as $key => $getPurchaseorNotkgs) {
+                                $Pkgcount = $getPurchaseorNotkgs->count;
                             }
                         }
 
                         $Sbagcount = '';
                         $Skgcount = '';
-                        if($getSalesorNot != ""){
-                            foreach ($getSalesorNot as $key => $getSalesorNots) {
-
-                                if($getSalesorNots->bagorkg == 'bag'){
-                                    $Sbagcount = $getSalesorNots->count;
-                                }else {
-                                    $Sbagcount = '';
-                                }
-                                if($getSalesorNots->bagorkg == 'kg'){
-                                    $Skgcount = $getSalesorNots->count;
-                                }else{
-                                    $Skgcount = '';
-                                }
+                        if($getSalesorNotbag != ""){
+                            foreach ($getSalesorNotbag as $key => $getSalesorNotbags) {
+                                $Sbagcount = $getSalesorNotbags->count;
                             }
                         }
-
-
+                        if($getSalesorNotkg != ""){
+                            foreach ($getSalesorNotkg as $key => $getSalesorNotkgs) {
+                                $Skgcount = $getSalesorNotkgs->count;
+                            }
+                        }
 
 
                         $PSTodayStockArr[] = array(
@@ -676,6 +665,10 @@ class PurchaseController extends Controller
 
 
             }
+
+
+
+            
 
 
 
@@ -902,6 +895,10 @@ class PurchaseController extends Controller
         $Purchase_Data->update();
 
 
+
+       
+
+
         $PurchaseId = $Purchase_Data->id;
 
         // Purchase Products Table
@@ -937,6 +934,40 @@ class PurchaseController extends Controller
                 $PurchaseExtracost->extracost = $request->extracost[$key];
                 $PurchaseExtracost->save();
             }
+        }
+
+
+
+        $PurchseData = BranchwiseBalance::where('supplier_id', '=', $Purchase_Data->supplier_id)->where('branch_id', '=', $Purchase_Data->branch_id)->first();
+        if($PurchseData != ""){
+
+            $old_grossamount = $PurchseData->purchase_amount;
+            $old_paid = $PurchseData->purchase_paid;
+
+            $gross_amount = $request->get('gross_amount');
+            $payable_amount = $request->get('payable_amount');
+
+            $new_grossamount = $old_grossamount + $gross_amount;
+            $new_paid = $old_paid + $payable_amount;
+            $new_balance = $new_grossamount - $new_paid;
+
+            DB::table('branchwise_balances')->where('supplier_id', $Purchase_Data->supplier_id)->where('branch_id', $Purchase_Data->branch_id)->update([
+                'purchase_amount' => $new_grossamount,  'purchase_paid' => $new_paid, 'purchase_balance' => $new_balance
+            ]);
+            
+        }else {
+            $gross_amount = $request->get('gross_amount');
+            $payable_amount = $request->get('payable_amount');
+            $balance_amount = $gross_amount - $payable_amount;
+
+            $data = new BranchwiseBalance();
+
+            $data->supplier_id = $Purchase_Data->supplier_id;
+            $data->branch_id = $Purchase_Data->branch_id;
+            $data->purchase_amount = $request->get('gross_amount');
+            $data->purchase_paid = $request->get('payable_amount');
+            $data->purchase_balance = $balance_amount;
+            $data->save();
         }
 
         return redirect()->route('purchase.index')->with('update', 'Updated Purchase information has been added to your list.');
@@ -1046,36 +1077,15 @@ class PurchaseController extends Controller
 
 
 
-        $last_idrow = Purchase::where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->latest('id')->first();
-
+        $last_idrow = BranchwiseBalance::where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->first();
+        
         if($last_idrow != ""){
 
-            if($last_idrow->payment_pending != ""){
-
-                $userData['data'] = $last_idrow->payment_pending;
-            }else if($last_idrow->payment_pending == ""){
-
-                if($last_idrow->balance_amount != ""){
-
-                    $userData['data'] = $last_idrow->balance_amount;
-                }else if($last_idrow->balance_amount == ""){
-
-                    $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $invoice_supplier)->where('branch_id', '=', $invoice_branchid)->skip(1)->take(1)->first();
-                    if($secondlastrow != ""){
-                        if($secondlastrow->payment_pending != ""){
-                            $userData['data'] = $secondlastrow->payment_pending;
-                        }else {
-                            $userData['data'] = $secondlastrow->balance_amount;
-                        }
-                    }else {
-                        $userData['data'] = 0;
-                    }
-
-                }else {
-                    $userData['data'] = 0;
-                }
-
+            if($last_idrow->purchase_balance != NULL){
+                $userData['data'] = $last_idrow->purchase_balance;
             }
+            
+            
         }else {
             $userData['data'] = 0;
         }
@@ -1093,45 +1103,24 @@ class PurchaseController extends Controller
 
 
 
-        $last_idrow = Purchase::where('supplier_id', '=', $supplier_id)->where('branch_id', '=', $branch_id)->latest('id')->first();
+        $last_idrow = BranchwiseBalance::where('supplier_id', '=', $supplier_id)->where('branch_id', '=', $branch_id)->first();
         if($last_idrow != ""){
 
-            if($last_idrow->payment_pending != NULL){
+            if($last_idrow->purchase_balance != NULL){
 
                 $output[] = array(
-                    'payment_pending' => $last_idrow->payment_pending,
-                    'payment_purchase_id' => $last_idrow->id,
+                    'payment_pending' => $last_idrow->purchase_balance,
                 );
-            }else if($last_idrow->payment_pending == NULL){
-
-                if($last_idrow->balance_amount != NULL){
-
-                    $output[] = array(
-                        'payment_pending' => $last_idrow->balance_amount,
-                        'payment_purchase_id' => $last_idrow->id,
-                    );
-                }else if($last_idrow->balance_amount == NULL){
-
-                    $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $supplier_id)->where('branch_id', '=', $branch_id)->skip(1)->take(1)->first();
-                    if($secondlastrow->payment_pending != NULL){
-                        $output[] = array(
-                            'payment_pending' => $secondlastrow->payment_pending,
-                            'payment_purchase_id' => $secondlastrow->id,
-                        );
-                    }else {
-                        $output[] = array(
-                            'payment_pending' => $secondlastrow->balance_amount,
-                            'payment_purchase_id' => $secondlastrow->id,
-                        );
-                    }
-
-                }
+            }else {
+                $output[] = array(
+                    'payment_pending' => 0,
+                );
+                
 
             }
         }else {
             $output[] = array(
-                'payment_pending' => '',
-                'payment_purchase_id' => '',
+                'payment_pending' => 0,
             );
         }
 

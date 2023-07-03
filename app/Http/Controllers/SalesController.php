@@ -12,6 +12,7 @@ use App\Models\Sales;
 use App\Models\SalesProduct;
 use App\Models\Purchase;
 use App\Models\PurchaseProduct;
+use App\Models\BranchwiseBalance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -505,6 +506,7 @@ class SalesController extends Controller
     {
         // Sales Table
 
+            $sales_customerid = $request->get('sales_customerid');
             $sales_branch_id = $request->get('sales_branch_id');
             $sales_date = $request->get('sales_date');
             $s_bill_no = 1;
@@ -602,6 +604,40 @@ class SalesController extends Controller
                 }
 
 
+            }
+
+
+
+            $SalesbranchwiseData = BranchwiseBalance::where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->first();
+            if($SalesbranchwiseData != ""){
+
+                $old_grossamount = $SalesbranchwiseData->sales_amount;
+                $old_paid = $SalesbranchwiseData->sales_paid;
+
+                $gross_amount = $request->get('sales_gross_amount');
+                $payable_amount = $request->get('salespayable_amount');
+
+                $new_grossamount = $old_grossamount + $gross_amount;
+                $new_paid = $old_paid + $payable_amount;
+                $new_balance = $new_grossamount - $new_paid;
+
+                DB::table('branchwise_balances')->where('customer_id', $sales_customerid)->where('branch_id', $sales_branch_id)->update([
+                    'sales_amount' => $new_grossamount,  'sales_paid' => $new_paid, 'sales_balance' => $new_balance
+                ]);
+                
+            }else {
+                $gross_amount = $request->get('sales_gross_amount');
+                $payable_amount = $request->get('salespayable_amount');
+                $balance_amount = $gross_amount - $payable_amount;
+
+                $data = new BranchwiseBalance();
+
+                $data->customer_id = $sales_customerid;
+                $data->branch_id = $sales_branch_id;
+                $data->sales_amount = $gross_amount;
+                $data->sales_paid = $payable_amount;
+                $data->sales_balance = $balance_amount;
+                $data->save();
             }
 
 
@@ -1887,48 +1923,23 @@ class SalesController extends Controller
         $sales_customerid = request()->get('sales_customerid');
         $sales_branch_id = request()->get('sales_branch_id');
 
-
-        $last_idrow = Sales::where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->latest('id')->first();
+        $last_idrow = BranchwiseBalance::where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->first();
+        
         if($last_idrow != ""){
-
-            if($last_idrow->sales_paymentpending != NULL){
-
+            $output = [];
+            if($last_idrow->sales_balance != NULL){
                 $output[] = array(
-                    'payment_pending' => $last_idrow->sales_paymentpending,
-                    'payment_sales_id' => $last_idrow->id,
+                    'payment_pending' => $last_idrow->sales_balance,
                 );
-            }else if($last_idrow->sales_paymentpending == NULL){
-
-                if($last_idrow->balance_amount != NULL){
-
-                    $output[] = array(
-                        'payment_pending' => $last_idrow->balance_amount,
-                        'payment_sales_id' => $last_idrow->id,
-                    );
-                }else if($last_idrow->balance_amount == NULL){
-
-                    $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->skip(1)->take(1)->first();
-                    if($secondlastrow->sales_paymentpending != NULL){
-                        $output[] = array(
-                            'payment_pending' => $secondlastrow->sales_paymentpending,
-                            'payment_sales_id' => $secondlastrow->id,
-                        );
-                    }else {
-                        $output[] = array(
-                            'payment_pending' => $secondlastrow->balance_amount,
-                            'payment_sales_id' => $secondlastrow->id,
-                        );
-                    }
-
-                }
-
             }
+            
+            
         }else {
             $output[] = array(
-                'payment_pending' => '0',
-                'payment_sales_id' => '',
+                'payment_pending' => 0,
             );
         }
+
 
 
         echo json_encode($output);
@@ -2030,47 +2041,27 @@ class SalesController extends Controller
 
 
 
-        $last_idrow = Sales::where('customer_id', '=', $customer_id)->where('branch_id', '=', $branch_id)->latest('id')->first();
+        $last_idrow = BranchwiseBalance::where('customer_id', '=', $customer_id)->where('branch_id', '=', $branch_id)->first();
         if($last_idrow != ""){
 
-            if($last_idrow->sales_paymentpending != NULL){
+            if($last_idrow->sales_balance != NULL){
 
                 $output[] = array(
-                    'payment_pending' => $last_idrow->sales_paymentpending,
-                    'payment_sales_id' => $last_idrow->id,
+                    'payment_pending' => $last_idrow->sales_balance,
                 );
-            }else if($last_idrow->sales_paymentpending == NULL){
-
-                if($last_idrow->balance_amount != NULL){
-
-                    $output[] = array(
-                        'payment_pending' => $last_idrow->balance_amount,
-                        'payment_sales_id' => $last_idrow->id,
-                    );
-                }else if($last_idrow->balance_amount == NULL){
-
-                    $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $customer_id)->where('branch_id', '=', $branch_id)->skip(1)->take(1)->first();
-                    if($secondlastrow->sales_paymentpending != NULL){
-                        $output[] = array(
-                            'payment_pending' => $secondlastrow->sales_paymentpending,
-                            'payment_sales_id' => $secondlastrow->id,
-                        );
-                    }else {
-                        $output[] = array(
-                            'payment_pending' => $secondlastrow->balance_amount,
-                            'payment_sales_id' => $secondlastrow->id,
-                        );
-                    }
-
-                }
+            }else {
+                $output[] = array(
+                    'payment_pending' => 0,
+                );
+                
 
             }
         }else {
             $output[] = array(
-                'payment_pending' => '',
-                'payment_sales_id' => '',
+                'payment_pending' => 0,
             );
         }
+
 
 
 

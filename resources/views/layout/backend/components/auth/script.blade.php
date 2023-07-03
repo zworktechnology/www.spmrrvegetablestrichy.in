@@ -161,7 +161,6 @@ $(".purchaseclose").click(function() {
                         var len = response.length;
                         for (var i = 0; i < len; i++) {
                             $(".oldblance").val(response[i].payment_pending);
-                            $("#payment_purchase_id").val(response[i].payment_purchase_id);
                         }
                     }
                 });
@@ -186,7 +185,6 @@ $(".purchaseclose").click(function() {
                         var len = response.length;
                         for (var i = 0; i < len; i++) {
                             $(".oldblance").val(response[i].payment_pending);
-                            $("#payment_purchase_id").val(response[i].payment_purchase_id);
                         }
                     }
                 });
@@ -637,7 +635,6 @@ $(".purchaseclose").click(function() {
                         var len = response.length;
                         for (var i = 0; i < len; i++) {
                             $(".sales_oldblance").val(response[i].payment_pending);
-                            $("#payment_sales_id").val(response[i].payment_sales_id);
                         }
                     }
                 });
@@ -662,7 +659,6 @@ $(".purchaseclose").click(function() {
                         var len = response.length;
                         for (var i = 0; i < len; i++) {
                             $(".sales_oldblance").val(response[i].payment_pending);
-                            $("#payment_sales_id").val(response[i].payment_sales_id);
                         }
                     }
                 });

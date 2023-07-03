@@ -77,26 +77,11 @@
                                     <td>{{ $P_PaymentData->amount }}</td>
                                     <td>{{ $P_PaymentData->payment_pending }}</td>
                                     
-                                    <td>
-                                        <ul class="list-unstyled hstack gap-1 mb-0">
-                                            
-                                            <li hidden>
-                                                <a href="#delete{{ $P_PaymentData->unique_key }}" data-bs-toggle="modal"
-                                                    data-id="{{ $P_PaymentData->unique_key }}"
-                                                    data-bs-target=".p_paymentedelete-modal-xl{{ $P_PaymentData->unique_key }}"
-                                                    class="badges bg-danger" style="color: white">Delete</a>
-                                            </li>
-                                        </ul>
-                                    </td>
+                                    
                                 </tr>
 
                               
-                                <div class="modal fade p_paymentedelete-modal-xl{{ $P_PaymentData->unique_key }}"
-                                    tabindex="-1" role="dialog"data-bs-backdrop="static"
-                                    aria-labelledby="p_paymentedeleteLargeModalLabel{{ $P_PaymentData->unique_key }}"
-                                    aria-hidden="true">
-                                    @include('page.backend.purchasepayment.delete')
-                                </div>
+                               
                             @endforeach
                         </tbody>
                     </table>
