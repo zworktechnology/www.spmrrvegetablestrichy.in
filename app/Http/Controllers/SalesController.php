@@ -565,8 +565,8 @@ class SalesController extends Controller
                 $SalesProduct = new SalesProduct;
                 $SalesProduct->unique_key = $salesprandomkey;
                 $SalesProduct->sales_id = $insertedId;
-                $SalesProduct->date = $request->get('sales_date');
-                $SalesProduct->branch_id = $request->get('sales_branch_id');
+                $SalesProduct->date = $data->date;
+                $SalesProduct->branch_id = $data->branch_id;
                 $SalesProduct->productlist_id = $sales_product_id;
                 $SalesProduct->bagorkg = $request->sales_bagorkg[$key];
                 $SalesProduct->count = $request->sales_count[$key];

@@ -608,8 +608,8 @@ class PurchaseController extends Controller
                 $PurchaseProduct = new PurchaseProduct;
                 $PurchaseProduct->unique_key = $pprandomkey;
                 $PurchaseProduct->purchase_id = $insertedId;
-                $PurchaseProduct->date = $request->get('date');
-                $PurchaseProduct->branch_id = $request->get('branch_id');
+                $PurchaseProduct->date = $data->date;
+                $PurchaseProduct->branch_id = $data->branch_id;
                 $PurchaseProduct->productlist_id = $product_id;
                 $PurchaseProduct->bagorkg = $request->bagorkg[$key];
                 $PurchaseProduct->count = $request->count[$key];
