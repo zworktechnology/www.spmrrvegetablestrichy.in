@@ -128,53 +128,50 @@ class PurchaseController extends Controller
 
                     $Merge_ProductlistId = array_merge($purchase_Array, $sales_Array);
 
-                    foreach (($Merge_ProductlistId) as $key => $Merge_Productlist) {
+                    foreach (array_unique($Merge_ProductlistId) as $key => $Merge_Productlist) {
                         $productlist_ID = Productlist::findOrFail($Merge_Productlist);
 
 
 
-                        $getPurchaseorNotbag = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'bag')->get();
-                        $getPurchaseorNotkg = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'kg')->get();
-                        $getSalesorNotbag = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'bag')->get();
-                        $getSalesorNotkg = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'kg')->get();
+                        $getPurchaseorNot = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
+                        $getSalesorNot = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
 
-                        
-                        if($getPurchaseorNotbag != ""){
-                            foreach ($getPurchaseorNotbag as $key => $getPurchaseorNotbags) {
-                                    $Pbagcount = $getPurchaseorNotbags->count;
-                                
+                        $Pbagcount = '';
+                        $Pkgcount = '';
+                        if($getPurchaseorNot != ""){
+                            foreach ($getPurchaseorNot as $key => $getPurchaseorNots) {
+
+                                if($getPurchaseorNots->bagorkg == 'bag'){
+                                    $Pbagcount = $getPurchaseorNots->count;
+                                }else {
+                                    $Pbagcount = '';
+                                }
+                                if($getPurchaseorNots->bagorkg == 'kg'){
+                                    $Pkgcount = $getPurchaseorNots->count;
+                                }else {
+                                    $Pkgcount = '';
+                                }
                             }
-                        }else {
-                            $Pbagcount = '';
                         }
 
-                        if($getPurchaseorNotkg != ""){
-                            foreach ($getPurchaseorNotkg as $key => $getPurchaseorNotkgs) {
-                                    $Pkgcount = $getPurchaseorNotkgs->count;
-                                
+                        $Sbagcount = '';
+                        $Skgcount = '';
+                        if($getSalesorNot != ""){
+                            foreach ($getSalesorNot as $key => $getSalesorNots) {
+
+                                if($getSalesorNots->bagorkg == 'bag'){
+                                    $Sbagcount = $getSalesorNots->count;
+                                }else {
+                                    $Sbagcount = '';
+                                }
+                                if($getSalesorNots->bagorkg == 'kg'){
+                                    $Skgcount = $getSalesorNots->count;
+                                }else{
+                                    $Skgcount = '';
+                                }
                             }
-                        }else {
-                            $Pkgcount = '';
                         }
 
-                        
-                        if($getSalesorNotbag != ""){
-                            foreach ($getSalesorNotbag as $key => $getSalesorNotbags) {
-                                    $Sbagcount = $getSalesorNotbags->count;
-                                
-                            }
-                        }else {
-                            $Sbagcount = '';
-                        }
-
-                        if($getSalesorNotkg != ""){
-                            foreach ($getSalesorNotkg as $key => $getSalesorNotkgs) {
-                                    $Skgcount = $getSalesorNotkgs->count;
-                                
-                            }
-                        }else {
-                            $Skgcount = '';
-                        }
 
 
 
@@ -308,53 +305,50 @@ class PurchaseController extends Controller
 
                     $Merge_ProductlistId = array_merge($purchase_Array, $sales_Array);
 
-                    foreach (($Merge_ProductlistId) as $key => $Merge_Productlist) {
+                    foreach (array_unique($Merge_ProductlistId) as $key => $Merge_Productlist) {
                         $productlist_ID = Productlist::findOrFail($Merge_Productlist);
 
 
 
-                        $getPurchaseorNotbag = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'bag')->get();
-                        $getPurchaseorNotkg = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'kg')->get();
-                        $getSalesorNotbag = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'bag')->get();
-                        $getSalesorNotkg = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'kg')->get();
+                        $getPurchaseorNot = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
+                        $getSalesorNot = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
 
-                        
-                        if($getPurchaseorNotbag != ""){
-                            foreach ($getPurchaseorNotbag as $key => $getPurchaseorNotbags) {
-                                    $Pbagcount = $getPurchaseorNotbags->count;
-                                
+                        $Pbagcount = '';
+                        $Pkgcount = '';
+                        if($getPurchaseorNot != ""){
+                            foreach ($getPurchaseorNot as $key => $getPurchaseorNots) {
+
+                                if($getPurchaseorNots->bagorkg == 'bag'){
+                                    $Pbagcount = $getPurchaseorNots->count;
+                                }else {
+                                    $Pbagcount = '';
+                                }
+                                if($getPurchaseorNots->bagorkg == 'kg'){
+                                    $Pkgcount = $getPurchaseorNots->count;
+                                }else {
+                                    $Pkgcount = '';
+                                }
                             }
-                        }else {
-                            $Pbagcount = '';
                         }
 
-                        if($getPurchaseorNotkg != ""){
-                            foreach ($getPurchaseorNotkg as $key => $getPurchaseorNotkgs) {
-                                    $Pkgcount = $getPurchaseorNotkgs->count;
-                                
+                        $Sbagcount = '';
+                        $Skgcount = '';
+                        if($getSalesorNot != ""){
+                            foreach ($getSalesorNot as $key => $getSalesorNots) {
+
+                                if($getSalesorNots->bagorkg == 'bag'){
+                                    $Sbagcount = $getSalesorNots->count;
+                                }else {
+                                    $Sbagcount = '';
+                                }
+                                if($getSalesorNots->bagorkg == 'kg'){
+                                    $Skgcount = $getSalesorNots->count;
+                                }else{
+                                    $Skgcount = '';
+                                }
                             }
-                        }else {
-                            $Pkgcount = '';
                         }
 
-                        
-                        if($getSalesorNotbag != ""){
-                            foreach ($getSalesorNotbag as $key => $getSalesorNotbags) {
-                                    $Sbagcount = $getSalesorNotbags->count;
-                                
-                            }
-                        }else {
-                            $Sbagcount = '';
-                        }
-
-                        if($getSalesorNotkg != ""){
-                            foreach ($getSalesorNotkg as $key => $getSalesorNotkgs) {
-                                    $Skgcount = $getSalesorNotkgs->count;
-                                
-                            }
-                        }else {
-                            $Skgcount = '';
-                        }
 
 
 
@@ -484,54 +478,49 @@ class PurchaseController extends Controller
 
                     $Merge_ProductlistId = array_merge($purchase_Array, $sales_Array);
 
-                    foreach (($Merge_ProductlistId) as $key => $Merge_Productlist) {
+                    foreach (array_unique($Merge_ProductlistId) as $key => $Merge_Productlist) {
                         $productlist_ID = Productlist::findOrFail($Merge_Productlist);
 
 
 
-                        $getPurchaseorNotbag = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'bag')->get();
-                        $getPurchaseorNotkg = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'kg')->get();
-                        $getSalesorNotbag = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'bag')->get();
-                        $getSalesorNotkg = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->where('bagorkg', '=', 'kg')->get();
+                        $getPurchaseorNot = PurchaseProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
+                        $getSalesorNot = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $Merge_Productlist)->get();
 
-                        
-                        if($getPurchaseorNotbag != ""){
-                            foreach ($getPurchaseorNotbag as $key => $getPurchaseorNotbags) {
-                                    $Pbagcount = $getPurchaseorNotbags->count;
-                                
+                        $Pbagcount = '';
+                        $Pkgcount = '';
+                        if($getPurchaseorNot != ""){
+                            foreach ($getPurchaseorNot as $key => $getPurchaseorNots) {
+
+                                if($getPurchaseorNots->bagorkg == 'bag'){
+                                    $Pbagcount = $getPurchaseorNots->count;
+                                }else {
+                                    $Pbagcount = '';
+                                }
+                                if($getPurchaseorNots->bagorkg == 'kg'){
+                                    $Pkgcount = $getPurchaseorNots->count;
+                                }else {
+                                    $Pkgcount = '';
+                                }
                             }
-                        }else {
-                            $Pbagcount = '';
                         }
 
-                        if($getPurchaseorNotkg != ""){
-                            foreach ($getPurchaseorNotkg as $key => $getPurchaseorNotkgs) {
-                                    $Pkgcount = $getPurchaseorNotkgs->count;
-                                
-                            }
-                        }else {
-                            $Pkgcount = '';
-                        }
+                        $Sbagcount = '';
+                        $Skgcount = '';
+                        if($getSalesorNot != ""){
+                            foreach ($getSalesorNot as $key => $getSalesorNots) {
 
-                        
-                        if($getSalesorNotbag != ""){
-                            foreach ($getSalesorNotbag as $key => $getSalesorNotbags) {
-                                    $Sbagcount = $getSalesorNotbags->count;
-                                
+                                if($getSalesorNots->bagorkg == 'bag'){
+                                    $Sbagcount = $getSalesorNots->count;
+                                }else {
+                                    $Sbagcount = '';
+                                }
+                                if($getSalesorNots->bagorkg == 'kg'){
+                                    $Skgcount = $getSalesorNots->count;
+                                }else{
+                                    $Skgcount = '';
+                                }
                             }
-                        }else {
-                            $Sbagcount = '';
                         }
-
-                        if($getSalesorNotkg != ""){
-                            foreach ($getSalesorNotkg as $key => $getSalesorNotkgs) {
-                                    $Skgcount = $getSalesorNotkgs->count;
-                                
-                            }
-                        }else {
-                            $Skgcount = '';
-                        }
-
 
 
                         $PSTodayStockArr[] = array(
