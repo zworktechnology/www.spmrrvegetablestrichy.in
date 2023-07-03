@@ -30,7 +30,7 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Branch</label>
-                                <select class="select purchasereport_branch" name="purchasereport_branch"
+                                <select class="purchasereport_branch form-control js-example-basic-single select" name="purchasereport_branch"
                                     id="purchasereport_branch">
                                     <option value="" selected>Select Branch</option>
                                     @foreach ($branch as $branches)
@@ -42,7 +42,7 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Supplier</label>
-                                <select class="select" name="purchasereport_supplier" id="purchasereport_supplier">
+                                <select class="form-control js-example-basic-single select" name="purchasereport_supplier" id="purchasereport_supplier">
                                     <option value="" selected>Select Supplier</option>
                                     @foreach ($supplier as $suppliers)
                                         <option value="{{ $suppliers->id }}">{{ $suppliers->name }}</option>

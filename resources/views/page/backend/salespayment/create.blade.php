@@ -8,10 +8,22 @@
                 @csrf
 
                 <div class="row">
-                    <div class="col-lg-12 col-sm-6 col-12">
+                    <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Supplier <span style="color: red;">*</span></label>
-                            <select class="select form-control spayment_customer_id" name="customer_id" id="customer_id" required>
+                            <label>Date</label>
+                            <input type="date" name="date" placeholder="" value="{{ $today }}" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label>Time</label>
+                            <input type="time" name="time" placeholder="" value="{{ $timenow }}" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label>Client <span style="color: red;">*</span></label>
+                            <select class="form-control js-example-basic-single select spayment_customer_id" name="customer_id" id="customer_id" required>
                                     <option value="" disabled selected hiddden>Select Customer</option>
                                     @foreach ($customer as $customers)
                                         <option value="{{ $customers->id }}">{{ $customers->name }}</option>
@@ -19,10 +31,10 @@
                                 </select>
                         </div>
                     </div>
-                    <div class="col-lg-12 col-sm-6 col-12">
+                    <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Branch</label>
-                            <select class="select form-control spayment_branch_id" name="branch_id" id="branch_id" required>
+                            <select class="form-control js-example-basic-single select spayment_branch_id" name="branch_id" id="branch_id" required>
                                     <option value="" disabled selected hiddden>Select Branch</option>
                                     @foreach ($allbranch as $branches)
                                         <option value="{{ $branches->id }}">{{ $branches->shop_name }}</option>
@@ -30,24 +42,13 @@
                                 </select>
                         </div>
                     </div>
-                    <div class="col-lg-12 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label>Date</label>
-                            <input type="date" name="date" placeholder="" value="{{ $today }}" required>
-                        </div>
-                    </div>
-                    <div class="col-lg-12 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label>Time</label>
-                            <input type="time" name="time" placeholder="" value="{{ $timenow }}" required>
-                        </div>
-                    </div>
+
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Old Balance</label>
                             <input type="text" name="sales_oldblance" id="sales_oldblance" readonly class="sales_oldblance" style="color:red" placeholder="Enter Amount">
                             <input type="hidden" name="payment_sales_id" id="payment_sales_id" value=""/>
-                        </div> 
+                        </div>
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
