@@ -55,9 +55,9 @@
                 </div>
             @endforeach
         </div>
-        
 
-            
+
+
 
         <div class="card">
             <div class="card-body">
@@ -81,7 +81,7 @@
                                     <td>#{{ $purchasedata['bill_no'] }}</td>
                                     <td>{{ $purchasedata['supplier_name'] }}</td>
                                     <td>{{ $purchasedata['branch_name'] }}</td>
-                                    <td>
+                                    <td style="text-transform: uppercase;">
                                     @foreach ($purchasedata['terms'] as $index => $terms_array)
                                                     @if ($terms_array['purchase_id'] == $purchasedata['id'])
                                                     {{ $terms_array['product_name'] }} - {{ $terms_array['kgs'] }}{{ $terms_array['bag'] }},<br/>
