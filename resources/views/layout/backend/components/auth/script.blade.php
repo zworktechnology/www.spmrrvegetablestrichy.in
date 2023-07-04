@@ -357,7 +357,48 @@ $(".purchaseclose").click(function() {
                         //});
                      //});
 
+
+
+
+            $(".supplier_contactno").keyup(function() {
+                var query = $(this).val();
+
+
+                if (query != '') {
+                    
+                    $.ajax({
+                        url: "{{ route('supplier.checkduplicate') }}",
+                        type: 'POST',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            query: query
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            console.log(response['data']);
+                            if(response['data'] != null){
+                                alert('Already Existed');
+                                $('.supplier_contactno').val('');
+                            }
+                        }
+                    });
+                }
+
+                
+            });
+
     });
+
+
+    function check()
+    {
+        var mobile = $('.supplier_contactno').val();
+    
+        if(mobile.length>10){
+            $('.supplier_contactno').val('');
+            
+        }
+    }
 
     
 

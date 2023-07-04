@@ -202,4 +202,18 @@ class SupplierController extends Controller
 
     }
 
+
+
+    public function checkduplicate(Request $request)
+    {
+        if(request()->get('query'))
+        {
+            $query = request()->get('query');
+            $supplierdata = Supplier::where('contact_number', '=', $query)->first();
+            
+            $userData['data'] = $supplierdata;
+            echo json_encode($userData);
+        }
+    }
+
 }
