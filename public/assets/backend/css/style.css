@@ -8144,6 +8144,12 @@ span.select2-container.select2-container--default.select2-container--open {
 #filter_inputs .card-body {
     padding: 0
 }
+.dash-widgetdashboard {
+    background: #fff;
+    margin-bottom: 19px;
+    border-radius: 6px;
+    border: 1px solid #e9c184
+}
 
 .dash-widget {
     background: #fff;
