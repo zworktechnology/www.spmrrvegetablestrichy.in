@@ -199,7 +199,14 @@ $(".purchaseclose").click(function() {
 
        
 
+        $('.purchase_pattiyal').each(function() {
+            $(this).on('click', function(e) {
+                purchase_uniquekey = $(this).attr('data-id');
+                //alert(purchase_uniquekey);
 
+                
+            });
+        });
 
         $('.purchaseview').each(function() {
             $(this).on('click', function(e) {

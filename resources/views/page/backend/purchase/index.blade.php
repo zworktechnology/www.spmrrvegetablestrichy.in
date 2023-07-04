@@ -113,8 +113,14 @@
 
                                             <li>
                                                 @if ($purchasedata['status'] == 0)
-                                                    <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
-                                                        class="badges bg-lightgreen" style="color: white">Pattial</a>
+                                                    @if ($purchasedata['id'] == $first_id)
+                                                        <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
+                                                            class="badges bg-lightgreen purchase_pattiyal" style="color: white" data-id="{{ $purchasedata['unique_key'] }}">
+                                                            Pattial</a>
+                                                    @else
+                                                    <a class="badges bg-lightorange" style="color: white">
+                                                            Update Old Pattiyal</a>
+                                                    @endif
                                                 @elseif ($purchasedata['status'] == 1)
                                                     <a href="{{ route('purchase.print_view', ['unique_key' => $purchasedata['unique_key']]) }}"
                                                         class="badges bg-green" style="color: white">Invoice</a>

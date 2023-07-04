@@ -271,3 +271,5 @@ Route::get('/getsupplierbalance', [SupplierController::class, 'getsupplierbalanc
 Route::get('/getBranchName', [PurchaseController::class, 'getBranchName']);
 Route::get('/getbranchwiseProducts', [SalesController::class, 'getbranchwiseProducts']);
 Route::get('/getProductsdetail', [SalesController::class, 'getProductsdetail']);
+
+Route::get('/Checkinvoiceupdated', [PurchaseController::class, 'Checkinvoiceupdated']);

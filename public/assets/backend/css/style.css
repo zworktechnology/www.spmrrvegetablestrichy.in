@@ -8975,6 +8975,11 @@ span.select2-container.select2-container--default.select2-container--open {
     background: #ea5455
 }
 
+.badges.bg-lightorange {
+    background: #7db4a2
+}
+
+
 .badges.bg-lightyellow {
     background: #f90
 }

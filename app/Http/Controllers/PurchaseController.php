@@ -142,7 +142,15 @@ class PurchaseController extends Controller
             
         }
 
-              
+
+        $PurchaseArray = Purchase::where('soft_delete', '!=', 1)->get();
+        $null_grossarr = [];
+        foreach ($PurchaseArray as $key => $PurchaseArrays) {
+            if($PurchaseArrays->gross_amount == ""){
+                $null_grossarr[] = $PurchaseArrays->id;
+            }
+        }
+        $first_id = reset($null_grossarr);
             
 
             
@@ -154,7 +162,7 @@ class PurchaseController extends Controller
         $timenow = Carbon::now()->format('H:i');
 
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        return view('page.backend.purchase.index', compact('purchase_data', 'today', 'productlist', 'allbranch', 'branch', 'supplier', 'timenow', 'bank', 'PSTodayStockArr'));
+        return view('page.backend.purchase.index', compact('purchase_data', 'today', 'productlist', 'allbranch', 'branch', 'supplier', 'timenow', 'bank', 'PSTodayStockArr' , 'first_id'));
     }
 
 
@@ -272,8 +280,18 @@ class PurchaseController extends Controller
             }
             
         }
+
+
+        $PurchaseArray = Purchase::where('soft_delete', '!=', 1)->get();
+        $null_grossarr = [];
+        foreach ($PurchaseArray as $key => $PurchaseArrays) {
+            if($PurchaseArrays->gross_amount == ""){
+                $null_grossarr[] = $PurchaseArrays->id;
+            }
+        }
+        $first_id = reset($null_grossarr);
         
-        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'branch_id', 'today', 'PSTodayStockArr'));
+        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'branch_id', 'today', 'PSTodayStockArr', 'first_id'));
     }
 
 
@@ -396,8 +414,17 @@ class PurchaseController extends Controller
             
         }
 
+        $PurchaseArray = Purchase::where('soft_delete', '!=', 1)->get();
+        $null_grossarr = [];
+        foreach ($PurchaseArray as $key => $PurchaseArrays) {
+            if($PurchaseArrays->gross_amount == ""){
+                $null_grossarr[] = $PurchaseArrays->id;
+            }
+        }
+        $first_id = reset($null_grossarr);
+        //dd($first_id);
 
-        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'today', 'PSTodayStockArr'));
+        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'today', 'PSTodayStockArr', 'first_id'));
 
     }
 
@@ -2298,6 +2325,27 @@ class PurchaseController extends Controller
 
 
         return view('page.backend.purchase.report', compact('purchasereport_fromdate', 'branch', 'supplier', 'purchasereport_todate','purchasereport_branch', 'purchasereport_supplier', 'purchase_data'));
+    }
+
+
+
+
+    public function Checkinvoiceupdated()
+    {
+        $purchase_id = request()->get('purchase_id');
+        $get_Purchase = Purchase::where('soft_delete', '!=', 1)
+                                    ->where('unique_key', '=', $purchase_id)
+                                    ->first();
+        
+
+        if($get_Purchase->total_amount != NULL){
+            $userData['data'] = '1';
+            echo json_encode($userData);
+        }else {
+            $userData['data'] = '0';
+            echo json_encode($userData);
+        }
+
     }
 
 }
