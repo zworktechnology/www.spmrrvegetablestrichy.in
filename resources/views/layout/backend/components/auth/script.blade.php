@@ -387,6 +387,33 @@ $(".purchaseclose").click(function() {
                 
             });
 
+            $(".customer_contactno").keyup(function() {
+                var query = $(this).val();
+
+
+                if (query != '') {
+                    
+                    $.ajax({
+                        url: "{{ route('customer.checkduplicate') }}",
+                        type: 'POST',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            query: query
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            console.log(response['data']);
+                            if(response['data'] != null){
+                                alert('Already Existed');
+                                $('.customer_contactno').val('');
+                            }
+                        }
+                    });
+                }
+
+                
+            });
+
     });
 
 
@@ -396,6 +423,16 @@ $(".purchaseclose").click(function() {
     
         if(mobile.length>10){
             $('.supplier_contactno').val('');
+            
+        }
+    }
+
+    function customercheck()
+    {
+        var mobile = $('.customer_contactno').val();
+    
+        if(mobile.length>10){
+            $('.customer_contactno').val('');
             
         }
     }

@@ -161,4 +161,17 @@ class CustomerController extends Controller
         echo json_encode($userData);
     }
 
+
+    public function checkduplicate(Request $request)
+    {
+        if(request()->get('query'))
+        {
+            $query = request()->get('query');
+            $supplierdata = Customer::where('contact_number', '=', $query)->first();
+            
+            $userData['data'] = $supplierdata;
+            echo json_encode($userData);
+        }
+    }
+
 }
