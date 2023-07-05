@@ -1005,6 +1005,13 @@ $(document).on('click', '.remove-salestr', function() {
 
       });
 
+        $(document).on("keyup", 'input.salespayable_amount', function() { 
+                var salespayable_amount = $(this).val();
+                var sales_grand_total = $(".sales_grand_total").val();
+                var sales_pending_amount = Number(sales_grand_total) - Number(salespayable_amount);
+                $('.sales_pending_amount').val(sales_pending_amount.toFixed(2));
+            });  
+
 
       
 

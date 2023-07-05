@@ -50,7 +50,7 @@ return new class extends Migration
             $table->string('payment_pending')->nullable();
 
             $table->string('paid_status')->nullable();
-
+            $table->string('purchase_remark')->nullable();
             $table->string('status')->default(0);
             $table->boolean('soft_delete')->default(0);
             $table->timestamps();

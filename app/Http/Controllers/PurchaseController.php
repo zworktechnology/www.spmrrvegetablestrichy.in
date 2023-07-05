@@ -869,6 +869,34 @@ class PurchaseController extends Controller
 
 
 
+    public function invoiceedit($unique_key)
+    {
+        $PurchaseData = Purchase::where('unique_key', '=', $unique_key)->first();
+        $productlist = Productlist::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $branch = Branch::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $supplier = Supplier::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $bank = Bank::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $PurchaseData->id)->get();
+        $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $PurchaseData->id)->get();
+
+        return view('page.backend.purchase.invoiceedit', compact('productlist', 'branch', 'supplier', 'bank', 'PurchaseData', 'PurchaseProducts', 'PurchaseExtracosts'));
+    }
+
+
+    public function invoiceedit_update(Request $request, $unique_key)
+    {
+
+        $Purchase_Data = Purchase::where('unique_key', '=', $unique_key)->first();
+
+        $Purchase_Data->purchase_remark = $request->get('purchase_remark');
+        $Purchase_Data->update();
+        
+        return redirect()->route('purchase.index')->with('update', 'Updated Purchase information has been added to your list.');
+
+    }
+
+
+
     public function print_view($unique_key)
     {
 

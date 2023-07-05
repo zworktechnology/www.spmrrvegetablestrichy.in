@@ -34,6 +34,7 @@ class Purchase extends Model
         'payment_paid_amount',
         'payment_pending',
         'paid_status',
+        'purchase_remark',
         'status',
         'soft_delete'
     ];

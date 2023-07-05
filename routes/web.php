@@ -194,6 +194,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/report_view', [PurchaseController::class, 'report_view'])->name('purchase.report_view');
         // DATAE FILTER
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/datefilter', [PurchaseController::class, 'datefilter'])->name('purchase.datefilter');
+        // EDIT
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchase/invoiceedit/{unique_key}', [PurchaseController::class, 'invoiceedit'])->name('purchase.invoiceedit');
+        // INVOICE UPDATE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/invoiceedit_update/{unique_key}', [PurchaseController::class, 'invoiceedit_update'])->name('purchase.invoiceedit_update');
     });
 
 

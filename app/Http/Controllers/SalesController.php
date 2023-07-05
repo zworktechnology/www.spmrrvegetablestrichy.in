@@ -127,8 +127,8 @@ class SalesController extends Controller
             
 
 
-
-        return view('page.backend.sales.index', compact('Sales_data','allbranch', 'today', 'PSTodayStockArr'));
+                $today_date = Carbon::now()->format('Y-m-d');
+        return view('page.backend.sales.index', compact('Sales_data','allbranch', 'today', 'PSTodayStockArr', 'today_date'));
     }
 
 
@@ -232,8 +232,8 @@ class SalesController extends Controller
             
         }
 
-
-        return view('page.backend.sales.index', compact('Sales_data', 'allbranch', 'branch_id', 'today', 'PSTodayStockArr'));
+        $today_date = Carbon::now()->format('Y-m-d');
+        return view('page.backend.sales.index', compact('Sales_data', 'allbranch', 'branch_id', 'today', 'PSTodayStockArr', 'today_date'));
     }
 
     public function datefilter(Request $request)
@@ -342,8 +342,8 @@ class SalesController extends Controller
         }
 
 
-
-        return view('page.backend.sales.index', compact('Sales_data','allbranch', 'today', 'PSTodayStockArr'));
+        $today_date = Carbon::now()->format('Y-m-d');
+        return view('page.backend.sales.index', compact('Sales_data','allbranch', 'today', 'PSTodayStockArr', 'today_date'));
 
     }
 
@@ -544,19 +544,62 @@ class SalesController extends Controller
     {
 
         $branch_id = $request->get('sales_branch_id');
+        $sales_customer_id = $request->get('sales_customerid');
 
 
         $Sales_Data = Sales::where('unique_key', '=', $unique_key)->first();
 
-        $Sales_Data->customer_id = $request->get('sales_customerid');
-        $Sales_Data->branch_id = $request->get('sales_branch_id');
-        $Sales_Data->date = $request->get('sales_date');
-        $Sales_Data->time = $request->get('sales_time');
-        $Sales_Data->bank_id = $request->get('sales_bank_id');
+
+        $SalesbranchwiseData = BranchwiseBalance::where('customer_id', '=', $sales_customer_id)->where('branch_id', '=', $branch_id)->first();
+        if($SalesbranchwiseData != ""){
+
+            $old_grossamount = $SalesbranchwiseData->sales_amount;
+            $old_paid = $SalesbranchwiseData->sales_paid;
+
+                $oldentry_grossamount = $Sales_Data->gross_amount;
+                $oldentry_paid = $Sales_Data->paid_amount;
+
+                $gross_amount = $request->get('sales_gross_amount');
+                $payable_amount = $request->get('salespayable_amount');
+
+
+                if($oldentry_grossamount > $gross_amount){
+                    $newgross = $oldentry_grossamount - $gross_amount;
+                    $updated_gross = $old_grossamount - $newgross;
+                }else if($oldentry_grossamount < $gross_amount){
+                    $newgross = $gross_amount - $oldentry_grossamount;
+                    $updated_gross = $old_grossamount + $newgross;
+                }else if($oldentry_grossamount == $gross_amount){
+                    $updated_gross = $old_grossamount;
+                }
+
+
+                if($oldentry_paid > $payable_amount){
+                    $newPaidAmt = $oldentry_paid - $payable_amount;
+                    $updated_paid = $old_paid - $newPaidAmt;
+                }else if($oldentry_paid < $payable_amount){
+                    $newPaidAmt = $payable_amount - $oldentry_paid;
+                    $updated_paid = $old_paid + $newPaidAmt;
+                }else if($oldentry_paid == $payable_amount){
+                    $updated_paid = $old_paid;
+                }
+
+
+                
+                $new_balance = $updated_gross - $updated_paid;
+
+                DB::table('branchwise_balances')->where('customer_id', $sales_customer_id)->where('branch_id', $branch_id)->update([
+                    'sales_amount' => $updated_gross,  'sales_paid' => $updated_paid, 'sales_balance' => $new_balance
+                ]);
+                
+            } 
+
+
+        
+
+        
 
         $Sales_Data->total_amount = $request->get('sales_total_amount');
-        $Sales_Data->note = $request->get('sales_extracost_note');
-        $Sales_Data->extra_cost = $request->get('sales_extracost');
         $Sales_Data->gross_amount = $request->get('sales_gross_amount');
         $Sales_Data->old_balance = $request->get('sales_old_balance');
         $Sales_Data->grand_total = $request->get('sales_grand_total');
@@ -568,52 +611,76 @@ class SalesController extends Controller
 
         // Purchase Products Table
 
-        $getinsertedP_Products = SalesProduct::where('sales_id', '=', $SalesId)->get();
-        $Purchaseproducts = array();
-        foreach ($getinsertedP_Products as $key => $getinserted_P_Products) {
-            $Purchaseproducts[] = $getinserted_P_Products->id;
-        }
 
-        $updatedpurchaseproduct_id = $request->sales_detail_id;
-        $updated_PurchaseProduct_id = array_filter($updatedpurchaseproduct_id);
-        $different_ids = array_merge(array_diff($Purchaseproducts, $updated_PurchaseProduct_id), array_diff($updated_PurchaseProduct_id, $Purchaseproducts));
-
-        if (!empty($different_ids)) {
-            foreach ($different_ids as $key => $differents_id) {
-
-                $getPurchaseOld = SalesProduct::where('id', '=', $differents_id)->first();
-
-                $product_Data = Product::where('soft_delete', '!=', 1)->where('productlist_id', '=', $getPurchaseOld->productlist_id)->where('branchtable_id', '=', $branch_id)->first();
-                if($branch_id == $product_Data->branchtable_id){
-
-                        $bag_count = $product_Data->available_stockin_bag;
-                        $kg_count = $product_Data->available_stockin_kilograms;
-
-                        if($getPurchaseOld->bagorkg == 'bag'){
-                            $totalbag_count = $bag_count + $getPurchaseOld->count;
-                            $totalkg_count = $kg_count + 0;
-                        }else if($getPurchaseOld->bagorkg == 'kg'){
-                            $totalkg_count = $kg_count + $getPurchaseOld->count;
-                            $totalbag_count = $bag_count + 0;
-                        }
-
-                        DB::table('products')->where('productlist_id', $getPurchaseOld->productlist_id)->where('branchtable_id', $branch_id)->update([
-                            'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
-                        ]);
-                    }
-            }
-        }
-
-        if (!empty($different_ids)) {
-            foreach ($different_ids as $key => $different_id) {
-                SalesProduct::where('id', $different_id)->delete();
-            }
-        }
-
+       
+            
         foreach ($request->get('sales_detail_id') as $key => $sales_detail_id) {
             if ($sales_detail_id > 0) {
 
                 $updatesales_product_id = $request->sales_product_id[$key];
+
+                
+
+                $product_Data = Product::where('soft_delete', '!=', 1)->where('productlist_id', '=', $updatesales_product_id)->where('branchtable_id', '=', $branch_id)->first();
+                if($product_Data != ""){
+                        $bag_count = $product_Data->available_stockin_bag;
+                        $kg_count = $product_Data->available_stockin_kilograms;
+
+                    if($request->sales_bagorkg[$key] == 'bag'){
+
+                        $getP_Productbag = SalesProduct::where('id', '=', $sales_detail_id)->where('bagorkg', '=', 'bag')->first();
+
+                        $old_count = $getP_Productbag->count;
+                        $new_count = $request->sales_count[$key];
+    
+                        if($old_count > $new_count){
+
+                            $total_count = $old_count - $new_count;
+                            $stockbag_count = $total_count + $bag_count;
+
+                            DB::table('products')->where('productlist_id', $updatesales_product_id)->where('branchtable_id', $branch_id)->update([
+                                'available_stockin_bag' => $stockbag_count
+                            ]);
+
+                        }else if($old_count < $new_count){
+
+                            $total_count = $new_count - $old_count;
+                            $stockbag_count = $bag_count - $total_count;
+
+                            DB::table('products')->where('productlist_id', $updatesales_product_id)->where('branchtable_id', $branch_id)->update([
+                                'available_stockin_bag' => $stockbag_count
+                            ]);
+
+                        }
+                    }else if($request->sales_bagorkg[$key] == 'kg'){
+
+                        $getP_Productkg = SalesProduct::where('id', '=', $sales_detail_id)->where('bagorkg', '=', 'kg')->first();
+    
+                        $oldkg_count = $getP_Productkg->count;
+                        $newkg_count = $request->sales_count[$key];
+    
+                        if($oldkg_count > $newkg_count){
+
+                            $total_count = $oldkg_count - $newkg_count;
+                            $stockkg_count = $total_count + $kg_count;
+
+                            DB::table('products')->where('productlist_id', $updatesales_product_id)->where('branchtable_id', $branch_id)->update([
+                                'available_stockin_kilograms' => $stockkg_count
+                            ]);
+
+                        }else if($oldkg_count < $newkg_count){
+
+                            $total_count = $newkg_count - $oldkg_count;
+                            $stockkg_count = $kg_count - $total_count;
+
+                            DB::table('products')->where('productlist_id', $updatesales_product_id)->where('branchtable_id', $branch_id)->update([
+                                'available_stockin_kilograms' => $stockkg_count
+                            ]);
+
+                        }
+                    }
+                }
+
 
                 $ids = $sales_detail_id;
                 $Sales_Id = $SalesId;
@@ -627,57 +694,10 @@ class SalesController extends Controller
                     'sales_id' => $Sales_Id,  'productlist_id' => $updatesales_product_id,  'bagorkg' => $bagorkg,  'count' => $count, 'price_per_kg' => $price_per_kg, 'total_price' => $total_price
                 ]);
 
-            } else if ($sales_detail_id == '') {
-                if ($request->sales_product_id[$key] > 0) {
-
-
-                    $p_prandomkey = Str::random(5);
-
-                    $SalesProduct = new SalesProduct;
-                    $SalesProduct->unique_key = $p_prandomkey;
-                    $SalesProduct->sales_id = $SalesId;
-                    $SalesProduct->productlist_id = $request->sales_product_id[$key];
-                    $SalesProduct->bagorkg = $request->sales_bagorkg[$key];
-                    $SalesProduct->count = $request->sales_count[$key];
-                    $SalesProduct->price_per_kg = $request->sales_priceperkg[$key];
-                    $SalesProduct->total_price = $request->sales_total_price[$key];
-                    $SalesProduct->save();
-
-
-
-                    $Product_id = $request->sales_product_id[$key];
-                    $product_Data = Product::where('productlist_id', '=', $Product_id)->where('branchtable_id', '=', $branch_id)->first();
-
-                    if($product_Data != ""){
-
-                        if($branch_id == $product_Data->branchtable_id){
-
-                            $bag_count = $product_Data->available_stockin_bag;
-                            $kg_count = $product_Data->available_stockin_kilograms;
-
-
-                            if($request->sales_bagorkg[$key] != ""){
-                                if($request->sales_bagorkg[$key] == 'bag'){
-                                    $totalbag_count = $bag_count - $request->sales_count[$key];
-                                    $totalkg_count = $kg_count - 0;
-                                }else {
-                                    $totalkg_count = $kg_count - $request->sales_count[$key];
-                                    $totalbag_count = $bag_count - 0;
-                                }
-                            }
-
-
-
-                            DB::table('products')->where('productlist_id', $Product_id)->where('branchtable_id', $branch_id)->update([
-                                'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
-                            ]);
-                        }
-                    }
-
-
-                }
-            }
+            } 
         }
+
+       
 
         return redirect()->route('sales.index')->with('update', 'Updated Sales information has been added to your list.');
 

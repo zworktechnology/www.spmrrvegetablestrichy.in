@@ -83,13 +83,14 @@
                                     <td>{{ $Sales_datas['gross_amount'] }}</td>
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
-                                            @if ($Sales_datas['status'] == 0)
-                                            <li>
-
-                                                <a href="{{ route('sales.edit', ['unique_key' => $Sales_datas['unique_key']]) }}"
-                                                    class="badges bg-lightyellow" style="color: white">Edit</a>
-                                            </li>
+                                        @if ($Sales_datas['date'] == $today_date)
+                                            @if ($Sales_datas['status'] == 1)
+                                                <li>
+                                                    <a href="{{ route('sales.edit', ['unique_key' => $Sales_datas['unique_key']]) }}"
+                                                        class="badges bg-lightyellow" style="color: white">Edit</a>
+                                                </li>
                                             @endif
+                                        @endif
                                             <li>
                                                 <a href="#salesview{{ $Sales_datas['unique_key'] }}" data-bs-toggle="modal"
                                                     data-id="{{ $Sales_datas['id'] }}"

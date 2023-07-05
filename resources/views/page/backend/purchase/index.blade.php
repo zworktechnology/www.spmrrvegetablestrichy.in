@@ -97,6 +97,12 @@
                                                         class="badges bg-lightyellow" style="color: white">Edit</a>
                                                 </li>
                                             @endif
+                                            @if ($purchasedata['status'] == 1)
+                                                <li>
+                                                    <a href="{{ route('purchase.invoiceedit', ['unique_key' => $purchasedata['unique_key']]) }}"
+                                                        class="badges bg-lightyellow" style="color: white">Edit</a>
+                                                </li>
+                                            @endif
                                             <li hidden>
                                                 <a href="#delete{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
                                                     data-id="{{ $purchasedata['unique_key'] }}"
