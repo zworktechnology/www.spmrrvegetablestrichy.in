@@ -1034,7 +1034,7 @@ $(document).on('click', '.remove-salestr', function() {
             var grand_total = $(".sales_grand_total").val();
 
             if (Number(payable_amount) > Number(grand_total)) {
-                alert('You are entering Maximum Amount of Total');
+                alert('!Paid Amount is More than of Total!');
                 $(".salespayable_amount").val('');
             }
         });
@@ -1045,7 +1045,7 @@ $(document).on('click', '.remove-salestr', function() {
             var grand_total = $(".grand_total").val();
 
             if (Number(payable_amount) > Number(grand_total)) {
-                alert('You are entering Maximum Amount of Total');
+                alert('!Paid Amount is More than of Total!');
                 $(".payable_amount").val('');
             }
         });
@@ -1056,7 +1056,7 @@ $(document).on('click', '.remove-salestr', function() {
             var oldblance = $(".oldblance").val();
 
             if (Number(payment_payableamount) > Number(oldblance)) {
-                alert('You are entering Maximum Amount of Total');
+                alert('!Paid Amount is More than of Total!');
                 $(".payment_payableamount").val('');
             }
         });
@@ -1067,7 +1067,7 @@ $(document).on('click', '.remove-salestr', function() {
             var sales_oldblance = $(".sales_oldblance").val();
 
             if (Number(spayment_payableamount) > Number(sales_oldblance)) {
-                alert('You are entering Maximum Amount of Total');
+                alert('!Paid Amount is More than of Total!');
                 $(".spayment_payableamount").val('');
             }
         });
@@ -1080,7 +1080,7 @@ $(document).on('click', '.remove-salestr', function() {
         btn.form.submit();
     }
 
-    function purchasesaveprint(btn) {
+    function purchaseinvoiceubmitForm(btn) {
         // disable the button
         btn.disabled = true;
         // submit the form
@@ -1096,12 +1096,7 @@ $(document).on('click', '.remove-salestr', function() {
     }
 
 
-    function salessaveprintForm(btn) {
-        // disable the button
-        btn.disabled = true;
-        // submit the form
-        btn.form.submit();
-    }
+    
 
 
 

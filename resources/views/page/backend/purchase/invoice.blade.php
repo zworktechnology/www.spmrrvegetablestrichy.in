@@ -232,7 +232,7 @@
                     </div>
                     <br /><br />
                     <div class="modal-footer">
-                        <input type="submit" class="btn btn-primary" name="submit" value="submit" />
+                        <input type="submit" class="btn btn-primary" onclick="purchaseinvoiceubmitForm(this);" />
                         <a href="{{ route('purchase.index') }}" class="btn btn-danger" value="">Cancel</a>
                     </div>
                 </form>
