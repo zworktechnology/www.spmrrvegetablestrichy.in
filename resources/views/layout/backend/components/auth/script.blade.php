@@ -756,7 +756,16 @@ $(".purchaseclose").click(function() {
                 $('.spayment_pending').val(spayment_pending_amount.toFixed(2));
             });
 
-       
+       // $(document).ready(function() {
+
+            /* NEW QUOTE BUTTON */
+
+          //  $("#branch_widget").click(function() {
+           //     location.reload();
+         //       document.getElementById("branch_widget").style.backgroundColor = "blue";
+          //  });
+
+       // });  
 
 var j = 1;
 var i = 1;

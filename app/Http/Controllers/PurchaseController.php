@@ -141,15 +141,19 @@ class PurchaseController extends Controller
             }
             
         }
-
-
-        $PurchaseArray = Purchase::where('soft_delete', '!=', 1)->get();
         $null_grossarr = [];
-        foreach ($PurchaseArray as $key => $PurchaseArrays) {
-            if($PurchaseArrays->gross_amount == ""){
-                $null_grossarr[] = $PurchaseArrays->id;
+        $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        foreach ($All_supplier as $key => $All_supplierarr) {
+            $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('soft_delete', '!=', 1)->get();
+            
+            foreach ($PurchaseArray as $key => $PurchaseArrays) {
+                if($PurchaseArrays->gross_amount == ""){
+                    $null_grossarr[] = $PurchaseArrays->id;
+                }
             }
         }
+        
+        
         $first_id = reset($null_grossarr);
             
 
@@ -282,11 +286,15 @@ class PurchaseController extends Controller
         }
 
 
-        $PurchaseArray = Purchase::where('soft_delete', '!=', 1)->get();
         $null_grossarr = [];
-        foreach ($PurchaseArray as $key => $PurchaseArrays) {
-            if($PurchaseArrays->gross_amount == ""){
-                $null_grossarr[] = $PurchaseArrays->id;
+        $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        foreach ($All_supplier as $key => $All_supplierarr) {
+            $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('soft_delete', '!=', 1)->get();
+            
+            foreach ($PurchaseArray as $key => $PurchaseArrays) {
+                if($PurchaseArrays->gross_amount == ""){
+                    $null_grossarr[] = $PurchaseArrays->id;
+                }
             }
         }
         $first_id = reset($null_grossarr);
@@ -414,11 +422,15 @@ class PurchaseController extends Controller
             
         }
 
-        $PurchaseArray = Purchase::where('soft_delete', '!=', 1)->get();
         $null_grossarr = [];
-        foreach ($PurchaseArray as $key => $PurchaseArrays) {
-            if($PurchaseArrays->gross_amount == ""){
-                $null_grossarr[] = $PurchaseArrays->id;
+        $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        foreach ($All_supplier as $key => $All_supplierarr) {
+            $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('soft_delete', '!=', 1)->get();
+            
+            foreach ($PurchaseArray as $key => $PurchaseArrays) {
+                if($PurchaseArrays->gross_amount == ""){
+                    $null_grossarr[] = $PurchaseArrays->id;
+                }
             }
         }
         $first_id = reset($null_grossarr);
