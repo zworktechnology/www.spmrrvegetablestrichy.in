@@ -27,15 +27,15 @@
         </div>
 
         <div class="row">
-        @php 
-           
+        @php
+
            preg_match("/[^\/]+$/", Request::url(), $matches);
        $pos = $matches[0];
-       @endphp 
+       @endphp
             <div class="col-lg-2 col-sm-4 col-6">
                 <a href="{{ route('expence.index') }}" style="color: black">
                     <div class="dash-widget" @if ($pos == "expence")
-                    style="color: black; border-color:red;margin-bottom:18px;"
+                    style="color: black; border-color:red; background-color: #fff8f0; margin-bottom:18px;"
                     @endif>
                         <div class="dash-widgetcontent">
                             <h6 style="font-weight: bold;">All</h6>
@@ -43,16 +43,16 @@
                     </div>
                 </a>
             </div>
-                            @php 
+                            @php
                             $lastword = Request::url();
                             preg_match("/[^\/]+$/", $lastword, $matches);
                             $last_word = $matches[0];
-                            @endphp 
+                            @endphp
             @foreach ($branch as $keydata => $allbranches)
                 <div class="col-lg-2 col-sm-4 col-6">
                     <a href="{{ route('expence.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
                         <div class="dash-widget" @if ($last_word == $allbranches->id)
-                    style="color: black; border-color:red;"
+                    style="color: black; border-color:red; background-color: #fff8f0;"
                     @endif>
                             <div class="dash-widgetcontent">
                                 <h6 style="font-weight: bold;">{{ $allbranches->shop_name }}</h6>
