@@ -20,4 +20,9 @@ class Customer extends Model
         'status',
         'soft_delete'
     ];
+
+    public function salespayment()
+    {
+        return $this->hasMany(Salespayment::class, 'customer_id');
+    }
 }

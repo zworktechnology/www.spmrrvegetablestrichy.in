@@ -23,6 +23,4 @@ class PurchaseProduct extends Model
         'soft_delete'
     ];
 
-
-   
 }

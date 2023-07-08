@@ -31,4 +31,14 @@ class Branch extends Model
     {
         return $this->hasMany(Expence::class, 'branch_id');
     }
+
+    public function purchasepayment()
+    {
+        return $this->hasMany(PurchasePayment::class, 'branch_id');
+    }
+
+    public function salespayment()
+    {
+        return $this->hasMany(Salespayment::class, 'branch_id');
+    }
 }

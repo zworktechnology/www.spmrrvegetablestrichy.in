@@ -21,4 +21,14 @@ class Salespayment extends Model
         'payment_pending',
         'soft_delete'
     ];
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
 }

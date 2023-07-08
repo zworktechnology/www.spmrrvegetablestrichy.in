@@ -22,4 +22,14 @@ class PurchasePayment extends Model
         'payment_pending',
         'soft_delete'
     ];
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'supplier_id');
+    }
 }

@@ -16,7 +16,7 @@
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Contact Number</label>
-                            <input type="number" name="contact_number" id="supplier_contactno" class="supplier_contactno form-control" onkeyup="check(); return false;" placeholder="Enter Supplier Number"><span id="supplier_message">Maximum 10 Numbers Allowed</span>
+                            <input type="number" name="contact_number" id="supplier_contactno" class="supplier_contactno form-control" onkeyup="check(); return false;" placeholder="Enter Supplier Number">
                         </div>
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">

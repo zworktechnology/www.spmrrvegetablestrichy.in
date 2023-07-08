@@ -84,8 +84,8 @@
                                     <td>{{ ++$keydata }}</td>
                                     <td>{{ date('d M Y', strtotime($P_PaymentData->date)) }} -
                                         {{ date('h:i A', strtotime($P_PaymentData->time)) }}</td>
-                                    <td>{{ $P_PaymentData->branch_id }}</td>
-                                    <td>{{$P_PaymentData->customer_id }}</td>
+                                    <td>{{ $P_PaymentData->branch->name }}</td>
+                                    <td>{{$P_PaymentData->customer->name }}</td>
                                     <td>{{$P_PaymentData->oldblance }}</td>
                                     <td>{{ $P_PaymentData->amount }}</td>
                                     <td>{{ $P_PaymentData->payment_pending }}</td>
