@@ -76,7 +76,7 @@ $(".purchaseclose").click(function() {
 
                         if (len > 0) {
                             for (var i = 0; i < len; i++) {
-                                
+
                                     var id = response['data'][i].id;
                                     var name = response['data'][i].name;
                                     var option = "<option value='" + id + "'>" + name +
@@ -107,7 +107,7 @@ $(".purchaseclose").click(function() {
         });
 
 
-       
+
 
         $('.commission_ornet').on('change', function() {
             var commission_ornet = this.value;
@@ -119,7 +119,7 @@ $(".purchaseclose").click(function() {
                 $("#commission_percent").val(0);
             }
         });
-        $(document).on("keyup", 'input.commission_percent', function() { 
+        $(document).on("keyup", 'input.commission_percent', function() {
                 var commission_percent = $(this).val();
                 var total_amount = $(".total_amount").val();
                 var commision_amount = (commission_percent / 100) * total_amount;
@@ -190,21 +190,21 @@ $(".purchaseclose").click(function() {
                 });
         });
 
-        $(document).on("keyup", 'input.payment_payableamount', function() { 
+        $(document).on("keyup", 'input.payment_payableamount', function() {
                 var payment_payableamount = $(this).val();
                 var oldblance = $(".oldblance").val();
                 var payment_pending_amount = Number(oldblance) - Number(payment_payableamount);
                 $('.payment_pending').val(payment_pending_amount.toFixed(2));
             });
 
-       
+
 
         $('.purchase_pattiyal').each(function() {
             $(this).on('click', function(e) {
                 purchase_uniquekey = $(this).attr('data-id');
                 //alert(purchase_uniquekey);
 
-                
+
             });
         });
 
@@ -320,7 +320,7 @@ $(".purchaseclose").click(function() {
                   //         supplierid = $this.attr('data-id');
                             //alert(supplierid);
 
-                            
+
 
                     //        $.ajax({
                       //          url: '/getsupplierbalance/',
@@ -339,14 +339,14 @@ $(".purchaseclose").click(function() {
                         //                        supplirtotbal += response[i].balance_amount << 0;
                         //                        var balance_amount = response[0].balance_amount;
                         //                        console.log(balance_amount);
-                                                
+
                          //                       $('.supplier_balance' + m).html(balance_amount);
                          //                       $('.suplier_totbalnce').html(supplirtotbal);
                          //                   }
                          //                  for (var i = 0; i < len; i++) {
                           //                      var balance_amount1 = response[1].balance_amount;
                           //                      console.log(balance_amount1);
-                                                
+
                           //                      $('.supplier_balance' + n).html(balance_amount1);
                            //                 }
                            //             }
@@ -365,7 +365,7 @@ $(".purchaseclose").click(function() {
 
 
                 if (query != '') {
-                    
+
                     $.ajax({
                         url: "{{ route('supplier.checkduplicate') }}",
                         type: 'POST',
@@ -384,7 +384,7 @@ $(".purchaseclose").click(function() {
                     });
                 }
 
-                
+
             });
 
             $(".customer_contactno").keyup(function() {
@@ -392,7 +392,7 @@ $(".purchaseclose").click(function() {
 
 
                 if (query != '') {
-                    
+
                     $.ajax({
                         url: "{{ route('customer.checkduplicate') }}",
                         type: 'POST',
@@ -411,7 +411,7 @@ $(".purchaseclose").click(function() {
                     });
                 }
 
-                
+
             });
 
     });
@@ -420,24 +420,24 @@ $(".purchaseclose").click(function() {
     function check()
     {
         var mobile = $('.supplier_contactno').val();
-    
+
         if(mobile.length>10){
             $('.supplier_contactno').val('');
-            
+
         }
     }
 
     function customercheck()
     {
         var mobile = $('.customer_contactno').val();
-    
+
         if(mobile.length>10){
             $('.customer_contactno').val('');
-            
+
         }
     }
 
-    
+
 
 
 
@@ -466,7 +466,7 @@ $(".purchaseclose").click(function() {
                 var pending_amount = Number(grand_total) - Number(payable_amount);
                 $('.pending_amount').val(pending_amount.toFixed(2));
 
-                $(document).on("keyup", 'input.payable_amount', function() { 
+                $(document).on("keyup", 'input.payable_amount', function() {
                 var payable_amount = $(this).val();
                 var grand_total = $(".grand_total").val();
                 var pending_amount = Number(grand_total) - Number(payable_amount);
@@ -502,9 +502,9 @@ $(".purchaseclose").click(function() {
                 var grand_total = $(".grand_total").val();
                 var pending_amount = Number(grand_total) - Number(payable_amount);
                 $('.pending_amount').val(pending_amount.toFixed(2));
-                                    
 
-            $(document).on("keyup", 'input.extracost', function() {   
+
+            $(document).on("keyup", 'input.extracost', function() {
                 var extracost = $(this).val();
                 var total_amount = $(".total_amount").val();
                 var gross_amount = Number(total_amount) + Number(extracost);
@@ -516,9 +516,9 @@ $(".purchaseclose").click(function() {
                 var payable_amount = $(".payable_amount").val();
                 var pending_amount = Number(grand_total) - Number(payable_amount);
                 $('.pending_amount').val(pending_amount.toFixed(2));
-            });   
-            
-            $(document).on("keyup", 'input.payable_amount', function() { 
+            });
+
+            $(document).on("keyup", 'input.payable_amount', function() {
                 var payable_amount = $(this).val();
                 var grand_total = $(".grand_total").val();
                 var pending_amount = Number(grand_total) - Number(payable_amount);
@@ -543,7 +543,7 @@ $(".purchaseclose").click(function() {
                                             totalAmount);
                                     });
 
-                        
+
             var totalExtraAmount = 0;
             $("input[name='extracost[]']").each(
                                     function() {
@@ -556,7 +556,7 @@ $(".purchaseclose").click(function() {
             var tot_comm_extracost = Number(totalExtraAmount) + Number(commission_amount);
             $(".tot_comm_extracost").val(tot_comm_extracost);
 
-                
+
                 var total_amount = $(".total_amount").val();
                 var gross_amount = Number(total_amount) - Number(tot_comm_extracost);
                 $('.gross_amount').val(gross_amount.toFixed(2));
@@ -567,10 +567,10 @@ $(".purchaseclose").click(function() {
                 var payable_amount = $(".payable_amount").val();
                 var grand_total = $(".grand_total").val();
                 var pending_amount = Number(grand_total) - Number(payable_amount);
-                $('.pending_amount').val(pending_amount.toFixed(2)); 
-                
-                
-            $(document).on("blur", "input[name*=extracost]", function() {  
+                $('.pending_amount').val(pending_amount.toFixed(2));
+
+
+            $(document).on("blur", "input[name*=extracost]", function() {
                 var extracost = $(this).val();
                 var totalExtraAmount = 0;
                 $("input[name='extracost[]']").each(
@@ -594,16 +594,16 @@ $(".purchaseclose").click(function() {
                 var payable_amount = $(".payable_amount").val();
                 var pending_amount = Number(grand_total) - Number(payable_amount);
                 $('.pending_amount').val(pending_amount.toFixed(2));
-            });   
-            
-            $(document).on("keyup", 'input.payable_amount', function() { 
+            });
+
+            $(document).on("keyup", 'input.payable_amount', function() {
                 var payable_amount = $(this).val();
                 var grand_total = $(".grand_total").val();
                 var pending_amount = Number(grand_total) - Number(payable_amount);
                 $('.pending_amount').val(pending_amount.toFixed(2));
-            });     
+            });
 
-            
+
             var invoice_supplier = $(".invoice_supplier").val();
             var invoice_branchid = $(".invoice_branchid").val();
 
@@ -661,8 +661,8 @@ $(".purchaseclose").click(function() {
         });
 
 
-   
-   
+
+
 
 // SALES
 
@@ -685,7 +685,7 @@ $(".purchaseclose").click(function() {
 
                         if (len > 0) {
                             for (var i = 0; i < len; i++) {
-                                
+
                                     var id = response[i].productlistid;
                                     var name = response[i].productlist_name;
                                     var option = "<option value='" + id + "'>" + name +
@@ -749,7 +749,7 @@ $(".purchaseclose").click(function() {
                 });
         });
 
-        $(document).on("keyup", 'input.spayment_payableamount', function() { 
+        $(document).on("keyup", 'input.spayment_payableamount', function() {
                 var spayment_payableamount = $(this).val();
                 var sales_oldblance = $(".sales_oldblance").val();
                 var spayment_pending_amount = Number(sales_oldblance) - Number(spayment_payableamount);
@@ -757,7 +757,7 @@ $(".purchaseclose").click(function() {
             });
 
        // $(document).ready(function() {
-            
+
             /* NEW QUOTE BUTTON */
 
           //  $("#branch_widget").click(function() {
@@ -765,7 +765,7 @@ $(".purchaseclose").click(function() {
          //       document.getElementById("branch_widget").style.backgroundColor = "blue";
           //  });
 
-       // });  
+       // });
 
 var j = 1;
 var i = 1;
@@ -809,7 +809,7 @@ $(document).ready(function() {
 
                         if (len > 0) {
                             for (var i = 0; i < len; i++) {
-                                
+
                                     var id = response[i].productlistid;
                                     var name = response[i].productlist_name;
                                     var option = "<option value='" + id + "'>" + name +
@@ -823,13 +823,13 @@ $(document).ready(function() {
 
     });
 
-               
 
 
 
-       
 
-        
+
+
+
 });
 
 
@@ -859,7 +859,7 @@ $(document).on('click', '.remove-salestr', function() {
                 var sales_pending_amount = Number(sales_grand_total) - Number(salespayable_amount);
                 $('.sales_pending_amount').val(sales_pending_amount.toFixed(2));
 
-                $(document).on("keyup", 'input.salespayable_amount', function() { 
+                $(document).on("keyup", 'input.salespayable_amount', function() {
                 var salespayable_amount = $(this).val();
                 var sales_grand_total = $(".sales_grand_total").val();
                 var sales_pending_amount = Number(sales_grand_total) - Number(salespayable_amount);
@@ -896,9 +896,9 @@ $(document).on('click', '.remove-salestr', function() {
                 var sales_grand_total = $(".sales_grand_total").val();
                 var sales_pending_amount = Number(sales_grand_total) - Number(salespayable_amount);
                 $('.sales_pending_amount').val(sales_pending_amount.toFixed(2));
-                                    
 
-            $(document).on("keyup", 'input.sales_extracost', function() {   
+
+            $(document).on("keyup", 'input.sales_extracost', function() {
                 var sales_extracost = $(this).val();
                 var sales_total_amount = $(".sales_total_amount").val();
                 var sales_gross_amount = Number(sales_total_amount) + Number(sales_extracost);
@@ -910,9 +910,9 @@ $(document).on('click', '.remove-salestr', function() {
                 var salespayable_amount = $(".salespayable_amount").val();
                 var sales_pending_amount = Number(sales_grand_total) - Number(salespayable_amount);
                 $('.sales_pending_amount').val(sales_pending_amount.toFixed(2));
-            });   
-            
-            $(document).on("keyup", 'input.salespayable_amount', function() { 
+            });
+
+            $(document).on("keyup", 'input.salespayable_amount', function() {
                 var salespayable_amount = $(this).val();
                 var sales_grand_total = $(".sales_grand_total").val();
                 var sales_pending_amount = Number(sales_grand_total) - Number(salespayable_amount);
@@ -924,7 +924,7 @@ $(document).on('click', '.remove-salestr', function() {
 
       $(document).on("blur", "input[name*=sales_priceperkg]", function() {
 
-            
+
 
 
 
@@ -954,9 +954,9 @@ $(document).on('click', '.remove-salestr', function() {
                 var sales_grand_total = $(".sales_grand_total").val();
                 var sales_pending_amount = Number(sales_grand_total) - Number(salespayable_amount);
                 $('.sales_pending_amount').val(sales_pending_amount.toFixed(2));
-                                    
 
-            $(document).on("keyup", 'input.sales_extracost', function() {   
+
+            $(document).on("keyup", 'input.sales_extracost', function() {
                 var sales_extracost = $(this).val();
                 var sales_total_amount = $(".sales_total_amount").val();
                 var sales_gross_amount = Number(sales_total_amount) + Number(sales_extracost);
@@ -968,14 +968,14 @@ $(document).on('click', '.remove-salestr', function() {
                 var salespayable_amount = $(".salespayable_amount").val();
                 var sales_pending_amount = Number(sales_grand_total) - Number(salespayable_amount);
                 $('.sales_pending_amount').val(sales_pending_amount.toFixed(2));
-            });   
-            
-            $(document).on("keyup", 'input.salespayable_amount', function() { 
+            });
+
+            $(document).on("keyup", 'input.salespayable_amount', function() {
                 var salespayable_amount = $(this).val();
                 var sales_grand_total = $(".sales_grand_total").val();
                 var sales_pending_amount = Number(sales_grand_total) - Number(salespayable_amount);
                 $('.sales_pending_amount').val(sales_pending_amount.toFixed(2));
-            });   
+            });
 
 
 
@@ -1006,7 +1006,7 @@ $(document).on('click', '.remove-salestr', function() {
                             var sales_pending_amount = Number(sales_grand_total) - Number(salespayable_amount);
                             $('.sales_pending_amount').val(sales_pending_amount.toFixed(2));
                         }
-                        
+
                     }
                 });
 
@@ -1014,15 +1014,15 @@ $(document).on('click', '.remove-salestr', function() {
 
       });
 
-        $(document).on("keyup", 'input.salespayable_amount', function() { 
+        $(document).on("keyup", 'input.salespayable_amount', function() {
                 var salespayable_amount = $(this).val();
                 var sales_grand_total = $(".sales_grand_total").val();
                 var sales_pending_amount = Number(sales_grand_total) - Number(salespayable_amount);
                 $('.sales_pending_amount').val(sales_pending_amount.toFixed(2));
-            });  
+            });
 
 
-      
+
 
 
         function printDiv(divName) {
@@ -1105,13 +1105,13 @@ $(document).on('click', '.remove-salestr', function() {
     }
 
 
-    
 
 
 
-   
 
-   
+
+
+
 
 
 </script>

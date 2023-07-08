@@ -33,12 +33,12 @@
        $pos = $matches[0];
        @endphp
             <div class="col-lg-2 col-sm-4 col-6">
-                <a href="{{ route('expence.index') }}" style="color: black">
+                <a href="{{ route('expence.index') }}">
                     <div class="dash-widget" @if ($pos == "expence")
-                    style="color: black; border-color:red; background-color: #fff8f0; margin-bottom:18px;"
+                    style="border-color:red; background-color: red; margin-bottom:18px;"
                     @endif>
                         <div class="dash-widgetcontent">
-                            <h6 style="font-weight: bold;">All</h6>
+                            <h6 @if ($pos == "expence") style="font-weight: bold; color:white" @endif>All</h6>
                         </div>
                     </div>
                 </a>
@@ -50,12 +50,12 @@
                             @endphp
             @foreach ($branch as $keydata => $allbranches)
                 <div class="col-lg-2 col-sm-4 col-6">
-                    <a href="{{ route('expence.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
+                    <a href="{{ route('expence.branchdata', ['branch_id' => $allbranches->id]) }}">
                         <div class="dash-widget" @if ($last_word == $allbranches->id)
-                    style="color: black; border-color:red; background-color: #fff8f0;"
+                            style="border-color:red; background-color: red;"
                     @endif>
                             <div class="dash-widgetcontent">
-                                <h6 style="font-weight: bold;">{{ $allbranches->shop_name }}</h6>
+                                <h6 @if ($last_word == $allbranches->id) style="font-weight: bold; color:white" @endif>{{ $allbranches->shop_name }}</h6>
                             </div>
                         </div>
                     </a>
