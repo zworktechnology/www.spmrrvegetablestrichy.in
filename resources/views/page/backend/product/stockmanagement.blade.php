@@ -8,12 +8,18 @@
             </div>
         </div>
 
-
+        @php 
+           
+           preg_match("/[^\/]+$/", Request::url(), $matches);
+       $pos = $matches[0];
+       @endphp 
         <div class="row">
 
             <div class="col-lg-2 col-sm-4 col-6">
                 <a href="{{ route('stockmanagement.index') }}" style="color: black">
-                    <div class="dash-widget">
+                    <div class="dash-widget" @if ($pos == "stockmanagement")
+                    style="color: black; border-color:red;margin-bottom:18px;"
+                    @endif>
                         <div class="dash-widgetcontent">
                             <h6 style="font-weight: bold;">All</h6>
                         </div>
