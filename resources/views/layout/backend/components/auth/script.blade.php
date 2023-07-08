@@ -757,7 +757,7 @@ $(".purchaseclose").click(function() {
             });
 
        // $(document).ready(function() {
-
+            
             /* NEW QUOTE BUTTON */
 
           //  $("#branch_widget").click(function() {

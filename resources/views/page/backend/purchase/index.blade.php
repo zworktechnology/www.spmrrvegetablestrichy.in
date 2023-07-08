@@ -13,7 +13,7 @@
                             @method('PUT')
                             @csrf
                             <div style="display: flex">
-                                <div style="margin-right: 10px;"><input type="date" name="from_date" required
+                                <div style="margin-right: 10px;"><input type="date" name="from_date"  required
                                         class="form-control from_date" value="{{ $today }}"></div>
                                 <div style="margin-right: 10px;"><input type="submit" class="btn btn-success"
                                         value="Search" /></div>

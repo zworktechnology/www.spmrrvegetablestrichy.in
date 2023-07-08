@@ -135,7 +135,7 @@ class SalesController extends Controller
     public function branchdata($branch_id)
     {
         $today = Carbon::now()->format('Y-m-d');
-        $branchwise_data = Sales::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+        $branchwise_data = Sales::where('date', '=', $today)->where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
         $Sales_data = [];
         $sales_terms = [];
         foreach ($branchwise_data as $key => $branchwise_datas) {

@@ -172,7 +172,9 @@ class PurchaseController extends Controller
 
     public function branchdata($branch_id)
     {
-        $branchwise_data = Purchase::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+
+        $today = Carbon::now()->format('Y-m-d');
+        $branchwise_data = Purchase::where('date', '=', $today)->where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
         $purchase_data = [];
         $terms = [];
         $Extracost_Arr = [];
