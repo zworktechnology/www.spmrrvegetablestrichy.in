@@ -1,7 +1,7 @@
 <div class="modal-dialog modal-l">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="customerLargeModalLabel">Add new Expence</h5>
+            <h5 class="modal-title" id="customerLargeModalLabel">Add new Expense</h5>
         </div>
         <div class="modal-body">
             <form autocomplete="off" method="POST" action="{{ route('expence.store') }}">
@@ -22,7 +22,7 @@
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Branch <span style="color: red;">*</span></label>
-                            <select class="select" name="branch_id" required>
+                            <select class="form-control js-example-basic-single select" name="branch_id" required>
                                 <option value="" disabled selected hiddden>Select Branch</option>
                                    @foreach ($branch as $branches)
                                       <option value="{{ $branches->id }}">{{ $branches->shop_name }}</option>

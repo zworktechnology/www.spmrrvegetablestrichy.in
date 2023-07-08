@@ -22,7 +22,7 @@
                      <select class="select sales_branch_id" name="sales_branch_id" id="sales_branch_id">
                         <option value="" disabled selected hiddden>Select Branch</option>
                            @foreach ($branch as $branches)
-                              <option value="{{ $branches->id }}"@if ($branches->id === $SalesData->branch_id) selected='selected' @endif>{{ $branches->name }}</option>
+                              <option value="{{ $branches->id }}"@if ($branches->id === $SalesData->branch_id) selected='selected' @endif>{{ $branches->shop_name }}</option>
                            @endforeach
                      </select>
                   </div>
@@ -43,14 +43,14 @@
                <div class="col-lg-6 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Date<span style="color: red;">*</span></label>
-                     <input type="date" name="sales_date" placeholder="" value="{{ $SalesData->date }}">
+                     <input type="date" name="sales_date" placeholder="" readonly value="{{ $SalesData->date }}">
                   </div>
                </div>
 
                <div class="col-lg-6 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span style="color: red;">*</span></label>
-                     <input type="time" name="sales_time" placeholder="" value="{{ $SalesData->time }}">
+                     <input type="time" name="sales_time" placeholder="" readonly value="{{ $SalesData->time }}">
                   </div>
                </div>
 
@@ -65,7 +65,7 @@
                <div class="col-lg-16 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank<span style="color: red;">*</span></label>
-                     <select class="select" name="sales_bank_id" id="sales_bank_id">
+                     <select class="select" name="sales_bank_id" id="sales_bank_id" disabled>
                         <option value="" disabled selected hiddden>Select Bank</option>
                         @foreach ($bank as $banks)
                            <option value="{{ $banks->id }}"@if ($banks->id === $SalesData->bank_id) selected='selected' @endif>{{ $banks->name }}</option>
@@ -82,8 +82,7 @@
                <div class="table-responsive col-12">
                   <table class="table">
                      <thead>
-                           <button style="width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
-                              type="button" id="addsalesproductfields" value="Add">+</button>
+                           
                         <tr>
                            <th style="font-size:15px; width:28%;">Product</th>
                            <th style="font-size:15px; width:12%;">Bag / Kg</th>
@@ -106,11 +105,10 @@
                               @endforeach
                            </td>
                            <td><input type="text" class="form-control" id="sales_bagorkg" readonly name="sales_bagorkg[]" placeholder="Bag" value="{{ $Sales_Products->bagorkg }}" required /></td>
-                           <td><input type="text" class="form-control sales_count" id="sales_count" readonly name="sales_count[]" placeholder="kgs" value="{{ $Sales_Products->count }}" required /></td>
-                           <td><input type="text" class="form-control sales_priceperkg" readonly id="sales_priceperkg" name="sales_priceperkg[]" placeholder="Price Per Count" value="{{ $Sales_Products->price_per_kg }}" required /></td>
+                           <td><input type="text" class="form-control sales_count" id="sales_count"  name="sales_count[]" placeholder="kgs" value="{{ $Sales_Products->count }}" required /></td>
+                           <td><input type="text" class="form-control sales_priceperkg"  id="sales_priceperkg" name="sales_priceperkg[]" placeholder="Price Per Count" value="{{ $Sales_Products->price_per_kg }}" required /></td>
                            <td class="text-end"><input type="text" class="form-control sales_total_price" readonly id="sales_total_price"  style="background-color: #e9ecef;" name="sales_total_price[]" placeholder="" value="{{ $Sales_Products->total_price }}" required /></td>
-                           <td><button style="width: 35px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-salestr" type="button" >-</button>
-                           </td>
+                           
                         </tr>
                         @endforeach
                      </tbody>
@@ -124,9 +122,9 @@
                            
                         </tr>
                         <tr>
-                           <td colspan="3"><input type="text" class="form-control" id="sales_extracost_note" placeholder="Note" value="{{ $SalesData->note }}" name="sales_extracost_note" required/></td>
+                           <td colspan="3"><input type="text" class="form-control" id="sales_extracost_note" placeholder="Note" readonly value="{{ $SalesData->note }}" name="sales_extracost_note" required/></td>
                            <td style="font-size:15px;color: black;" class="text-end">Extra Cost<span style="color: red;">*</span></td>
-                           <td><input type="text" class="form-control sales_extracost" id="sales_extracost" placeholder="Extra Cost" name="sales_extracost" value="{{ $SalesData->extra_cost }}"/></td>
+                           <td><input type="text" class="form-control sales_extracost" id="sales_extracost" placeholder="Extra Cost" readonly name="sales_extracost" value="{{ $SalesData->extra_cost }}"/></td>
                         </tr>
                         <tr>
                            <td colspan="4" class="text-end" style="font-size:15px;color: black;">Gross Amount</td>

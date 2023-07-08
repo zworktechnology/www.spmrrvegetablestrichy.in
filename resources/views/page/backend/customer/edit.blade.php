@@ -20,8 +20,8 @@
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Contact Number</label>
-                            <input type="text" name="contact_number" placeholder="Enter Contact Number"
-                                value="{{ $customertdata['contact_number'] }}">
+                            <input type="number" name="contact_number" id="customer_contactno" class="customer_contactno form-control" value="{{ $customertdata['contact_number'] }}" onkeyup="customercheck(); return false;" placeholder="Enter Customer Number">
+                            <span id="customer_message">Maximum 10 Numbers Allowed</span>
                         </div>
                     </div>
                     <div class="col-lg-12 col-sm-6 col-12">

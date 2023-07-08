@@ -4,7 +4,7 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Expence</h4>
+                <h4>Expense</h4>
             </div>
             <div class="page-btn">
                 <div class="row">
@@ -20,7 +20,7 @@
                             </div>
                         </form>
                         <button type="button" class="btn btn-primary waves-effect waves-light btn-added"
-                            data-bs-toggle="modal" data-bs-target=".cusomer-modal-xl">Add Expence</button>
+                            data-bs-toggle="modal" data-bs-target=".cusomer-modal-xl">Add Expense</button>
                     </div>
                 </div>
             </div>

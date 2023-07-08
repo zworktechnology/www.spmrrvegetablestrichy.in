@@ -10,6 +10,9 @@ use App\Models\Customer;
 use App\Models\Productlist;
 use App\Models\Sales;
 use App\Models\SalesProduct;
+use App\Models\Purchase;
+use App\Models\PurchaseProduct;
+use App\Models\BranchwiseBalance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -60,7 +63,72 @@ class SalesController extends Controller
         }
 
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        return view('page.backend.sales.index', compact('Sales_data','allbranch', 'today'));
+
+
+                $PSTodayStockArr = [];
+           
+                $sales_branchwise_data = Sales::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
+                $Sales_Branch = [];
+                foreach ($sales_branchwise_data as $key => $sales_Data) {
+                    $Sales_Branch[] = $sales_Data->branch_id;
+                }
+              
+               
+                foreach (array_unique($Sales_Branch) as $key => $Merge_Branchs) {
+
+                    $merge_salesProduct = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->get();
+                    $sales_Array = [];
+                    if($merge_salesProduct != ""){
+                        foreach ($merge_salesProduct as $key => $merge_salesProducts) {
+                            $sales_Array[] = $merge_salesProducts->productlist_id;
+                        }
+                    }else {
+                        $sales_Array[] = '';
+                    }
+
+
+
+                    foreach (array_unique($sales_Array) as $key => $sales_productlist) {
+                       
+                        $getSalebagcount = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $sales_productlist)->where('bagorkg', '=', 'bag')->sum('count');
+                        $getSalekgcount = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $sales_productlist)->where('bagorkg', '=', 'kg')->sum('count');
+
+
+                        if($getSalebagcount != 0){
+                            $bag_count = $getSalebagcount;
+                        }else {
+                            $bag_count = '';
+                        }
+
+                        if($getSalekgcount != 0){
+                            $kg_count = $getSalekgcount;
+                        }else {
+                            $kg_count = '';
+                        }
+
+
+                            $productlist_ID = Productlist::findOrFail($sales_productlist);
+
+                            $PSTodayStockArr[] = array(
+                                'branch_id' => $Merge_Branchs,
+                                'product_name' => $productlist_ID->name,
+                                'getSalebagcount' => $bag_count,
+                                'getSalekgcount' => $kg_count,
+                                'today' => $today,
+    
+                            );
+
+                        
+                    }
+                    
+                }
+
+              
+            
+
+
+                $today_date = Carbon::now()->format('Y-m-d');
+        return view('page.backend.sales.index', compact('Sales_data','allbranch', 'today', 'PSTodayStockArr', 'today_date'));
     }
 
 
@@ -104,11 +172,72 @@ class SalesController extends Controller
             );
         }
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        return view('page.backend.sales.index', compact('Sales_data', 'allbranch', 'branch_id', 'today'));
+
+
+        $PSTodayStockArr = [];
+           
+        $sales_branchwise_data = Sales::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
+        $Sales_Branch = [];
+        foreach ($sales_branchwise_data as $key => $sales_Data) {
+            $Sales_Branch[] = $sales_Data->branch_id;
+        }
+      
+       
+        foreach (array_unique($Sales_Branch) as $key => $Merge_Branchs) {
+
+            $merge_salesProduct = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->get();
+            $sales_Array = [];
+            if($merge_salesProduct != ""){
+                foreach ($merge_salesProduct as $key => $merge_salesProducts) {
+                    $sales_Array[] = $merge_salesProducts->productlist_id;
+                }
+            }else {
+                $sales_Array[] = '';
+            }
+
+
+
+            foreach (array_unique($sales_Array) as $key => $sales_productlist) {
+               
+                $getSalebagcount = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $sales_productlist)->where('bagorkg', '=', 'bag')->sum('count');
+                $getSalekgcount = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $sales_productlist)->where('bagorkg', '=', 'kg')->sum('count');
+
+
+                if($getSalebagcount != 0){
+                    $bag_count = $getSalebagcount;
+                }else {
+                    $bag_count = '';
+                }
+
+                if($getSalekgcount != 0){
+                    $kg_count = $getSalekgcount;
+                }else {
+                    $kg_count = '';
+                }
+
+
+                    $productlist_ID = Productlist::findOrFail($sales_productlist);
+
+                    $PSTodayStockArr[] = array(
+                        'branch_id' => $Merge_Branchs,
+                        'product_name' => $productlist_ID->name,
+                        'getSalebagcount' => $bag_count,
+                        'getSalekgcount' => $kg_count,
+                        'today' => $today,
+
+                    );
+
+                
+            }
+            
+        }
+
+        $today_date = Carbon::now()->format('Y-m-d');
+        return view('page.backend.sales.index', compact('Sales_data', 'allbranch', 'branch_id', 'today', 'PSTodayStockArr', 'today_date'));
     }
 
-    public function datefilter(Request $request) {
-
+    public function datefilter(Request $request)
+    {
 
         $today = $request->get('from_date');
 
@@ -152,7 +281,69 @@ class SalesController extends Controller
         }
 
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        return view('page.backend.sales.index', compact('Sales_data','allbranch', 'today'));
+
+
+        $PSTodayStockArr = [];
+           
+        $sales_branchwise_data = Sales::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
+        $Sales_Branch = [];
+        foreach ($sales_branchwise_data as $key => $sales_Data) {
+            $Sales_Branch[] = $sales_Data->branch_id;
+        }
+      
+       
+        foreach (array_unique($Sales_Branch) as $key => $Merge_Branchs) {
+
+            $merge_salesProduct = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->get();
+            $sales_Array = [];
+            if($merge_salesProduct != ""){
+                foreach ($merge_salesProduct as $key => $merge_salesProducts) {
+                    $sales_Array[] = $merge_salesProducts->productlist_id;
+                }
+            }else {
+                $sales_Array[] = '';
+            }
+
+
+
+            foreach (array_unique($sales_Array) as $key => $sales_productlist) {
+               
+                $getSalebagcount = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $sales_productlist)->where('bagorkg', '=', 'bag')->sum('count');
+                $getSalekgcount = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('productlist_id', '=', $sales_productlist)->where('bagorkg', '=', 'kg')->sum('count');
+
+
+                if($getSalebagcount != 0){
+                    $bag_count = $getSalebagcount;
+                }else {
+                    $bag_count = '';
+                }
+
+                if($getSalekgcount != 0){
+                    $kg_count = $getSalekgcount;
+                }else {
+                    $kg_count = '';
+                }
+
+
+                    $productlist_ID = Productlist::findOrFail($sales_productlist);
+
+                    $PSTodayStockArr[] = array(
+                        'branch_id' => $Merge_Branchs,
+                        'product_name' => $productlist_ID->name,
+                        'getSalebagcount' => $bag_count,
+                        'getSalekgcount' => $kg_count,
+                        'today' => $today,
+
+                    );
+
+                
+            }
+            
+        }
+
+
+        $today_date = Carbon::now()->format('Y-m-d');
+        return view('page.backend.sales.index', compact('Sales_data','allbranch', 'today', 'PSTodayStockArr', 'today_date'));
 
     }
 
@@ -167,12 +358,11 @@ class SalesController extends Controller
         return view('page.backend.sales.create', compact('productlist', 'branch', 'customer', 'today', 'timenow', 'bank'));
     }
 
-
-
     public function store(Request $request)
     {
         // Sales Table
 
+            $sales_customerid = $request->get('sales_customerid');
             $sales_branch_id = $request->get('sales_branch_id');
             $sales_date = $request->get('sales_date');
             $s_bill_no = 1;
@@ -190,7 +380,7 @@ class SalesController extends Controller
             $lastreport_OFBranch = Sales::where('branch_id', '=', $sales_branch_id)->where('date', '=', $sales_date)->latest('id')->first();
             if($lastreport_OFBranch != '')
             {
-                $added_billno = substr ($lastreport_OFBranch->bill_no, -5);
+                $added_billno = substr ($lastreport_OFBranch->bill_no, -2);
                 $invoiceno = $branch_upper . $billreport_date . 'S0' . ($added_billno) + 1;
             } else {
                 $invoiceno = $branch_upper . $billreport_date . 'S0' . $s_bill_no;
@@ -206,7 +396,7 @@ class SalesController extends Controller
             $data->branch_id = $request->get('sales_branch_id');
             $data->date = $request->get('sales_date');
             $data->time = $request->get('sales_time');
-            
+
             $data->bill_no = $request->get('sales_billno');
             $data->bank_id = $request->get('sales_bank_id');
             $data->total_amount = $request->get('sales_total_amount');
@@ -231,6 +421,8 @@ class SalesController extends Controller
                 $SalesProduct = new SalesProduct;
                 $SalesProduct->unique_key = $salesprandomkey;
                 $SalesProduct->sales_id = $insertedId;
+                $SalesProduct->date = $data->date;
+                $SalesProduct->branch_id = $data->branch_id;
                 $SalesProduct->productlist_id = $sales_product_id;
                 $SalesProduct->bagorkg = $request->sales_bagorkg[$key];
                 $SalesProduct->count = $request->sales_count[$key];
@@ -270,7 +462,41 @@ class SalesController extends Controller
 
             }
 
-            
+
+
+            $SalesbranchwiseData = BranchwiseBalance::where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->first();
+            if($SalesbranchwiseData != ""){
+
+                $old_grossamount = $SalesbranchwiseData->sales_amount;
+                $old_paid = $SalesbranchwiseData->sales_paid;
+
+                $gross_amount = $request->get('sales_gross_amount');
+                $payable_amount = $request->get('salespayable_amount');
+
+                $new_grossamount = $old_grossamount + $gross_amount;
+                $new_paid = $old_paid + $payable_amount;
+                $new_balance = $new_grossamount - $new_paid;
+
+                DB::table('branchwise_balances')->where('customer_id', $sales_customerid)->where('branch_id', $sales_branch_id)->update([
+                    'sales_amount' => $new_grossamount,  'sales_paid' => $new_paid, 'sales_balance' => $new_balance
+                ]);
+                
+            }else {
+                $gross_amount = $request->get('sales_gross_amount');
+                $payable_amount = $request->get('salespayable_amount');
+                $balance_amount = $gross_amount - $payable_amount;
+
+                $data = new BranchwiseBalance();
+
+                $data->customer_id = $sales_customerid;
+                $data->branch_id = $sales_branch_id;
+                $data->sales_amount = $gross_amount;
+                $data->sales_paid = $payable_amount;
+                $data->sales_balance = $balance_amount;
+                $data->save();
+            }
+
+
 
             return redirect()->route('sales.index')->with('add', 'Sales Data added successfully!');
 
@@ -282,7 +508,8 @@ class SalesController extends Controller
     }
 
 
-    public function print_view($unique_key) {
+    public function print_view($unique_key)
+    {
 
         $SalesData = Sales::where('unique_key', '=', $unique_key)->first();
 
@@ -317,19 +544,62 @@ class SalesController extends Controller
     {
 
         $branch_id = $request->get('sales_branch_id');
+        $sales_customer_id = $request->get('sales_customerid');
 
 
         $Sales_Data = Sales::where('unique_key', '=', $unique_key)->first();
 
-        $Sales_Data->customer_id = $request->get('sales_customerid');
-        $Sales_Data->branch_id = $request->get('sales_branch_id');
-        $Sales_Data->date = $request->get('sales_date');
-        $Sales_Data->time = $request->get('sales_time');
-        $Sales_Data->bank_id = $request->get('sales_bank_id');
+
+        $SalesbranchwiseData = BranchwiseBalance::where('customer_id', '=', $sales_customer_id)->where('branch_id', '=', $branch_id)->first();
+        if($SalesbranchwiseData != ""){
+
+            $old_grossamount = $SalesbranchwiseData->sales_amount;
+            $old_paid = $SalesbranchwiseData->sales_paid;
+
+                $oldentry_grossamount = $Sales_Data->gross_amount;
+                $oldentry_paid = $Sales_Data->paid_amount;
+
+                $gross_amount = $request->get('sales_gross_amount');
+                $payable_amount = $request->get('salespayable_amount');
+
+
+                if($oldentry_grossamount > $gross_amount){
+                    $newgross = $oldentry_grossamount - $gross_amount;
+                    $updated_gross = $old_grossamount - $newgross;
+                }else if($oldentry_grossamount < $gross_amount){
+                    $newgross = $gross_amount - $oldentry_grossamount;
+                    $updated_gross = $old_grossamount + $newgross;
+                }else if($oldentry_grossamount == $gross_amount){
+                    $updated_gross = $old_grossamount;
+                }
+
+
+                if($oldentry_paid > $payable_amount){
+                    $newPaidAmt = $oldentry_paid - $payable_amount;
+                    $updated_paid = $old_paid - $newPaidAmt;
+                }else if($oldentry_paid < $payable_amount){
+                    $newPaidAmt = $payable_amount - $oldentry_paid;
+                    $updated_paid = $old_paid + $newPaidAmt;
+                }else if($oldentry_paid == $payable_amount){
+                    $updated_paid = $old_paid;
+                }
+
+
+                
+                $new_balance = $updated_gross - $updated_paid;
+
+                DB::table('branchwise_balances')->where('customer_id', $sales_customer_id)->where('branch_id', $branch_id)->update([
+                    'sales_amount' => $updated_gross,  'sales_paid' => $updated_paid, 'sales_balance' => $new_balance
+                ]);
+                
+            } 
+
+
         
+
+        
+
         $Sales_Data->total_amount = $request->get('sales_total_amount');
-        $Sales_Data->note = $request->get('sales_extracost_note');
-        $Sales_Data->extra_cost = $request->get('sales_extracost');
         $Sales_Data->gross_amount = $request->get('sales_gross_amount');
         $Sales_Data->old_balance = $request->get('sales_old_balance');
         $Sales_Data->grand_total = $request->get('sales_grand_total');
@@ -341,52 +611,76 @@ class SalesController extends Controller
 
         // Purchase Products Table
 
-        $getinsertedP_Products = SalesProduct::where('sales_id', '=', $SalesId)->get();
-        $Purchaseproducts = array();
-        foreach ($getinsertedP_Products as $key => $getinserted_P_Products) {
-            $Purchaseproducts[] = $getinserted_P_Products->id;
-        }
 
-        $updatedpurchaseproduct_id = $request->sales_detail_id;
-        $updated_PurchaseProduct_id = array_filter($updatedpurchaseproduct_id);
-        $different_ids = array_merge(array_diff($Purchaseproducts, $updated_PurchaseProduct_id), array_diff($updated_PurchaseProduct_id, $Purchaseproducts));
-
-        if (!empty($different_ids)) {
-            foreach ($different_ids as $key => $differents_id) {
-
-                $getPurchaseOld = SalesProduct::where('id', '=', $differents_id)->first();
-
-                $product_Data = Product::where('soft_delete', '!=', 1)->where('productlist_id', '=', $getPurchaseOld->productlist_id)->where('branchtable_id', '=', $branch_id)->first();
-                if($branch_id == $product_Data->branchtable_id){
-
-                        $bag_count = $product_Data->available_stockin_bag;
-                        $kg_count = $product_Data->available_stockin_kilograms;
-
-                        if($getPurchaseOld->bagorkg == 'bag'){
-                            $totalbag_count = $bag_count + $getPurchaseOld->count;
-                            $totalkg_count = $kg_count + 0;
-                        }else if($getPurchaseOld->bagorkg == 'kg'){
-                            $totalkg_count = $kg_count + $getPurchaseOld->count;
-                            $totalbag_count = $bag_count + 0;
-                        }
-
-                        DB::table('products')->where('productlist_id', $getPurchaseOld->productlist_id)->where('branchtable_id', $branch_id)->update([
-                            'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
-                        ]);
-                    }
-            }
-        }
-
-        if (!empty($different_ids)) {
-            foreach ($different_ids as $key => $different_id) {
-                SalesProduct::where('id', $different_id)->delete();
-            }
-        }
-
+       
+            
         foreach ($request->get('sales_detail_id') as $key => $sales_detail_id) {
             if ($sales_detail_id > 0) {
 
                 $updatesales_product_id = $request->sales_product_id[$key];
+
+                
+
+                $product_Data = Product::where('soft_delete', '!=', 1)->where('productlist_id', '=', $updatesales_product_id)->where('branchtable_id', '=', $branch_id)->first();
+                if($product_Data != ""){
+                        $bag_count = $product_Data->available_stockin_bag;
+                        $kg_count = $product_Data->available_stockin_kilograms;
+
+                    if($request->sales_bagorkg[$key] == 'bag'){
+
+                        $getP_Productbag = SalesProduct::where('id', '=', $sales_detail_id)->where('bagorkg', '=', 'bag')->first();
+
+                        $old_count = $getP_Productbag->count;
+                        $new_count = $request->sales_count[$key];
+    
+                        if($old_count > $new_count){
+
+                            $total_count = $old_count - $new_count;
+                            $stockbag_count = $total_count + $bag_count;
+
+                            DB::table('products')->where('productlist_id', $updatesales_product_id)->where('branchtable_id', $branch_id)->update([
+                                'available_stockin_bag' => $stockbag_count
+                            ]);
+
+                        }else if($old_count < $new_count){
+
+                            $total_count = $new_count - $old_count;
+                            $stockbag_count = $bag_count - $total_count;
+
+                            DB::table('products')->where('productlist_id', $updatesales_product_id)->where('branchtable_id', $branch_id)->update([
+                                'available_stockin_bag' => $stockbag_count
+                            ]);
+
+                        }
+                    }else if($request->sales_bagorkg[$key] == 'kg'){
+
+                        $getP_Productkg = SalesProduct::where('id', '=', $sales_detail_id)->where('bagorkg', '=', 'kg')->first();
+    
+                        $oldkg_count = $getP_Productkg->count;
+                        $newkg_count = $request->sales_count[$key];
+    
+                        if($oldkg_count > $newkg_count){
+
+                            $total_count = $oldkg_count - $newkg_count;
+                            $stockkg_count = $total_count + $kg_count;
+
+                            DB::table('products')->where('productlist_id', $updatesales_product_id)->where('branchtable_id', $branch_id)->update([
+                                'available_stockin_kilograms' => $stockkg_count
+                            ]);
+
+                        }else if($oldkg_count < $newkg_count){
+
+                            $total_count = $newkg_count - $oldkg_count;
+                            $stockkg_count = $kg_count - $total_count;
+
+                            DB::table('products')->where('productlist_id', $updatesales_product_id)->where('branchtable_id', $branch_id)->update([
+                                'available_stockin_kilograms' => $stockkg_count
+                            ]);
+
+                        }
+                    }
+                }
+
 
                 $ids = $sales_detail_id;
                 $Sales_Id = $SalesId;
@@ -400,57 +694,10 @@ class SalesController extends Controller
                     'sales_id' => $Sales_Id,  'productlist_id' => $updatesales_product_id,  'bagorkg' => $bagorkg,  'count' => $count, 'price_per_kg' => $price_per_kg, 'total_price' => $total_price
                 ]);
 
-            } else if ($sales_detail_id == '') {
-                if ($request->sales_product_id[$key] > 0) {
-
-
-                    $p_prandomkey = Str::random(5);
-
-                    $SalesProduct = new SalesProduct;
-                    $SalesProduct->unique_key = $p_prandomkey;
-                    $SalesProduct->sales_id = $SalesId;
-                    $SalesProduct->productlist_id = $request->sales_product_id[$key];
-                    $SalesProduct->bagorkg = $request->sales_bagorkg[$key];
-                    $SalesProduct->count = $request->sales_count[$key];
-                    $SalesProduct->price_per_kg = $request->sales_priceperkg[$key];
-                    $SalesProduct->total_price = $request->sales_total_price[$key];
-                    $SalesProduct->save();
-
-
-
-                    $Product_id = $request->sales_product_id[$key];
-                    $product_Data = Product::where('productlist_id', '=', $Product_id)->where('branchtable_id', '=', $branch_id)->first();
-
-                    if($product_Data != ""){
-
-                        if($branch_id == $product_Data->branchtable_id){
-
-                            $bag_count = $product_Data->available_stockin_bag;
-                            $kg_count = $product_Data->available_stockin_kilograms;
-
-
-                            if($request->sales_bagorkg[$key] != ""){
-                                if($request->sales_bagorkg[$key] == 'bag'){
-                                    $totalbag_count = $bag_count - $request->sales_count[$key];
-                                    $totalkg_count = $kg_count - 0;
-                                }else {
-                                    $totalkg_count = $kg_count - $request->sales_count[$key];
-                                    $totalbag_count = $bag_count - 0;
-                                }
-                            }
-
-
-
-                            DB::table('products')->where('productlist_id', $Product_id)->where('branchtable_id', $branch_id)->update([
-                                'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
-                            ]);
-                        }
-                    }
-
-
-                }
-            }
+            } 
         }
+
+       
 
         return redirect()->route('sales.index')->with('update', 'Updated Sales information has been added to your list.');
 
@@ -522,19 +769,49 @@ class SalesController extends Controller
     public function report() {
         $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $Customer = Customer::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        
+
+        $data = Sales::where('soft_delete', '!=', 1)->get();
         $Sales_data = [];
-        $Sales_data[] = array(
-            'unique_key' => '',
-            'branch_name' => '',
-            'customer_name' => '',
-            'date' => '',
-            'time' => '',
-            'gross_amount' => '',
-            'bill_no' => '',
-            'id' => '',
-            'terms' => '',
-            'heading' => '',
-        );
+        $sales_terms = [];
+        foreach ($data as $key => $datas) {
+            $branch_name = Branch::findOrFail($datas->branch_id);
+            $customer_name = Customer::findOrFail($datas->customer_id);
+
+            $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->get();
+            foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                $sales_terms[] = array(
+                    'bag' => $SalesProducts_arrdata->bagorkg,
+                    'kgs' => $SalesProducts_arrdata->count,
+                    'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                    'total_price' => $SalesProducts_arrdata->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                );
+            }
+
+
+
+            $Sales_data[] = array(
+                'unique_key' => $datas->unique_key,
+                'branch_name' => $branch_name->shop_name,
+                'customer_name' => $customer_name->name,
+                'date' => $datas->date,
+                'time' => $datas->time,
+                'gross_amount' => $datas->gross_amount,
+                'bill_no' => $datas->bill_no,
+                'id' => $datas->id,
+                'sales_terms' => $sales_terms,
+                'status' => $datas->status,
+                'branchheading' => $branch_name->shop_name,
+                'customerheading' => $customer_name->name,
+                'fromdateheading' => date('d-M-Y', strtotime($datas->date)),
+                'todateheading' => date('d-M-Y', strtotime($datas->date)),
+            );
+        }
 
 
 
@@ -1500,6 +1777,9 @@ class SalesController extends Controller
         }
 
 
+        
+
+
 
 
         return view('page.backend.sales.report', compact('Sales_data', 'branch', 'Customer'));
@@ -1519,48 +1799,23 @@ class SalesController extends Controller
         $sales_customerid = request()->get('sales_customerid');
         $sales_branch_id = request()->get('sales_branch_id');
 
-
-        $last_idrow = Sales::where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->latest('id')->first();
+        $last_idrow = BranchwiseBalance::where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->first();
+        
         if($last_idrow != ""){
-
-            if($last_idrow->sales_paymentpending != NULL){
-
+            $output = [];
+            if($last_idrow->sales_balance != NULL){
                 $output[] = array(
-                    'payment_pending' => $last_idrow->sales_paymentpending,
-                    'payment_sales_id' => $last_idrow->id,
+                    'payment_pending' => $last_idrow->sales_balance,
                 );
-            }else if($last_idrow->sales_paymentpending == NULL){
-
-                if($last_idrow->balance_amount != NULL){
-                    
-                    $output[] = array(
-                        'payment_pending' => $last_idrow->balance_amount,
-                        'payment_sales_id' => $last_idrow->id,
-                    );
-                }else if($last_idrow->balance_amount == NULL){
-
-                    $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $sales_customerid)->where('branch_id', '=', $sales_branch_id)->skip(1)->take(1)->first();
-                    if($secondlastrow->sales_paymentpending != NULL){
-                        $output[] = array(
-                            'payment_pending' => $secondlastrow->sales_paymentpending,
-                            'payment_sales_id' => $secondlastrow->id,
-                        );
-                    }else {
-                        $output[] = array(
-                            'payment_pending' => $secondlastrow->balance_amount,
-                            'payment_sales_id' => $secondlastrow->id,
-                        );
-                    }
-                    
-                }
-                
             }
+            
+            
         }else {
             $output[] = array(
-                'payment_pending' => '0',
-                'payment_sales_id' => '',
+                'payment_pending' => 0,
             );
         }
+
 
 
         echo json_encode($output);
@@ -1648,7 +1903,7 @@ class SalesController extends Controller
     {
         $sales_product_id = request()->get('sales_product_id');
         $sales_branch_id = request()->get('sales_branch_id');
-        
+
         $GetProduct[] = Product::where('soft_delete', '!=', 1)->where('productlist_id', '=', $sales_product_id)->where('branchtable_id', '=', $sales_branch_id)->get();
         echo json_encode($GetProduct);
     }
@@ -1662,47 +1917,27 @@ class SalesController extends Controller
 
 
 
-        $last_idrow = Sales::where('customer_id', '=', $customer_id)->where('branch_id', '=', $branch_id)->latest('id')->first();
+        $last_idrow = BranchwiseBalance::where('customer_id', '=', $customer_id)->where('branch_id', '=', $branch_id)->first();
         if($last_idrow != ""){
 
-            if($last_idrow->sales_paymentpending != NULL){
+            if($last_idrow->sales_balance != NULL){
 
                 $output[] = array(
-                    'payment_pending' => $last_idrow->sales_paymentpending,
-                    'payment_sales_id' => $last_idrow->id,
+                    'payment_pending' => $last_idrow->sales_balance,
                 );
-            }else if($last_idrow->sales_paymentpending == NULL){
-
-                if($last_idrow->balance_amount != NULL){
-                    
-                    $output[] = array(
-                        'payment_pending' => $last_idrow->balance_amount,
-                        'payment_sales_id' => $last_idrow->id,
-                    );
-                }else if($last_idrow->balance_amount == NULL){
-
-                    $secondlastrow = Sales::orderBy('created_at', 'desc')->where('customer_id', '=', $customer_id)->where('branch_id', '=', $branch_id)->skip(1)->take(1)->first();
-                    if($secondlastrow->sales_paymentpending != NULL){
-                        $output[] = array(
-                            'payment_pending' => $secondlastrow->sales_paymentpending,
-                            'payment_sales_id' => $secondlastrow->id,
-                        );
-                    }else {
-                        $output[] = array(
-                            'payment_pending' => $secondlastrow->balance_amount,
-                            'payment_sales_id' => $secondlastrow->id,
-                        );
-                    }
-                    
-                }
+            }else {
+                $output[] = array(
+                    'payment_pending' => 0,
+                );
                 
+
             }
         }else {
             $output[] = array(
-                'payment_pending' => '',
-                'payment_sales_id' => '',
+                'payment_pending' => 0,
             );
         }
+
 
 
 

@@ -13,21 +13,23 @@
                             @method('PUT')
                             @csrf
                             <div style="display: flex">
-                                <div style="margin-right: 10px;"><input type="date" name="from_date" required class="form-control from_date"
-                                        value="{{ $today }}"></div>
-                                <div style="margin-right: 10px;"><input type="submit" class="btn btn-success" value="Search" /></div>
+                                <div style="margin-right: 10px;"><input type="date" name="from_date" required
+                                        class="form-control from_date" value="{{ $today }}"></div>
+                                <div style="margin-right: 10px;"><input type="submit" class="btn btn-success"
+                                        value="Search" /></div>
                             </div>
                         </form>
-                        <a href="{{ route('purchase.create') }}" class="btn btn-added">Add Purchase</a>
+                        <a href="{{ route('purchase.create') }}" class="btn btn-added" style="margin-right: 10px;">Add
+                            Purchase</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row">
+        <div class="row py-2" style="margin-bottom:10px;">
             <div class="col-lg-2 col-sm-4 col-6">
                 <a href="{{ route('purchase.index') }}" style="color: black">
-                    <div class="dash-widget">
+                    <div class="dash-widget" style="margin-bottom:18px;">
                         <div class="dash-widgetcontent">
                             <h6 style="font-weight: bold;">All</h6>
                         </div>
@@ -43,9 +45,19 @@
                             </div>
                         </div>
                     </a>
+                    <a href="#todaystock{{ $allbranches->id }}" data-bs-toggle="modal"data-id="{{ $allbranches->id }}"
+                            data-bs-target=".todaystock-modal-xl{{ $allbranches->id }}" class="btn btn-added btn-primary " style="color:black;background-color: #e4c6bc !important;font-size: 13px;font-weight: 600;">{{ $allbranches->shop_name }} - Stock</a>
+
+                            <div class="modal fade todaystock-modal-xl{{ $allbranches->id }}" tabindex="-1"role="dialog" data-bs-backdrop="static"
+                                aria-labelledby="todaystockLargeModalLabel{{ $allbranches->id }}"aria-hidden="true">
+                                @include('page.backend.purchase.todaystock')
+                            </div>
                 </div>
             @endforeach
         </div>
+
+
+
 
         <div class="card">
             <div class="card-body">
@@ -53,10 +65,11 @@
                     <table class="table  customerdatanew">
                         <thead>
                             <tr>
+                                <th>Date</th>
                                 <th>Bill No</th>
-                                <th>Date & Time</th>
                                 <th>Supplier</th>
                                 <th>Branch</th>
+                                <th>Product Details</th>
                                 <th>Total</th>
                                 <th>Action</th>
                             </tr>
@@ -64,19 +77,31 @@
                         <tbody>
                             @foreach ($purchase_data as $keydata => $purchasedata)
                                 <tr>
+                                    <td>{{ date('d-m-Y', strtotime($purchasedata['date'])) }}</td>
                                     <td>#{{ $purchasedata['bill_no'] }}</td>
-                                    <td>{{ date('d M Y', strtotime($purchasedata['date'])) }} -
-                                        {{ date('h:i A', strtotime($purchasedata['time'])) }}</td>
                                     <td>{{ $purchasedata['supplier_name'] }}</td>
                                     <td>{{ $purchasedata['branch_name'] }}</td>
+                                    <td style="text-transform: uppercase;">
+                                    @foreach ($purchasedata['terms'] as $index => $terms_array)
+                                                    @if ($terms_array['purchase_id'] == $purchasedata['id'])
+                                                    {{ $terms_array['product_name'] }} - {{ $terms_array['kgs'] }}{{ $terms_array['bag'] }},<br/>
+                                                    @endif
+                                                    @endforeach
+                                    </td>
                                     <td>{{ $purchasedata['gross_amount'] }}</td>
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
                                             @if ($purchasedata['status'] == 0)
-                                            <li>
-                                                <a href="{{ route('purchase.edit', ['unique_key' => $purchasedata['unique_key']]) }}"
-                                                    class="badges bg-lightyellow" style="color: white">Edit</a>
-                                            </li>
+                                                <li>
+                                                    <a href="{{ route('purchase.edit', ['unique_key' => $purchasedata['unique_key']]) }}"
+                                                        class="badges bg-lightyellow" style="color: white">Edit</a>
+                                                </li>
+                                            @endif
+                                            @if ($purchasedata['status'] == 1)
+                                                <li>
+                                                    <a href="{{ route('purchase.invoiceedit', ['unique_key' => $purchasedata['unique_key']]) }}"
+                                                        class="badges bg-lightyellow" style="color: white">Edit</a>
+                                                </li>
                                             @endif
                                             <li hidden>
                                                 <a href="#delete{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
@@ -93,13 +118,19 @@
                                             </li>
 
                                             <li>
-                                            @if ($purchasedata['status'] == 0)
-                                                <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
-                                                    class="badges bg-lightgreen" style="color: white">Invoice</a>
-                                            @elseif ($purchasedata['status'] == 1)
-                                                <a href="{{ route('purchase.print_view', ['unique_key' => $purchasedata['unique_key']]) }}"
-                                                    class="badges bg-green" style="color: white">Generated Invoice</a>
-                                            @endif
+                                                @if ($purchasedata['status'] == 0)
+                                                    @if ($purchasedata['id'] == $first_id)
+                                                        <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
+                                                            class="badges bg-lightgreen purchase_pattiyal" style="color: white" data-id="{{ $purchasedata['unique_key'] }}">
+                                                            Pattial</a>
+                                                    @else
+                                                    <a class="badges bg-lightorange" style="color: white">
+                                                            Update Old Pattiyal</a>
+                                                    @endif
+                                                @elseif ($purchasedata['status'] == 1)
+                                                    <a href="{{ route('purchase.print_view', ['unique_key' => $purchasedata['unique_key']]) }}"
+                                                        class="badges bg-green" style="color: white">Invoice</a>
+                                                @endif
                                             </li>
 
                                         </ul>

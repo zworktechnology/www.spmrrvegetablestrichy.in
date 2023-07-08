@@ -24,7 +24,7 @@ return new class extends Migration
             $table->unsignedBigInteger('supplier_id');
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
 
-            $table->unsignedBigInteger('purchase_id');
+            $table->unsignedBigInteger('purchase_id')->nullable();
             $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');
 
             $table->string('date');

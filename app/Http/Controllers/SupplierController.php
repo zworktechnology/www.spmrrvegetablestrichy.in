@@ -6,6 +6,7 @@ use App\Models\Supplier;
 use App\Models\Branch;
 use App\Models\Purchase;
 use App\Models\PurchasePayment;
+use App\Models\BranchwiseBalance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -72,32 +73,18 @@ class SupplierController extends Controller
             $Supplier_array = Supplier::where('soft_delete', '!=', 1)->get();
             foreach ($Supplier_array as $key => $Supplier_arra) {
 
+        $last_idrow = BranchwiseBalance::where('supplier_id', '=', $Supplier_arra->id)->where('branch_id', '=', $alldata_branchs->id)->first();
 
-        $last_idrow = Purchase::where('soft_delete', '!=', 1)
-                                ->where('supplier_id', '=', $Supplier_arra->id)
-                                ->where('branch_id', '=', $alldata_branchs->id)
-                                ->latest('id')
-                                ->first();
+
+        
 
         if($last_idrow != ""){
-            if($last_idrow->payment_pending != NULL){
-                $tot_balace = $last_idrow->payment_pending;
+            if($last_idrow->purchase_balance != NULL){
+                $tot_balace = $last_idrow->purchase_balance;
 
-            }else if($last_idrow->payment_pending == NULL){
+            }else {
 
-                if($last_idrow->balance_amount != NULL){
-                    
-                    $tot_balace = $last_idrow->balance_amount;
-                }else if($last_idrow->balance_amount == NULL){
-
-                    $secondlastrow = Purchase::orderBy('created_at', 'desc')->where('supplier_id', '=', $Supplier_arra->id)->where('branch_id', '=', $alldata_branchs->id)->skip(1)->take(1)->first();
-                    if($secondlastrow->payment_pending != NULL){
-                        $tot_balace = $secondlastrow->payment_pending;
-                    }else {
-                        $tot_balace = $secondlastrow->balance_amount;
-                    }
-                    
-                }
+                $tot_balace = 0;
                 
             }
         }else {
@@ -213,6 +200,20 @@ class SupplierController extends Controller
         }
 
 
+    }
+
+
+
+    public function checkduplicate(Request $request)
+    {
+        if(request()->get('query'))
+        {
+            $query = request()->get('query');
+            $supplierdata = Supplier::where('contact_number', '=', $query)->first();
+            
+            $userData['data'] = $supplierdata;
+            echo json_encode($userData);
+        }
     }
 
 }

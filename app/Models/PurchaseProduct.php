@@ -12,6 +12,8 @@ class PurchaseProduct extends Model
     protected $fillable = [
         'unique_key',
         'purchase_id',
+        'date',
+        'branch_id',
         'productlist_id',
         'bagorkg',
         'count',

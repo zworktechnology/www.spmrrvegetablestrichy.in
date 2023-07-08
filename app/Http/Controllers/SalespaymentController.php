@@ -9,6 +9,7 @@ use App\Models\Sales;
 use App\Models\SalesProduct;
 use App\Models\Salespayment;
 use App\Models\Productlist;
+use App\Models\BranchwiseBalance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -63,29 +64,46 @@ class SalespaymentController extends Controller
 
     public function store(Request $request)
     {
-        $randomkey = Str::random(5);
 
-        $data = new Salespayment();
-
-        $data->unique_key = $randomkey;
-        $data->customer_id = $request->get('customer_id');
-        $data->branch_id = $request->get('branch_id');
-        $data->sales_id = $request->get('payment_sales_id');
-        $data->date = $request->get('date');
-        $data->time = $request->get('time');
-        $data->oldblance = $request->get('sales_oldblance');
-        $data->amount = $request->get('spayment_payableamount');
-        $data->payment_pending = $request->get('spayment_pending');
-        $data->save();
-
-        $spayment_payableamount = $request->get('spayment_payableamount');
-        $spayment_pending = $request->get('spayment_pending');
-        $payment_sales_id = $request->get('payment_sales_id');
+        $customer_id = $request->get('customer_id');
+        $branch_id = $request->get('branch_id');
 
 
-        DB::table('sales')->where('id', $payment_sales_id)->update([
-            'sales_paymentpaidamount' => $spayment_payableamount,  'sales_paymentpending' => $spayment_pending, 'sales_payment_id' => $data->id
-        ]);
+        $SalesData = BranchwiseBalance::where('customer_id', '=', $customer_id)->where('branch_id', '=', $branch_id)->first();
+        if($SalesData != ""){
+
+
+            $randomkey = Str::random(5);
+
+            $data = new Salespayment();
+    
+            $data->unique_key = $randomkey;
+            $data->customer_id = $request->get('customer_id');
+            $data->branch_id = $request->get('branch_id');
+            $data->sales_id = $request->get('payment_sales_id');
+            $data->date = $request->get('date');
+            $data->time = $request->get('time');
+            $data->oldblance = $request->get('sales_oldblance');
+            $data->amount = $request->get('spayment_payableamount');
+            $data->payment_pending = $request->get('spayment_pending');
+            $data->save();
+
+
+            $old_grossamount = $SalesData->sales_amount;
+            $old_paid = $SalesData->sales_paid;
+
+            $payment_paid_amount = $request->get('spayment_payableamount');
+
+            $new_paid = $old_paid + $payment_paid_amount;
+            $new_balance = $old_grossamount - $new_paid;
+
+            DB::table('branchwise_balances')->where('customer_id', $customer_id)->where('branch_id', $branch_id)->update([
+                'sales_paid' => $new_paid, 'sales_balance' => $new_balance
+            ]);
+
+    
+        }
+
 
         return redirect()->route('salespayment.index')->with('add', 'Payment Data added successfully!');
     }

@@ -41,6 +41,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // DASHBOARD
     Route::middleware(['auth:sanctum', 'verified'])->get('/home', [HomeController::class, 'index'])->name('home');
+    Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/home/datefilter', [HomeController::class, 'datefilter'])->name('home.datefilter');
 
     // INVITE CONTROLLER
     Route::middleware(['auth:sanctum', 'verified'])->group(function () {
@@ -72,6 +73,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/customer/edit/{unique_key}', [CustomerController::class, 'edit'])->name('customer.edit');
         // DELETE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/customer/delete/{unique_key}', [CustomerController::class, 'delete'])->name('customer.delete');
+        // CHECK DUPLICATE
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/customer/checkduplicate', [CustomerController::class, 'checkduplicate'])->name('customer.checkduplicate');
     });
 
     // SUPPLIER CONTROLLER
@@ -86,6 +89,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/supplier/delete/{unique_key}', [SupplierController::class, 'delete'])->name('supplier.delete');
         // CHECK BALANCE
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/supplier/checkbalance/{id}', [SupplierController::class, 'checkbalance'])->name('supplier.checkbalance');
+        // CHECK DUPLICATE
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/supplier/checkduplicate', [SupplierController::class, 'checkduplicate'])->name('supplier.checkduplicate');
     });
 
 
@@ -189,6 +194,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/report_view', [PurchaseController::class, 'report_view'])->name('purchase.report_view');
         // DATAE FILTER
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/datefilter', [PurchaseController::class, 'datefilter'])->name('purchase.datefilter');
+        // EDIT
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchase/invoiceedit/{unique_key}', [PurchaseController::class, 'invoiceedit'])->name('purchase.invoiceedit');
+        // INVOICE UPDATE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/invoiceedit_update/{unique_key}', [PurchaseController::class, 'invoiceedit_update'])->name('purchase.invoiceedit_update');
     });
 
 
@@ -270,3 +279,5 @@ Route::get('/getsupplierbalance', [SupplierController::class, 'getsupplierbalanc
 Route::get('/getBranchName', [PurchaseController::class, 'getBranchName']);
 Route::get('/getbranchwiseProducts', [SalesController::class, 'getbranchwiseProducts']);
 Route::get('/getProductsdetail', [SalesController::class, 'getProductsdetail']);
+
+Route::get('/Checkinvoiceupdated', [PurchaseController::class, 'Checkinvoiceupdated']);

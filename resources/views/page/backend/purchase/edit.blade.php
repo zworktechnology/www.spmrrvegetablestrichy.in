@@ -15,10 +15,22 @@
             @method('PUT')
             @csrf
             <div class="row">
+                <div class="col-lg-3 col-sm-3 col-12">
+                    <div class="form-group">
+                       <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Date<span style="color: red;">*</span></label>
+                       <input type="date" name="date" placeholder="" value="{{ $PurchaseData->date }}">
+                    </div>
+                 </div>
+                 <div class="col-lg-2 col-sm-2 col-12">
+                    <div class="form-group">
+                       <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span style="color: red;">*</span></label>
+                       <input type="time" name="time" placeholder="" value="{{ $PurchaseData->time }}">
+                    </div>
+                 </div>
                <div class="col-lg-3 col-sm-3 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Supplier<span style="color: red;">*</span> </label>
-                     <select class="select" name="supplier_id" id="supplier_id">
+                     <select class="form-control js-example-basic-single select" name="supplier_id" id="supplier_id">
                         <option value="" disabled selected hiddden>Select Supplier</option>
                            @foreach ($supplier as $suppliers)
                               <option value="{{ $suppliers->id }}"@if ($suppliers->id === $PurchaseData->supplier_id) selected='selected' @endif>{{ $suppliers->name }}</option>
@@ -30,26 +42,18 @@
                <div class="col-lg-3 col-sm-3 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Branch<span style="color: red;">*</span></label>
-                     <select class="select" name="branch_id" id="branch_id">
+                     <select class="form-control js-example-basic-single select" name="branch_id" id="branch_id">
                         <option value="" disabled selected hiddden>Select Branch</option>
                            @foreach ($branch as $branches)
-                              <option value="{{ $branches->id }}"@if ($branches->id === $PurchaseData->branch_id) selected='selected' @endif>{{ $branches->name }}</option>
+                              <option value="{{ $branches->id }}"@if ($branches->id === $PurchaseData->branch_id) selected='selected' @endif>{{ $branches->shop_name }}</option>
                            @endforeach
                      </select>
                   </div>
                </div>
-
-               <div class="col-lg-3 col-sm-3 col-12">
-                  <div class="form-group">
-                     <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Date<span style="color: red;">*</span></label>
-                     <input type="date" name="date" placeholder="" value="{{ $PurchaseData->date }}">
-                  </div>
-               </div>
-               <div class="col-lg-3 col-sm-3 col-12">
-                  <div class="form-group">
-                     <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span style="color: red;">*</span></label>
-                     <input type="time" name="time" placeholder="" value="{{ $PurchaseData->time }}">
-                  </div>
+               <div class="col-lg-1 col-sm-1 col-12">
+                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Action</label>
+                <button style="margin-top:10px; width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
+                type="button" id="addproductfields" value="Add">+</button>
                </div>
             </div>
 
@@ -59,12 +63,12 @@
                <div class="table-responsive col-12">
                   <table class="table">
                      <thead>
-                           <button style="width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
-                              type="button" id="addproductfields" value="Add">+</button>
+                           
                         <tr>
-                           <th style="font-size:15px; width:28%;">Product</th>
-                           <th style="font-size:15px; width:12%;">Bag / Kg</th>
-                           <th style="font-size:15px; width:12%;">Count </th>
+                           <th style="font-size:15px; width:40%;">Product</th>
+                           <th style="font-size:15px; width:25%;">Bag / Kg</th>
+                           <th style="font-size:15px; width:25%;">Count </th>
+                           <th style="font-size:15px; width:10%;">Action </th>
                            
                         </tr>
                      </thead>

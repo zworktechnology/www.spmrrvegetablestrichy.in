@@ -18,8 +18,13 @@ class Purchase extends Model
         'bill_no',
         'bank_id',
         'total_amount',
+
+        'commission_ornet',
+        'commission_percent',
+        'commission_amount',
+
         'note',
-        'extra_cost',
+        'tot_comm_extracost',
         'gross_amount',
         'old_balance',
         'grand_total',
@@ -29,6 +34,7 @@ class Purchase extends Model
         'payment_paid_amount',
         'payment_pending',
         'paid_status',
+        'purchase_remark',
         'status',
         'soft_delete'
     ];

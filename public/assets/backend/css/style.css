@@ -8144,10 +8144,16 @@ span.select2-container.select2-container--default.select2-container--open {
 #filter_inputs .card-body {
     padding: 0
 }
+.dash-widgetdashboard {
+    background: #fff;
+    margin-bottom: 19px;
+    border-radius: 6px;
+    border: 1px solid #e99311
+}
 
 .dash-widget {
     background: #fff;
-    margin-bottom: 25px;
+    margin-bottom: 19px;
     border-radius: 6px;
     padding: 20px;
     border: 1px solid #e99311
@@ -8968,6 +8974,11 @@ span.select2-container.select2-container--default.select2-container--open {
 .badges.bg-lightred {
     background: #ea5455
 }
+
+.badges.bg-lightorange {
+    background: #7db4a2
+}
+
 
 .badges.bg-lightyellow {
     background: #f90
@@ -10208,4 +10219,10 @@ span.select2-container.select2-container--default.select2-container--open {
 .button-align {
     display: flex;
     justify-content: flex-end;
+}
+.error_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }

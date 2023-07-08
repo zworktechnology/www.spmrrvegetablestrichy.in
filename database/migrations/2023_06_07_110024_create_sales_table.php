@@ -40,7 +40,6 @@ return new class extends Migration
             $table->string('balance_amount')->nullable();
 
             $table->unsignedBigInteger('sales_payment_id')->nullable();
-            $table->foreign('sales_payment_id')->references('id')->on('salespayments')->onDelete('cascade');
             $table->string('sales_paymentpaidamount')->nullable();
             $table->string('sales_paymentpending')->nullable();
 

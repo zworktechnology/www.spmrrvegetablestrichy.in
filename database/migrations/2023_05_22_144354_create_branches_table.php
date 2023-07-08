@@ -22,10 +22,10 @@ return new class extends Migration
             $table->string('shop_name');
             $table->string('address');
             $table->string('contact_number');
-            $table->string('mail_address');
-            $table->string('web_address');
-            $table->string('gst_number');
-            $table->string('logo');
+            $table->string('mail_address')->nullable();
+            $table->string('web_address')->nullable();
+            $table->string('gst_number')->nullable();
+            $table->string('logo')->nullable();
             $table->tinyInteger('status')->default(0);
             $table->tinyInteger('soft_delete')->default(0);
 

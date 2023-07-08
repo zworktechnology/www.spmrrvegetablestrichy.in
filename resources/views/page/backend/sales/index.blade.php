@@ -20,7 +20,7 @@
                 <a href="{{ route('sales.create') }}" class="btn btn-added">Add Sales</a>
             </div>
         </div>
-        <div class="row">
+        <div class="row py-2" style="margin-bottom:10px;">
 
             <div class="col-lg-2 col-sm-4 col-6">
                 <a href="{{ route('sales.index') }}" style="color: black">
@@ -40,6 +40,13 @@
                             </div>
                         </div>
                     </a>
+                    <a href="#todaystock{{ $allbranches->id }}" data-bs-toggle="modal"data-id="{{ $allbranches->id }}"
+                            data-bs-target=".todaystock-modal-xl{{ $allbranches->id }}" class="btn btn-added btn-primary " style="color:black;background-color: #e4c6bc !important;font-size: 13px;font-weight: 600;">{{ $allbranches->shop_name }} - Stock</a>
+
+                            <div class="modal fade todaystock-modal-xl{{ $allbranches->id }}" tabindex="-1"role="dialog" data-bs-backdrop="static"
+                                aria-labelledby="todaystockLargeModalLabel{{ $allbranches->id }}"aria-hidden="true">
+                                @include('page.backend.sales.todaystock')
+                            </div>
                 </div>
             @endforeach
         </div>
@@ -50,10 +57,11 @@
                     <table class="table  customerdatanew">
                         <thead>
                             <tr>
+                                <th>Date</th>
                                 <th>Bill No</th>
-                                <th>Date & Time</th>
                                 <th>Customer</th>
                                 <th>Branch</th>
+                                <th>Product Details</th>
                                 <th>Total</th>
                                 <th>Action</th>
                             </tr>
@@ -61,21 +69,28 @@
                         <tbody>
                             @foreach ($Sales_data as $keydata => $Sales_datas)
                                 <tr>
+                                    <td>{{ date('d-m-Y', strtotime($Sales_datas['date'])) }}</td>
                                     <td>#{{ $Sales_datas['bill_no'] }}</td>
-                                    <td>{{ date('d M Y', strtotime($Sales_datas['date'])) }} -
-                                        {{ date('h:i A', strtotime($Sales_datas['time'])) }}</td>
                                     <td>{{ $Sales_datas['customer_name'] }}</td>
                                     <td>{{ $Sales_datas['branch_name'] }}</td>
+                                    <td style="text-transform: uppercase;">
+                                    @foreach ($Sales_datas['sales_terms'] as $index => $terms_array)
+                                                    @if ($terms_array['sales_id'] == $Sales_datas['id'])
+                                                    {{ $terms_array['product_name'] }} - {{ $terms_array['kgs'] }}{{ $terms_array['bag'] }},<br/>
+                                                    @endif
+                                                    @endforeach
+                                    </td>
                                     <td>{{ $Sales_datas['gross_amount'] }}</td>
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
-                                            @if ($Sales_datas['status'] == 0)
-                                            <li>
-
-                                                <a href="{{ route('sales.edit', ['unique_key' => $Sales_datas['unique_key']]) }}"
-                                                    class="badges bg-lightyellow" style="color: white">Edit</a>
-                                            </li>
+                                        @if ($Sales_datas['date'] == $today_date)
+                                            @if ($Sales_datas['status'] == 1)
+                                                <li>
+                                                    <a href="{{ route('sales.edit', ['unique_key' => $Sales_datas['unique_key']]) }}"
+                                                        class="badges bg-lightyellow" style="color: white">Edit</a>
+                                                </li>
                                             @endif
+                                        @endif
                                             <li>
                                                 <a href="#salesview{{ $Sales_datas['unique_key'] }}" data-bs-toggle="modal"
                                                     data-id="{{ $Sales_datas['id'] }}"
