@@ -414,6 +414,24 @@ $(".purchaseclose").click(function() {
 
             });
 
+
+
+            $("#addexpensefilds").click(function() {
+                $("#expensefilds").append(
+                    '<tr>' +
+                    '<td><input type="hidden"id="expense_detialid"name="expense_detialid[]" /><input type="text" class="form-control expense_note" id="expense_note" name="expense_note[]" placeholder="Note" value="" required /></td>' +
+                    '<td><input type="text" class="form-control expense_amount" id="expense_amount" name="expense_amount[]" placeholder="Amount" value="" required /></td>' +
+                    '<td><button style="width: 35px;"class="py-1 text-white remove-expensetr font-medium rounded-lg text-sm  text-center btn btn-danger" type="button" id="" value="">-</button></td>' +
+                    '</tr>'
+                );
+            });
+
+
+            $(document).on('click', '.remove-expensetr', function() {
+                $(this).parents('tr').remove();
+            });
+
+
     });
 
 
