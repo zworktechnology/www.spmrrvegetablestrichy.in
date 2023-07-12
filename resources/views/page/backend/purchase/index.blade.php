@@ -60,7 +60,7 @@
                         </div>
                     </a>
                     <a href="#todaystock{{ $allbranches->id }}" data-bs-toggle="modal"data-id="{{ $allbranches->id }}"
-                            data-bs-target=".todaystock-modal-xl{{ $allbranches->id }}" class="btn btn-added btn-primary " style="color:black;background-color: #e4c6bc !important;font-size: 13px;font-weight: 600;">{{ $allbranches->shop_name }} - Stock</a>
+                            data-bs-target=".todaystock-modal-xl{{ $allbranches->id }}" class="btn btn-added btn-primary " style="color:black;background-color: #e4c6bc !important;font-size: 13px;font-weight: 600;">Current Details</a>
 
                             <div class="modal fade todaystock-modal-xl{{ $allbranches->id }}" tabindex="-1"role="dialog" data-bs-backdrop="static"
                                 aria-labelledby="todaystockLargeModalLabel{{ $allbranches->id }}"aria-hidden="true">

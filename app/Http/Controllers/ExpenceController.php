@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use App\Models\Branch;
 use App\Models\Expence;
+use App\Models\Expensedetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -98,6 +99,18 @@ class ExpenceController extends Controller
     }
 
 
+    public function create()
+    {
+        $today = Carbon::now()->format('Y-m-d');
+        $branch = Branch::where('soft_delete', '!=', 1)->get();
+        $timenow = Carbon::now()->format('H:i');
+
+
+
+        return view('page.backend.expence.create', compact('today', 'branch', 'timenow'));
+    }
+
+
 
 
     public function store(Request $request)
@@ -109,27 +122,102 @@ class ExpenceController extends Controller
         $data->unique_key = $randomkey;
         $data->date = $request->get('date');
         $data->time = $request->get('time');
-        $data->amount = $request->get('amount');
-        $data->note = $request->get('note');
         $data->branch_id = $request->get('branch_id');
-
         $data->save();
+
+
+        $insertedId = $data->id;
+        $total = 0;
+        foreach ($request->get('expense_note') as $key => $expense_note) {
+            $total +=  $request->expense_amount[$key];
+
+            $Expensedetail = new Expensedetail;
+            $Expensedetail->expense_id = $insertedId;
+            $Expensedetail->expense_note = $expense_note;
+            $Expensedetail->expense_amount = $request->expense_amount[$key];
+            $Expensedetail->save();
+
+            DB::table('expences')->where('id', $insertedId)->update([
+                'amount' => $total
+            ]);
+        }
 
         return redirect()->route('expence.index')->with('add', 'Expence Data added successfully!');
     }
 
 
-    public function edit(Request $request, $unique_key)
+
+    public function edit($unique_key)
+    {
+        $today = Carbon::now()->format('Y-m-d');
+        $branch = Branch::where('soft_delete', '!=', 1)->get();
+        $timenow = Carbon::now()->format('H:i');
+        $data = Expence::where('unique_key', '=', $unique_key)->where('soft_delete', '!=', 1)->first();
+        $Expense_details = Expensedetail::where('expense_id', '=', $data->id)->get();
+
+
+        return view('page.backend.expence.edit', compact('today', 'branch', 'timenow', 'data', 'Expense_details'));
+    }
+
+
+    public function update(Request $request, $unique_key)
     {
         $ExpenceData = Expence::where('unique_key', '=', $unique_key)->first();
 
         $ExpenceData->date = $request->get('date');
         $ExpenceData->time = $request->get('time');
-        $ExpenceData->amount = $request->get('amount');
-        $ExpenceData->note = $request->get('note');
         $ExpenceData->branch_id = $request->get('branch_id');
-
         $ExpenceData->update();
+
+        $ExpenceDataID = $ExpenceData->id;
+
+
+
+        $getinsertedExpense = Expensedetail::where('expense_id', '=', $ExpenceDataID)->get();
+        $Expensedetil = array();
+        foreach ($getinsertedExpense as $key => $getinserted_Expense) {
+            $Expensedetil[] = $getinserted_Expense->id;
+        }
+
+        $expense_detialid = $request->expense_detialid;
+        $updated_ExpenseDetlid = array_filter($expense_detialid);
+        $different_ids = array_merge(array_diff($Expensedetil, $updated_ExpenseDetlid), array_diff($updated_ExpenseDetlid, $Expensedetil));
+
+        if (!empty($different_ids)) {
+            foreach ($different_ids as $key => $different_id) {
+                Expensedetail::where('id', $different_id)->delete();
+            }
+        }
+
+        $total = 0;
+        foreach ($request->get('expense_detialid') as $key => $expense_detialid) {
+            
+            if ($expense_detialid > 0) {
+                $total +=  $request->expense_amount[$key];
+
+                $expense_note = $request->expense_note[$key];
+                $expense_amount = $request->expense_amount[$key];
+
+                DB::table('expensedetails')->where('id', $expense_detialid)->update([
+                    'expense_note' => $expense_note,  'expense_amount' => $expense_amount
+                ]);
+            } else if ($expense_detialid == '') {
+
+                $total +=  $request->expense_amount[$key];
+
+                $Expensedetail = new Expensedetail;
+                $Expensedetail->expense_id = $ExpenceDataID;
+                $Expensedetail->expense_note = $request->expense_note[$key];
+                $Expensedetail->expense_amount = $request->expense_amount[$key];
+                $Expensedetail->save();
+
+                DB::table('expences')->where('id', $ExpenceDataID)->update([
+                    'amount' => $total
+                ]);
+            }
+
+           
+        }
 
         return redirect()->route('expence.index')->with('update', 'Expence Data updated successfully!');
     }

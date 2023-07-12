@@ -111,6 +111,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // INDEX
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/expence', [ExpenceController::class, 'index'])->name('expence.index');
+        // CREATE
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/expence/create', [ExpenceController::class, 'create'])->name('expence.create');
+        // EDIT
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/expence/edit/{unique_key}', [ExpenceController::class, 'edit'])->name('expence.edit');
+         // UPDATE
+         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/expence/update/{unique_key}', [ExpenceController::class, 'update'])->name('expence.update');
         // STORE
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/expence/store', [ExpenceController::class, 'store'])->name('expence.store');
         // EDIT

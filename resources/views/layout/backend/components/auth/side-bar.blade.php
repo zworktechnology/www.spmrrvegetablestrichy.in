@@ -14,10 +14,10 @@
                     <h6 class="submenu-hdr">Bill Management</h6>
                     <ul>
                         <li class="{{ Route::is('purchase.index', 'purchase.store') ? 'active' : '' }}">
-                            <a href="{{ route('purchase.index') }}"><i data-feather="shopping-bag"></i><span>Purchase</span></a>
+                            <a href="{{ route('purchase.branchdata', ['branch_id' => '1']) }}"><i data-feather="shopping-bag"></i><span>Purchase</span></a>
                         </li>
                         <li class="{{ Route::is('sales.index', 'sales.store') ? 'active' : '' }}">
-                            <a href="{{ route('sales.index') }}"><i data-feather="shopping-cart"></i><span>Sales</span></a>
+                            <a href="{{ route('sales.branchdata', ['branch_id' => '1']) }}"><i data-feather="shopping-cart"></i><span>Sales</span></a>
                         </li>
                         <li class="{{ Route::is('expence.index', 'expence.store') ? 'active' : '' }}">
                             <a href="{{ route('expence.index') }}"><i data-feather="corner-up-left"></i><span>Expence</span></a>
@@ -28,10 +28,10 @@
                     <h6 class="submenu-hdr">Payment</h6>
                     <ul>
                         <li class="{{ Route::is('purchasepayment.index', 'purchasepayment.store') ? 'active' : '' }}">
-                            <a href="{{ route('purchasepayment.index') }}"><i data-feather="columns"></i></i><span>Purchase</span></a>
+                            <a href="{{ route('purchasepayment.index') }}"><i data-feather="columns"></i></i><span>Purchase Receipt</span></a>
                         </li>
                         <li class="{{ Route::is('salespayment.index', 'salespayment.store') ? 'active' : '' }}">
-                            <a href="{{ route('salespayment.index') }}"><i data-feather="pen-tool"></i><span>Sales</span></a>
+                            <a href="{{ route('salespayment.index') }}"><i data-feather="pen-tool"></i><span>Sales Receipt</span></a>
                         </li>
                     </ul>
                 </li>
