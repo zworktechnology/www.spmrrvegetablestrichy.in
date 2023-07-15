@@ -51,6 +51,10 @@
                                                     data-id="{{ $suppliertdata['id'] }}"
                                                     data-bs-target=".checkbalance-modal-xl{{ $suppliertdata['unique_key'] }}" class="badges bg-lightred checkbalance" style="color: white">Check Balance</a>
                                             </li>
+                                            <li>
+                                                <a href="{{ route('supplier.view', ['unique_key' => $suppliertdata['unique_key']]) }}"
+                                                class="badges bg-lightgreen" style="color: white">view</a>
+                                            </li>
                                         </ul>
 
                                     </td>

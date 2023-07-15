@@ -17,6 +17,8 @@ class Salespayment extends Model
         'date',
         'time',
         'oldblance',
+        'salespayment_discount',
+        'salespayment_totalamount',
         'amount',
         'payment_pending',
         'soft_delete'

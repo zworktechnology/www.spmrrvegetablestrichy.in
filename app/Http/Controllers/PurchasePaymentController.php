@@ -20,10 +20,9 @@ class PurchasePaymentController extends Controller
 {
     public function index()
     {
-
-        $data = PurchasePayment::where('soft_delete', '!=', 1)->get();
-        
         $today = Carbon::now()->format('Y-m-d');
+        $data = PurchasePayment::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
+        
         $timenow = Carbon::now()->format('H:i');
 
         $allbranch = Branch::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -105,9 +104,6 @@ class PurchasePaymentController extends Controller
             $data->amount = $request->get('payment_payableamount');
             $data->payment_pending = $request->get('payment_pending');
             $data->save();
-
-            
-
 
 
 
@@ -196,7 +192,6 @@ class PurchasePaymentController extends Controller
 
         }else if($payment_paid_amount == $paidamount){
 
-            $total_paid = $PurchseData->purchase_amount;
             $total_paid = $old_paid;
         }
         

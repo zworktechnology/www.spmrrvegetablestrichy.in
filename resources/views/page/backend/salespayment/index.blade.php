@@ -19,8 +19,8 @@
                                         value="Search" /></div>
                             </div>
                         </form>
-                        <button type="button" class="btn btn-primary waves-effect waves-light btn-added"
-                            data-bs-toggle="modal" data-bs-target=".salespayment-modal-xl">Add Sales Payment</button>
+                        <a href="{{ route('salespayment.create') }}" class="btn btn-added" style="margin-right: 10px;">Add
+                            Purchase Payment</a>
                     </div>
                 </div>
             </div>
@@ -74,8 +74,9 @@
                                 <th>Branch</th>
                                 <th>Customer</th>
                                 <th>Old Balance</th>
+                                <th>Discount</th>
                                 <th>Paid</th>
-                                <th>Pending Amount</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,8 +88,16 @@
                                     <td>{{ $P_PaymentData->branch->name }}</td>
                                     <td>{{$P_PaymentData->customer->name }}</td>
                                     <td>{{$P_PaymentData->oldblance }}</td>
+                                    <td>{{ $P_PaymentData->salespayment_discount }}</td>
                                     <td>{{ $P_PaymentData->amount }}</td>
-                                    <td>{{ $P_PaymentData->payment_pending }}</td>
+                                    <td>
+                                        <ul class="list-unstyled hstack gap-1 mb-0">
+                                            <li>
+                                                <a href="{{ route('salespayment.edit', ['unique_key' => $P_PaymentData->unique_key]) }}"
+                                                class="badges bg-lightyellow" style="color: white">Edit</a>
+                                            </li>
+                                        </ul>
+                                    </td>
 
 
                                 </tr>
@@ -102,10 +111,7 @@
             </div>
         </div>
 
-        <div class="modal fade salespayment-modal-xl" tabindex="-1" role="dialog" aria-labelledby="salespaymentLargeModalLabel"
-            aria-hidden="true" data-bs-backdrop="static">
-            @include('page.backend.salespayment.create')
-        </div>
+      
 
 
     </div>

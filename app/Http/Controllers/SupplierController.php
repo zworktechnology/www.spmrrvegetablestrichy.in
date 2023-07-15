@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use App\Models\Branch;
 use App\Models\Purchase;
+use App\Models\PurchaseProduct;
+use App\Models\Productlist;
 use App\Models\PurchasePayment;
 use App\Models\BranchwiseBalance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class SupplierController extends Controller
 {
@@ -159,6 +162,643 @@ class SupplierController extends Controller
         $data->update();
 
         return redirect()->route('supplier.index')->with('soft_destroy', 'Successfully deleted the Supplier !');
+    }
+
+
+
+    public function view($unique_key)
+    {
+        $SupplierData = Supplier::where('unique_key', '=', $unique_key)->first();
+
+        $today = Carbon::now()->format('Y-m-d');
+        $data = Purchase::where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
+        $purchase_data = [];
+        foreach ($data as $key => $datas) {
+
+            $branch_name = Branch::findOrFail($datas->branch_id);
+            $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+            foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                $terms[] = array(
+                    'bag' => $PurchaseProducts_arrdata->bagorkg,
+                    'kgs' => $PurchaseProducts_arrdata->count,
+                    'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                    'total_price' => $PurchaseProducts_arrdata->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                );
+
+            }
+
+
+            $purchase_data[] = array(
+                'unique_key' => $datas->unique_key,
+                'branch_name' => $branch_name->shop_name,
+                'supplier_name' => $SupplierData->name,
+                'date' => $datas->date,
+                'gross_amount' => $datas->gross_amount,
+                'paid_amount' => $datas->paid_amount,
+                'bill_no' => $datas->bill_no,
+                'id' => $datas->id,
+                'terms' => $terms,
+            );
+        }
+
+        $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $supplier = Supplier::where('soft_delete', '!=', 1)->get();
+
+
+        $suppliername = $SupplierData->name;
+        $supplier_id = $SupplierData->id;
+        $unique_key = $SupplierData->unique_key;
+
+
+
+
+        $PurchasePayment = PurchasePayment::where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
+        $PurchasePayment_data = [];
+
+        foreach ($PurchasePayment as $key => $PurchasePayments) {
+            $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
+
+
+            $PurchasePayment_data[] = array(
+                'unique_key' => $PurchasePayments->unique_key,
+                'branch_name' => $branch_name->shop_name,
+                'supplier_name' => $SupplierData->name,
+                'date' => $PurchasePayments->date,
+                'paid_amount' => $PurchasePayments->amount,
+                'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
+            );
+        }
+
+
+        $fromdate = '';
+        $todate = '';
+        $branchid = '';
+        $supplierid = $SupplierData->id;
+
+
+        return view('page.backend.supplier.view', compact('SupplierData', 'purchase_data', 'branch', 'supplier', 'suppliername', 'supplier_id', 'unique_key', 'today',
+                     'fromdate','todate', 'branchid', 'supplierid', 'PurchasePayment_data'));
+    }
+
+
+
+    public function viewfilter(Request $request)
+    {
+        $fromdate = $request->get('fromdate');
+        $todate = $request->get('todate');
+        $branchid = $request->get('branchid');
+        $supplierid = $request->get('supplierid');
+        $viewall = $request->get('viewall');
+        $unique_key = $request->get('uniquekey');
+        $SupplierData = Supplier::where('unique_key', '=', $unique_key)->first();
+
+        $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        
+
+        if($branchid){
+
+            $GetBranch = Branch::findOrFail($branchid);
+            $purchase_data = [];
+
+            $data = Purchase::where('branch_id', '=', $branchid)->where('supplier_id', '=', $supplierid)->where('soft_delete', '!=', 1)->get();
+            if($data != ''){
+
+                $terms = [];
+                foreach ($data as $key => $datas) {
+                    
+
+                    $branch_name = Branch::findOrFail($datas->branch_id);
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                        );
+                    }
+
+
+                    $purchase_data[] = array(
+                        'unique_key' => $datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'supplier_name' => $SupplierData->name,
+                        'date' => $datas->date,
+                        'gross_amount' => $datas->gross_amount,
+                        'paid_amount' => $datas->paid_amount,
+                        'bill_no' => $datas->bill_no,
+                        'id' => $datas->id,
+                        'terms' => $terms,
+                    );
+                }
+            }
+
+
+            $PurchasePayment_data = [];
+
+            $PurchasePayment = PurchasePayment::where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
+            if($PurchasePayment != ''){
+                
+                foreach ($PurchasePayment as $key => $PurchasePayments) {
+                    $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
+
+
+                    $PurchasePayment_data[] = array(
+                        'unique_key' => $PurchasePayments->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'supplier_name' => $SupplierData->name,
+                        'date' => $PurchasePayments->date,
+                        'paid_amount' => $PurchasePayments->amount,
+                        'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
+                    );
+                }
+            }
+
+
+
+        }
+
+       
+        if($fromdate){
+            $purchase_data = [];
+
+            $data = Purchase::where('date', '=', $fromdate)->where('supplier_id', '=', $supplierid)->where('soft_delete', '!=', 1)->get();
+            if($data != ''){
+
+
+                $terms = [];
+                foreach ($data as $key => $datas) {
+                    
+
+                    $branch_name = Branch::findOrFail($datas->branch_id);
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                        );
+
+                    }
+
+
+                    $purchase_data[] = array(
+                        'unique_key' => $datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'supplier_name' => $SupplierData->name,
+                        'date' => $datas->date,
+                        'gross_amount' => $datas->gross_amount,
+                        'paid_amount' => $datas->paid_amount,
+                        'bill_no' => $datas->bill_no,
+                        'id' => $datas->id,
+                        'terms' => $terms,
+                    );
+                }
+            }
+
+
+            $PurchasePayment = PurchasePayment::where('date', '=', $fromdate)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
+            if($PurchasePayment != ''){
+                $PurchasePayment_data = [];
+
+                foreach ($PurchasePayment as $key => $PurchasePayments) {
+                    $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
+
+
+                    $PurchasePayment_data[] = array(
+                        'unique_key' => $PurchasePayments->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'supplier_name' => $SupplierData->name,
+                        'date' => $PurchasePayments->date,
+                        'paid_amount' => $PurchasePayments->amount,
+                        'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
+                    );
+                }
+            }
+
+
+        }
+
+
+        if($todate){
+            $purchase_data = [];
+
+            $data = Purchase::where('date', '=', $todate)->where('supplier_id', '=', $supplierid)->where('soft_delete', '!=', 1)->get();
+            if($data != ''){
+
+
+                $terms = [];
+                foreach ($data as $key => $datas) {
+                    
+
+                    $branch_name = Branch::findOrFail($datas->branch_id);
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                        );
+
+                    }
+
+
+                    $purchase_data[] = array(
+                        'unique_key' => $datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'supplier_name' => $SupplierData->name,
+                        'date' => $datas->date,
+                        'gross_amount' => $datas->gross_amount,
+                        'paid_amount' => $datas->paid_amount,
+                        'bill_no' => $datas->bill_no,
+                        'id' => $datas->id,
+                        'terms' => $terms,
+                    );
+                }
+            }
+
+
+            $PurchasePayment = PurchasePayment::where('date', '=', $todate)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
+            if($PurchasePayment != ''){
+                $PurchasePayment_data = [];
+
+                foreach ($PurchasePayment as $key => $PurchasePayments) {
+                    $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
+
+
+                    $PurchasePayment_data[] = array(
+                        'unique_key' => $PurchasePayments->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'supplier_name' => $SupplierData->name,
+                        'date' => $PurchasePayments->date,
+                        'paid_amount' => $PurchasePayments->amount,
+                        'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
+                    );
+                }
+            }
+
+
+        }
+
+
+        if($fromdate && $todate){
+            $purchase_data = [];
+
+            $data = Purchase::whereBetween('date', [$fromdate, $todate])->where('supplier_id', '=', $supplierid)->where('soft_delete', '!=', 1)->get();
+            if($data != ''){
+
+
+                $terms = [];
+                foreach ($data as $key => $datas) {
+                    
+
+                    $branch_name = Branch::findOrFail($datas->branch_id);
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                        );
+
+                    }
+
+
+                    $purchase_data[] = array(
+                        'unique_key' => $datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'supplier_name' => $SupplierData->name,
+                        'date' => $datas->date,
+                        'gross_amount' => $datas->gross_amount,
+                        'paid_amount' => $datas->paid_amount,
+                        'bill_no' => $datas->bill_no,
+                        'id' => $datas->id,
+                        'terms' => $terms,
+                    );
+                }
+            }
+
+
+
+            $PurchasePayment = PurchasePayment::whereBetween('date', [$fromdate, $todate])->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
+            if($PurchasePayment != ''){
+                $PurchasePayment_data = [];
+
+                foreach ($PurchasePayment as $key => $PurchasePayments) {
+                    $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
+
+
+                    $PurchasePayment_data[] = array(
+                        'unique_key' => $PurchasePayments->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'supplier_name' => $SupplierData->name,
+                        'date' => $PurchasePayments->date,
+                        'paid_amount' => $PurchasePayments->amount,
+                        'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
+                    );
+                }
+            }
+        }
+
+
+        if($fromdate && $branchid){
+            $purchase_data = [];
+
+            $data = Purchase::where('date', '=', $fromdate)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $supplierid)->where('soft_delete', '!=', 1)->get();
+            if($data != ''){
+
+
+                $terms = [];
+                foreach ($data as $key => $datas) {
+                    
+
+                    $branch_name = Branch::findOrFail($datas->branch_id);
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                        );
+
+                    }
+
+
+                    $purchase_data[] = array(
+                        'unique_key' => $datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'supplier_name' => $SupplierData->name,
+                        'date' => $datas->date,
+                        'gross_amount' => $datas->gross_amount,
+                        'paid_amount' => $datas->paid_amount,
+                        'bill_no' => $datas->bill_no,
+                        'id' => $datas->id,
+                        'terms' => $terms,
+                    );
+                }
+            }
+
+
+            $PurchasePayment = PurchasePayment::where('date', '=', $fromdate)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
+            if($PurchasePayment != ''){
+                $PurchasePayment_data = [];
+
+                foreach ($PurchasePayment as $key => $PurchasePayments) {
+                    $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
+
+
+                    $PurchasePayment_data[] = array(
+                        'unique_key' => $PurchasePayments->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'supplier_name' => $SupplierData->name,
+                        'date' => $PurchasePayments->date,
+                        'paid_amount' => $PurchasePayments->amount,
+                        'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
+                    );
+                }
+            }
+        }
+
+
+
+        if($todate && $branchid){
+            $purchase_data = [];
+
+            $data = Purchase::where('date', '=', $todate)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $supplierid)->where('soft_delete', '!=', 1)->get();
+            if($data != ''){
+
+
+                $terms = [];
+                foreach ($data as $key => $datas) {
+                    
+
+                    $branch_name = Branch::findOrFail($datas->branch_id);
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                        );
+
+                    }
+
+
+                    $purchase_data[] = array(
+                        'unique_key' => $datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'supplier_name' => $SupplierData->name,
+                        'date' => $datas->date,
+                        'gross_amount' => $datas->gross_amount,
+                        'paid_amount' => $datas->paid_amount,
+                        'bill_no' => $datas->bill_no,
+                        'id' => $datas->id,
+                        'terms' => $terms,
+                    );
+                }
+            }
+
+            $PurchasePayment = PurchasePayment::where('date', '=', $todate)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
+            if($PurchasePayment != ''){
+                $PurchasePayment_data = [];
+
+                foreach ($PurchasePayment as $key => $PurchasePayments) {
+                    $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
+
+
+                    $PurchasePayment_data[] = array(
+                        'unique_key' => $PurchasePayments->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'supplier_name' => $SupplierData->name,
+                        'date' => $PurchasePayments->date,
+                        'paid_amount' => $PurchasePayments->amount,
+                        'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
+                    );
+                }
+            }
+
+
+        }
+
+
+
+        if($fromdate && $todate && $branchid){
+            $purchase_data = [];
+
+            $data = Purchase::whereBetween('date', [$fromdate, $todate])->where('branch_id', '=', $branchid)->where('supplier_id', '=', $supplierid)->where('soft_delete', '!=', 1)->get();
+            if($data != ''){
+
+
+                $terms = [];
+                foreach ($data as $key => $datas) {
+                    
+
+                    $branch_name = Branch::findOrFail($datas->branch_id);
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $terms[] = array(
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
+                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+
+                        );
+
+                    }
+
+
+                    $purchase_data[] = array(
+                        'unique_key' => $datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'supplier_name' => $SupplierData->name,
+                        'date' => $datas->date,
+                        'gross_amount' => $datas->gross_amount,
+                        'paid_amount' => $datas->paid_amount,
+                        'bill_no' => $datas->bill_no,
+                        'id' => $datas->id,
+                        'terms' => $terms,
+                    );
+                }
+            }
+
+
+            $PurchasePayment = PurchasePayment::whereBetween('date', [$fromdate, $todate])->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
+            if($PurchasePayment != ''){
+                $PurchasePayment_data = [];
+
+                foreach ($PurchasePayment as $key => $PurchasePayments) {
+                    $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
+
+
+                    $PurchasePayment_data[] = array(
+                        'unique_key' => $PurchasePayments->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'supplier_name' => $SupplierData->name,
+                        'date' => $PurchasePayments->date,
+                        'paid_amount' => $PurchasePayments->amount,
+                        'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
+                    );
+                }
+            }
+
+
+        }
+
+
+        if($viewall == 'all'){
+            $data = Purchase::where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
+            $purchase_data = [];
+            foreach ($data as $key => $datas) {
+    
+                $branch_name = Branch::findOrFail($datas->branch_id);
+                $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+                foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+    
+                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                    $terms[] = array(
+                        'bag' => $PurchaseProducts_arrdata->bagorkg,
+                        'kgs' => $PurchaseProducts_arrdata->count,
+                        'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+                        'total_price' => $PurchaseProducts_arrdata->total_price,
+                        'product_name' => $productlist_ID->name,
+                        'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+    
+                    );
+    
+                }
+    
+    
+                $purchase_data[] = array(
+                    'unique_key' => $datas->unique_key,
+                    'branch_name' => $branch_name->shop_name,
+                    'supplier_name' => $SupplierData->name,
+                    'date' => $datas->date,
+                    'gross_amount' => $datas->gross_amount,
+                    'paid_amount' => $datas->paid_amount,
+                    'bill_no' => $datas->bill_no,
+                    'id' => $datas->id,
+                    'terms' => $terms,
+                );
+            }
+
+
+            $PurchasePayment = PurchasePayment::where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
+            $PurchasePayment_data = [];
+
+            foreach ($PurchasePayment as $key => $PurchasePayments) {
+                $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
+
+
+                $PurchasePayment_data[] = array(
+                    'unique_key' => $PurchasePayments->unique_key,
+                    'branch_name' => $branch_name->shop_name,
+                    'supplier_name' => $SupplierData->name,
+                    'date' => $PurchasePayments->date,
+                    'paid_amount' => $PurchasePayments->amount,
+                    'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
+                );
+            }
+    
+        }
+
+
+      
+
+
+
+
+        $suppliername = $SupplierData->name;
+        $supplier_id = $SupplierData->id;
+        $unique_key = $SupplierData->unique_key;
+
+
+        return view('page.backend.supplier.view', compact('purchase_data', 'branch', 'supplier', 'fromdate','todate', 'branchid', 'supplierid',
+                         'suppliername', 'supplier_id', 'unique_key', 'PurchasePayment_data'));
     }
 
 
