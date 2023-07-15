@@ -18,6 +18,8 @@ class PurchasePayment extends Model
         'date',
         'time',
         'oldblance',
+        'purchasepayment_discount',
+        'purchasepayment_totalamount',
         'amount',
         'payment_pending',
         'soft_delete'

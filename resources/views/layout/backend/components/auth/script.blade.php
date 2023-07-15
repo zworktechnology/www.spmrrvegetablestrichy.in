@@ -161,6 +161,7 @@ $(".purchaseclose").click(function() {
                         var len = response.length;
                         for (var i = 0; i < len; i++) {
                             $(".oldblance").val(response[i].payment_pending);
+                            $('.purchasepayment_totalamount').val(response[i].payment_pending);
                         }
                     }
                 });
@@ -185,15 +186,28 @@ $(".purchaseclose").click(function() {
                         var len = response.length;
                         for (var i = 0; i < len; i++) {
                             $(".oldblance").val(response[i].payment_pending);
+                            $('.purchasepayment_totalamount').val(response[i].payment_pending);
                         }
                     }
                 });
         });
 
-        $(document).on("keyup", 'input.payment_payableamount', function() {
-                var payment_payableamount = $(this).val();
+            $(document).on("keyup", 'input.purchasepayment_discount', function() {
+                var purchasepayment_discount = $(this).val();
                 var oldblance = $(".oldblance").val();
-                var payment_pending_amount = Number(oldblance) - Number(payment_payableamount);
+                var Total_purchasepayment = Number(oldblance) - Number(purchasepayment_discount);
+                $('.purchasepayment_totalamount').val(Total_purchasepayment);
+
+                var payment_payableamount = $(".payment_payableamount").val();
+                var payment_pending_amount = Number(Total_purchasepayment) - Number(payment_payableamount);
+                $('.payment_pending').val(payment_pending_amount.toFixed(2));
+                
+            });
+
+            $(document).on("keyup", 'input.payment_payableamount', function() {
+                var payment_payableamount = $(this).val();
+                var purchasepayment_totalamount = $(".purchasepayment_totalamount").val();
+                var payment_pending_amount = Number(purchasepayment_totalamount) - Number(payment_payableamount);
                 $('.payment_pending').val(payment_pending_amount.toFixed(2));
             });
 
@@ -767,7 +781,7 @@ $(".purchaseclose").click(function() {
                 });
         });
 
-        $(document).on("keyup", 'input.spayment_payableamount', function() {
+            $(document).on("keyup", 'input.spayment_payableamount', function() {
                 var spayment_payableamount = $(this).val();
                 var sales_oldblance = $(".sales_oldblance").val();
                 var spayment_pending_amount = Number(sales_oldblance) - Number(spayment_payableamount);

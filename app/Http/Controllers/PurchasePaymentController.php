@@ -63,6 +63,20 @@ class PurchasePaymentController extends Controller
     }
 
 
+    public function create()
+    {
+        $today = Carbon::now()->format('Y-m-d');
+        $timenow = Carbon::now()->format('H:i');
+
+        $allbranch = Branch::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $supplier = Supplier::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+
+
+        return view('page.backend.purchasepayment.create', compact('today', 'allbranch', 'timenow', 'supplier'));
+    }
+
+
     public function store(Request $request)
     {
         
@@ -86,6 +100,8 @@ class PurchasePaymentController extends Controller
             $data->date = $request->get('date');
             $data->time = $request->get('time');
             $data->oldblance = $request->get('oldblance');
+            $data->purchasepayment_discount = $request->get('purchasepayment_discount');
+            $data->purchasepayment_totalamount = $request->get('purchasepayment_totalamount');
             $data->amount = $request->get('payment_payableamount');
             $data->payment_pending = $request->get('payment_pending');
             $data->save();
@@ -99,12 +115,16 @@ class PurchasePaymentController extends Controller
             $old_paid = $PurchseData->purchase_paid;
 
             $payment_paid_amount = $request->get('payment_payableamount');
+            $purchasepayment_discount = $request->get('purchasepayment_discount');
 
+
+            $new_purchaseamount = $old_grossamount - $purchasepayment_discount;
             $new_paid = $old_paid + $payment_paid_amount;
-            $new_balance = $old_grossamount - $new_paid;
+            $new_balance = $new_purchaseamount - $new_paid;
+            
 
             DB::table('branchwise_balances')->where('supplier_id', $supplier_id)->where('branch_id', $branch_id)->update([
-                'purchase_paid' => $new_paid, 'purchase_balance' => $new_balance
+                'purchase_amount' => $new_purchaseamount, 'purchase_paid' => $new_paid, 'purchase_balance' => $new_balance
             ]);
 
         }
@@ -120,7 +140,95 @@ class PurchasePaymentController extends Controller
     {
         $PurchasePaymentData = PurchasePayment::where('unique_key', '=', $unique_key)->first();
 
-        return redirect()->route('purchasepayment.index')->with('update', 'Payment Data updated successfully!');
+        $today = Carbon::now()->format('Y-m-d');
+        $timenow = Carbon::now()->format('H:i');
+
+        $allbranch = Branch::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $supplier = Supplier::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+        return view('page.backend.purchasepayment.edit', compact('today', 'allbranch', 'timenow', 'supplier', 'PurchasePaymentData'));
+    }
+
+
+    public function update(Request $request, $unique_key)
+    {
+        $PurchasePaymentData = PurchasePayment::where('unique_key', '=', $unique_key)->first();
+        
+        $discount = $PurchasePaymentData->purchasepayment_discount;
+        $paidamount = $PurchasePaymentData->amount;
+        $supplier_id = $PurchasePaymentData->supplier_id;
+        $branch_id = $PurchasePaymentData->branch_id;
+        $payment_paid_amount = $request->get('payment_payableamount');
+        $p_discount = $request->get('purchasepayment_discount');
+        
+
+        
+        $PurchseData = BranchwiseBalance::where('supplier_id', '=', $supplier_id)->where('branch_id', '=', $branch_id)->first();
+        $old_paid = $PurchseData->purchase_paid;
+
+        
+
+        if($p_discount > $discount){
+
+            $diff_discount = $p_discount - $discount;
+            $total_purchaseamount = $PurchseData->purchase_amount - $diff_discount;
+
+
+        }else if($p_discount < $discount){
+
+            $diff_discount = $discount - $p_discount;
+            $total_purchaseamount = $PurchseData->purchase_amount + $diff_discount;
+
+        }else if($p_discount == $discount){
+
+            $total_purchaseamount = $PurchseData->purchase_amount;
+        }
+
+
+        if($payment_paid_amount > $paidamount){
+            $diff_paid = $payment_paid_amount - $paidamount;
+            $total_paid = $old_paid + $diff_paid;
+
+        }else if($payment_paid_amount < $paidamount){
+
+            $diff_paid = $paidamount - $payment_paid_amount;
+            $total_paid = $old_paid - $diff_paid;
+
+        }else if($payment_paid_amount == $paidamount){
+
+            $total_paid = $PurchseData->purchase_amount;
+            $total_paid = $old_paid;
+        }
+        
+
+
+        $new_balance = $total_purchaseamount - $total_paid;
+
+        DB::table('branchwise_balances')->where('supplier_id', $supplier_id)->where('branch_id', $branch_id)->update([
+            'purchase_amount' => $total_purchaseamount, 'purchase_paid' => $total_paid, 'purchase_balance' => $new_balance
+        ]);
+
+
+
+
+
+        $PurchasePaymentData->date = $request->get('date');
+        $PurchasePaymentData->time = $request->get('time');
+        $PurchasePaymentData->oldblance = $request->get('oldblance');
+        $PurchasePaymentData->purchasepayment_discount = $request->get('purchasepayment_discount');
+        $PurchasePaymentData->purchasepayment_totalamount = $request->get('purchasepayment_totalamount');
+        $PurchasePaymentData->amount = $request->get('payment_payableamount');
+        $PurchasePaymentData->payment_pending = $request->get('payment_pending');
+        $PurchasePaymentData->update();
+
+
+        
+        
+            
+        return redirect()->route('purchasepayment.index')->with('add', 'Payment Data added successfully!');
+       
+
+
     }
 
 
