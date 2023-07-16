@@ -2,7 +2,7 @@
     <div class="main-header__wrapper">
         <div class="main-header__wrapper-inner">
             <div class="main-header__logo">
-                <a href="index.html"><img src="{{ asset('assets/frontend/images/resources/logo-1.png') }}" alt=""></a>
+                <a href="index.html"><img src="{{ asset('assets/frontend/images/spm.jpg') }}" style="height: 100px;" alt=""></a>
             </div>
             <div class="main-header__menu-box">
                 <div class="main-header__menu-box-top">

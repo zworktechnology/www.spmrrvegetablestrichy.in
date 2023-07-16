@@ -24,10 +24,10 @@
                             </div>
                             <ul class="footer-widget__Explore-list list-unstyled">
                                 <li><a href="about.html">About</a></li>
-                                <li><a href="farmers.html">Our Farmers</a></li>
-                                <li><a href="project-01.html">New Projects</a></li>
-                                <li><a href="services.html">Services</a></li>
-                                <li><a href="contact.html">Contact</a></li>
+                                <li><a href="#services">Services</a></li>
+                                <li><a href="#testimonial">Testimonial</a></li>
+                                <li><a href="#projects">Projects</a></li>
+                                <li><a href="#contact">Contact</a></li>
                             </ul>
                         </div>
                     </div>
