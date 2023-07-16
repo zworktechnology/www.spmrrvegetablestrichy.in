@@ -52,6 +52,10 @@
                                                     data-id="{{ $customertdata['id'] }}"
                                                     data-bs-target=".customercheckbalance-modal-xl{{ $customertdata['unique_key'] }}" class="badges bg-lightred customercheckbalance" style="color: white">Check Balance</a>
                                             </li>
+                                            <li>
+                                                <a href="{{ route('customer.view', ['unique_key' => $customertdata['unique_key']]) }}"
+                                                class="badges bg-lightgreen" style="color: white">view</a>
+                                            </li>
                                         </ul>
                                     </td>
                                 </tr>

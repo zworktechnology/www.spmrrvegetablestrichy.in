@@ -75,6 +75,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/customer/delete/{unique_key}', [CustomerController::class, 'delete'])->name('customer.delete');
         // CHECK DUPLICATE
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/customer/checkduplicate', [CustomerController::class, 'checkduplicate'])->name('customer.checkduplicate');
+         // VIEW
+         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/customer/view/{unique_key}', [CustomerController::class, 'view'])->name('customer.view');
+         // REPORT VIEW
+         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/customer/viewfilter', [CustomerController::class, 'viewfilter'])->name('customer.viewfilter');
     });
 
     // SUPPLIER CONTROLLER
