@@ -20,10 +20,8 @@ class SalespaymentController extends Controller
 {
     public function index()
     {
-
-        $data = Salespayment::where('soft_delete', '!=', 1)->get();
-        
         $today = Carbon::now()->format('Y-m-d');
+        $data = Salespayment::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
         $timenow = Carbon::now()->format('H:i');
 
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -62,6 +60,19 @@ class SalespaymentController extends Controller
 
     }
 
+    public function create()
+    {
+        $today = Carbon::now()->format('Y-m-d');
+        $timenow = Carbon::now()->format('H:i');
+
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $customer = Customer::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+
+
+        return view('page.backend.salespayment.create', compact('today', 'allbranch', 'timenow', 'customer'));
+    }
+
     public function store(Request $request)
     {
 
@@ -84,6 +95,8 @@ class SalespaymentController extends Controller
             $data->date = $request->get('date');
             $data->time = $request->get('time');
             $data->oldblance = $request->get('sales_oldblance');
+            $data->salespayment_discount = $request->get('salespayment_discount');
+            $data->salespayment_totalamount = $request->get('salespayment_totalamount');
             $data->amount = $request->get('spayment_payableamount');
             $data->payment_pending = $request->get('spayment_pending');
             $data->save();
@@ -93,12 +106,15 @@ class SalespaymentController extends Controller
             $old_paid = $SalesData->sales_paid;
 
             $payment_paid_amount = $request->get('spayment_payableamount');
+            $salespayment_discount = $request->get('salespayment_discount');
 
+
+            $new_salesamount = $old_grossamount - $salespayment_discount;
             $new_paid = $old_paid + $payment_paid_amount;
-            $new_balance = $old_grossamount - $new_paid;
+            $new_balance = $new_salesamount - $new_paid;
 
             DB::table('branchwise_balances')->where('customer_id', $customer_id)->where('branch_id', $branch_id)->update([
-                'sales_paid' => $new_paid, 'sales_balance' => $new_balance
+                'sales_amount' => $new_salesamount, 'sales_paid' => $new_paid, 'sales_balance' => $new_balance
             ]);
 
     
@@ -114,8 +130,97 @@ class SalespaymentController extends Controller
     {
         $SalespaymentData = Salespayment::where('unique_key', '=', $unique_key)->first();
 
-        return redirect()->route('salespayment.index')->with('update', 'Payment Data updated successfully!');
+        $today = Carbon::now()->format('Y-m-d');
+        $timenow = Carbon::now()->format('H:i');
+
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $customer = Customer::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+        return view('page.backend.salespayment.edit', compact('today', 'allbranch', 'timenow', 'customer', 'SalespaymentData'));
     }
+
+
+
+    public function update(Request $request, $unique_key)
+    {
+        $SalespaymentData = Salespayment::where('unique_key', '=', $unique_key)->first();
+        
+        $discount = $SalespaymentData->salespayment_discount;
+        $paidamount = $SalespaymentData->amount;
+        $customer_id = $SalespaymentData->customer_id;
+        $branch_id = $SalespaymentData->branch_id;
+        $payment_paid_amount = $request->get('spayment_payableamount');
+        $p_discount = $request->get('salespayment_discount');
+        
+
+        
+        $salesData = BranchwiseBalance::where('customer_id', '=', $customer_id)->where('branch_id', '=', $branch_id)->first();
+        $old_paid = $salesData->sales_paid;
+
+        
+
+        if($p_discount > $discount){
+
+            $diff_discount = $p_discount - $discount;
+            $total_salesamount = $salesData->sales_amount - $diff_discount;
+
+
+        }else if($p_discount < $discount){
+
+            $diff_discount = $discount - $p_discount;
+            $total_salesamount = $salesData->sales_amount + $diff_discount;
+
+        }else if($p_discount == $discount){
+
+            $total_salesamount = $salesData->sales_amount;
+        }
+
+
+        if($payment_paid_amount > $paidamount){
+            $diff_paid = $payment_paid_amount - $paidamount;
+            $total_paid = $old_paid + $diff_paid;
+
+        }else if($payment_paid_amount < $paidamount){
+
+            $diff_paid = $paidamount - $payment_paid_amount;
+            $total_paid = $old_paid - $diff_paid;
+
+        }else if($payment_paid_amount == $paidamount){
+
+            $total_paid = $old_paid;
+        }
+        
+
+
+        $new_balance = $total_salesamount - $total_paid;
+
+        DB::table('branchwise_balances')->where('customer_id', $customer_id)->where('branch_id', $branch_id)->update([
+            'sales_amount' => $total_salesamount, 'sales_paid' => $total_paid, 'sales_balance' => $new_balance
+        ]);
+
+
+
+
+
+        $SalespaymentData->date = $request->get('date');
+        $SalespaymentData->time = $request->get('time');
+        $SalespaymentData->oldblance = $request->get('sales_oldblance');
+        $SalespaymentData->salespayment_discount = $request->get('salespayment_discount');
+        $SalespaymentData->salespayment_totalamount = $request->get('salespayment_totalamount');
+        $SalespaymentData->amount = $request->get('spayment_payableamount');
+        $SalespaymentData->payment_pending = $request->get('spayment_pending');
+        $SalespaymentData->update();
+
+
+        
+        
+            
+        return redirect()->route('salespayment.index')->with('add', 'Payment Data added successfully!');
+       
+
+
+    }
+   
 
 
     public function delete($unique_key)

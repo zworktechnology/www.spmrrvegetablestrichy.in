@@ -30,6 +30,8 @@ return new class extends Migration
             $table->string('date');
             $table->string('time');
             $table->string('oldblance');
+            $table->string('purchasepayment_discount')->nullable();
+            $table->string('purchasepayment_totalamount')->nullable();
             $table->string('amount');
             $table->string('payment_pending');
 

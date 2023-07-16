@@ -91,6 +91,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/supplier/checkbalance/{id}', [SupplierController::class, 'checkbalance'])->name('supplier.checkbalance');
         // CHECK DUPLICATE
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/supplier/checkduplicate', [SupplierController::class, 'checkduplicate'])->name('supplier.checkduplicate');
+        // VIEW
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/supplier/view/{unique_key}', [SupplierController::class, 'view'])->name('supplier.view');
+        // REPORT VIEW
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/supplier/viewfilter', [SupplierController::class, 'viewfilter'])->name('supplier.viewfilter');
     });
 
 
@@ -212,10 +216,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // INDEX
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchasepayment', [PurchasePaymentController::class, 'index'])->name('purchasepayment.index');
+        // CREATE
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchasepayment/create', [PurchasePaymentController::class, 'create'])->name('purchasepayment.create');
         // STORE
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/purchasepayment/store', [PurchasePaymentController::class, 'store'])->name('purchasepayment.store');
         // EDIT
-        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/purchasepayment/edit/{unique_key}', [PurchasePaymentController::class, 'edit'])->name('purchasepayment.edit');
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchasepayment/edit/{unique_key}', [PurchasePaymentController::class, 'edit'])->name('purchasepayment.edit');
+        // UPDATE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchasepayment/update/{unique_key}', [PurchasePaymentController::class, 'update'])->name('purchasepayment.update');
         // DELETE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchasepayment/delete/{unique_key}', [PurchasePaymentController::class, 'delete'])->name('purchasepayment.delete');
          // INDEX BRANCH WISE
@@ -229,8 +237,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // INDEX
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salespayment', [SalespaymentController::class, 'index'])->name('salespayment.index');
+         // CREATE
+         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salespayment/create', [SalespaymentController::class, 'create'])->name('salespayment.create');
         // STORE
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/salespayment/store', [SalespaymentController::class, 'store'])->name('salespayment.store');
+         // EDIT
+         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salespayment/edit/{unique_key}', [SalespaymentController::class, 'edit'])->name('salespayment.edit');
+         // UPDATE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/salespayment/update/{unique_key}', [SalespaymentController::class, 'update'])->name('salespayment.update');
         // INDEX BRANCH WISE
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salespayment/branchdata/{branch_id}', [SalespaymentController::class, 'branchdata'])->name('salespayment.branchdata');
         // DATAE FILTER

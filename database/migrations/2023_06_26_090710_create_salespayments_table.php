@@ -29,6 +29,8 @@ return new class extends Migration
             $table->string('date');
             $table->string('time');
             $table->string('oldblance');
+            $table->string('salespayment_discount')->nullable();
+            $table->string('salespayment_totalamount')->nullable();
             $table->string('amount');
             $table->string('payment_pending');
 
