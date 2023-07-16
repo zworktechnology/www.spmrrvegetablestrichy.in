@@ -20,17 +20,17 @@
             <div class="swiper-wrapper">
 
                 <div class="swiper-slide">
-                    <div class="image-layer" style="background-image: url(assets/images/backgrounds/main-slider-1-1.jpg);">
+                    <div class="image-layer" style="background-image: url(https://images.unsplash.com/photo-1505692794401-b371fa865622?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80);">
                     </div>
                     <!-- /.image-layer -->
                     <div class="container">
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="main-slider__content">
-                                    <p class="main-slider__sub-title">We are Producing Natural Products</p>
+                                    <p class="main-slider__sub-title">Embracing nature's finest</p>
                                     <h2 class="main-slider__title">Agriculture.</h2>
                                     <div class="main-slider__btn-box">
-                                        <a href="about.html" class="thm-btn main-slider__btn">Discover More <i
+                                        <a href="#products" class="thm-btn main-slider__btn">Discover More <i
                                                 class="icon-right-arrow"></i> </a>
                                     </div>
                                 </div>
@@ -40,17 +40,17 @@
                 </div>
 
                 <div class="swiper-slide">
-                    <div class="image-layer" style="background-image: url(assets/images/backgrounds/main-slider-1-2.jpg);">
+                    <div class="image-layer" style="background-image: url(https://images.unsplash.com/photo-1518843875459-f738682238a6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1142&q=80);">
                     </div>
                     <!-- /.image-layer -->
                     <div class="container">
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="main-slider__content">
-                                    <p class="main-slider__sub-title">We are Producing Natural Products</p>
+                                    <p class="main-slider__sub-title">Embracing nature's finest</p>
                                     <h2 class="main-slider__title">Agriculture.</h2>
                                     <div class="main-slider__btn-box">
-                                        <a href="about.html" class="thm-btn main-slider__btn">Discover More <i
+                                        <a href="#products" class="thm-btn main-slider__btn">Discover More <i
                                                 class="icon-right-arrow"></i> </a>
                                     </div>
                                 </div>
@@ -58,28 +58,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="swiper-slide">
-                    <div class="image-layer" style="background-image: url(assets/images/backgrounds/main-slider-1-3.jpg);">
-                    </div>
-                    <!-- /.image-layer -->
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class="main-slider__content">
-                                    <p class="main-slider__sub-title">We are Producing Natural Products</p>
-                                    <h2 class="main-slider__title">Agriculture.</h2>
-                                    <div class="main-slider__btn-box">
-                                        <a href="about.html" class="thm-btn main-slider__btn">Discover More <i
-                                                class="icon-right-arrow"></i> </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
             </div>
 
             <div class="swiper-pagination" id="main-slider-pagination"></div>
@@ -121,7 +99,7 @@
                             <span class="icon-agriculture"></span>
                         </div>
                         <div class="feature-one__content">
-                            <h3 class="feature-one__title">a Smart organic <br> services</h3>
+                            <h3 class="feature-one__title">a Smart organic <br> Products</h3>
                         </div>
                     </div>
                 </div>
@@ -133,7 +111,7 @@
                             <span class="icon-harvest"></span>
                         </div>
                         <div class="feature-one__content">
-                            <h3 class="feature-one__title">Natural Healthy <br> prodducts</h3>
+                            <h3 class="feature-one__title">Natural Healthy <br> products</h3>
                         </div>
                     </div>
                 </div>
@@ -153,51 +131,15 @@
                 <div class="col-xl-6">
                     <div class="about-one__left">
                         <div class="section-title text-left">
-                            <span class="section-title__tagline">Get to Know Agrion</span>
-                            <h2 class="section-title__title">Agrion is the Agriculture and Organic farm</h2>
+                            {{-- <span class="section-title__tagline">About Us</span> --}}
+                            <h2 class="section-title__title">About Us</h2>
                             <div class="section-title__icon">
                                 <img src="{{ asset('assets/frontend/images/icon/section-title-icon-1.png') }}"
                                     alt="">
                             </div>
                         </div>
                         <p class="about-one__text-1">We’ve 20 years of agriculture farming experience.</p>
-                        <p class="about-one__text-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                            do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim dolore
-                            veniam.</p>
-                        <ul class="list-unstyled about-one__points">
-                            <li>
-                                <div class="icon">
-                                    <span class="icon-tick"></span>
-                                </div>
-                                <div class="text">
-                                    <p>There are many variations of passage of lorem.</p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="icon">
-                                    <span class="icon-tick"></span>
-                                </div>
-                                <div class="text">
-                                    <p>Available but the majority alteration.</p>
-                                </div>
-                            </li>
-                        </ul>
-                        <div class="about-one__btn-and-ceo">
-                            <div class="about-one__btn-box">
-                                <a href="about.html" class="thm-btn about-one__btn">About More <i
-                                        class="icon-right-arrow"></i> </a>
-                            </div>
-                            <div class="about-one__ceo">
-                                <div class="about-one__ceo-img">
-                                    <img src="{{ asset('assets/frontend/images/resources/about-one-ceo-img.jpg') }}"
-                                        alt="">
-                                </div>
-                                <div class="about-one__ceo-content">
-                                    <h4 class="about-one__ceo-name">Mike Hardson</h4>
-                                    <p class="about-one__ceo-title">CEO of Agrion</p>
-                                </div>
-                            </div>
-                        </div>
+                        <p class="about-one__text-2">Welcome to our vegetable paradise! Explore a bountiful world of fresh, locally sourced produce that celebrates the goodness of Mother Nature. Discover a delightful assortment of vibrant, nutrient-rich vegetables, handpicked and cultivated with love. Immerse yourself in the flavors and colors of our farm-fresh veggies, grown sustainably to nourish both body and soul. Whether you're a seasoned chef or a home cook, our vegetable site is your ultimate destination for culinary inspiration and the freshest ingredients straight from the earth. Join us on this veggie-filled journey and savor the taste of nature's goodness in every bite.</p>
                     </div>
                 </div>
                 <div class="col-xl-6">
@@ -229,13 +171,13 @@
     <!--About One End-->
 
     <!--Services One Start-->
-    <section class="services-one" id="services">
+    <section class="services-one" id="products">
         <div class="services-one__bg" style="background-image: url(assets/images/shapes/services-one-shape-1.png);">
         </div>
         <div class="container">
             <div class="section-title text-center">
-                <span class="section-title__tagline">What We’re Doing</span>
-                <h2 class="section-title__title">Services We’re offering</h2>
+                <span class="section-title__tagline">Products</span>
+                <h2 class="section-title__title">Our Products</h2>
                 <div class="section-title__icon">
                     <img src="{{ asset('assets/frontend/images/icon/section-title-icon-1.png') }}" alt="">
                 </div>
@@ -246,18 +188,16 @@
                     <div class="services-one__single">
                         <div class="services-one__img-box">
                             <div class="services-one__img">
-                                <img src="{{ asset('assets/frontend/images/services/services-one-1.jpg') }}"
+                                <img src="{{ asset('assets/frontend/images/products/beans1.jpeg') }}"
                                     alt="">
                             </div>
                             <div class="services-one__icon">
-                                <span class="icon-tractor"></span>
+                                <span class="icon-vegetables"></span>
                             </div>
                         </div>
                         <div class="services-one__content">
-                            <h3 class="services-one__title"><a href="agriculture-products.html">Agriculture <br>
-                                    Products</a></h3>
-                            <p class="services-one__text">I was impresed by the agrion services, not lorem ipsum is
-                                simply free text.</p>
+                            <h3 class="services-one__title"><a href="agriculture-products.html">Beans</a></h3>
+                            <p class="services-one__text"></p>
                         </div>
                     </div>
                 </div>
@@ -267,18 +207,15 @@
                     <div class="services-one__single">
                         <div class="services-one__img-box">
                             <div class="services-one__img">
-                                <img src="{{ asset('assets/frontend/images/services/services-one-2.jpg') }}"
-                                    alt="">
+                                <img src="{{ asset('assets/frontend/images/products/chilly.jpeg') }}" alt="">
                             </div>
                             <div class="services-one__icon">
-                                <span class="icon-organic-food"></span>
+                                <span class="icon-vegetables"></span>
                             </div>
                         </div>
                         <div class="services-one__content">
-                            <h3 class="services-one__title"><a href="organic-products.html">Organic
-                                    <br> Products</a></h3>
-                            <p class="services-one__text">I was impresed by the agrion services, not lorem ipsum is
-                                simply free text.</p>
+                            <h3 class="services-one__title"><a href="organic-products.html">Green Chilly</a></h3>
+                            <p class="services-one__text"></p>
                         </div>
                     </div>
                 </div>
@@ -288,7 +225,7 @@
                     <div class="services-one__single">
                         <div class="services-one__img-box">
                             <div class="services-one__img">
-                                <img src="{{ asset('assets/frontend/images/services/services-one-3.jpg') }}"
+                                <img src="{{ asset('assets/frontend/images/products/chow chow image.jpeg') }}"
                                     alt="">
                             </div>
                             <div class="services-one__icon">
@@ -296,10 +233,7 @@
                             </div>
                         </div>
                         <div class="services-one__content">
-                            <h3 class="services-one__title"><a href="fresh-vegetables.html">Fresh
-                                    <br> Vegetables</a></h3>
-                            <p class="services-one__text">I was impresed by the agrion services, not lorem ipsum is
-                                simply free text.</p>
+                            <h3 class="services-one__title"><a href="fresh-vegetables.html">Chou Chou</a></h3>
                         </div>
                     </div>
                 </div>
@@ -309,18 +243,16 @@
                     <div class="services-one__single">
                         <div class="services-one__img-box">
                             <div class="services-one__img">
-                                <img src="{{ asset('assets/frontend/images/services/services-one-4.jpg') }}"
+                                <img src="{{ asset('assets/frontend/images/products/ginger.jpeg') }}"
                                     alt="">
                             </div>
                             <div class="services-one__icon">
-                                <span class="icon-dairy"></span>
+                                <span class="icon-vegetables"></span>
                             </div>
                         </div>
                         <div class="services-one__content">
-                            <h3 class="services-one__title"><a href="dairy-products.html">Dairy <br> Products</a>
+                            <h3 class="services-one__title"><a href="dairy-products.html">Ginger</a>
                             </h3>
-                            <p class="services-one__text">I was impresed by the agrion services, not lorem ipsum is
-                                simply free text.</p>
                         </div>
                     </div>
                 </div>
@@ -333,18 +265,15 @@
                     <div class="services-one__single">
                         <div class="services-one__img-box">
                             <div class="services-one__img">
-                                <img src="{{ asset('assets/frontend/images/services/services-one-1.jpg') }}"
+                                <img src="{{ asset('assets/frontend/images/products/onion1.jpg') }}"
                                     alt="">
                             </div>
                             <div class="services-one__icon">
-                                <span class="icon-tractor"></span>
+                                <span class="icon-vegetables"></span>
                             </div>
                         </div>
                         <div class="services-one__content">
-                            <h3 class="services-one__title"><a href="agriculture-products.html">Agriculture <br>
-                                    Products</a></h3>
-                            <p class="services-one__text">I was impresed by the agrion services, not lorem ipsum is
-                                simply free text.</p>
+                            <h3 class="services-one__title"><a href="agriculture-products.html">Onion</a></h3>
                         </div>
                     </div>
                 </div>
@@ -354,18 +283,15 @@
                     <div class="services-one__single">
                         <div class="services-one__img-box">
                             <div class="services-one__img">
-                                <img src="{{ asset('assets/frontend/images/services/services-one-2.jpg') }}"
+                                <img src="{{ asset('assets/frontend/images/products/potato.jpeg') }}"
                                     alt="">
                             </div>
                             <div class="services-one__icon">
-                                <span class="icon-organic-food"></span>
+                                <span class="icon-vegetables"></span>
                             </div>
                         </div>
                         <div class="services-one__content">
-                            <h3 class="services-one__title"><a href="organic-products.html">Organic
-                                    <br> Products</a></h3>
-                            <p class="services-one__text">I was impresed by the agrion services, not lorem ipsum is
-                                simply free text.</p>
+                            <h3 class="services-one__title"><a href="organic-products.html">Potato</a></h3>
                         </div>
                     </div>
                 </div>
@@ -375,7 +301,7 @@
                     <div class="services-one__single">
                         <div class="services-one__img-box">
                             <div class="services-one__img">
-                                <img src="{{ asset('assets/frontend/images/services/services-one-3.jpg') }}"
+                                <img src="{{ asset('assets/frontend/images/products/tomato.jpeg') }}"
                                     alt="">
                             </div>
                             <div class="services-one__icon">
@@ -383,10 +309,7 @@
                             </div>
                         </div>
                         <div class="services-one__content">
-                            <h3 class="services-one__title"><a href="fresh-vegetables.html">Fresh
-                                    <br> Vegetables</a></h3>
-                            <p class="services-one__text">I was impresed by the agrion services, not lorem ipsum is
-                                simply free text.</p>
+                            <h3 class="services-one__title"><a href="fresh-vegetables.html">Tomato</a></h3>
                         </div>
                     </div>
                 </div>
@@ -396,18 +319,16 @@
                     <div class="services-one__single">
                         <div class="services-one__img-box">
                             <div class="services-one__img">
-                                <img src="{{ asset('assets/frontend/images/services/services-one-4.jpg') }}"
+                                <img src="{{ asset('assets/frontend/images/products/veg2.jpg') }}"
                                     alt="">
                             </div>
                             <div class="services-one__icon">
-                                <span class="icon-dairy"></span>
+                                <span class="icon-vegetables"></span>
                             </div>
                         </div>
                         <div class="services-one__content">
-                            <h3 class="services-one__title"><a href="dairy-products.html">Dairy <br> Products</a>
+                            <h3 class="services-one__title"><a href="dairy-products.html">Other Vegtables</a>
                             </h3>
-                            <p class="services-one__text">I was impresed by the agrion services, not lorem ipsum is
-                                simply free text.</p>
                         </div>
                     </div>
                 </div>
@@ -507,10 +428,10 @@
                     </div>
                     <p class="unbeatable-one__tagline">We’re Selling Healthy Products</p>
                     <h3 class="unbeatable-one__title">Unbeatable Organic and
-                        <br> Agriculture Services
+                        <br> Agriculture Products
                     </h3>
                     <div class="unbeatable-one__btn-box">
-                        <a href="about.html" class="thm-btn unbeatable-one__btn">Discover More <i
+                        <a href="#products" class="thm-btn unbeatable-one__btn">Discover More <i
                                 class="icon-right-arrow"></i> </a>
                     </div>
                 </div>
@@ -519,463 +440,12 @@
     </section>
     <!--Unbeatable One End-->
 
-    <!--Healthey Food One Start-->
-    <section class="healthy-food-one">
-        <div class="healthy-food-one__bg float-bob-x"
-            style="background-image: url(assets/images/shapes/healthy-food-one-shape-1.png);"></div>
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-6">
-                    <div class="healthy-food-one__left">
-                        <div class="healthy-food-one__img">
-                            <img src="{{ asset('assets/frontend/images/resources/healthy-food-one-1.jpg') }}"
-                                alt="">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-6">
-                    <div class="healthy-food-one__right">
-                        <div class="section-title text-left">
-                            <span class="section-title__tagline">Pure Organic Food</span>
-                            <h2 class="section-title__title">Healthy food for your good
-                                growth</h2>
-                            <div class="section-title__icon">
-                                <img src="{{ asset('assets/frontend/images/icon/section-title-icon-1.png') }}"
-                                    alt="">
-                            </div>
-                        </div>
-                        <p class="healthy-food-one__text">Lorem ipsum dolor sit amet nsectetur cing elit. Suspe
-                            ndisse suscipit sagittis leo sit met entum estibu dignissim posuere cubilia durae. Leo
-                            sit met entum cubilia crae onec.</p>
-                        <ul class="list-unstyled healthy-food-one__list">
-                            <li class="healthy-food-one__single">
-                                <div class="healthy-food-one__content">
-                                    <div class="healthy-food-one__icon">
-                                        <span class="icon-harvester"></span>
-                                    </div>
-                                    <p class="healthy-food-one__title">Harvesting</p>
-                                </div>
-                            </li>
-                            <li class="healthy-food-one__single">
-                                <div class="healthy-food-one__content">
-                                    <div class="healthy-food-one__icon">
-                                        <span class="icon-agriculture-1"></span>
-                                    </div>
-                                    <p class="healthy-food-one__title">Growth</p>
-                                </div>
-                            </li>
-                            <li class="healthy-food-one__single">
-                                <div class="healthy-food-one__content">
-                                    <div class="healthy-food-one__icon">
-                                        <span class="icon-harvest-1"></span>
-                                    </div>
-                                    <p class="healthy-food-one__title">Maintenance</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--Healthey Food One End-->
 
-    <!--Testimonial One Start-->
-    <section class="testimonial-one" id="testimonial">
-        <div class="testimonial-one-bg" style="background-image: url(assets/images/backgrounds/testimonial-one-bg.png);">
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="testimonial-one__top">
-                        <div class="section-title text-center">
-                            <span class="section-title__tagline">Our Testimonials</span>
-                            <h2 class="section-title__title">What They’re taking about</h2>
-                            <div class="section-title__icon">
-                                <img src="{{ asset('assets/frontend/images/icon/section-title-icon-1.png') }}"
-                                    alt="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testimonial-one__bottom">
-                        <div class="testimonial-one__carousel owl-carousel owl-theme thm-owl__carousel"
-                            data-owl-options='{
-                                "loop": true,
-                                "autoplay": true,
-                                "margin": 30,
-                                "nav": false,
-                                "dots": false,
-                                "smartSpeed": 500,
-                                "autoplayTimeout": 10000,
-                                "navText": ["<span class=\"icon-left-arrow\"></span>","<span class=\"icon-right-arrow1\"></span>"],
-                                "responsive": {
-                                    "0": {
-                                        "items": 1
-                                    },
-                                    "768": {
-                                        "items": 2
-                                    },
-                                    "992": {
-                                        "items": 2
-                                    },
-                                    "1200": {
-                                        "items": 3
-                                    }
-                                }
-                            }'>
-                            <!--Testimonial One Single Start-->
-                            <div class="item">
-                                <div class="testimonial-one__single">
-                                    <div class="testimonial-one__content">
-                                        <p class="testimonial-one__text">Lorem ipsum is simply free text dolor sit
-                                            amet, consect notted adipisicing elit sed do eiusmod tempor incididunt
-                                            ut labore et dolore magna aliqua.</p>
-                                        <div class="testimonial-one__client-info">
-                                            <div class="testimonial-one__client-img">
-                                                <img src="{{ asset('assets/frontend/images/testimonial/testimonial-1-1.jpg') }}" alt="">
-                                                <div class="testimonial-one__quote">
-                                                    <span class="icon-quote"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="testimonial-one__client-details-box">
-                                        <div class="testimonial-one__client-details">
-                                            <h4 class="testimonial-one__client-name">Sarah Albert</h4>
-                                            <p class="testimonial-one__client-sub-title">Customer</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Testimonial One Single End-->
-                            <!--Testimonial One Single Start-->
-                            <div class="item">
-                                <div class="testimonial-one__single">
-                                    <div class="testimonial-one__content">
-                                        <p class="testimonial-one__text">Lorem ipsum is simply free text dolor sit
-                                            amet, consect notted adipisicing elit sed do eiusmod tempor incididunt
-                                            ut labore et dolore magna aliqua.</p>
-                                        <div class="testimonial-one__client-info">
-                                            <div class="testimonial-one__client-img">
-                                                <img src="{{ asset('assets/frontend/images/testimonial/testimonial-1-2.jpg') }}" alt="">
-                                                <div class="testimonial-one__quote">
-                                                    <span class="icon-quote"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="testimonial-one__client-details-box">
-                                        <div class="testimonial-one__client-details">
-                                            <h4 class="testimonial-one__client-name">Kevin Martin</h4>
-                                            <p class="testimonial-one__client-sub-title">Customer</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Testimonial One Single End-->
-                            <!--Testimonial One Single Start-->
-                            <div class="item">
-                                <div class="testimonial-one__single">
-                                    <div class="testimonial-one__content">
-                                        <p class="testimonial-one__text">Lorem ipsum is simply free text dolor sit
-                                            amet, consect notted adipisicing elit sed do eiusmod tempor incididunt
-                                            ut labore et dolore magna aliqua.</p>
-                                        <div class="testimonial-one__client-info">
-                                            <div class="testimonial-one__client-img">
-                                                <img src="{{ asset('assets/frontend/images/testimonial/testimonial-1-3.jpg') }}" alt="">
-                                                <div class="testimonial-one__quote">
-                                                    <span class="icon-quote"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="testimonial-one__client-details-box">
-                                        <div class="testimonial-one__client-details">
-                                            <h4 class="testimonial-one__client-name">Aleesha Brown</h4>
-                                            <p class="testimonial-one__client-sub-title">Customer</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Testimonial One Single End-->
-                            <!--Testimonial One Single Start-->
-                            <div class="item">
-                                <div class="testimonial-one__single">
-                                    <div class="testimonial-one__content">
-                                        <p class="testimonial-one__text">Lorem ipsum is simply free text dolor sit
-                                            amet, consect notted adipisicing elit sed do eiusmod tempor incididunt
-                                            ut labore et dolore magna aliqua.</p>
-                                        <div class="testimonial-one__client-info">
-                                            <div class="testimonial-one__client-img">
-                                                <img src="{{ asset('assets/frontend/images/testimonial/testimonial-1-4.jpg') }}" alt="">
-                                                <div class="testimonial-one__quote">
-                                                    <span class="icon-quote"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="testimonial-one__client-details-box">
-                                        <div class="testimonial-one__client-details">
-                                            <h4 class="testimonial-one__client-name">Mike Hardson</h4>
-                                            <p class="testimonial-one__client-sub-title">Customer</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Testimonial One Single End-->
-                            <!--Testimonial One Single Start-->
-                            <div class="item">
-                                <div class="testimonial-one__single">
-                                    <div class="testimonial-one__content">
-                                        <p class="testimonial-one__text">Lorem ipsum is simply free text dolor sit
-                                            amet, consect notted adipisicing elit sed do eiusmod tempor incididunt
-                                            ut labore et dolore magna aliqua.</p>
-                                        <div class="testimonial-one__client-info">
-                                            <div class="testimonial-one__client-img">
-                                                <img src="{{ asset('assets/frontend/images/testimonial/testimonial-1-5.jpg') }}" alt="">
-                                                <div class="testimonial-one__quote">
-                                                    <span class="icon-quote"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="testimonial-one__client-details-box">
-                                        <div class="testimonial-one__client-details">
-                                            <h4 class="testimonial-one__client-name">Jolie Michale</h4>
-                                            <p class="testimonial-one__client-sub-title">Customer</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Testimonial One Single End-->
-                            <!--Testimonial One Single Start-->
-                            <div class="item">
-                                <div class="testimonial-one__single">
-                                    <div class="testimonial-one__content">
-                                        <p class="testimonial-one__text">Lorem ipsum is simply free text dolor sit
-                                            amet, consect notted adipisicing elit sed do eiusmod tempor incididunt
-                                            ut labore et dolore magna aliqua.</p>
-                                        <div class="testimonial-one__client-info">
-                                            <div class="testimonial-one__client-img">
-                                                <img src="{{ asset('assets/frontend/images/testimonial/testimonial-1-6.jpg') }}" alt="">
-                                                <div class="testimonial-one__quote">
-                                                    <span class="icon-quote"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="testimonial-one__client-details-box">
-                                        <div class="testimonial-one__client-details">
-                                            <h4 class="testimonial-one__client-name">David Smith</h4>
-                                            <p class="testimonial-one__client-sub-title">Customer</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Testimonial One Single End-->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--Testimonial One End-->
 
-    <!--Counter One Start-->
-    <section class="counter-one">
-        <div class="counter-one__bg" style="background-image: url(assets/images/shapes/counter-one-shape-3.png);">
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="counter-one__inner">
-                        <ul class="list-unstyled counter-one__list">
-                            <li class="counter-one__single wow fadeInLeft" data-wow-delay="100ms">
-                                <div class="counter-one__icon">
-                                    <span class="icon-seeds"></span>
-                                    <div class="counter-one__shape-one">
-                                        <img src="assets/images/shapes/counter-one-shape-1.png" alt="">
-                                    </div>
-                                    <div class="counter-one__shape-two">
-                                        <img src="assets/images/shapes/counter-one-shape-2.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="counter-one__content-box count-box">
-                                    <h3 class="count-text" data-stop="6420" data-speed="1500">00</h3>
-                                    <p class="counter-one__text">Agriculture Products</p>
-                                </div>
-                            </li>
-                            <li class="counter-one__single wow fadeInLeft" data-wow-delay="200ms">
-                                <div class="counter-one__icon">
-                                    <span class="icon-cotton"></span>
-                                    <div class="counter-one__shape-one">
-                                        <img src="assets/images/shapes/counter-one-shape-1.png" alt="">
-                                    </div>
-                                    <div class="counter-one__shape-two">
-                                        <img src="assets/images/shapes/counter-one-shape-2.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="counter-one__content-box count-box">
-                                    <h3 class="count-text" data-stop="8800" data-speed="1500">00</h3>
-                                    <p class="counter-one__text">Projects completed</p>
-                                </div>
-                            </li>
-                            <li class="counter-one__single wow fadeInLeft" data-wow-delay="300ms">
-                                <div class="counter-one__icon">
-                                    <span class="icon-customer"></span>
-                                    <div class="counter-one__shape-one">
-                                        <img src="assets/images/shapes/counter-one-shape-1.png" alt="">
-                                    </div>
-                                    <div class="counter-one__shape-two">
-                                        <img src="assets/images/shapes/counter-one-shape-2.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="counter-one__content-box count-box">
-                                    <h3 class="count-text" data-stop="9360" data-speed="1500">00</h3>
-                                    <p class="counter-one__text">satisfied customers</p>
-                                </div>
-                            </li>
-                            <li class="counter-one__single wow fadeInLeft" data-wow-delay="400ms">
-                                <div class="counter-one__icon">
-                                    <span class="icon-farmer"></span>
-                                    <div class="counter-one__shape-one">
-                                        <img src="assets/images/shapes/counter-one-shape-1.png" alt="">
-                                    </div>
-                                    <div class="counter-one__shape-two">
-                                        <img src="assets/images/shapes/counter-one-shape-2.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="counter-one__content-box count-box">
-                                    <h3 class="count-text" data-stop="1070" data-speed="1500">00</h3>
-                                    <p class="counter-one__text">Expert farmers</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--Counter One End-->
 
-    <!--Call One Start-->
-    <section class="call-one">
-        <div class="container">
-            <div class="call-one__inner wow fadeInUp" data-wow-delay="100ms">
-                <div class="call-one__left">
-                    <h3 class="call-one__content">Healthy products</h3>
-                    <div class="call-one__icon">
-                        <span class="icon-phone-ringing"></span>
-                    </div>
-                </div>
-                <div class="call-one__right">
-                    <div class="call-one__contact-info">
-                        <p>Lorem ipsum dolor sit am cons sid</p>
-                        <a href="tel:12463330088">+ 1- (246) 333-0088</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--Call One End-->
-
-    <!--Project One Start-->
-    <section class="project-one" id="project">
-        <div class="project-one__bg float-bob-y-2"
-            style="background-image: url(assets/images/shapes/project-one-shape-1.png);">
-        </div>
-        <div class="container">
-            <div class="section-title text-center">
-                <span class="section-title__tagline">Our Latest Projects</span>
-                <h2 class="section-title__title">Recently completed Projects</h2>
-                <div class="section-title__icon">
-                    <img src="{{ asset('assets/frontend/images/icon/section-title-icon-1.png') }}" alt="">
-                </div>
-            </div>
-            <div class="row">
-                <!--Project One Single Start-->
-                <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="100ms">
-                    <div class="project-one__single">
-                        <div class="project-one__inner">
-                            <div class="project-one__img">
-                                <img src="{{ asset('assets/frontend/images/project/project-one-1.jpg') }}" alt="">
-                            </div>
-                            <div class="project-one__arrow">
-                                <a href="project-details.html"><i class="icon-right-arrow"></i></a>
-                            </div>
-                            <div class="project-one__content">
-                                <span class="project-one__tagline">healthy</span>
-                                <h3 class="project-one__title"><a href="project-details.html">organic
-                                        <br> solutions</a></h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--Project One Single Start-->
-                <!--Project One Single Start-->
-                <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="200ms">
-                    <div class="project-one__single">
-                        <div class="project-one__inner">
-                            <div class="project-one__img">
-                                <img src="{{ asset('assets/frontend/images/project/project-one-2.jpg') }}" alt="">
-                            </div>
-                            <div class="project-one__arrow">
-                                <a href="project-details.html"><i class="icon-right-arrow"></i></a>
-                            </div>
-                            <div class="project-one__content">
-                                <span class="project-one__tagline">farming</span>
-                                <h3 class="project-one__title"><a href="project-details.html">Harvest
-                                        <br> Innovations</a></h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--Project One Single Start-->
-                <!--Project One Single Start-->
-                <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="300ms">
-                    <div class="project-one__single">
-                        <div class="project-one__inner">
-                            <div class="project-one__img">
-                                <img src="{{ asset('assets/frontend/images/project/project-one-3.jpg') }}" alt="">
-                            </div>
-                            <div class="project-one__arrow">
-                                <a href="project-details.html"><i class="icon-right-arrow"></i></a>
-                            </div>
-                            <div class="project-one__content">
-                                <span class="project-one__tagline">organic</span>
-                                <h3 class="project-one__title"><a href="project-details.html">Agriculture
-                                        <br> farming</a></h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--Project One Single Start-->
-                <!--Project One Single Start-->
-                <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="400ms">
-                    <div class="project-one__single">
-                        <div class="project-one__inner">
-                            <div class="project-one__img">
-                                <img src="{{ asset('assets/frontend/images/project/project-one-4.jpg') }}" alt="">
-                            </div>
-                            <div class="project-one__arrow">
-                                <a href="project-details.html"><i class="icon-right-arrow"></i></a>
-                            </div>
-                            <div class="project-one__content">
-                                <span class="project-one__tagline">solution</span>
-                                <h3 class="project-one__title"><a href="project-details.html">the Farming
-                                        <br> season</a></h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--Project One Single Start-->
-            </div>
-        </div>
-    </section>
-    <!--Project One End-->
 
     <!--Contact One Start-->
-    <section class="contact-one pb-5" id="contact">
+    <section class="contact-one pb-5 pt-5" id="contact">
         <div class="container">
             <div class="row">
                 <div class="col-xl-4 col-lg-5">
@@ -987,8 +457,7 @@
                                 <img src="assets/images/icon/section-title-icon-1.png" alt="">
                             </div>
                         </div>
-                        <p class="contact-one__text">Lorem ipsum dolor sit amet, adipiscing elit. In hac habitasse
-                            platea dictumst. Duis porta, <br> quam ut finibus ultrices.</p>
+                        {{-- <p class="contact-one__text"></p> --}}
                         <ul class="list-unstyled contact-one__contact-list">
                             <li>
                                 <div class="icon">
@@ -1166,11 +635,11 @@
                             <div class="cta-one__icon">
                                 <span class="icon-agriculture-2"></span>
                             </div>
-                            <h3 class="cta-one__title">We’re popular leader in agriculture <br> & Organic market.
+                            <h3 class="cta-one__title">We’re  <br> One Of The Best
                             </h3>
                         </div>
                         <div class="cta-one__right">
-                            <a href="about.html" class="thm-btn cta-one__btn">Discover More <i
+                            <a href="#products" class="thm-btn cta-one__btn">Discover More <i
                                     class="icon-right-arrow"></i> </a>
                         </div>
                     </div>

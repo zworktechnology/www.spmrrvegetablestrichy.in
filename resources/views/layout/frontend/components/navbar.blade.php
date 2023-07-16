@@ -46,19 +46,10 @@
                                                 <a href="#about">About</a>
                                             </li>
                                             <li class="scrollToLink">
-                                                <a href="#services">Services</a>
-                                            </li>
-                                            <li class="scrollToLink">
-                                                <a href="#testimonial">Testimonial</a>
-                                            </li>
-                                            <li class="scrollToLink">
-                                                <a href="#project">Projects</a>
+                                                <a href="#products">Products</a>
                                             </li>
                                             <li class="scrollToLink">
                                                 <a href="#contact">Contact</a>
-                                            </li>
-                                            <li class="scrollToLink">
-                                                <a href="#blog">Blog</a>
                                             </li>
                                         </ul>
                                     </div>
