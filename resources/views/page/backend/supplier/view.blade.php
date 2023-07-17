@@ -89,7 +89,7 @@
                               <th>Paid</th>
                            </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="background: #97a2d226;">
                         @foreach ($purchase_data as $keydata => $purchase_datas)
                            <tr>
                               <td>{{ ++$keydata }}</td>
@@ -133,7 +133,7 @@
                               <th>Paid</th>
                            </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="background: #cfafb21f;">
                         @foreach ($PurchasePayment_data as $keydata => $PurchasePayment_datas)
                            <tr>
                               <td>{{ ++$keydata }}</td>
