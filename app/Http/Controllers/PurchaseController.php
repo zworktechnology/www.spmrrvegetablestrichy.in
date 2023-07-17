@@ -29,6 +29,7 @@ class PurchaseController extends Controller
         $purchase_data = [];
         $terms = [];
         $Extracost_Arr = [];
+        $null_grossarr = [];
         foreach ($data as $key => $datas) {
             $branch_name = Branch::findOrFail($datas->branch_id);
             $supplier_name = Supplier::findOrFail($datas->supplier_id);
@@ -63,6 +64,22 @@ class PurchaseController extends Controller
             }
 
 
+        
+        $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        foreach ($All_supplier as $key => $All_supplierarr) {
+            $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('soft_delete', '!=', 1)->get();
+
+            foreach ($PurchaseArray as $key => $PurchaseArrays) {
+                if($PurchaseArrays->supplier_id == $All_supplierarr->id){
+                    if($PurchaseArrays->gross_amount == ""){
+                        $null_grossarr[] = $PurchaseArrays->id;
+                    }
+                }
+            }
+        }
+
+
+        $first_id = reset($null_grossarr);
 
             $purchase_data[] = array(
                 'unique_key' => $datas->unique_key,
@@ -79,6 +96,7 @@ class PurchaseController extends Controller
                 'status' => $datas->status,
                 'terms' => $terms,
                 'Extracost_Arr' => $Extracost_Arr,
+                'first_id' => $first_id,
             );
         }
 
@@ -141,20 +159,7 @@ class PurchaseController extends Controller
             }
 
         }
-        $null_grossarr = [];
-        $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        foreach ($All_supplier as $key => $All_supplierarr) {
-            $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('soft_delete', '!=', 1)->get();
 
-            foreach ($PurchaseArray as $key => $PurchaseArrays) {
-                if($PurchaseArrays->gross_amount == ""){
-                    $null_grossarr[] = $PurchaseArrays->id;
-                }
-            }
-        }
-
-
-        $first_id = reset($null_grossarr);
 
 
 
@@ -166,7 +171,7 @@ class PurchaseController extends Controller
         $timenow = Carbon::now()->format('H:i');
 
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        return view('page.backend.purchase.index', compact('purchase_data', 'today', 'productlist', 'allbranch', 'branch', 'supplier', 'timenow', 'bank', 'PSTodayStockArr' , 'first_id'));
+        return view('page.backend.purchase.index', compact('purchase_data', 'today', 'productlist', 'allbranch', 'branch', 'supplier', 'timenow', 'bank', 'PSTodayStockArr'));
     }
 
 
@@ -178,6 +183,7 @@ class PurchaseController extends Controller
         $purchase_data = [];
         $terms = [];
         $Extracost_Arr = [];
+        $null_grossarr = [];
         foreach ($branchwise_data as $key => $branchwise_datas) {
             $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
             $supplier_name = Supplier::findOrFail($branchwise_datas->supplier_id);
@@ -211,6 +217,22 @@ class PurchaseController extends Controller
 
             }
 
+
+            $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            foreach ($All_supplier as $key => $All_supplierarr) {
+                $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('soft_delete', '!=', 1)->get();
+
+                foreach ($PurchaseArray as $key => $PurchaseArrays) {
+                    if($PurchaseArrays->supplier_id == $All_supplierarr->id){
+                        if($PurchaseArrays->gross_amount == ""){
+                            $null_grossarr[] = $PurchaseArrays->id;
+                        }
+                    }
+                }
+            }
+
+            $first_id = reset($null_grossarr);
+
             $purchase_data[] = array(
                 'unique_key' => $branchwise_datas->unique_key,
                 'branch_id' => $branch_id,
@@ -224,6 +246,7 @@ class PurchaseController extends Controller
                 'terms' => $terms,
                 'status' => $branchwise_datas->status,
                 'Extracost_Arr' => $Extracost_Arr,
+                'first_id' => $first_id,
             );
         }
         $today = Carbon::now()->format('Y-m-d');
@@ -301,7 +324,7 @@ class PurchaseController extends Controller
         }
         $first_id = reset($null_grossarr);
 
-        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'branch_id', 'today', 'PSTodayStockArr', 'first_id'));
+        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'branch_id', 'today', 'PSTodayStockArr'));
     }
 
 
@@ -316,6 +339,7 @@ class PurchaseController extends Controller
         $purchase_data = [];
         $terms = [];
         $Extracost_Arr = [];
+        $null_grossarr = [];
         foreach ($data as $key => $datas) {
             $branch_name = Branch::findOrFail($datas->branch_id);
             $supplier_name = Supplier::findOrFail($datas->supplier_id);
@@ -348,6 +372,21 @@ class PurchaseController extends Controller
 
             }
 
+            $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            foreach ($All_supplier as $key => $All_supplierarr) {
+                $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('soft_delete', '!=', 1)->get();
+
+                foreach ($PurchaseArray as $key => $PurchaseArrays) {
+                    if($PurchaseArrays->supplier_id == $All_supplierarr->id){
+                        if($PurchaseArrays->gross_amount == ""){
+                            $null_grossarr[] = $PurchaseArrays->id;
+                        }
+                    }
+                }
+            }
+
+            $first_id = reset($null_grossarr);
+
             $purchase_data[] = array(
                 'unique_key' => $datas->unique_key,
                 'branch_id' => $datas->branch_id,
@@ -361,6 +400,7 @@ class PurchaseController extends Controller
                 'terms' => $terms,
                 'Extracost_Arr' => $Extracost_Arr,
                 'status' => $datas->status,
+                'null_grossarr' => $null_grossarr,
             );
         }
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
