@@ -21,6 +21,7 @@ return new class extends Migration
             
             $table->string('extracost_note')->nullable();
             $table->string('extracost')->nullable();
+            $table->string('purchase_order')->nullable();
             $table->boolean('soft_delete')->default(0);
             $table->timestamps();
         });

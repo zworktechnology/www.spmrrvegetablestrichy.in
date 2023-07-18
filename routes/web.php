@@ -286,6 +286,37 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // DATAE FILTER
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/sales/datefilter', [SalesController::class, 'datefilter'])->name('sales.datefilter');
     });
+
+
+
+
+    // PURCHASE ORDER CONTROLLER
+    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+        // INDEX
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchaseorder', [PurchaseController::class, 'purchaseorder_index'])->name('purchaseorder.purchaseorder_index');
+         // INDEX BRANCH WISE
+         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchaseorder/purchaseorder_branchdata/{branch_id}', [PurchaseController::class, 'purchaseorder_branchdata'])->name('purchaseorder.purchaseorder_branchdata');
+         // DATAE FILTER
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchaseorder/purchaseorder_datefilter', [PurchaseController::class, 'purchaseorder_datefilter'])->name('purchaseorder.purchaseorder_datefilter');
+         // CREATE
+         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchaseorder/purchaseorder_create', [PurchaseController::class, 'purchaseorder_create'])->name('purchaseorder.purchaseorder_create');
+         // STORE
+         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/purchaseorder/purchaseorder_store', [PurchaseController::class, 'purchaseorder_store'])->name('purchaseorder.purchaseorder_store');
+         // EDIT
+         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchaseorder/purchaseorder_edit/{unique_key}', [PurchaseController::class, 'purchaseorder_edit'])->name('purchaseorder.purchaseorder_edit');
+         // UPDATE
+         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchaseorder/purchaseorder_update/{unique_key}', [PurchaseController::class, 'purchaseorder_update'])->name('purchaseorder.purchaseorder_update');
+         // INVOICE
+         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchaseorder/purchaseorder_invoice/{unique_key}', [PurchaseController::class, 'purchaseorder_invoice'])->name('purchaseorder.purchaseorder_invoice');
+         // INVOICE UPDATE
+         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchaseorder/purchaseorder_invoiceupdate/{unique_key}', [PurchaseController::class, 'purchaseorder_invoiceupdate'])->name('purchaseorder.purchaseorder_invoiceupdate');
+         // EDIT
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchaseorder/purchaseorder_invoiceedit/{unique_key}', [PurchaseController::class, 'purchaseorder_invoiceedit'])->name('purchaseorder.purchaseorder_invoiceedit');
+        // INVOICE UPDATE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchaseorder/purchaseorder_invoiceeditupdate/{unique_key}', [PurchaseController::class, 'purchaseorder_invoiceeditupdate'])->name('purchaseorder.purchaseorder_invoiceeditupdate');
+        // VIEW
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchaseorder/purchaseorder_printview/{unique_key}', [PurchaseController::class, 'purchaseorder_printview'])->name('purchaseorder.purchaseorder_printview');
+    });
 });
 
 
@@ -305,3 +336,7 @@ Route::get('/getbranchwiseProducts', [SalesController::class, 'getbranchwiseProd
 Route::get('/getProductsdetail', [SalesController::class, 'getProductsdetail']);
 
 Route::get('/Checkinvoiceupdated', [PurchaseController::class, 'Checkinvoiceupdated']);
+
+
+
+Route::get('/getpurchaseorderview', [PurchaseController::class, 'getpurchaseorderview']);

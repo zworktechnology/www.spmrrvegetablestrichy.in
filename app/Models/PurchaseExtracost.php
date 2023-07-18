@@ -14,6 +14,7 @@ class PurchaseExtracost extends Model
         'purchase_id',
         'extracost_note',
         'extracost',
+        'purchase_order',
         'soft_delete'
     ];
 }

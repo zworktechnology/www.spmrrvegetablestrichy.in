@@ -9029,17 +9029,11 @@ span.select2-container.select2-container--default.select2-container--open {
 .total-order {
     max-width: 430px;
     width: 100%;
-    margin: 30px 30px 30px auto
 }
 
 .total-order ul {
     margin: 0;
     padding: 0
-}
-
-.total-order ul li {
-    border: 1px solid #f8f8f8;
-    border-top: 0
 }
 
 .total-order ul li h4 {
@@ -9058,10 +9052,6 @@ span.select2-container.select2-container--default.select2-container--open {
     font-weight: 700;
     text-align: right;
     width: 50%
-}
-
-.total-order ul li:first-child {
-    border-top: 1px solid #f8f8f8
 }
 
 .total-order ul li.total h5 {

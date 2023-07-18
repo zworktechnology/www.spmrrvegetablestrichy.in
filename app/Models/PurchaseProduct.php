@@ -19,6 +19,7 @@ class PurchaseProduct extends Model
         'count',
         'price_per_kg',
         'total_price',
+        'purchase_order',
         'status',
         'soft_delete'
     ];

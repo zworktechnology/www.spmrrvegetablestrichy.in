@@ -200,6 +200,7 @@ class SupplierController extends Controller
                 'date' => $datas->date,
                 'gross_amount' => $datas->gross_amount,
                 'paid_amount' => $datas->paid_amount,
+                'purchase_order' => $datas->purchase_order,
                 'bill_no' => $datas->bill_no,
                 'id' => $datas->id,
                 'terms' => $terms,
@@ -298,6 +299,7 @@ class SupplierController extends Controller
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $datas->paid_amount,
                         'bill_no' => $datas->bill_no,
+                        'purchase_order' => $datas->purchase_order,
                         'id' => $datas->id,
                         'terms' => $terms,
                     );
@@ -367,6 +369,7 @@ class SupplierController extends Controller
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $datas->paid_amount,
                         'bill_no' => $datas->bill_no,
+                        'purchase_order' => $datas->purchase_order,
                         'id' => $datas->id,
                         'terms' => $terms,
                     );
@@ -435,6 +438,7 @@ class SupplierController extends Controller
                         'paid_amount' => $datas->paid_amount,
                         'bill_no' => $datas->bill_no,
                         'id' => $datas->id,
+                        'purchase_order' => $datas->purchase_order,
                         'terms' => $terms,
                     );
                 }
@@ -501,6 +505,7 @@ class SupplierController extends Controller
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $datas->paid_amount,
                         'bill_no' => $datas->bill_no,
+                        'purchase_order' => $datas->purchase_order,
                         'id' => $datas->id,
                         'terms' => $terms,
                     );
@@ -567,6 +572,7 @@ class SupplierController extends Controller
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $datas->paid_amount,
                         'bill_no' => $datas->bill_no,
+                        'purchase_order' => $datas->purchase_order,
                         'id' => $datas->id,
                         'terms' => $terms,
                     );
@@ -633,6 +639,7 @@ class SupplierController extends Controller
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $datas->paid_amount,
                         'bill_no' => $datas->bill_no,
+                        'purchase_order' => $datas->purchase_order,
                         'id' => $datas->id,
                         'terms' => $terms,
                     );
@@ -700,6 +707,7 @@ class SupplierController extends Controller
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $datas->paid_amount,
                         'bill_no' => $datas->bill_no,
+                        'purchase_order' => $datas->purchase_order,
                         'id' => $datas->id,
                         'terms' => $terms,
                     );
@@ -761,6 +769,7 @@ class SupplierController extends Controller
                     'gross_amount' => $datas->gross_amount,
                     'paid_amount' => $datas->paid_amount,
                     'bill_no' => $datas->bill_no,
+                    'purchase_order' => $datas->purchase_order,
                     'id' => $datas->id,
                     'terms' => $terms,
                 );

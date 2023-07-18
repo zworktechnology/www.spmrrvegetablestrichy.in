@@ -84,6 +84,7 @@
                               <th>Branch</th>
                               <th>Date</th>
                               <th>Billno</th>
+                              <th>Purchase / Order</th>
                               <th>Product</th>
                               <th>Total</th>
                               <th>Paid</th>
@@ -96,6 +97,13 @@
                               <td>{{ $purchase_datas['branch_name'] }}</td>
                               <td>{{ date('d-m-Y', strtotime($purchase_datas['date'])) }}</td>
                               <td>{{ $purchase_datas['bill_no'] }}</td>
+                              
+                                    @if ($purchase_datas['purchase_order'] == '1')
+                                        <td style="text-transform: uppercase; color:#3f8fd5">  Purchase Order </td>
+                                    @elseif ($purchase_datas['purchase_order'] == NULL)
+                                        <td style="text-transform: uppercase; color:#14a763">  Purchase </td>
+                                    @endif
+                              </td>
                               <td style="text-transform: uppercase;">
                                     @foreach ($purchase_datas['terms'] as $index => $terms_array)
                                                     @if ($terms_array['purchase_id'] == $purchase_datas['id'])

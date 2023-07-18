@@ -25,6 +25,14 @@
                     </ul>
                 </li>
                 <li class="submenu-open">
+                    <h6 class="submenu-hdr">Order</h6>
+                    <ul>
+                        <li class="{{ Route::is('purchaseorder.purchaseorder_index') ? 'active' : '' }}">
+                            <a href="{{ route('purchaseorder.purchaseorder_branchdata', ['branch_id' => '1']) }}"><i data-feather="shopping-bag"></i><span>Purchase Order</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="submenu-open">
                     <h6 class="submenu-hdr">Payment</h6>
                     <ul>
                         <li class="{{ Route::is('purchasepayment.index', 'purchasepayment.store') ? 'active' : '' }}">
