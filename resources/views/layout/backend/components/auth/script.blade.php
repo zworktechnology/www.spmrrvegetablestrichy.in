@@ -321,6 +321,8 @@ $(".purchaseclose").click(function() {
                                 $('.purchase_total_amount').html(response[i].purchase_total_amount);
                                 $('.purchase_commision').html(response[i].commission_amount);
                                 $('.purchase_extra_cost').html(Totalextraamount);
+                                
+                                $('.purchase_grossamont').html(response[i].purchase_gross_amount);
                                 $('.purchase_old_balance').html(response[i].purchase_old_balance);
                                 $('.purchase_grand_total').html(response[i].purchase_grand_total);
                                 $('.purchase_paid_amount').html(response[i].purchase_paid_amount);
@@ -375,6 +377,7 @@ $(".purchaseclose").click(function() {
                                 $('.purchaseorder_total_amount').html(response[i].purchase_total_amount);
                                 $('.purchaseorder_commision').html(response[i].commission_amount);
                                 $('.purchaseorder_extra_cost').html(Totalextraamount);
+                                $('.purchaseorder_grossamont').html(response[i].purchase_gross_amount);
                                 $('.purchaseorder_old_balance').html(response[i].purchase_old_balance);
                                 $('.purchaseorder_grand_total').html(response[i].purchase_grand_total);
                                 $('.purchaseorder_paid_amount').html(response[i].purchase_paid_amount);

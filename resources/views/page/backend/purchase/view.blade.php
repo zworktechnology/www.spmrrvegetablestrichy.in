@@ -156,15 +156,20 @@
                         <h5>₹ <span  class="purchase_extra_cost"></span></h5>
                      </li>
                      <li class="total">
-                        <h4>Old Balance</h4>
-                        <h5>₹ <span  class="purchase_old_balance"></span></h5>
+                        <h4>Gross Amount</h4>
+                        <h5>₹ <span  class="purchase_grossamont"></span></h5>
                      </li>
+                     
                   </ul>
                </div>
             </div>
             <div class="col-lg-6 ">
                <div class="total-order w-100 max-widthauto mb-4">
                   <ul>
+                     <li class="total">
+                        <h4>Old Balance</h4>
+                        <h5>₹ <span  class="purchase_old_balance"></span></h5>
+                     </li>
                      <li class="total">
                         <h4>Grand Total</h4>
                         <h5>₹ <span  class="purchase_grand_total"></span></h5>
