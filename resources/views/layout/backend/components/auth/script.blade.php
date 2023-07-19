@@ -458,6 +458,59 @@ $(".purchaseclose").click(function() {
         });
 
 
+
+        $('.salesorderview').each(function() {
+            $(this).on('click', function(e) {
+                e.preventDefault();
+                var $this = $(this),
+                sales_id = $this.attr('data-id');
+                //alert(sales_id);
+
+                $.ajax({
+                    url: '/salesorderview/',
+                    type: 'get',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        sales_id: sales_id
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        var len = response.length;
+                        if (len > 0) {
+                            for (var i = 0; i < len; i++) {
+                                $('.sales_bill_no').html(response[i].sales_bill_no);
+                                $('.sales_total_amount').html(response[i].sales_total_amount);
+                                $('.sales_grossamount').html(response[i].sales_gross_amount);
+                                $('.sales_extra_cost').html(response[i].sales_extra_cost);
+                                $('.sales_old_balance').html(response[i].sales_old_balance);
+                                $('.sales_grand_total').html(response[i].sales_grand_total);
+                                $('.sales_paid_amount').html(response[i].sales_paid_amount);
+                                $('.sales_balance_amount').html(response[i].sales_balance_amount);
+
+                                $('.sales_customername').html(response[i].sales_customername);
+                                $('.sales_customercontact_number').html(response[i].sales_customercontact_number);
+                                $('.sales_customershop_name').html(response[i].sales_customershop_name);
+                                $('.sales_customershop_address').html(response[i].sales_customershop_address);
+
+                                $('.sales_branchname').html(response[i].sales_branchname);
+                                $('.salesbranch_contact_number').html(response[i].salesbranch_contact_number);
+                                $('.salesbranch_shop_name').html(response[i].salesbranch_shop_name);
+                                $('.salesbranch_address').html(response[i].salesbranch_address);
+
+                                $('.sales_date').html(response[i].sales_date);
+                                $('.sales_time').html(response[i].sales_time);
+                                $('.sales_bank_namedata').html(response[i].sales_bank_namedata);
+                            }
+                        }
+                    }
+                });
+
+
+            });
+        });
+
+
             //$('.checkbalance').each(function() {
                //         $(this).on('click', function(e) {
                   //         e.preventDefault();

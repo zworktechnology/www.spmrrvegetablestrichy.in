@@ -84,6 +84,7 @@
                               <th>Branch</th>
                               <th>Date</th>
                               <th>Billno</th>
+                              <th>Sales / Order</th>
                               <th>Product</th>
                               <th>Total</th>
                               <th>Paid</th>
@@ -96,6 +97,11 @@
                               <td>{{ $Sales_datas['branch_name'] }}</td>
                               <td>{{ date('d-m-Y', strtotime($Sales_datas['date'])) }}</td>
                               <td>{{ $Sales_datas['bill_no'] }}</td>
+                              @if ($Sales_datas['sales_order'] == '1')
+                                        <td style="text-transform: uppercase; color:#3f8fd5">  Sales Order </td>
+                                    @elseif ($Sales_datas['sales_order'] == NULL)
+                                        <td style="text-transform: uppercase; color:#14a763">  Sales </td>
+                                    @endif
                               <td style="text-transform: uppercase;">
                                     @foreach ($Sales_datas['terms'] as $index => $terms_array)
                                                     @if ($terms_array['sales_id'] == $Sales_datas['id'])

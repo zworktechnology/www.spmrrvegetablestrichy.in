@@ -42,7 +42,7 @@ return new class extends Migration
             $table->unsignedBigInteger('sales_payment_id')->nullable();
             $table->string('sales_paymentpaidamount')->nullable();
             $table->string('sales_paymentpending')->nullable();
-
+            $table->string('sales_order')->nullable();
 
             $table->string('status')->default(0);
             $table->boolean('soft_delete')->default(0);

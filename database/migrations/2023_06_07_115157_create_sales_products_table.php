@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('count')->nullable();
             $table->string('price_per_kg')->nullable();
             $table->string('total_price')->nullable();
+            $table->string('sales_order')->nullable();
             $table->string('status')->default(0);
             $table->boolean('soft_delete')->default(0);
             $table->timestamps();

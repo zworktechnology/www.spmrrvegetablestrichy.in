@@ -317,6 +317,29 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // VIEW
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchaseorder/purchaseorder_printview/{unique_key}', [PurchaseController::class, 'purchaseorder_printview'])->name('purchaseorder.purchaseorder_printview');
     });
+
+
+
+    // SALES ORDER CONTROLLER
+    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+        // INDEX
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salesorder', [SalesController::class, 'salesorder_index'])->name('salesorder.salesorder_index');
+        // CREATE
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salesorder/salesorder_create', [SalesController::class, 'salesorder_create'])->name('salesorder.salesorder_create');
+        // STORE
+        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/salesorder/salesorder_store', [SalesController::class, 'salesorder_store'])->name('salesorder.salesorder_store');
+        // EDIT
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salesorder/salesorder_edit/{unique_key}', [SalesController::class, 'salesorder_edit'])->name('salesorder.salesorder_edit');
+        // UPDATE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/salesorder/salesorder_update/{unique_key}', [SalesController::class, 'salesorder_update'])->name('salesorder.salesorder_update');
+        // INDEX BRANCH WISE
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salesorder/salesorder_branchdata/{branch_id}', [SalesController::class, 'salesorder_branchdata'])->name('salesorder.salesorder_branchdata');
+         // VIEW
+         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salesorder/salesorder_printview/{unique_key}', [SalesController::class, 'salesorder_printview'])->name('salesorder.salesorder_printview');
+        // DATAE FILTER
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/salesorder/salesorder_datefilter', [SalesController::class, 'salesorder_datefilter'])->name('salesorder.salesorder_datefilter');
+    });
+
 });
 
 
@@ -340,3 +363,4 @@ Route::get('/Checkinvoiceupdated', [PurchaseController::class, 'Checkinvoiceupda
 
 
 Route::get('/getpurchaseorderview', [PurchaseController::class, 'getpurchaseorderview']);
+Route::get('/salesorderview', [SalesController::class, 'salesorderview']);

@@ -19,6 +19,7 @@ class SalesProduct extends Model
         'count',
         'price_per_kg',
         'total_price',
+        'sales_order',
         'status',
         'soft_delete'
     ];

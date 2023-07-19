@@ -103,7 +103,6 @@
                                     @elseif ($purchase_datas['purchase_order'] == NULL)
                                         <td style="text-transform: uppercase; color:#14a763">  Purchase </td>
                                     @endif
-                              </td>
                               <td style="text-transform: uppercase;">
                                     @foreach ($purchase_datas['terms'] as $index => $terms_array)
                                                     @if ($terms_array['purchase_id'] == $purchase_datas['id'])

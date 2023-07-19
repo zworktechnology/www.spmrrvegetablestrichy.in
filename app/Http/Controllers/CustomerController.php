@@ -179,6 +179,7 @@ class CustomerController extends Controller
                 'gross_amount' => $datas->gross_amount,
                 'paid_amount' => $datas->paid_amount,
                 'bill_no' => $datas->bill_no,
+                'sales_order' => $datas->sales_order,
                 'id' => $datas->id,
                 'terms' => $terms,
             );
@@ -276,6 +277,7 @@ class CustomerController extends Controller
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $datas->paid_amount,
                         'bill_no' => $datas->bill_no,
+                        'sales_order' => $datas->sales_order,
                         'id' => $datas->id,
                         'terms' => $terms,
                     );
@@ -344,6 +346,7 @@ class CustomerController extends Controller
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $datas->paid_amount,
                         'bill_no' => $datas->bill_no,
+                        'sales_order' => $datas->sales_order,
                         'id' => $datas->id,
                         'terms' => $terms,
                     );
@@ -412,6 +415,7 @@ class CustomerController extends Controller
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $datas->paid_amount,
                         'bill_no' => $datas->bill_no,
+                        'sales_order' => $datas->sales_order,
                         'id' => $datas->id,
                         'terms' => $terms,
                     );
@@ -479,6 +483,7 @@ class CustomerController extends Controller
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $datas->paid_amount,
                         'bill_no' => $datas->bill_no,
+                        'sales_order' => $datas->sales_order,
                         'id' => $datas->id,
                         'terms' => $terms,
                     );
@@ -546,6 +551,7 @@ class CustomerController extends Controller
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $datas->paid_amount,
                         'bill_no' => $datas->bill_no,
+                        'sales_order' => $datas->sales_order,
                         'id' => $datas->id,
                         'terms' => $terms,
                     );
@@ -612,6 +618,7 @@ class CustomerController extends Controller
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $datas->paid_amount,
                         'bill_no' => $datas->bill_no,
+                        'sales_order' => $datas->sales_order,
                         'id' => $datas->id,
                         'terms' => $terms,
                     );
@@ -679,6 +686,7 @@ class CustomerController extends Controller
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $datas->paid_amount,
                         'bill_no' => $datas->bill_no,
+                        'sales_order' => $datas->sales_order,
                         'id' => $datas->id,
                         'terms' => $terms,
                     );
@@ -740,6 +748,7 @@ class CustomerController extends Controller
                     'gross_amount' => $datas->gross_amount,
                     'paid_amount' => $datas->paid_amount,
                     'bill_no' => $datas->bill_no,
+                    'sales_order' => $datas->sales_order,
                     'id' => $datas->id,
                     'terms' => $terms,
                 );

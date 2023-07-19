@@ -28,6 +28,7 @@ class Sales extends Model
         'sales_payment_id',
         'sales_paymentpaidamount',
         'sales_paymentpending',
+        'sales_order',
         'status',
         'soft_delete'
     ];

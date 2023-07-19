@@ -29,6 +29,8 @@
                     <ul>
                         <li class="{{ Route::is('purchaseorder.purchaseorder_index') ? 'active' : '' }}">
                             <a href="{{ route('purchaseorder.purchaseorder_branchdata', ['branch_id' => '1']) }}"><i data-feather="shopping-bag"></i><span>Purchase Order</span></a>
+                        </li><li class="{{ Route::is('salesorder.salesorder_index', 'salesorder.salesorder_store') ? 'active' : '' }}">
+                            <a href="{{ route('salesorder.salesorder_branchdata', ['branch_id' => '1']) }}"><i data-feather="shopping-cart"></i><span>Sales Order</span></a>
                         </li>
                     </ul>
                 </li>
