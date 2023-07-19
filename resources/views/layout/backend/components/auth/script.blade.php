@@ -350,6 +350,60 @@ $(".purchaseclose").click(function() {
 
 
 
+        $('.purchaseorderview').each(function() {
+            $(this).on('click', function(e) {
+                e.preventDefault();
+                var $this = $(this),
+                purchase_id = $this.attr('data-id');
+                //alert(purchase_id);
+
+                $.ajax({
+                    url: '/getpurchaseorderview/',
+                    type: 'get',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        purchase_id: purchase_id
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        var len = response.length;
+                        if (len > 0) {
+                            for (var i = 0; i < len; i++) {
+                                var Totalextraamount = Number(response[i].tot_comm_extracost) - Number(response[i].commission_amount);
+                                $('.purchaseorder_bill_no').html(response[i].purchase_bill_no);
+                                $('.purchaseorder_total_amount').html(response[i].purchase_total_amount);
+                                $('.purchaseorder_commision').html(response[i].commission_amount);
+                                $('.purchaseorder_extra_cost').html(Totalextraamount);
+                                $('.purchaseorder_old_balance').html(response[i].purchase_old_balance);
+                                $('.purchaseorder_grand_total').html(response[i].purchase_grand_total);
+                                $('.purchaseorder_paid_amount').html(response[i].purchase_paid_amount);
+                                $('.purchaseorder_balance_amount').html(response[i].purchase_balance_amount);
+
+                                $('.purchaseorder_suppliername').html(response[i].suppliername);
+                                $('.purchaseordersupplier_contact_number').html(response[i].supplier_contact_number);
+                                $('.purchaseordersupplier_shop_name').html(response[i].supplier_shop_name);
+                                $('.purchaseordersupplier_shop_address').html(response[i].supplier_shop_address);
+
+                                $('.purchaseorderbranchname').html(response[i].branchname);
+                                $('.purchaseorderbranch_contact_number').html(response[i].branch_contact_number);
+                                $('.purchaseorderbranch_shop_name').html(response[i].branch_shop_name);
+                                $('.purchaseorderbranch_address').html(response[i].branch_address);
+
+                                $('.purchaseorder_date').html(response[i].date);
+                                $('.purchaseorder_time').html(response[i].time);
+                                $('.purchaseorderbank_namedata').html(response[i].bank_namedata);
+                            }
+                        }
+                    }
+                });
+
+
+            });
+        });
+
+
+
         $('.salesview').each(function() {
             $(this).on('click', function(e) {
                 e.preventDefault();
