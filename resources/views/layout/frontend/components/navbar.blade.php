@@ -20,16 +20,16 @@
                                 <i class="icon-pin"></i>
                             </div>
                             <div class="text">
-                                <p>80 Broklyn Golden Street USA</p>
+                                <p>SPM, NS 83, 84, Gandhi Market, Trichy - 8.</p>
                             </div>
                         </li>
                     </ul>
-                    <div class="main-header__social">
+                    {{-- <div class="main-header__social">
                         <a href="#"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-facebook"></i></a>
                         <a href="#"><i class="fab fa-pinterest-p"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="main-header__menu-box-bottom">
                     <nav class="main-menu">
@@ -61,7 +61,7 @@
             </div>
             <div class="main-header__phone-contact-box">
                 <div class="main-header__phone-number">
-                    <a href="tel:9200886823">+92 (0088) 6823</a>
+                    <a href="tel:+91 9994065696">+91 9994065696</a>
                 </div>
                 <div class="main-header__call-box">
                     <div class="main-header__call-inner">

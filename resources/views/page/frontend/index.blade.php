@@ -465,7 +465,7 @@
                                 </div>
                                 <div class="content">
                                     <p>Have Question?</p>
-                                    <h4><a href="tel:9288009850">Free +92 (8800)-9850</a></h4>
+                                    <h4><a href="tel:9288009850">Free +91 9994065696</a></h4>
                                 </div>
                             </li>
                             <li>
@@ -483,7 +483,7 @@
                                 </div>
                                 <div class="content">
                                     <p>Visit Now</p>
-                                    <h4>88 Broklyn Golden Street. USA</h4>
+                                    <h4>SPM, NS 83, 84, Gandhi Market, Trichy - 8.</h4>
                                 </div>
                             </li>
                         </ul>

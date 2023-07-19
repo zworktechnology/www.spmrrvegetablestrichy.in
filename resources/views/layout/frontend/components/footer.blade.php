@@ -5,15 +5,14 @@
                 <div class="site-footer-shape-1 float-bob-x"
                     style="background-image: url(assets/images/shapes/site-footer-shape-1.png);"></div>
                 <div class="row">
-                    <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="100ms">
+                    <div class="col-xl-5 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="100ms">
                         <div class="footer-widget__column footer-widget__about">
                             <div class="footer-widget__logo">
                                 <a href="index.html"><img src="assets/images/resources/footer-logo.png"
                                         alt=""></a>
                             </div>
                             <div class="footer-widget__about-text-box">
-                                <p class="footer-widget__about-text">Welcome to our Agriculture Farming. Lorem
-                                    simply text amet cing elit.</p>
+                                <img src="{{ asset('assets/frontend/images/spm.jpg') }}" style="border-radius: 10px;height: 230px;" alt="">
                             </div>
                         </div>
                     </div>
@@ -25,50 +24,12 @@
                             <ul class="footer-widget__Explore-list list-unstyled">
                                 <li><a href="about.html">About</a></li>
                                 <li><a href="#services">Services</a></li>
-                                <li><a href="#testimonial">Testimonial</a></li>
-                                <li><a href="#projects">Projects</a></li>
+                                <li><a href="#products">Products</a></li>
                                 <li><a href="#contact">Contact</a></li>
                             </ul>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="300ms">
-                        <div class="footer-widget__column footer-widget__news">
-                            <div class="footer-widget__title-box">
-                                <h3 class="footer-widget__title">News</h3>
-                            </div>
-                            <ul class="footer-widget__news-list list-unstyled">
-                                <li>
-                                    <div class="footer-widget__news-img">
-                                        <img src="assets/images/resources/footer-widget-news-img-1.jpg"
-                                            alt="">
-                                    </div>
-                                    <div class="footer-widget__news-content">
-                                        <p class="footer-widget__news-date">20 Jul, 2022</p>
-                                        <h5 class="footer-widget__news-sub-title"><a
-                                                href="blog-details.html">A
-                                                Organic Food
-                                                Gives
-                                                More Good Taste</a></h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="footer-widget__news-img">
-                                        <img src="assets/images/resources/footer-widget-news-img-2.jpg"
-                                            alt="">
-                                    </div>
-                                    <div class="footer-widget__news-content">
-                                        <p class="footer-widget__news-date">20 Jul, 2022</p>
-                                        <h5 class="footer-widget__news-sub-title"><a
-                                                href="blog-details.html">A
-                                                Organic Food
-                                                Gives
-                                                More Good Taste</a></h5>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="400ms">
+                    <div class="col-xl-5 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="400ms">
                         <div class="footer-widget__column footer-widget__Contact">
                             <div class="footer-widget__title-box">
                                 <h3 class="footer-widget__title">Contact</h3>
@@ -79,7 +40,7 @@
                                         <span class="fas fa-phone-square-alt"></span>
                                     </div>
                                     <div class="text">
-                                        <p><a href="tel:9200886823">+92 (0088) 6823</a></p>
+                                        <p><a href="tel:9200886823">+91 9994065696</a></p>
                                     </div>
                                 </li>
                                 <li>
@@ -95,7 +56,7 @@
                                         <span class="icon-pin"></span>
                                     </div>
                                     <div class="text">
-                                        <p>80 Broklyn Golden Street. USA</p>
+                                        <p>SPM, NS 83, 84, Gandhi Market, Trichy - 8.</p>
                                     </div>
                                 </li>
                             </ul>
@@ -117,8 +78,8 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="site-footer__bottom-inner">
-                        <p class="site-footer__bottom-text">© Copyright 2022 by <a
-                                href="#">Agrion.com</a></p>
+                        <p class="site-footer__bottom-text">© Copyright 2023 Developed by <a
+                                href="zworktechnology.com">Zworktechnology</a></p>
                         <div class="site-footer__social">
                             <a href="#"><i class="fab fa-twitter"></i></a>
                             <a href="#"><i class="fab fa-facebook"></i></a>
