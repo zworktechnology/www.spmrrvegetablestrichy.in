@@ -8,7 +8,7 @@
                     <div class="login-logo logo-normal">
                         <img src="{{ asset('assets/backend/img/logo.png') }}" alt="img">
                     </div>
-                    <a href="index.html" class="login-logo logo-white">
+                    <a href="javascript::void(o);" class="login-logo logo-white">
                         <img src="{{ asset('assets/backend/img/logo-white.png') }}" alt>
                     </a>
                     <div class="login-userheading">
@@ -25,7 +25,7 @@
                             autofocus placeholder="Enter your email address">
                             <img src="{{ asset('assets/backend/img/icons/mail.svg') }}" alt="img">
                         </div>
-                        
+
                         @error('email')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -40,7 +40,7 @@
                             name="password" required autocomplete="current-password" placeholder="Enter your password">
                             <span class="fas toggle-password fa-eye-slash"></span>
                         </div>
-                        
+
                         @error('password')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -49,7 +49,7 @@
                     </div>
                     <div class="form-login">
                         <div class="alreadyuser">
-                            <h4><a href="forgetpassword.html" class="hover-a">Forgot Password?</a></h4>
+                            <h4><a href="javascript::void(o);" class="hover-a">Forgot Password?</a></h4>
                         </div>
                     </div>
                     <div class="form-login">

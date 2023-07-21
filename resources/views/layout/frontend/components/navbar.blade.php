@@ -2,25 +2,25 @@
     <div class="main-header__wrapper">
         <div class="main-header__wrapper-inner">
             <div class="main-header__logo">
-                <a href="index.html"><img src="{{ asset('assets/frontend/images/spm.jpg') }}" style="height: 100px;" alt=""></a>
+                <a href="javascript::void(o);"><img src="{{ asset('assets/frontend/images/spm.jpg') }}" style="height: 100px;" alt=""></a>
             </div>
             <div class="main-header__menu-box">
                 <div class="main-header__menu-box-top">
                     <ul class="list-unstyled main-header__contact-list">
-                        <li>
+                        {{-- <li>
                             <div class="icon">
                                 <i class="icon-email"></i>
                             </div>
                             <div class="text">
                                 <p><a href="mailto:needhelp@company.com">needhelp@company.com</a></p>
                             </div>
-                        </li>
+                        </li> --}}
                         <li>
                             <div class="icon">
                                 <i class="icon-pin"></i>
                             </div>
                             <div class="text">
-                                <p>SPM, NS 83, 84, Gandhi Market, Trichy - 8.</p>
+                                <p>SPM, NS83, 84 | RR, OT166, 167, 117, Gandhi Market, Trichy 8.</p>
                             </div>
                         </li>
                     </ul>
