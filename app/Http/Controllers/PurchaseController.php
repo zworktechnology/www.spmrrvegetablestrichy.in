@@ -66,7 +66,9 @@ class PurchaseController extends Controller
             $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             foreach ($All_supplier as $key => $All_supplierarr) {
                 $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('gross_amount', '=', NULL)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->first();
-                        $null_grossarr[] = $PurchaseArray->id;
+                if($PurchaseArray){
+                    $null_grossarr[] = $PurchaseArray->id;
+                }
             }
 
 
@@ -209,7 +211,9 @@ class PurchaseController extends Controller
             $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             foreach ($All_supplier as $key => $All_supplierarr) {
                 $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('purchase_order', '=', NULL)->where('gross_amount', '=', NULL)->where('soft_delete', '!=', 1)->first();
-                        $null_grossarr[] = $PurchaseArray->id;
+                if($PurchaseArray){
+                    $null_grossarr[] = $PurchaseArray->id;
+                }
             }
 
            
@@ -350,7 +354,9 @@ class PurchaseController extends Controller
             $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             foreach ($All_supplier as $key => $All_supplierarr) {
                 $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('purchase_order', '=', NULL)->where('gross_amount', '=', NULL)->where('soft_delete', '!=', 1)->first();
-                        $null_grossarr[] = $PurchaseArray->id;
+                if($PurchaseArray){
+                    $null_grossarr[] = $PurchaseArray->id;
+                }
             }
            
 
