@@ -111,7 +111,35 @@ class SupplierController extends Controller
 
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
-        return view('page.backend.supplier.index', compact('supplierarr_data', 'tot_balance_Arr', 'allbranch'));
+        $total_purchase_amount = Purchase::where('soft_delete', '!=', 1)->sum('gross_amount');
+        if($total_purchase_amount != ""){
+            $total_purchaseAmount = $total_purchase_amount;
+        }else {
+            $total_purchaseAmount = '0';
+        }
+
+
+        $total_amuntpaid = Purchase::where('soft_delete', '!=', 1)->sum('paid_amount');
+        if($total_amuntpaid != ""){
+            $totalpaid_Amount = $total_amuntpaid;
+        }else {
+            $totalpaid_Amount = '0';
+        }
+        $paymenttotal_paid = PurchasePayment::where('soft_delete', '!=', 1)->sum('amount');
+        if($paymenttotal_paid != ""){
+            $totalpayment_paid = $paymenttotal_paid;
+        }else {
+            $totalpayment_paid = '0';
+        }
+
+        $totalamount_paid = $totalpaid_Amount + $totalpayment_paid;
+        
+
+
+        // Total Balance
+        $totalbalance = $total_purchaseAmount - $totalamount_paid;
+
+        return view('page.backend.supplier.index', compact('supplierarr_data', 'tot_balance_Arr', 'allbranch', 'total_purchaseAmount', 'totalamount_paid', 'totalbalance'));
     }
 
 
@@ -171,32 +199,26 @@ class SupplierController extends Controller
         }
         $alldata_branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $tot_balance_Arr = [];
+       
 
         foreach ($alldata_branch as $key => $alldata_branchs) {
             $Supplier_array = Supplier::where('soft_delete', '!=', 1)->get();
             foreach ($Supplier_array as $key => $Supplier_arra) {
 
-        $last_idrow = BranchwiseBalance::where('supplier_id', '=', $Supplier_arra->id)->where('branch_id', '=', $alldata_branchs->id)->first();
-
-
+            $last_idrow = BranchwiseBalance::where('supplier_id', '=', $Supplier_arra->id)->where('branch_id', '=', $alldata_branchs->id)->first();
         
+            if($last_idrow != ""){
+                if($last_idrow->purchase_balance != NULL){
+                    $tot_balace = $last_idrow->purchase_balance;
 
-        if($last_idrow != ""){
-            if($last_idrow->purchase_balance != NULL){
-                $tot_balace = $last_idrow->purchase_balance;
+                }else {
 
+                    $tot_balace = 0;
+                    
+                }
             }else {
-
                 $tot_balace = 0;
-                
             }
-        }else {
-            $tot_balace = 0;
-        }
-
-
-
-       
 
                 $tot_balance_Arr[] = array(
                     'Supplier_name' => $Supplier_arra->name,
@@ -206,12 +228,43 @@ class SupplierController extends Controller
                 );
 
             }
+
+            
+
+
         }
+            $total_purchase_amount = Purchase::where('soft_delete', '!=', 1)->where('branch_id', '=', $branch_id)->sum('gross_amount');
+            if($total_purchase_amount != ""){
+                $total_purchaseAmount = $total_purchase_amount;
+            }else {
+                $total_purchaseAmount = '0';
+            }
+
+
+            $total_amuntpaid = Purchase::where('soft_delete', '!=', 1)->where('branch_id', '=', $branch_id)->sum('paid_amount');
+            if($total_amuntpaid != ""){
+                $totalpaid_Amount = $total_amuntpaid;
+            }else {
+                $totalpaid_Amount = '0';
+            }
+            $paymenttotal_paid = PurchasePayment::where('soft_delete', '!=', 1)->where('branch_id', '=', $branch_id)->sum('amount');
+            if($paymenttotal_paid != ""){
+                $totalpayment_paid = $paymenttotal_paid;
+            }else {
+                $totalpayment_paid = '0';
+            }
+
+            $totalamount_paid = $totalpaid_Amount + $totalpayment_paid;
+            
+
+
+            // Total Balance
+            $totalbalance = $total_purchaseAmount - $totalamount_paid;
 
 
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
-        return view('page.backend.supplier.index', compact('supplierarr_data', 'tot_balance_Arr', 'allbranch'));
+        return view('page.backend.supplier.index', compact('supplierarr_data', 'tot_balance_Arr', 'allbranch', 'total_purchaseAmount', 'totalamount_paid', 'totalbalance'));
     }  
     
 

@@ -53,38 +53,37 @@ $pos = $matches[0];
 
 <div class="row">
     <div class="col-lg-3 col-sm-6 col-12">
-    <div class="dash-widget">
-    <div class="dash-widgetcontent">
-    <h5>Summary</h5>
-    <h6 style="opacity: 0%;">Summary</h6>
-    </div>
-    </div>
-    </div>
-    <div class="col-lg-3 col-sm-6 col-12">
-    <div class="dash-widget dash1">
-    <div class="dash-widgetcontent">
-    <h5>$<span class="counters" data-count="4385.00">$4,385.00</span></h5>
-    <h6>Total Sale Value</h6>
-    </div>
-    </div>
+        <div class="dash-widget">
+            <div class="dash-widgetcontent">
+                <h5>Summary</h5>
+                <h6 style="opacity: 0%;">Summary</h6>
+            </div>      
+        </div>
     </div>
     <div class="col-lg-3 col-sm-6 col-12">
-    <div class="dash-widget dash2">
-    <div class="dash-widgetcontent">
-    <h5>$<span class="counters" data-count="385656.50">385,656.50</span></h5>
-    <h6>Total Paid Value</h6>
-    </div>
-    </div>
+        <div class="dash-widget dash1">
+            <div class="dash-widgetcontent">
+                <h5>$<span class="counters" data-count="{{ $totsaleAmount }}"></span></h5>
+                <h6>Total Purchase Value</h6>
+            </div>
+        </div>
     </div>
     <div class="col-lg-3 col-sm-6 col-12">
-    <div class="dash-widget dash3">
-    <div class="dash-widgetcontent">
-    <h5>$<span class="counters" data-count="40000.00">400.00</span></h5>
-    <h6>Total Balance Value</h6>
+        <div class="dash-widget dash2">
+            <div class="dash-widgetcontent">
+                <h5>$<span class="counters" data-count="{{$total_saleamount_paid}}"></span></h5>
+                <h6>Total Paid Value</h6>
+            </div>
+        </div>
     </div>
+    <div class="col-lg-3 col-sm-6 col-12">
+        <div class="dash-widget dash3">
+            <div class="dash-widgetcontent">
+                <h5>$<span class="counters" data-count="{{$saletotal_balance }}"></span></h5>
+                <h6>Total Balance Value</h6>
+            </div>
+        </div>
     </div>
-    </div>
-
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">

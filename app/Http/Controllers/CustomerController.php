@@ -104,7 +104,34 @@ class CustomerController extends Controller
 
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
-        return view('page.backend.customer.index', compact('customerarr_data', 'tot_balance_Arr', 'allbranch'));
+        $total_sale_amount = Sales::where('soft_delete', '!=', 1)->sum('gross_amount');
+            if($total_sale_amount != ""){
+                $totsaleAmount = $total_sale_amount;
+            }else {
+                $totsaleAmount = '0';
+            }
+
+
+            // Total Paid
+            $total_salepaid = Sales::where('soft_delete', '!=', 1)->sum('paid_amount');
+            if($total_salepaid != ""){
+                $total_salepaid_Amount = $total_salepaid;
+            }else {
+                $total_salepaid_Amount = '0';
+            }
+            $payment_saletotal_paid = Salespayment::where('soft_delete', '!=', 1)->sum('amount');
+            if($payment_saletotal_paid != ""){
+                $total_sakepayment_paid = $payment_saletotal_paid;
+            }else {
+                $total_sakepayment_paid = '0';
+            }
+            $total_saleamount_paid = $total_salepaid_Amount + $total_sakepayment_paid;
+
+
+            // Total Balance
+            $saletotal_balance = $totsaleAmount - $total_saleamount_paid;
+
+        return view('page.backend.customer.index', compact('customerarr_data', 'tot_balance_Arr', 'allbranch', 'totsaleAmount', 'total_saleamount_paid', 'saletotal_balance'));
     }
 
 
@@ -196,7 +223,34 @@ class CustomerController extends Controller
         }
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
-        return view('page.backend.customer.index', compact('customerarr_data', 'tot_balance_Arr', 'allbranch'));
+            $total_sale_amount = Sales::where('soft_delete', '!=', 1)->where('branch_id', '=', $branch_id)->sum('gross_amount');
+            if($total_sale_amount != ""){
+                $totsaleAmount = $total_sale_amount;
+            }else {
+                $totsaleAmount = '0';
+            }
+
+
+            // Total Paid
+            $total_salepaid = Sales::where('soft_delete', '!=', 1)->where('branch_id', '=', $branch_id)->sum('paid_amount');
+            if($total_salepaid != ""){
+                $total_salepaid_Amount = $total_salepaid;
+            }else {
+                $total_salepaid_Amount = '0';
+            }
+            $payment_saletotal_paid = Salespayment::where('soft_delete', '!=', 1)->where('branch_id', '=', $branch_id)->sum('amount');
+            if($payment_saletotal_paid != ""){
+                $total_sakepayment_paid = $payment_saletotal_paid;
+            }else {
+                $total_sakepayment_paid = '0';
+            }
+            $total_saleamount_paid = $total_salepaid_Amount + $total_sakepayment_paid;
+
+
+            // Total Balance
+            $saletotal_balance = $totsaleAmount - $total_saleamount_paid;
+
+        return view('page.backend.customer.index', compact('customerarr_data', 'tot_balance_Arr', 'allbranch', 'totsaleAmount', 'total_saleamount_paid', 'saletotal_balance'));
     }
 
     public function store(Request $request)
