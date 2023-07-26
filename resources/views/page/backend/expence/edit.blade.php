@@ -33,9 +33,9 @@
                             </div>
                         </div>
 
-                        
 
-                        <div class="col-lg-3 col-sm-3 col-12">
+
+                        <div class="col-lg-5 col-sm-5 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Branch<span
                                         style="color: red;">*</span></label>
@@ -57,8 +57,8 @@
                     <br />
 
                     <div class="row">
-                        <div class="table-responsive col-lg-10 col-sm-12 col-10">
-                            
+                        <div class="table-responsive col-lg-12 col-sm-12 col-12">
+
                             <table class="table">
                                 <thead>
                                     <tr>
