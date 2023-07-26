@@ -20,7 +20,7 @@
                             </div>
                         </form>
                         <a href="{{ route('salespayment.create') }}" class="btn btn-added" style="margin-right: 10px;">Add
-                            Purchase Payment</a>
+                            Sales Payment</a>
                     </div>
                 </div>
             </div>
