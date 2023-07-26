@@ -12,6 +12,46 @@
             </div>
         </div>
 
+
+        @php
+
+preg_match("/[^\/]+$/", Request::url(), $matches);
+$pos = $matches[0];
+@endphp
+<div class="row py-2" style="margin-bottom:10px;">
+<div class="col-lg-2 col-sm-4 col-6">
+    <a href="{{ route('supplier.index') }}" style="color: black">
+        <div class="dash-widget" @if ($pos == "supplier")
+        style="border-color:red; background-color: red; margin-bottom:18px;"
+        @endif>
+            <div class="dash-widgetcontent">
+                <h6 @if ($pos == "supplier") style="font-weight: bold; color:white" @endif>All</h6>
+            </div>
+        </div>
+    </a>
+</div>
+                @php
+                $lastword = Request::url();
+                preg_match("/[^\/]+$/", $lastword, $matches);
+                $last_word = $matches[0];
+                @endphp
+@foreach ($allbranch as $keydata => $allbranches)
+
+    <div class="col-lg-2 col-sm-4 col-6">
+        <a href="{{ route('supplier.branchdata', ['branch_id' => $allbranches->id]) }}">
+            <div class="dash-widget " @if ($last_word == $allbranches->id)
+        style="border-color:red; background-color: red;"
+        @endif >
+                <div class="dash-widgetcontent">
+                    <h6 @if ($last_word == $allbranches->id) style="font-weight: bold; color:white" @endif>{{ $allbranches->shop_name }}</h6>
+                </div>
+            </div>
+        </a>
+    </div>
+@endforeach
+</div>
+
+
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">

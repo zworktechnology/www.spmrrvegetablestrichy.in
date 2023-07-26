@@ -109,6 +109,57 @@ $(".purchaseclose").click(function() {
 
 
 
+        $(document).on('click', '.addpurchaseorderfields', function() {
+         ++i;
+                $(".purchaseorder_fields").append(
+                    '<tr>' +
+                    '<td class=""><input type="hidden"id="purchase_detail_id"name="purchase_detail_id[]" />' +
+                    '<select class="form-control js-example-basic-single product_id select"name="product_id[]" id="product_id' + i + '"required>' +
+                    '<option value="" selected hidden class="text-muted">Select Product</option></select>' +
+                    '</td>' +
+                    '<td><select class=" form-control bagorkg" name="bagorkg[]" id="bagorkg1"required>' +
+                    '<option value="" selected hidden class="text-muted">Select</option>' +
+                    '<option value="bag">Bag</option><option value="kg">Kg</option>' +
+                    '</select></td>' +
+                    '<td><input type="text" class="form-control count" id="count" name="count[]" placeholder="count" value="" required /></td>' +
+                    '<td><input type="text" class="form-control price_per_kg" id="price_per_kg" name="price_per_kg[]" placeholder="Price Per count" required /></td>' +
+                    '<td></td>' +
+                    '<td class="text-end"><input type="text" class="form-control total_price" id="total_price" style="background-color: #e9ecef;" readonly name="total_price[]" placeholder=""required /></td>' +
+                    '<td><button style="width: 35px;margin-right:5px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary addpurchaseorderfields" type="button" id="" value="Add">+</button>' +
+                    '<button style="width: 35px;" class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-tr" type="button" >-</button> </td>' +
+                    '</tr>'
+                );
+
+                $.ajax({
+                    url: '/getProducts/',
+                    type: 'get',
+                    dataType: 'json',
+                    success: function(response) {
+                        //console.log(response['data']);
+                        var len = response['data'].length;
+
+                        var selectedValues = new Array();
+
+                        if (len > 0) {
+                            for (var i = 0; i < len; i++) {
+
+                                    var id = response['data'][i].id;
+                                    var name = response['data'][i].name;
+                                    var option = "<option value='" + id + "'>" + name +
+                                        "</option>";
+                                    selectedValues.push(option);
+                            }
+                        }
+                        ++j;
+                        $('#product_id' + j).append(selectedValues);
+                        //add_count.push(Object.keys(selectedValues).length);
+                    }
+                });
+        });
+
+
+
+
         $('.commission_ornet').on('change', function() {
             var commission_ornet = this.value;
             if(commission_ornet == 'commission'){
@@ -980,6 +1031,58 @@ $(document).ready(function() {
                             }
                         }++j;
                         $('#sales_product_id' + j).append(selectedValues);
+                    }
+                });
+
+    });
+
+
+
+
+    $(document).on('click', '.addsalesorderfields', function() {
+        ++i;
+                $("#sales_orderfields").append(
+                    '<tr>' +
+                    '<td class=""><input type="hidden"id="sales_detail_id"name="sales_detail_id[]" />' +
+                    '<select class="form-control js-example-basic-single select "name="sales_product_id[]" id="product_id' + i + '"required>' +
+                    '<option value="" selected hidden class="text-muted">Select Product</option></select>' +
+                    '</td>' +
+                    '<td><select class=" form-control sales_bagorkg" name="sales_bagorkg[]" id="sales_bagorkg' + i + '"required>' +
+                    '<option value="" selected hidden class="text-muted">Select</option>' +
+                    '<option value="bag">Bag</option><option value="kg">Kg</option>' +
+                    '</select></td>' +
+                    '<td><input type="text" class="form-control sales_count" id="sales_count' + i + '" name="sales_count[]" placeholder="count" value="" required /></td>' +
+                    '<td><input type="text" class="form-control sales_priceperkg" id="sales_priceperkg" name="sales_priceperkg[]" placeholder="Price Per Count" value="" required /></td>' +
+                    '<td class="text-end"><input type="text" class="form-control sales_total_price" id="sales_total_price" readonly style="background-color: #e9ecef;" name="sales_total_price[]" placeholder="" value="" required /></td>' +
+                    '<td><button style="width: 35px;margin-right:5px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary addsalesorderfields" type="button" id="" value="Add">+</button>' +
+                    '<button style="width: 35px;" class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-salestr" type="button" >-</button></td>' +
+                    '</tr>'
+                );
+
+
+                $.ajax({
+                    url: '/getProducts/',
+                    type: 'get',
+                    dataType: 'json',
+                    success: function(response) {
+                        //console.log(response['data']);
+                        var len = response['data'].length;
+
+                        var selectedValues = new Array();
+
+                        if (len > 0) {
+                            for (var i = 0; i < len; i++) {
+
+                                    var id = response['data'][i].id;
+                                    var name = response['data'][i].name;
+                                    var option = "<option value='" + id + "'>" + name +
+                                        "</option>";
+                                    selectedValues.push(option);
+                            }
+                        }
+                        ++j;
+                        $('#product_id' + j).append(selectedValues);
+                        //add_count.push(Object.keys(selectedValues).length);
                     }
                 });
 

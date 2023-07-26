@@ -109,10 +109,111 @@ class SupplierController extends Controller
         }
 
 
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
-
-        return view('page.backend.supplier.index', compact('supplierarr_data', 'tot_balance_Arr'));
+        return view('page.backend.supplier.index', compact('supplierarr_data', 'tot_balance_Arr', 'allbranch'));
     }
+
+
+    public function branchdata($branch_id) 
+    {
+
+        $data = Supplier::where('soft_delete', '!=', 1)->get();
+        $supplierarr_data = [];
+        foreach ($data as $key => $datas) {
+
+            $supplier_name = Supplier::findOrFail($datas->id);
+            // Grand total
+            $total_purchase_amt = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $datas->id)->where('branch_id', '=', $branch_id)->sum('gross_amount');
+            if($total_purchase_amt != ""){
+                $tot_purchaseAmount = $total_purchase_amt;
+            }else {
+                $tot_purchaseAmount = '0';
+            }
+
+            // Total Paid
+            $total_paid = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $datas->id)->where('branch_id', '=', $branch_id)->sum('paid_amount');
+            if($total_paid != ""){
+                $total_paid_Amount = $total_paid;
+            }else {
+                $total_paid_Amount = '0';
+            }
+            $payment_total_paid = PurchasePayment::where('soft_delete', '!=', 1)->where('supplier_id', '=', $datas->id)->where('branch_id', '=', $branch_id)->sum('amount');
+            if($payment_total_paid != ""){
+                $total_payment_paid = $payment_total_paid;
+            }else {
+                $total_payment_paid = '0';
+            }
+
+            $total_amount_paid = $total_paid_Amount + $total_payment_paid;
+            
+
+
+            // Total Balance
+            $total_balance = $tot_purchaseAmount - $total_amount_paid;
+            
+
+
+            $supplierarr_data[] = array(
+                'unique_key' => $datas->unique_key,
+                'name' => $supplier_name->name,
+                'contact_number' => $datas->contact_number,
+                'shop_name' => $datas->shop_name,
+                'status' => $datas->status,
+                'id' => $datas->id,
+                'total_purchase_amt' => $tot_purchaseAmount,
+                'total_paid' => $total_amount_paid,
+                'email_address' => $datas->email_address,
+                'shop_address' => $datas->shop_address,
+                'shop_contact_number' => $datas->shop_contact_number,
+                'balance_amount' => $total_balance,
+            );
+        }
+        $alldata_branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $tot_balance_Arr = [];
+
+        foreach ($alldata_branch as $key => $alldata_branchs) {
+            $Supplier_array = Supplier::where('soft_delete', '!=', 1)->get();
+            foreach ($Supplier_array as $key => $Supplier_arra) {
+
+        $last_idrow = BranchwiseBalance::where('supplier_id', '=', $Supplier_arra->id)->where('branch_id', '=', $alldata_branchs->id)->first();
+
+
+        
+
+        if($last_idrow != ""){
+            if($last_idrow->purchase_balance != NULL){
+                $tot_balace = $last_idrow->purchase_balance;
+
+            }else {
+
+                $tot_balace = 0;
+                
+            }
+        }else {
+            $tot_balace = 0;
+        }
+
+
+
+       
+
+                $tot_balance_Arr[] = array(
+                    'Supplier_name' => $Supplier_arra->name,
+                    'branch_name' => $alldata_branchs->shop_name,
+                    'Supplier_id' => $Supplier_arra->id,
+                    'balance_amount' => $tot_balace
+                );
+
+            }
+        }
+
+
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+        return view('page.backend.supplier.index', compact('supplierarr_data', 'tot_balance_Arr', 'allbranch'));
+    }  
+    
 
     public function store(Request $request)
     {

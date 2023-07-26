@@ -2871,6 +2871,19 @@ class PurchaseController extends Controller
             $data->branch_id = $request->get('branch_id');
             $data->date = $request->get('date');
             $data->time = $request->get('time');
+            $data->bank_id = $request->get('bank_id');
+            $data->total_amount = $request->get('total_amount');
+
+            $data->commission_ornet = $request->get('commission_ornet');
+            $data->commission_percent = $request->get('commission_percent');
+            $data->commission_amount = $request->get('commission_amount');
+
+            $data->tot_comm_extracost = $request->get('tot_comm_extracost');
+            $data->gross_amount = $request->get('gross_amount');
+            $data->old_balance = $request->get('old_balance');
+            $data->grand_total = $request->get('grand_total');
+            $data->paid_amount = $request->get('payable_amount');
+            $data->balance_amount = $request->get('pending_amount');
             $data->bill_no = $invoiceno;
             $data->purchase_order = '1';
             $data->save();
@@ -2890,11 +2903,63 @@ class PurchaseController extends Controller
                 $PurchaseProduct->productlist_id = $product_id;
                 $PurchaseProduct->bagorkg = $request->bagorkg[$key];
                 $PurchaseProduct->count = $request->count[$key];
+                $PurchaseProduct->price_per_kg = $request->price_per_kg[$key];
+                $PurchaseProduct->total_price = $request->total_price[$key];
                 $PurchaseProduct->purchase_order = '1';
                 $PurchaseProduct->save();
 
 
             }
+
+
+            foreach ($request->get('extracost_note') as $key => $extracost_note) {
+                if ($extracost_note != "") {
+                    $pecrandomkey = Str::random(5);
+
+                    $PurchaseExtracost = new PurchaseExtracost;
+                    $PurchaseExtracost->unique_key = $pecrandomkey;
+                    $PurchaseExtracost->purchase_id = $insertedId;
+                    $PurchaseExtracost->extracost_note = $extracost_note;
+                    $PurchaseExtracost->extracost = $request->extracost[$key];
+                    $PurchaseExtracost->purchase_order = '1';
+                    $PurchaseExtracost->save();
+                }
+            }
+
+
+
+            $PurchseData = BranchwiseBalance::where('supplier_id', '=', $supplier_id)->where('branch_id', '=', $bill_branchid)->first();
+            if($PurchseData != ""){
+
+                $old_grossamount = $PurchseData->purchase_amount;
+                $old_paid = $PurchseData->purchase_paid;
+
+                $gross_amount = $request->get('gross_amount');
+                $payable_amount = $request->get('payable_amount');
+
+                $new_grossamount = $old_grossamount + $gross_amount;
+                $new_paid = $old_paid + $payable_amount;
+                $new_balance = $new_grossamount - $new_paid;
+
+                DB::table('branchwise_balances')->where('supplier_id', $supplier_id)->where('branch_id', $bill_branchid)->update([
+                    'purchase_amount' => $new_grossamount,  'purchase_paid' => $new_paid, 'purchase_balance' => $new_balance
+                ]);
+
+            }else {
+                $gross_amount = $request->get('gross_amount');
+                $payable_amount = $request->get('payable_amount');
+                $balance_amount = $gross_amount - $payable_amount;
+
+                $data = new BranchwiseBalance();
+
+                $data->supplier_id = $supplier_id;
+                $data->branch_id = $bill_branchid;
+                $data->purchase_amount = $request->get('gross_amount');
+                $data->purchase_paid = $request->get('payable_amount');
+                $data->purchase_balance = $balance_amount;
+                $data->save();
+            }
+
             return redirect()->route('purchaseorder.purchaseorder_index')->with('add', 'Purchase Data added successfully!');
 
 

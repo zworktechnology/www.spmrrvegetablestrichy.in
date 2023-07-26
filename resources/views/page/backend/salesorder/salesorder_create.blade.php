@@ -68,8 +68,8 @@
 
                <div class="col-lg-1 col-sm-1 col-12">
                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Action</label>
-                <button style="margin-top:10px; width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
-                              type="button" id="addsalesproductfields" value="Add">+</button>
+                <button style="margin-top:10px; width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary addsalesorderfields"
+                              type="button" id="" value="Add">+</button>
                </div>
 
             </div>
@@ -90,12 +90,17 @@
                            
                         </tr>
                      </thead>
-                     <tbody id="sales_productfields">
+                     <tbody id="sales_orderfields">
                         <tr>
                            <td class="">
                               <input type="hidden"id="sales_detail_id"name="sales_detail_id[]" />
                               <select class="form-control js-example-basic-single select sales_product_id" name="sales_product_id[]" id="sales_product_id1"required>
-                                 <option value="" selected hidden class="text-muted">Select Product</option>
+                              <option value="" selected hidden class="text-muted">Select Product
+                                                </option>
+                                                @foreach ($productlist as $productlists)
+                                                    <option value="{{ $productlists->id }}">{{ $productlists->name }}
+                                                    </option>
+                                                @endforeach
                                     
                               </select>
                            </td>
@@ -108,8 +113,9 @@
                            <td><input type="text" class="form-control sales_count" id="sales_count" name="sales_count[]" placeholder="count" value="" required /></td>
                            <td><input type="text" class="form-control sales_priceperkg" id="sales_priceperkg" name="sales_priceperkg[]" placeholder="Price Per Count" value="" required /></td>
                            <td class="text-end"><input type="text" class="form-control sales_total_price" readonly id="sales_total_price"  style="background-color: #e9ecef;" name="sales_total_price[]" placeholder="" value="" required /></td>
-                           <td>
-                            <button style="width: 35px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-salestr" type="button" >-</button>
+                           <td><button style="width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary addsalesorderfields"
+                              type="button" id="" value="Add">+</button>
+                            <button style="width: 35px;" class="text-white py-1 font-medium rounded-lg text-sm  text-center btn btn-danger remove-salestr" type="button" >-</button>
                            </td>
                         </tr>
                      </tbody>

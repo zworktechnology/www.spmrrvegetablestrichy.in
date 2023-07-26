@@ -79,6 +79,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
          Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/customer/view/{unique_key}', [CustomerController::class, 'view'])->name('customer.view');
          // REPORT VIEW
          Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/customer/viewfilter', [CustomerController::class, 'viewfilter'])->name('customer.viewfilter');
+         // INDEX BRANCH WISE
+         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/customer/branchdata/{branch_id}', [CustomerController::class, 'branchdata'])->name('customer.branchdata');
     });
 
     // SUPPLIER CONTROLLER
@@ -99,6 +101,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/supplier/view/{unique_key}', [SupplierController::class, 'view'])->name('supplier.view');
         // REPORT VIEW
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/supplier/viewfilter', [SupplierController::class, 'viewfilter'])->name('supplier.viewfilter');
+         // INDEX BRANCH WISE
+         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/supplier/branchdata/{branch_id}', [SupplierController::class, 'branchdata'])->name('supplier.branchdata');
     });
 
 

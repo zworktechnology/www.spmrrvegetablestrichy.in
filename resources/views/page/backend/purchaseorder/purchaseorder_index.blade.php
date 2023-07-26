@@ -98,19 +98,12 @@
                                     <td>{{ $purchasedata['gross_amount'] }}</td>
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
-                                            @if ($purchasedata['status'] == 0)
-                                                <li>
-                                                    <a href="{{ route('purchaseorder.purchaseorder_edit', ['unique_key' => $purchasedata['unique_key']]) }}"
-                                                        class="badges bg-lightyellow" style="color: white">Edit</a>
-                                                </li>
-                                            @endif
-                                            @if ($purchasedata['status'] == 1)
+                                            
+                                    
                                                 <li>
                                                     <a href="{{ route('purchaseorder.purchaseorder_invoiceedit', ['unique_key' => $purchasedata['unique_key']]) }}"
                                                         class="badges bg-lightyellow" style="color: white">Edit</a>
                                                 </li>
-                                            @endif
-                                           
                                             <li>
                                                 <a href="#purchaseorderview{{ $purchasedata['unique_key'] }}"
                                                     data-bs-toggle="modal" data-id="{{ $purchasedata['id'] }}"
@@ -120,24 +113,10 @@
                                             </li>
 
                                             <li>
-                                                @if ($purchasedata['status'] == 0)
-                                                    @foreach (array_unique($purchasedata['null_grossarr']) as $index => $null_grossarr)
-                                                    
-                                                        @if ($purchasedata['id'] == $null_grossarr)
+  
 
-                                                            
-                                                                <a href="{{ route('purchaseorder.purchaseorder_invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
-                                                                    class="badges bg-lightgreen purchase_pattiyal" style="color: white" data-id="{{ $purchasedata['unique_key'] }}">
-                                                                    Pattial</a>
-                                                        
-
-                                                        @endif
-                                                    @endforeach
-
-                                                @elseif ($purchasedata['status'] == 1)
-                                                    <a href="{{ route('purchaseorder.purchaseorder_printview', ['unique_key' => $purchasedata['unique_key']]) }}"
+                                                 <a href="{{ route('purchaseorder.purchaseorder_printview', ['unique_key' => $purchasedata['unique_key']]) }}"
                                                         class="badges bg-green" style="color: white">Invoice</a>
-                                                @endif
                                             </li>
 
                                         </ul>
