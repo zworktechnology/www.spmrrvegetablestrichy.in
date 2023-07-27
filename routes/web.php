@@ -41,6 +41,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // DASHBOARD
     Route::middleware(['auth:sanctum', 'verified'])->get('/home', [HomeController::class, 'index'])->name('home');
+    // DASHBOARD FILTER
     Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/home/datefilter', [HomeController::class, 'datefilter'])->name('home.datefilter');
 
     // INVITE CONTROLLER
@@ -131,8 +132,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
          Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/expence/update/{unique_key}', [ExpenceController::class, 'update'])->name('expence.update');
         // STORE
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/expence/store', [ExpenceController::class, 'store'])->name('expence.store');
-        // EDIT
-        Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/expence/edit/{unique_key}', [ExpenceController::class, 'edit'])->name('expence.edit');
         // DELETE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/expence/delete/{unique_key}', [ExpenceController::class, 'delete'])->name('expence.delete');
         // REPORT
@@ -161,7 +160,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // PRODUCTLIST CONTROLLER
     Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // INDEX
-        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/product', [ProductlistController::class, 'index'])->name('product.index');
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/productlist', [ProductlistController::class, 'index'])->name('product.index');
         // STORE
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/productlist/store', [ProductlistController::class, 'store'])->name('productlist.store');
         // EDIT
@@ -257,7 +256,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salespayment/branchdata/{branch_id}', [SalespaymentController::class, 'branchdata'])->name('salespayment.branchdata');
         // DATAE FILTER
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/salespayment/datefilter', [SalespaymentController::class, 'datefilter'])->name('salespayment.datefilter');
-        
+
     });
 
 
