@@ -104,6 +104,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/supplier/viewfilter', [SupplierController::class, 'viewfilter'])->name('supplier.viewfilter');
          // INDEX BRANCH WISE
          Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/supplier/branchdata/{branch_id}', [SupplierController::class, 'branchdata'])->name('supplier.branchdata');
+
+
+
     });
 
 
@@ -367,3 +370,7 @@ Route::get('/Checkinvoiceupdated', [PurchaseController::class, 'Checkinvoiceupda
 
 Route::get('/getpurchaseorderview', [PurchaseController::class, 'getpurchaseorderview']);
 Route::get('/salesorderview', [SalesController::class, 'salesorderview']);
+
+Route::get('/pdf_export/{last_word}', [SupplierController::class, 'pdf_export']);
+
+Route::get('/allpdf_export', [SupplierController::class, 'allpdf_export']);
