@@ -16,7 +16,7 @@
                 <form autocomplete="off" method="POST" action="{{ route('purchaseorder.purchaseorder_store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-lg-3 col-sm-3 col-12">
+                        <div class="col-lg-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Date<span
                                         style="color: red;">*</span></label>
@@ -24,7 +24,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-3 col-sm-3 col-12">
+                        <div class="col-lg-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span
                                         style="color: red;">*</span></label>
@@ -32,7 +32,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-3 col-sm-3 col-12">
+                        <div class="col-lg-4 col-sm-4 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Supplier<span
                                         style="color: red;">*</span> </label>
@@ -45,7 +45,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-3 col-sm-3 col-12">
+                        <div class="col-lg-4 col-sm-4 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Branch<span
                                         style="color: red;">*</span></label>
@@ -57,7 +57,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-sm-4 col-12">
+                        <div class="col-lg-4 col-sm-4 col-12">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank<span
                                         style="color: red;">*</span></label>
@@ -80,11 +80,11 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th style="font-size:15px; width: 20%;">Product</th>
+                                        <th style="font-size:15px; width:20%;">Product</th>
                                         <th style="font-size:15px; width:15%;">Bag / Kg</th>
-                                        <th style="font-size:15px; width:15%;">Count </th>
-                                        <th style="font-size:15px; width:15%;">Price / Count</th>
-                                        <th style="font-size:15px; width:10%;">Amount</th>
+                                        <th style="font-size:15px; width:10%;">Count </th>
+                                        <th style="font-size:15px; width:10%;">Price Per Count</th>
+                                        <th style="font-size:15px; width:15%;">Amount</th>
                                         <th style="font-size:15px; width:15%;">Amount</th>
                                         <th style="font-size:15px; width:10%;">Action </th>
                                     </tr>
@@ -123,15 +123,14 @@
                                         <td>
                                             <button style="width: 35px;margin-right:5px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary addpurchaseorderfields" type="button" id="" value="Add">+</button>
                                             <button style="width: 35px;" class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-tr" type="button" >-</button>
-                                            
+
                                         </td>
                                     </tr>
                                 </tbody>
-                                <tbody><tr><td></td></tr></tbody>
                                 <tbody>
                                     <tr>
                                         <td colspan="3">
-                                            
+
 
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input commission_ornet" type="radio" name="commission_ornet" id="commission" value="commission">
@@ -149,6 +148,7 @@
                                         <td><input type="text" style="display:none" value="" class="form-control commission_percent" name="commission_percent" id="commission_percent"/></td>
                                         <td><input type="text" class="form-control commission_amount" readonly  name="commission_amount" id="commission_amount" value=""/></td>
                                         <td></td>
+                                        <td></td>
                                     </tr>
                                 </tbody>
                                 <tbody id="extracost_tr">
@@ -159,12 +159,14 @@
                                             <input type="text" class="form-control"
                                                 id="extracost_note" placeholder="Note" value=""
                                                 name="extracost_note[]" required /></td>
-                                        
+
                                         <td><input type="text" class="form-control extracost" id="extracost"
                                                 placeholder="Extra Cost" required name="extracost[]"
                                                 value="" /></td>
                                         <td><button style="width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
                                                 type="button" id="addextranotefields" value="Add">+</button></td>
+                                        <td></td>
+
                                     </tr>
                                 </tbody>
                                 <tbody>
@@ -176,6 +178,8 @@
                                         <td><input type="text" class="form-control total_amount" id="total_amount"
                                                 name="total_amount" value="" readonly
                                                 style="background-color: #e9ecef;" /></td>
+                                        <td></td>
+
                                     </tr>
                                     <tr>
                                         <td colspan="4" class="text-end" style="font-size:15px;color: black;">Gross
@@ -183,6 +187,8 @@
                                         <td colspan="2"><input type="text" class="form-control gross_amount" id="gross_amount"
                                                 placeholder="Gross Amount" value=""
                                                 readonly style="background-color: #e9ecef;" name="gross_amount" /></td>
+                                        <td></td>
+
                                     </tr>
                                     <tr>
                                         <td colspan="4" class="text-end" style="font-size:15px;color: red;">Old
@@ -190,6 +196,8 @@
                                         <td colspan="2"><input type="text" class="form-control old_balance" id="old_balance"
                                                 placeholder="Old Balance" readonly value="0"
                                                 style="background-color: #e9ecef;" name="old_balance" /></td>
+                                        <td></td>
+
                                     </tr>
                                     <tr>
                                         <td colspan="4" class="text-end" style="font-size:15px;color: green;">Grand
@@ -198,6 +206,8 @@
                                                 readonly placeholder="Grand Total"
                                                 value=""
                                                 style="background-color: #e9ecef;" name="grand_total" /></td>
+                                        <td></td>
+
                                     </tr>
                                     <tr>
                                         <td colspan="4" class="text-end" style="font-size:15px;color: black;">Payable
@@ -205,6 +215,8 @@
                                         <td colspan="2"><input type="text" class="form-control payable_amount"
                                                 name="payable_amount" placeholder="Payable Amount" required
                                                 value="" id="payable_amount"></td>
+                                        <td></td>
+
                                     </tr>
                                     <tr>
                                         <td colspan="4" class="text-end" style="font-size:15px;color: black;">Pending
@@ -213,19 +225,13 @@
                                                 name="pending_amount" value=""
                                                 readonly style="background-color: #e9ecef;" placeholder="Pending Amount"
                                                 id="pending_amount"></td>
+                                        <td></td>
+
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
-
-
-
-
-
-
-                    <br /><br />
 
                     <div class="modal-footer">
                         <input type="submit" class="btn btn-primary" onclick="purchase_ordersubmitForm(this);" />

@@ -17,7 +17,7 @@
                         </div>
                     </div>
                 </form>
-                <a href="{{ route('salesorder.salesorder_create') }}" class="btn btn-added">Add Salesorder</a>
+                <a href="{{ route('salesorder.salesorder_create') }}" class="btn btn-added">Add Sales - Order</a>
             </div>
         </div>
         <div class="row py-2" style="margin-bottom:10px;">

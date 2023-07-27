@@ -57,21 +57,21 @@ $pos = $matches[0];
             <div class="dash-widgetcontent">
                 <h5>Summary</h5>
                 <h6 style="opacity: 0%;">Summary</h6>
-            </div>      
+            </div>
         </div>
     </div>
     <div class="col-lg-3 col-sm-6 col-12">
         <div class="dash-widget dash1">
             <div class="dash-widgetcontent">
-                <h5>$<span class="counters" data-count="{{ $totsaleAmount }}"></span></h5>
-                <h6>Total Purchase Value</h6>
+                <h5>₹ <span class="counters" data-count="{{ $totsaleAmount }}"></span></h5>
+                <h6>Total Sales Value</h6>
             </div>
         </div>
     </div>
     <div class="col-lg-3 col-sm-6 col-12">
         <div class="dash-widget dash2">
             <div class="dash-widgetcontent">
-                <h5>$<span class="counters" data-count="{{$total_saleamount_paid}}"></span></h5>
+                <h5>₹ <span class="counters" data-count="{{$total_saleamount_paid}}"></span></h5>
                 <h6>Total Paid Value</h6>
             </div>
         </div>
@@ -79,7 +79,7 @@ $pos = $matches[0];
     <div class="col-lg-3 col-sm-6 col-12">
         <div class="dash-widget dash3">
             <div class="dash-widgetcontent">
-                <h5>$<span class="counters" data-count="{{$saletotal_balance }}"></span></h5>
+                <h5>₹ <span class="counters" data-count="{{$saletotal_balance }}"></span></h5>
                 <h6>Total Balance Value</h6>
             </div>
         </div>
@@ -119,14 +119,14 @@ $pos = $matches[0];
                                                     data-bs-target=".cusomerdelete-modal-xl{{ $customertdata['unique_key'] }}" class="badges bg-lightgrey" style="color: white">Delete</a>
                                             </li>
 
-                                            <li>
+                                            {{-- <li>
                                                 <a href="#customercheckbalance{{ $customertdata['unique_key'] }}" data-bs-toggle="modal"
                                                     data-id="{{ $customertdata['id'] }}"
                                                     data-bs-target=".customercheckbalance-modal-xl{{ $customertdata['unique_key'] }}" class="badges bg-lightred customercheckbalance" style="color: white">Check Balance</a>
-                                            </li>
+                                            </li> --}}
                                             <li>
                                                 <a href="{{ route('customer.view', ['unique_key' => $customertdata['unique_key']]) }}"
-                                                class="badges bg-lightgreen" style="color: white">view</a>
+                                                class="badges bg-lightgreen" style="color: white">View</a>
                                             </li>
                                         </ul>
                                     </td>

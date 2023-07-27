@@ -22,7 +22,7 @@
                        <input type="date" name="sales_date" placeholder="" value="{{ $today }}">
                     </div>
                  </div>
-  
+
                  <div class="col-lg-6 col-sm-6 col-12">
                     <div class="form-group">
                        <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span style="color: red;">*</span></label>
@@ -41,7 +41,7 @@
                      </select>
                   </div>
                </div>
-            
+
                <div class="col-lg-4 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Customer<span style="color: red;">*</span> </label>
@@ -54,7 +54,7 @@
                   </div>
                </div>
 
-               <div class="col-lg-3 col-sm-6 col-12">
+               <div class="col-lg-4 col-sm-6 col-12">
                   <div class="form-group">
                      <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank<span style="color: red;">*</span></label>
                      <select class="select" name="sales_bank_id" id="sales_bank_id">
@@ -64,12 +64,6 @@
                         @endforeach
                      </select>
                   </div>
-               </div>
-
-               <div class="col-lg-1 col-sm-1 col-12">
-                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Action</label>
-                <button style="margin-top:10px; width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary addsalesorderfields"
-                              type="button" id="" value="Add">+</button>
                </div>
 
             </div>
@@ -87,7 +81,7 @@
                            <th style="font-size:15px; width:18%;">Price / Count</th>
                            <th style="font-size:15px; width:20%;">Amount</th>
                            <th style="font-size:15px; width:20%;">Action</th>
-                           
+
                         </tr>
                      </thead>
                      <tbody id="sales_orderfields">
@@ -101,7 +95,7 @@
                                                     <option value="{{ $productlists->id }}">{{ $productlists->name }}
                                                     </option>
                                                 @endforeach
-                                    
+
                               </select>
                            </td>
                            <td><select class=" form-control sales_bagorkg" name="sales_bagorkg[]" id="sales_bagorkg1"required>
@@ -126,33 +120,33 @@
                            <td></td>
                            <td style="font-size:15px;color: black;" class="text-end">Total</td>
                            <td colspan="2"><input type="text" class="form-control sales_total_amount" id="sales_total_amount" name="sales_total_amount" readonly style="background-color: #e9ecef;" /></td>
-                           
+
                         </tr>
                         <tr>
                            <td style="font-size:15px;color: black;" class="text-end">Extra Cost<span style="color: red;">*</span></td>
                            <td colspan="3"><input type="text" class="form-control" id="sales_extracost_note" placeholder="Note" name="sales_extracost_note" value="No"/></td>
                            <td colspan="2"><input type="text" class="form-control sales_extracost" id="sales_extracost" placeholder="Extra Cost" name="sales_extracost" value="0"/></td>
-                          
+
                         </tr>
                         <tr>
                            <td colspan="4" class="text-end" style="font-size:15px;color: black;">Gross Amount</td>
                            <td colspan="2"><input type="text" class="form-control sales_gross_amount" id="sales_gross_amount" placeholder="Gross Amount" readonly style="background-color: #e9ecef;" name="sales_gross_amount"/></td>
-                           
+
                         </tr>
                         <tr>
                            <td colspan="4" class="text-end" style="font-size:15px;color: red;">Old Balance</td>
                            <td colspan="2"><input type="text" class="form-control sales_old_balance" id="sales_old_balance" placeholder="Old Balance" readonly value="0" style="background-color: #e9ecef;" name="sales_old_balance"/></td>
-                           
+
                         </tr>
                         <tr>
                            <td colspan="4" class="text-end" style="font-size:15px;color: green;">Grand Total</td>
                            <td colspan="2"><input type="text" class="form-control sales_grand_total" id="sales_grand_total" readonly placeholder="Grand Total" style="background-color: #e9ecef;" name="sales_grand_total"/></td>
-                           
+
                         </tr>
                         <tr>
                            <td colspan="4" class="text-end" style="font-size:15px;color: black;">Payable Amount<span style="color: red;">*</span></td>
                            <td colspan="2"><input type="text" class="form-control salespayable_amount" name="salespayable_amount" placeholder="Payable Amount" id="salespayable_amount" required></td>
-                           
+
                         </tr>
                         <tr>
                            <td colspan="4" class="text-end" style="font-size:15px;color: black;">Pending Amount</td>
@@ -165,7 +159,7 @@
 
                <br/><br/>
 
-            
+
             <div class="modal-footer">
             <input type="submit" class="btn btn-primary" onclick="salesordersubmitForm(this);"/>
                <a href="{{ route('salesorder.salesorder_index') }}" class="btn btn-danger" value="">Cancel</a>
@@ -173,7 +167,7 @@
          </form>
 
 
-            
+
 
 
 

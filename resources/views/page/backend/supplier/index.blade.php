@@ -57,13 +57,13 @@ $pos = $matches[0];
             <div class="dash-widgetcontent">
                 <h5>Summary</h5>
                 <h6 style="opacity: 0%;">Summary</h6>
-            </div>      
+            </div>
         </div>
     </div>
     <div class="col-lg-3 col-sm-6 col-12">
         <div class="dash-widget dash1">
             <div class="dash-widgetcontent">
-                <h5>$<span class="counters" data-count="{{ $total_purchaseAmount }}"></span></h5>
+                <h5>₹ <span class="counters" data-count="{{ $total_purchaseAmount }}"></span></h5>
                 <h6>Total Purchase Value</h6>
             </div>
         </div>
@@ -71,7 +71,7 @@ $pos = $matches[0];
     <div class="col-lg-3 col-sm-6 col-12">
         <div class="dash-widget dash2">
             <div class="dash-widgetcontent">
-                <h5>$<span class="counters" data-count="{{$totalamount_paid}}"></span></h5>
+                <h5>₹ <span class="counters" data-count="{{$totalamount_paid}}"></span></h5>
                 <h6>Total Paid Value</h6>
             </div>
         </div>
@@ -79,7 +79,7 @@ $pos = $matches[0];
     <div class="col-lg-3 col-sm-6 col-12">
         <div class="dash-widget dash3">
             <div class="dash-widgetcontent">
-                <h5>$<span class="counters" data-count="{{$totalbalance }}"></span></h5>
+                <h5>₹ <span class="counters" data-count="{{$totalbalance }}"></span></h5>
                 <h6>Total Balance Value</h6>
             </div>
         </div>
@@ -120,14 +120,14 @@ $pos = $matches[0];
                                                     data-id="{{ $suppliertdata['unique_key'] }}"
                                                     data-bs-target=".supplierdelete-modal-xl{{ $suppliertdata['unique_key'] }}" class="badges bg-lightgrey" style="color: white">Delete</a>
                                             </li>
-                                            <li>
+                                            {{-- <li>
                                                 <a href="#checkbalance{{ $suppliertdata['unique_key'] }}" data-bs-toggle="modal"
                                                     data-id="{{ $suppliertdata['id'] }}"
                                                     data-bs-target=".checkbalance-modal-xl{{ $suppliertdata['unique_key'] }}" class="badges bg-lightred checkbalance" style="color: white">Check Balance</a>
-                                            </li>
+                                            </li> --}}
                                             <li>
                                                 <a href="{{ route('supplier.view', ['unique_key' => $suppliertdata['unique_key']]) }}"
-                                                class="badges bg-lightgreen" style="color: white">view</a>
+                                                class="badges bg-lightgreen" style="color: white">View</a>
                                             </li>
                                         </ul>
 
