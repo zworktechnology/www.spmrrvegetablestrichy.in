@@ -45,7 +45,14 @@ class SupplierController extends Controller
                 $total_payment_paid = '0';
             }
 
-            $total_amount_paid = $total_paid_Amount + $total_payment_paid;
+            $total_discount = PurchasePayment::where('soft_delete', '!=', 1)->where('supplier_id', '=', $datas->id)->sum('purchasepayment_discount');
+            if($total_discount != ""){
+                $total_discount_amont = $total_discount;
+            }else {
+                $total_discount_amont = '0';
+            }
+
+            $total_amount_paid = $total_paid_Amount + $total_payment_paid + $total_discount_amont;
             
 
 
@@ -67,6 +74,7 @@ class SupplierController extends Controller
                 'shop_address' => $datas->shop_address,
                 'shop_contact_number' => $datas->shop_contact_number,
                 'balance_amount' => $total_balance,
+                'total_discount_amont' => $total_discount_amont,
             );
         }
         $alldata_branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -132,7 +140,15 @@ class SupplierController extends Controller
             $totalpayment_paid = '0';
         }
 
-        $totalamount_paid = $totalpaid_Amount + $totalpayment_paid;
+
+        $discountpaid = PurchasePayment::where('soft_delete', '!=', 1)->sum('purchasepayment_discount');
+        if($discountpaid != ""){
+            $discount_paid = $discountpaid;
+        }else {
+            $discount_paid = '0';
+        }
+
+        $totalamount_paid = $totalpaid_Amount + $totalpayment_paid + $discount_paid;
         
 
 
@@ -173,7 +189,14 @@ class SupplierController extends Controller
                 $total_payment_paid = '0';
             }
 
-            $total_amount_paid = $total_paid_Amount + $total_payment_paid;
+            $total_discount = PurchasePayment::where('soft_delete', '!=', 1)->where('supplier_id', '=', $datas->id)->where('branch_id', '=', $branch_id)->sum('purchasepayment_discount');
+            if($total_discount != ""){
+                $total_discount_amont = $total_discount;
+            }else {
+                $total_discount_amont = '0';
+            }
+
+            $total_amount_paid = $total_paid_Amount + $total_payment_paid + $total_discount_amont;
             
 
 
@@ -195,6 +218,7 @@ class SupplierController extends Controller
                 'shop_address' => $datas->shop_address,
                 'shop_contact_number' => $datas->shop_contact_number,
                 'balance_amount' => $total_balance,
+                'total_discount_amont' => $total_discount_amont,
             );
         }
         $alldata_branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -254,7 +278,15 @@ class SupplierController extends Controller
                 $totalpayment_paid = '0';
             }
 
-            $totalamount_paid = $totalpaid_Amount + $totalpayment_paid;
+
+            $discountpaid = PurchasePayment::where('soft_delete', '!=', 1)->where('branch_id', '=', $branch_id)->sum('purchasepayment_discount');
+            if($discountpaid != ""){
+                $discount_paid = $discountpaid;
+            }else {
+                $discount_paid = '0';
+            }
+
+            $totalamount_paid = $totalpaid_Amount + $totalpayment_paid + $discount_paid;
             
 
 
