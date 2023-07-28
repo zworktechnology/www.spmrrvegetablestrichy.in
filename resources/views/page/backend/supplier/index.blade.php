@@ -2,22 +2,43 @@
 
 @section('content')
     <div class="content">
+
+    @php
+
+preg_match("/[^\/]+$/", Request::url(), $matches);
+$pos = $matches[0];
+@endphp
+
+                @php
+                $lastword = Request::url();
+                preg_match("/[^\/]+$/", $lastword, $matches);
+                $last_word = $matches[0];
+                @endphp
+
+
+                
         <div class="page-header">
             <div class="page-title">
                 <h4>Supplier</h4>
             </div>
             <div class="page-btn">
-               <button type="button" class="btn btn-primary waves-effect waves-light btn-added" data-bs-toggle="modal"
-                    data-bs-target=".supplier-modal-xl">Add Supplier</button>
+                <div style="display:flex;">
+
+                    <button type="button" style="margin-right:10px" class="btn btn-primary waves-effect waves-light btn-added" data-bs-toggle="modal"
+                        data-bs-target=".supplier-modal-xl">Add Supplier</button>
+
+                    @if ($last_word != "supplier")
+                    <a href="/pdf_export/{{$last_word}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+                    @else
+                    <a href="/allpdf_export" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+                    @endif
+                </div>
+               
             </div>
         </div>
 
 
-        @php
-
-preg_match("/[^\/]+$/", Request::url(), $matches);
-$pos = $matches[0];
-@endphp
+ 
 <div class="row py-2" style="margin-bottom:10px;">
 <div class="col-lg-2 col-sm-4 col-6">
     <a href="{{ route('supplier.index') }}" style="color: black">
@@ -30,12 +51,9 @@ $pos = $matches[0];
         </div>
     </a>
 </div>
-                @php
-                $lastword = Request::url();
-                preg_match("/[^\/]+$/", $lastword, $matches);
-                $last_word = $matches[0];
-                @endphp
+                
 @foreach ($allbranch as $keydata => $allbranches)
+<input type="hidden" name="branchwise_id" id="branchwise_id" value="{{$last_word}}" />
 
     <div class="col-lg-2 col-sm-4 col-6">
         <a href="{{ route('supplier.branchdata', ['branch_id' => $allbranches->id]) }}">
@@ -51,6 +69,7 @@ $pos = $matches[0];
 @endforeach
 </div>
 
+            
 <div class="row">
     <div class="col-lg-3 col-sm-6 col-12">
         <div class="dash-widget">
