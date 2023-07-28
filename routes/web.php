@@ -371,6 +371,8 @@ Route::get('/Checkinvoiceupdated', [PurchaseController::class, 'Checkinvoiceupda
 
 Route::get('/getpurchaseorderview', [PurchaseController::class, 'getpurchaseorderview']);
 Route::get('/salesorderview', [SalesController::class, 'salesorderview']);
-Route::get('/pdf_export/{last_word}', [SupplierController::class, 'pdf_export']);
 
+Route::get('/pdf_export/{last_word}', [SupplierController::class, 'pdf_export']);
 Route::get('/allpdf_export', [SupplierController::class, 'allpdf_export']);
+Route::get('/customerpdf_export/{last_word}', [CustomerController::class, 'customerpdf_export']);
+Route::get('/allbranchpdf_export', [CustomerController::class, 'allbranchpdf_export']);

@@ -2,22 +2,41 @@
 
 @section('content')
     <div class="content">
+
+    
+    @php
+
+preg_match("/[^\/]+$/", Request::url(), $matches);
+$pos = $matches[0];
+@endphp
+
+
+@php
+                $lastword = Request::url();
+                preg_match("/[^\/]+$/", $lastword, $matches);
+                $last_word = $matches[0];
+                @endphp
+
         <div class="page-header">
             <div class="page-title">
                 <h4>Customer</h4>
             </div>
             <div class="page-btn">
-                <button type="button" class="btn btn-primary waves-effect waves-light btn-added" data-bs-toggle="modal"
-                    data-bs-target=".cusomer-modal-xl">Add Customer</button>
+                <div style="display:flex;">
+
+                    <button type="button" style="margin-right:10px" class="btn btn-primary waves-effect waves-light btn-added" data-bs-toggle="modal"
+                        data-bs-target=".cusomer-modal-xl">Add Customer</button>
+
+                        @if ($last_word != "customer")
+                        <a href="/customerpdf_export/{{$last_word}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+                        @else
+                        <a href="/allbranchpdf_export" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+                        @endif
+                </div>
             </div>
         </div>
 
 
-        @php
-
-preg_match("/[^\/]+$/", Request::url(), $matches);
-$pos = $matches[0];
-@endphp
 <div class="row py-2" style="margin-bottom:10px;">
 <div class="col-lg-2 col-sm-4 col-6">
     <a href="{{ route('customer.index') }}" style="color: black">
@@ -30,11 +49,7 @@ $pos = $matches[0];
         </div>
     </a>
 </div>
-                @php
-                $lastword = Request::url();
-                preg_match("/[^\/]+$/", $lastword, $matches);
-                $last_word = $matches[0];
-                @endphp
+                
 @foreach ($allbranch as $keydata => $allbranches)
 
     <div class="col-lg-2 col-sm-4 col-6">
