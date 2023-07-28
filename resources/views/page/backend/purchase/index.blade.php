@@ -60,7 +60,7 @@
                         </div>
                     </a>
                     <a href="#todaystock{{ $allbranches->id }}" data-bs-toggle="modal"data-id="{{ $allbranches->id }}"
-                            data-bs-target=".todaystock-modal-xl{{ $allbranches->id }}" class="btn btn-added btn-primary " style="color:black;background-color: #e4c6bc !important;font-size: 13px;font-weight: 600;">Current Details</a>
+                            data-bs-target=".todaystock-modal-xl{{ $allbranches->id }}" class="btn btn-added btn-primary " style="color:white;background-color: #dfd8f0;font-size: 13px;font-weight: 600;">Current Details</a>
 
                             <div class="modal fade todaystock-modal-xl{{ $allbranches->id }}" tabindex="-1"role="dialog" data-bs-backdrop="static"
                                 aria-labelledby="todaystockLargeModalLabel{{ $allbranches->id }}"aria-hidden="true">
@@ -134,14 +134,14 @@
                                             <li>
                                                 @if ($purchasedata['status'] == 0)
                                                     @foreach (array_unique($purchasedata['null_grossarr']) as $index => $null_grossarr)
-                                                    
+
                                                         @if ($purchasedata['id'] == $null_grossarr)
 
-                                                            
+
                                                                 <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
                                                                     class="badges bg-lightgreen purchase_pattiyal" style="color: white" data-id="{{ $purchasedata['unique_key'] }}">
                                                                     Pattial</a>
-                                                        
+
 
                                                         @endif
                                                     @endforeach
