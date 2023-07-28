@@ -99,8 +99,6 @@
       </table>
 
 
-     
-
 
     <table id="customers">
         <thead style="background: #CAF1DE">
