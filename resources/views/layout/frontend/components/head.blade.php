@@ -35,3 +35,5 @@
 
 
 <link rel="stylesheet" href={{ asset('assets/frontend/css/agrion.css') }}>
+<link rel="stylesheet" href={{ asset('assets/frontend/css/agrion-responsive.css') }}>
+<link rel="stylesheet" href={{ asset('assets/frontend/css/agrion-dart.css') }}>
