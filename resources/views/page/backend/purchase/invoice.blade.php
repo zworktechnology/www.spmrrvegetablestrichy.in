@@ -163,7 +163,7 @@
                                         <td></td>
                                     </tr>
                                 </tbody>
-                                <tbody id="extracost_tr">
+                                <tbody class="extracost_tr">
                                     <tr>
                                         <td style="font-size:15px; color: black;" class="text-end">Extra Cost<span
                                             style="color: red;">*</span></td>
@@ -175,8 +175,9 @@
                                         <td><input type="text" class="form-control extracost" id="extracost"
                                                 placeholder="Extra Cost" required name="extracost[]"
                                                 value="" /></td>
-                                        <td><button style="width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
-                                                type="button" id="addextranotefields" value="Add">+</button></td>
+                                        <td><button style="width: 35px;"class="py-1 addextranotefields text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
+                                                type="button" id="" value="Add">+</button>
+                                                <button style="width: 35px;"class="py-1 text-white remove-extratr font-medium rounded-lg text-sm  text-center btn btn-danger" type="button" id="" value="Add">-</button></td>
                                     </tr>
                                 </tbody>
                                 <tbody>

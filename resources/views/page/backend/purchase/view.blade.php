@@ -137,6 +137,10 @@
                                             </div>
                                             <div class="col-lg-2 col-sm-2 col-12 border">
                                                 <span
+                                                    class=""style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; "></span>
+                                            </div>
+                                            <div class="col-lg-2 col-sm-2 col-12 border">
+                                                <span
                                                     class=""style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;line-height: 35px; ">{{ $term_arr['total_price'] }}</span>
                                             </div>
                                         @endif
@@ -160,7 +164,7 @@
                                             style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;font-weight: 700;line-height: 35px; ">Commission</span>
                                     </div>
                                     <div class="col-lg-2 col-sm-2 col-12 border">
-                                        <span class=""
+                                        <span class="purchase_commisionpercentage"
                                             style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;line-height: 35px; "></span>
                                     </div>
                                     <div class="col-lg-2 col-sm-2 col-12 border">
@@ -231,7 +235,7 @@
                                     </div>
                                     <div class="col-lg-2 col-sm-2 col-12 border">
                                         <span class=""
-                                            style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;line-height: 35px; "><span class="purchase_extra_cost"></span></span>
+                                            style="vertical-align: inherit;vertical-align: inherit;font-size: 14px;color:#000;line-height: 35px; "><span class="tot_comm_extracost"></span></span>
                                     </div>
                                     <div class="col-lg-2 col-sm-2 col-12 border">
                                         <span class=""

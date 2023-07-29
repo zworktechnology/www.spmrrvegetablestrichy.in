@@ -47,9 +47,9 @@ $(".purchaseclose").click(function() {
    var o = 3;
    var p = 4;
     $(document).ready(function() {
-        $("#addproductfields").click(function() {
+        $(document).on('click', '.addproductfields', function() {
          ++i;
-                $("#product_fields").append(
+                $(".product_fields").append(
                     '<tr>' +
                     '<td class=""><input type="hidden"id="purchase_detail_id"name="purchase_detail_id[]" />' +
                     '<select class="form-control js-example-basic-single product_id select"name="product_id[]" id="product_id' + i + '"required>' +
@@ -60,7 +60,7 @@ $(".purchaseclose").click(function() {
                     '<option value="bag">Bag</option><option value="kg">Kg</option>' +
                     '</select></td>' +
                     '<td><input type="text" class="form-control count" id="count" name="count[]" placeholder="count" value="" required /></td>' +
-                    '<td><button style="width: 35px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-tr" type="button" >-</button></td>' +
+                    '<td><button style="width: 35px;margin-right:5px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary addproductfields"type="button" id="" value="Add">+</button><button style="width: 35px;" class="text-white py-1 font-medium rounded-lg text-sm  text-center btn btn-danger remove-tr" type="button" >-</button></td>' +
                     '</tr>'
                 );
 
@@ -91,13 +91,14 @@ $(".purchaseclose").click(function() {
                 });
         });
 
-        $("#addextranotefields").click(function() {
-            $("#extracost_tr").append(
+        $(document).on('click', '.addextranotefields', function() {
+            $(".extracost_tr").append(
                     '<tr>' +
                     '<td style="font-size:15px;color: black;" class="text-end">Extra Cost<span style="color: red;">*</span></td>' +
                     '<td colspan="3"><input type="text" class="form-control" id="extracost_note" placeholder="Note" value="" name="extracost_note[]" required /></td>' +
                     '<td><input type="text" class="form-control extracost" id="extracost" placeholder="Extra Cost" name="extracost[]" value="" /></td>' +
-                    '<td><button style="width: 35px;"class="py-1 text-white remove-extratr font-medium rounded-lg text-sm  text-center btn btn-danger" type="button" id="" value="Add">-</button></td>' +
+                    '<td><button style="width: 35px;margin-right:5px;"class="py-1 addextranotefields text-white font-medium rounded-lg text-sm  text-center btn btn-primary"type="button" id="" value="Add">+</button>' +
+                    '<button style="width: 35px;"class="py-1 text-white remove-extratr font-medium rounded-lg text-sm  text-center btn btn-danger" type="button" id="" value="Add">-</button></td>' +
                     '</tr>'
                 );
         });
@@ -371,6 +372,8 @@ $(".purchaseclose").click(function() {
                                 $('.purchase_bill_no').html(response[i].purchase_bill_no);
                                 $('.purchase_total_amount').html(response[i].purchase_total_amount);
                                 $('.purchase_commision').html(response[i].commission_amount);
+                                $('.purchase_commisionpercentage').html(response[i].purchase_commisionpercentage);
+                                $('.tot_comm_extracost').html(response[i].tot_comm_extracost);
                                 $('.purchase_extra_cost').html(Totalextraamount);
                                 
                                 $('.purchase_grossamont').html(response[i].purchase_gross_amount);

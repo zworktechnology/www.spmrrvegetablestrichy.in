@@ -72,7 +72,7 @@
                            
                         </tr>
                      </thead>
-                     <tbody id="product_fields">
+                     <tbody class="product_fields">
                      @foreach ($PurchaseProducts as $index => $Purchase_Products)
                         <tr>
                            <td class="">
@@ -86,7 +86,9 @@
                            </td>
                            <td><input type="text" class="form-control" id="bagorkg" readonly name="bagorkg[]" placeholder="bagorkg" value="{{ $Purchase_Products->bagorkg }}" required /></td>
                            <td><input type="text" class="form-control count" id="count" readonly name="count[]" placeholder="count" value="{{ $Purchase_Products->count }}" required /></td>
-                           <td><button style="width: 35px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-tr" type="button" >-</button>
+                           <td><button style="width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary addproductfields"
+                                                type="button" id="" value="Add">+</button>
+                              <button style="width: 35px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-tr" type="button" >-</button>
                            </td>
                         </tr>
                         @endforeach

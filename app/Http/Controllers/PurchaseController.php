@@ -30,6 +30,8 @@ class PurchaseController extends Controller
         $terms = [];
         $Extracost_Arr = [];
         $null_grossarr = [];
+        $lastpattiyalDate = [];
+        $lastpattiyalid = [];
         foreach ($data as $key => $datas) {
             $branch_name = Branch::findOrFail($datas->branch_id);
             $supplier_name = Supplier::findOrFail($datas->supplier_id);
@@ -69,6 +71,11 @@ class PurchaseController extends Controller
                 if($PurchaseArray){
                     $null_grossarr[] = $PurchaseArray->id;
                 }
+                $last_pattiyal_date = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('gross_amount', '!=', NULL)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->latest('id')->first();
+                if($last_pattiyal_date){
+                    $lastpattiyalDate[] = $last_pattiyal_date->date;
+                    $lastpattiyalid[] = $last_pattiyal_date->supplier_id;
+                }
             }
 
 
@@ -90,6 +97,9 @@ class PurchaseController extends Controller
                 'terms' => $terms,
                 'Extracost_Arr' => $Extracost_Arr,
                 'null_grossarr' => $null_grossarr,
+                'supplier_id' => $datas->supplier_id,
+                'lastpattiyalDate' => $lastpattiyalDate,
+                'lastpattiyalid' => $lastpattiyalid,
             );
         }
 
@@ -174,6 +184,7 @@ class PurchaseController extends Controller
         $terms = [];
         $Extracost_Arr = [];
         $null_grossarr = [];
+        $lastpattiyalDate = [];
         foreach ($branchwise_data as $key => $branchwise_datas) {
             $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
             $supplier_name = Supplier::findOrFail($branchwise_datas->supplier_id);
@@ -214,6 +225,13 @@ class PurchaseController extends Controller
                 if($PurchaseArray){
                     $null_grossarr[] = $PurchaseArray->id;
                 }
+                
+                $last_pattiyal_date = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('gross_amount', '!=', NULL)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->latest('id')->first();
+                if($last_pattiyal_date){
+                    $lastpattiyalDate[] = $last_pattiyal_date->date;
+                    $lastpattiyalid[] = $last_pattiyal_date->supplier_id;
+                }
+
             }
 
            
@@ -235,6 +253,8 @@ class PurchaseController extends Controller
                 'status' => $branchwise_datas->status,
                 'Extracost_Arr' => $Extracost_Arr,
                 'null_grossarr' => $null_grossarr,
+                'supplier_id' => $branchwise_datas->supplier_id,
+                'lastpattiyalDate' => $lastpattiyalDate,
             );
         }
         $today = Carbon::now()->format('Y-m-d');
@@ -319,6 +339,7 @@ class PurchaseController extends Controller
         $terms = [];
         $Extracost_Arr = [];
         $null_grossarr = [];
+        $lastpattiyalDate = [];
         foreach ($data as $key => $datas) {
             $branch_name = Branch::findOrFail($datas->branch_id);
             $supplier_name = Supplier::findOrFail($datas->supplier_id);
@@ -357,6 +378,11 @@ class PurchaseController extends Controller
                 if($PurchaseArray){
                     $null_grossarr[] = $PurchaseArray->id;
                 }
+                $last_pattiyal_date = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('gross_amount', '!=', NULL)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->latest('id')->first();
+                if($last_pattiyal_date){
+                    $lastpattiyalDate[] = $last_pattiyal_date->date;
+                    $lastpattiyalid[] = $last_pattiyal_date->supplier_id;
+                }
             }
            
 
@@ -364,6 +390,7 @@ class PurchaseController extends Controller
                 'unique_key' => $datas->unique_key,
                 'branch_id' => $datas->branch_id,
                 'branch_name' => $branch_name->shop_name,
+                'supplier_id' => $datas->supplier_id,
                 'supplier_name' => $supplier_name->name,
                 'date' => $datas->date,
                 'time' => $datas->time,
@@ -373,6 +400,7 @@ class PurchaseController extends Controller
                 'terms' => $terms,
                 'Extracost_Arr' => $Extracost_Arr,
                 'null_grossarr' => $null_grossarr,
+                'lastpattiyalDate' => $lastpattiyalDate,
                 'status' => $datas->status,
             );
         }
@@ -1097,6 +1125,7 @@ class PurchaseController extends Controller
                 'bank_namedata' => $bank_name,
                 'purchase_total_amount' => $get_Purchase_data->total_amount,
                 'commission_amount' => $get_Purchase_data->commission_amount,
+                'purchase_commisionpercentage' => $get_Purchase_data->commission_percent . '%',
                 'tot_comm_extracost' => $get_Purchase_data->tot_comm_extracost,
                 'purchase_gross_amount' => $get_Purchase_data->gross_amount,
                 'purchase_old_balance' => $get_Purchase_data->old_balance,

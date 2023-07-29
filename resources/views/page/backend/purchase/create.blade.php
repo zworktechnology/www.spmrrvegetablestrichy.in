@@ -72,7 +72,7 @@
                                         <th style="font-size:15px; width:10%;">Action </th>
                                     </tr>
                                 </thead>
-                                <tbody id="product_fields">
+                                <tbody class="product_fields">
                                     <tr>
                                         <td>
                                             <input type="hidden"id="purchase_detail_id"name="purchase_detail_id[]" />
@@ -98,9 +98,9 @@
                                                 placeholder="count" value="" required />
                                         </td>
                                         <td>
-                                            <button style="width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
-                                                type="button" id="addproductfields" value="Add">+</button>
-                                            {{-- <button style="width: 35px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-tr" type="button" >-</button> --}}
+                                            <button style="width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary addproductfields"
+                                                type="button" id="" value="Add">+</button>
+                                             <button style="width: 35px;" class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-tr" type="button" >-</button>
                                         </td>
                                     </tr>
                                 </tbody>
