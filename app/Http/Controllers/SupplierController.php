@@ -398,7 +398,7 @@ class SupplierController extends Controller
             'total_purchaseAmount' => $total_purchaseAmount,
             'totalamount_paid' => $totalamount_paid,
             'totalbalance' => $totalbalance,
-            'branch_name' => 'All',
+            'branch_name' => 'All Branches',
 
         ]);
 
@@ -509,7 +509,7 @@ class SupplierController extends Controller
             'total_purchaseAmount' => $total_purchaseAmount,
             'totalamount_paid' => $totalamount_paid,
             'totalbalance' => $totalbalance,
-            'branch_name' => $branch_name->name,
+            'branch_name' => $branch_name->shop_name,
 
         ]);
 

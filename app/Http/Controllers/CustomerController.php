@@ -386,7 +386,7 @@ class CustomerController extends Controller
                 'totsaleAmount' => $totsaleAmount,
                 'total_saleamount_paid' => $total_saleamount_paid,
                 'saletotal_balance' => $saletotal_balance,
-                'branch_name' => 'All',
+                'branch_name' => 'All Branches',
     
             ]);
     
@@ -498,7 +498,7 @@ class CustomerController extends Controller
                 'totsaleAmount' => $totsaleAmount,
                 'total_saleamount_paid' => $total_saleamount_paid,
                 'saletotal_balance' => $saletotal_balance,
-                'branch_name' => $branch_name->name,
+                'branch_name' => $branch_name->shop_name,
     
             ]);
     

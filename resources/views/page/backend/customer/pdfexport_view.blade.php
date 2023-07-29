@@ -84,14 +84,14 @@
 <body>
    <div class="logoname">
         <div>
-            <h4  style="text-transform: uppercase; color:green">{{ $branch_name }} BRANCH</h4>
+            <h4  style="text-transform: uppercase; color:green">sales - {{ $branch_name }}</h4>
         </div>
     </div>
    
       <table id="customers">
         <thead>
             <tr>
-                <th style="background-color: #fe9f43;">Total Amount - Rs. {{ $totsaleAmount }}</th>
+                <th style="background-color: #fe9f43;">Total Sales Amount - Rs. {{ $totsaleAmount }}</th>
                 <th style="background-color: #6adfb4;">Paid Amount - Rs. {{ $total_saleamount_paid }}</th>
                 <th style="background-color: #e55139;">Pending Amount - Rs. {{ $saletotal_balance }}</th>
             </tr>
