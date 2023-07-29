@@ -97,6 +97,14 @@
                                                     data-bs-target=".expencedelete-modal-xl{{ $expenceData['unique_key'] }}"
                                                     class="badges bg-lightgrey" style="color: white">Delete</a>
                                             </li>
+                                            <li>
+                                                <a href="#expenseview{{ $expenceData['unique_key'] }}"
+                                                    data-bs-toggle="modal" data-id="{{ $expenceData['id'] }}"
+                                                    data-bs-target=".expenseview-modal-xl{{ $expenceData['unique_key'] }}"
+                                                    class="badges bg-lightred expenseview" style="color: white">View</a>
+
+                                            </li>
+
                                         </ul>
                                     </td>
                                 </tr>
@@ -107,6 +115,12 @@
                                     aria-labelledby="expencedeleteLargeModalLabel{{ $expenceData['unique_key'] }}"
                                     aria-hidden="true">
                                     @include('page.backend.expence.delete')
+                                </div>
+                                <div class="modal fade expenseview-modal-xl{{ $expenceData['unique_key'] }}"
+                                    tabindex="-1" role="dialog" data-bs-backdrop="static"
+                                    aria-labelledby="expenseviewLargeModalLabel{{ $expenceData['unique_key'] }}"
+                                    aria-hidden="true">
+                                    @include('page.backend.expence.view')
                                 </div>
                             @endforeach
                         </tbody>

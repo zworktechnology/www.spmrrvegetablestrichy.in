@@ -49,8 +49,7 @@
                         </div>
                         <div class="col-lg-1 col-sm-1 col-12">
                             <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Action</label>
-                            <button style="margin-top:10px; width: 35px;"class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
-                            type="button" id="addexpensefilds" value="Add">+</button>
+                            
                         </div>
                     </div>
 
@@ -67,7 +66,7 @@
                                         <th>Action </th>
                                     </tr>
                                 </thead>
-                                <tbody id="expensefilds">
+                                <tbody class="expensefilds">
                                 @foreach ($Expense_details as $index => $Expense_detail)
                                     <tr>
                                         <td>
@@ -78,10 +77,13 @@
                                             <input type="text" class="form-control expense_amount" id="expense_amount" name="expense_amount[]" placeholder="Amount" value="{{ $Expense_detail->expense_amount }}" required />
                                         </td>
                                         <td>
-                                            <button style="width: 35px;" class="text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-expensetr" type="button" >-</button>
+                                        <button style="width: 35px;"class="addexpensefilds py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
+                                            type="button" id="" value="Add">+</button>
+                                         <button style="width: 35px;" class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-expensetr" type="button" >-</button>
                                         </td>
                                     </tr>
                                     @endforeach
+                                    <input type="hidden" name="tot_expense_amount" id="tot_expense_amount" value=""/>
                                 </tbody>
                             </table>
                         </div>

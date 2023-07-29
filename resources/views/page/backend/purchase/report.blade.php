@@ -102,8 +102,10 @@
                         @if ($purchase_data != '')
                             <div class="table-responsive">
                                 <table class="table  customerdatanew">
-                                    <thead>
+                                    <thead style="background: #5e54c966;">
                                         <tr>
+                                            <th>S.No</th>
+                                            <th>Type</th>
                                             <th>Bill No</th>
                                             <th>Date & Time</th>
                                             <th>Supplier</th>
@@ -112,17 +114,24 @@
                                             <th>Grand Total</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody style="background: #f8f9fa;">
 
                                         @foreach ($purchase_data as $keydata => $purchasedata)
                                             @if ($purchasedata['unique_key'] != '')
                                                 <tr>
+
+                                                    <td>{{ ++$keydata }}</td>
+                                                    @if ($purchasedata['purchase_order'] == NULL) 
+                                                    <td style="text-transform: uppercase;color:#198754"> Purchase </td>
+                                                    @elseif ($purchasedata['purchase_order'] == '1')
+                                                    <td style="text-transform: uppercase;color:red;">Purchase Order</td>
+                                                    @endif
                                                     <td>#{{ $purchasedata['bill_no'] }}</td>
                                                     <td>{{ date('d M Y', strtotime($purchasedata['date'])) }} -
                                                         {{ date('h:i A', strtotime($purchasedata['time'])) }}</td>
                                                     <td>{{ $purchasedata['supplier_name'] }}</td>
                                                     <td>{{ $purchasedata['branch_name'] }}</td>
-                                                    <td>
+                                                    <td style="text-transform: uppercase;">
                                                     @foreach ($purchasedata['terms'] as $index => $terms_array)
                                                     @if ($terms_array['purchase_id'] == $purchasedata['id'])
                                                     {{ $terms_array['product_name'] }} - {{ $terms_array['kgs'] }}{{ $terms_array['bag'] }},<br/>

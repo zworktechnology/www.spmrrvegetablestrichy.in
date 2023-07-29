@@ -89,8 +89,6 @@
                                 <th>Branch</th>
                                 <th>Date</th>
                                 <th>Amount</th>
-                                <th>Note</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -101,35 +99,10 @@
                                     <td>{{ $expenceData['branch_name'] }}</td>
                                     <td>{{ date('d M Y', strtotime($expenceData['date'])) }} - {{ date('h:i A', strtotime($expenceData['time'])) }}</td>
                                     <td>{{ $expenceData['amount'] }}</td>
-                                    <td>{!! $expenceData['note'] !!}</td>
-                                    <td>
-                                        <ul class="list-unstyled hstack gap-1 mb-0">
-                                            <li>
-                                                <a href="#edit{{ $expenceData['unique_key'] }}" data-bs-toggle="modal"
-                                                    data-id="{{ $expenceData['unique_key'] }}"
-                                                    data-bs-target=".expenceedit-modal-xl{{ $expenceData['unique_key'] }}" class="badges bg-lightyellow" style="color: white">Edit</a>
-                                            </li>
-                                            <li>
-                                                <a href="#delete{{ $expenceData['unique_key'] }}" data-bs-toggle="modal"
-                                                    data-id="{{ $expenceData['unique_key'] }}"
-                                                    data-bs-target=".expencedelete-modal-xl{{ $expenceData['unique_key'] }}" class="badges bg-lightgrey" style="color: white">Delete</a>
-                                            </li>
-                                        </ul>
-                                    </td>
+                                   
                                 </tr>
 
-                                <div class="modal fade expenceedit-modal-xl{{ $expenceData['unique_key'] }}" tabindex="-1"
-                                    role="dialog" data-bs-backdrop="static" aria-labelledby="expenceeditLargeModalLabel{{ $expenceData['unique_key'] }}"
-                                    aria-hidden="true">
-                                    @include('page.backend.expence.edit')
-                                </div>
-
-                                <div class="modal fade expencedelete-modal-xl{{ $expenceData['unique_key'] }}"
-                                    tabindex="-1" role="dialog"data-bs-backdrop="static"
-                                    aria-labelledby="expencedeleteLargeModalLabel{{ $expenceData['unique_key'] }}"
-                                    aria-hidden="true">
-                                    @include('page.backend.expence.delete')
-                                </div>
+                               
                                 @endif
                             @endforeach
                         </tbody>

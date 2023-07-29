@@ -771,7 +771,7 @@ class SalesController extends Controller
         $Customer = Customer::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         
 
-        $data = Sales::where('soft_delete', '!=', 1)->where('sales_order', '=', NULL)->get();
+        $data = Sales::where('soft_delete', '!=', 1)->get();
         $Sales_data = [];
         $sales_terms = [];
         foreach ($data as $key => $datas) {
@@ -796,6 +796,7 @@ class SalesController extends Controller
 
 
             $Sales_data[] = array(
+                'sales_order' => $datas->sales_order,
                 'unique_key' => $datas->unique_key,
                 'branch_name' => $branch_name->shop_name,
                 'customer_name' => $customer_name->name,
@@ -833,7 +834,7 @@ class SalesController extends Controller
         if($salesreport_branch != ""){
             $GetBranch = Branch::findOrFail($salesreport_branch);
 
-            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ""){
                 $sales_terms = [];
@@ -842,7 +843,7 @@ class SalesController extends Controller
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->where('sales_order', '=', NULL)->get();
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
@@ -860,6 +861,7 @@ class SalesController extends Controller
 
 
                     $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
                         'branch_name' => $branch_name->name,
                         'customer_name' => $customer_name->name,
@@ -905,7 +907,7 @@ class SalesController extends Controller
         if($salesreport_customer != ""){
             $GetCustomer = Customer::findOrFail($salesreport_customer);
 
-            $branchwise_report = Sales::where('customer_id', '=', $salesreport_customer)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $branchwise_report = Sales::where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -914,7 +916,7 @@ class SalesController extends Controller
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->where('sales_order', '=', NULL)->get();
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
@@ -932,6 +934,7 @@ class SalesController extends Controller
 
 
                     $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
                         'branch_name' => $branch_name->name,
                         'customer_name' => $customer_name->name,
@@ -977,7 +980,7 @@ class SalesController extends Controller
 
         if($salesreport_fromdate != ""){
 
-            $branchwise_report = Sales::where('date', '=', $salesreport_fromdate)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $branchwise_report = Sales::where('date', '=', $salesreport_fromdate)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -986,7 +989,7 @@ class SalesController extends Controller
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->where('sales_order', '=', NULL)->get();
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
@@ -1004,6 +1007,7 @@ class SalesController extends Controller
 
 
                     $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
                         'branch_name' => $branch_name->name,
                         'customer_name' => $customer_name->name,
@@ -1047,7 +1051,7 @@ class SalesController extends Controller
 
         if($salesreport_todate != ""){
 
-            $branchwise_report = Sales::where('date', '=', $salesreport_todate)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $branchwise_report = Sales::where('date', '=', $salesreport_todate)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -1056,7 +1060,7 @@ class SalesController extends Controller
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->where('sales_order', '=', NULL)->get();
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
@@ -1074,6 +1078,7 @@ class SalesController extends Controller
 
 
                     $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
                         'branch_name' => $branch_name->name,
                         'customer_name' => $customer_name->name,
@@ -1117,7 +1122,7 @@ class SalesController extends Controller
         if($salesreport_fromdate && $salesreport_customer){
             $GetCustomer = Customer::findOrFail($salesreport_customer);
 
-            $branchwise_report = Sales::where('date', '=', $salesreport_fromdate)->where('customer_id', '=', $salesreport_customer)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $branchwise_report = Sales::where('date', '=', $salesreport_fromdate)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -1126,7 +1131,7 @@ class SalesController extends Controller
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->where('sales_order', '=', NULL)->get();
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
@@ -1144,6 +1149,7 @@ class SalesController extends Controller
 
 
                     $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
                         'branch_name' => $branch_name->name,
                         'customer_name' => $customer_name->name,
@@ -1191,7 +1197,7 @@ class SalesController extends Controller
         if($salesreport_fromdate && $salesreport_todate){
 
 
-            $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -1200,7 +1206,7 @@ class SalesController extends Controller
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->where('sales_order', '=', NULL)->get();
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
@@ -1218,6 +1224,7 @@ class SalesController extends Controller
 
 
                     $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
                         'branch_name' => $branch_name->name,
                         'customer_name' => $customer_name->name,
@@ -1265,7 +1272,7 @@ class SalesController extends Controller
         if($salesreport_todate && $salesreport_customer){
             $GetCustomer = Customer::findOrFail($salesreport_customer);
 
-            $branchwise_report = Sales::where('date', '=', $salesreport_todate)->where('customer_id', '=', $salesreport_customer)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $branchwise_report = Sales::where('date', '=', $salesreport_todate)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -1274,7 +1281,7 @@ class SalesController extends Controller
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->where('sales_order', '=', NULL)->get();
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
@@ -1292,6 +1299,7 @@ class SalesController extends Controller
 
 
                     $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
                         'branch_name' => $branch_name->name,
                         'customer_name' => $customer_name->name,
@@ -1341,7 +1349,7 @@ class SalesController extends Controller
             $GetBranch = Branch::findOrFail($salesreport_branch);
             $GetCustomer = Customer::findOrFail($salesreport_customer);
 
-            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('customer_id', '=', $salesreport_customer)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -1350,7 +1358,7 @@ class SalesController extends Controller
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->where('sales_order', '=', NULL)->get();
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
@@ -1368,6 +1376,7 @@ class SalesController extends Controller
 
 
                     $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
                         'branch_name' => $branch_name->name,
                         'customer_name' => $customer_name->name,
@@ -1413,7 +1422,7 @@ class SalesController extends Controller
         if($salesreport_branch && $salesreport_fromdate){
             $GetBranch = Branch::findOrFail($salesreport_branch);
 
-            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('date', '=', $salesreport_fromdate)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('date', '=', $salesreport_fromdate)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -1422,7 +1431,7 @@ class SalesController extends Controller
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->where('sales_order', '=', NULL)->get();
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
@@ -1440,6 +1449,7 @@ class SalesController extends Controller
 
 
                     $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
                         'branch_name' => $branch_name->name,
                         'customer_name' => $customer_name->name,
@@ -1486,7 +1496,7 @@ class SalesController extends Controller
         if($salesreport_branch && $salesreport_todate){
             $GetBranch = Branch::findOrFail($salesreport_branch);
 
-            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('date', '=', $salesreport_todate)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('date', '=', $salesreport_todate)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -1495,7 +1505,7 @@ class SalesController extends Controller
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->where('sales_order', '=', NULL)->get();
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
@@ -1513,6 +1523,7 @@ class SalesController extends Controller
 
 
                     $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
                         'branch_name' => $branch_name->name,
                         'customer_name' => $customer_name->name,
@@ -1559,7 +1570,7 @@ class SalesController extends Controller
         if($salesreport_fromdate && $salesreport_todate && $salesreport_branch){
             $GetBrach = Branch::findOrFail($salesreport_branch);
 
-            $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('branch_id', '=', $salesreport_branch)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -1568,7 +1579,7 @@ class SalesController extends Controller
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->where('sales_order', '=', NULL)->get();
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
@@ -1586,6 +1597,7 @@ class SalesController extends Controller
 
 
                     $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
                         'branch_name' => $branch_name->name,
                         'customer_name' => $customer_name->name,
@@ -1632,7 +1644,7 @@ class SalesController extends Controller
 
             $GetCustomer = Customer::findOrFail($salesreport_customer);
 
-            $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('customer_id', '=', $salesreport_customer)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -1641,7 +1653,7 @@ class SalesController extends Controller
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->where('sales_order', '=', NULL)->get();
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
@@ -1659,6 +1671,7 @@ class SalesController extends Controller
 
 
                     $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
                         'branch_name' => $branch_name->name,
                         'customer_name' => $customer_name->name,
@@ -1708,7 +1721,7 @@ class SalesController extends Controller
             $GetCustomer = Customer::findOrFail($salesreport_customer);
             $GetBrach = Branch::findOrFail($salesreport_branch);
 
-            $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('customer_id', '=', $salesreport_customer)->where('sales_order', '=', NULL)->where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->get();
+            $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('customer_id', '=', $salesreport_customer)->where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
                 $sales_terms = [];
@@ -1717,7 +1730,7 @@ class SalesController extends Controller
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
 
-                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->where('sales_order', '=', NULL)->get();
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
@@ -1735,6 +1748,7 @@ class SalesController extends Controller
 
 
                     $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
                         'branch_name' => $branch_name->name,
                         'customer_name' => $customer_name->name,

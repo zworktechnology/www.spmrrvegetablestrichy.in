@@ -21,8 +21,21 @@ class ExpenceController extends Controller
 
         $data = Expence::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
         $expense_data = [];
+        $terms = [];
         foreach ($data as $key => $datas) {
             $branch_name = Branch::findOrFail($datas->branch_id);
+
+            $ExpenseDetails = Expensedetail::where('expense_id', '=', $datas->id)->get();
+            foreach ($ExpenseDetails as $key => $ExpenseDetails_arr) {
+
+                $terms[] = array(
+                    'expense_note' => $ExpenseDetails_arr->expense_note,
+                    'expense_amount' => $ExpenseDetails_arr->expense_amount,
+                    'expense_id' => $ExpenseDetails_arr->expense_id,
+
+                );
+
+            }
 
             $expense_data[] = array(
                 'branch_name' => $branch_name->shop_name,
@@ -33,6 +46,7 @@ class ExpenceController extends Controller
                 'unique_key' => $datas->unique_key,
                 'id' => $datas->id,
                 'branch_id' => $datas->branch_id,
+                'terms' => $terms,
             );
         }
         return view('page.backend.expence.index', compact('expense_data', 'branch', 'today', 'timenow'));
@@ -47,11 +61,25 @@ class ExpenceController extends Controller
 
         $data = Expence::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
         $expense_data = [];
+        $terms = [];
+
         foreach ($data as $key => $datas) {
             $branch_name = Branch::findOrFail($datas->branch_id);
 
+            $ExpenseDetails = Expensedetail::where('expense_id', '=', $datas->id)->get();
+            foreach ($ExpenseDetails as $key => $ExpenseDetails_arr) {
+
+                $terms[] = array(
+                    'expense_note' => $ExpenseDetails_arr->expense_note,
+                    'expense_amount' => $ExpenseDetails_arr->expense_amount,
+                    'expense_id' => $ExpenseDetails_arr->expense_id,
+
+                );
+
+            }
+
             $expense_data[] = array(
-                'branch_name' => $branch_name->name,
+                'branch_name' => $branch_name->shop_name,
                 'date' => $datas->date,
                 'time' => $datas->time,
                 'amount' => $datas->amount,
@@ -59,6 +87,7 @@ class ExpenceController extends Controller
                 'unique_key' => $datas->unique_key,
                 'id' => $datas->id,
                 'branch_id' => $datas->branch_id,
+                'terms' => $terms,
             );
         }
 
@@ -80,11 +109,25 @@ class ExpenceController extends Controller
 
         $data = Expence::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
         $expense_data = [];
+        $terms = [];
+        
         foreach ($data as $key => $datas) {
             $branch_name = Branch::findOrFail($datas->branch_id);
 
+            $ExpenseDetails = Expensedetail::where('expense_id', '=', $datas->id)->get();
+            foreach ($ExpenseDetails as $key => $ExpenseDetails_arr) {
+
+                $terms[] = array(
+                    'expense_note' => $ExpenseDetails_arr->expense_note,
+                    'expense_amount' => $ExpenseDetails_arr->expense_amount,
+                    'expense_id' => $ExpenseDetails_arr->expense_id,
+
+                );
+
+            }
+
             $expense_data[] = array(
-                'branch_name' => $branch_name->name,
+                'branch_name' => $branch_name->shop_name,
                 'date' => $datas->date,
                 'time' => $datas->time,
                 'amount' => $datas->amount,
@@ -92,6 +135,7 @@ class ExpenceController extends Controller
                 'unique_key' => $datas->unique_key,
                 'id' => $datas->id,
                 'branch_id' => $datas->branch_id,
+                'terms' => $terms,
             );
         }
         return view('page.backend.expence.index', compact('expense_data', 'branch', 'today', 'timenow'));
@@ -193,17 +237,21 @@ class ExpenceController extends Controller
         foreach ($request->get('expense_detialid') as $key => $expense_detialid) {
             
             if ($expense_detialid > 0) {
-                $total +=  $request->expense_amount[$key];
+                $total =  $request->get('tot_expense_amount');
 
                 $expense_note = $request->expense_note[$key];
-                $expense_amount = $request->expense_amount[$key];
+                $expense_amount = $request->tot_expense_amount[$key];
 
                 DB::table('expensedetails')->where('id', $expense_detialid)->update([
                     'expense_note' => $expense_note,  'expense_amount' => $expense_amount
                 ]);
+
+                DB::table('expences')->where('id', $ExpenceDataID)->update([
+                    'amount' => $total
+                ]);
             } else if ($expense_detialid == '') {
 
-                $total +=  $request->expense_amount[$key];
+                $total =  $request->get('tot_expense_amount');
 
                 $Expensedetail = new Expensedetail;
                 $Expensedetail->expense_id = $ExpenceDataID;
@@ -242,17 +290,42 @@ class ExpenceController extends Controller
         $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
         $expense_data = [];
-        $expense_data[] = array(
-            'branch_name' => '',
-            'date' => '',
-            'time' => '',
-            'amount' => '',
-            'note' => '',
-            'unique_key' => '',
-            'id' => '',
-            'branch_id' => '',
-            'heading' => '',
-        );
+            $branchwise_report = Expence::where('soft_delete', '!=', 1)->get();
+            $expense_data = [];
+            $terms = [];
+            if($branchwise_report != ''){
+                foreach ($branchwise_report as $key => $branchwise_datas) {
+
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+
+                    $ExpenseDetails = Expensedetail::where('expense_id', '=', $branchwise_datas->id)->get();
+                    foreach ($ExpenseDetails as $key => $ExpenseDetails_arr) {
+        
+                        $terms[] = array(
+                            'expense_note' => $ExpenseDetails_arr->expense_note,
+                            'expense_amount' => $ExpenseDetails_arr->expense_amount,
+                            'expense_id' => $ExpenseDetails_arr->expense_id,
+        
+                        );
+        
+                    }
+
+                    $expense_data[] = array(
+                        'branch_name' => $branch_name->shop_name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'amount' => $branchwise_datas->amount,
+                        'note' => $branchwise_datas->note,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'id' => $branchwise_datas->id,
+                        'terms' => $terms,
+                        'branch_id' => $branchwise_datas->branch_id,
+                        'branchheading' => $branch_name->shop_name,
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+                    );
+                }
+            }
         return view('page.backend.expence.report', compact('branch', 'expense_data', 'today', 'timenow'));
     }
 
@@ -283,7 +356,7 @@ class ExpenceController extends Controller
 
 
                     $expense_data[] = array(
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'amount' => $branchwise_datas->amount,
@@ -328,7 +401,7 @@ class ExpenceController extends Controller
 
 
                         $expense_data[] = array(
-                            'branch_name' => $branch_name->name,
+                            'branch_name' => $branch_name->shop_name,
                             'date' => $branchwise_datas->date,
                             'time' => $branchwise_datas->time,
                             'amount' => $branchwise_datas->amount,
@@ -369,7 +442,7 @@ class ExpenceController extends Controller
 
 
                         $expense_data[] = array(
-                            'branch_name' => $branch_name->name,
+                            'branch_name' => $branch_name->shop_name,
                             'date' => $branchwise_datas->date,
                             'time' => $branchwise_datas->time,
                             'amount' => $branchwise_datas->amount,
@@ -417,7 +490,7 @@ class ExpenceController extends Controller
 
 
                     $expense_data[] = array(
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'amount' => $branchwise_datas->amount,
@@ -459,7 +532,7 @@ class ExpenceController extends Controller
 
 
                     $expense_data[] = array(
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'amount' => $branchwise_datas->amount,
@@ -504,7 +577,7 @@ class ExpenceController extends Controller
 
 
                     $expense_data[] = array(
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'amount' => $branchwise_datas->amount,
@@ -548,7 +621,7 @@ class ExpenceController extends Controller
 
 
                     $expense_data[] = array(
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'amount' => $branchwise_datas->amount,

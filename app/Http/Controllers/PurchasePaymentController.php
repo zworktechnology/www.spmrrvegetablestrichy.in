@@ -25,7 +25,7 @@ class PurchasePaymentController extends Controller
         
         $timenow = Carbon::now()->format('H:i');
 
-        $allbranch = Branch::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $supplier = Supplier::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         
         return view('page.backend.purchasepayment.index', compact('data', 'today', 'allbranch', 'supplier', 'timenow'));
@@ -40,7 +40,7 @@ class PurchasePaymentController extends Controller
         $today = Carbon::now()->format('Y-m-d');
         $timenow = Carbon::now()->format('H:i');
 
-        $allbranch = Branch::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $supplier = Supplier::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         return view('page.backend.purchasepayment.index', compact('data', 'today', 'allbranch', 'supplier', 'timenow'));
     }
@@ -54,7 +54,7 @@ class PurchasePaymentController extends Controller
         
         $timenow = Carbon::now()->format('H:i');
 
-        $allbranch = Branch::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $supplier = Supplier::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
         return view('page.backend.purchasepayment.index', compact('data', 'today', 'allbranch', 'supplier', 'timenow'));

@@ -100,8 +100,10 @@
                         @if ($Sales_data != '')
                             <div class="table-responsive">
                                 <table class="table  customerdatanew">
-                                    <thead>
+                                    <thead style="background: #5e54c966;">
                                         <tr>
+                                            <th>S.No</th>
+                                            <th>Type</th>
                                             <th>Bill No</th>
                                             <th>Date & Time</th>
                                             <th>Customer</th>
@@ -110,17 +112,23 @@
                                             <th>Grand Total</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody style="background: #f8f9fa;">
 
                                         @foreach ($Sales_data as $keydata => $Sales_datas)
                                             @if ($Sales_datas['unique_key'] != '')
                                                 <tr>
+                                                    <td>{{ ++$keydata }}</td>
+                                                    @if ($Sales_datas['sales_order'] == NULL) 
+                                                    <td style="text-transform: uppercase;color:#198754"> Sales </td>
+                                                    @elseif ($Sales_datas['sales_order'] == '1')
+                                                    <td style="text-transform: uppercase;color:red;">Sales Order</td>
+                                                    @endif
                                                     <td>#{{ $Sales_datas['bill_no'] }}</td>
                                                     <td>{{ date('d M Y', strtotime($Sales_datas['date'])) }} -
                                                         {{ date('h:i A', strtotime($Sales_datas['time'])) }}</td>
                                                     <td>{{ $Sales_datas['customer_name'] }}</td>
                                                     <td>{{ $Sales_datas['branch_name'] }}</td>
-                                                    <td>
+                                                    <td style="text-transform: uppercase;">
                                                     @foreach ($Sales_datas['sales_terms'] as $index => $terms_array)
                                                     @if ($terms_array['sales_id'] == $Sales_datas['id'])
                                                     {{ $terms_array['product_name'] }} - {{ $terms_array['kgs'] }}{{ $terms_array['bag'] }},<br/>

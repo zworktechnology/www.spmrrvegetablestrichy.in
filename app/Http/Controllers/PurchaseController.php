@@ -487,8 +487,6 @@ class PurchaseController extends Controller
 
     public function store(Request $request)
     {
-
-
             $randomkey = Str::random(5);
 
             $supplier_id = $request->get('supplier_id');
@@ -1153,7 +1151,7 @@ class PurchaseController extends Controller
         $supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
 
 
-        $data = Purchase::where('soft_delete', '!=', 1)->where('purchase_order', '=', NULL)->get();
+        $data = Purchase::where('soft_delete', '!=', 1)->get();
         $purchase_data = [];
         $terms = [];
         $Extracost_Arr = [];
@@ -1161,7 +1159,7 @@ class PurchaseController extends Controller
             $branch_name = Branch::findOrFail($datas->branch_id);
             $supplier_name = Supplier::findOrFail($datas->supplier_id);
 
-            $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->where('purchase_order', '=', NULL)->get();
+            $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
             foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
                 $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
@@ -1178,7 +1176,7 @@ class PurchaseController extends Controller
             }
 
 
-            $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datas->id)->where('purchase_order', '=', NULL)->get();
+            $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datas->id)->get();
             foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
 
                 $Extracost_Arr[] = array(
@@ -1193,6 +1191,7 @@ class PurchaseController extends Controller
 
 
             $purchase_data[] = array(
+                'purchase_order' => $datas->purchase_order,
                 'unique_key' => $datas->unique_key,
                 'branch_id' => $datas->branch_id,
                 'branch_name' => $branch_name->shop_name,
@@ -1235,7 +1234,7 @@ class PurchaseController extends Controller
             $GetBranch = Branch::findOrFail($purchasereport_branch);
             $purchase_data = [];
 
-            $branchwise_report = Purchase::where('branch_id', '=', $purchasereport_branch)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $branchwise_report = Purchase::where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->get();
             if($branchwise_report != ''){
 
 
@@ -1246,7 +1245,7 @@ class PurchaseController extends Controller
                     $supplier_name = Supplier::findOrFail($branchwise_datas->supplier_id);
 
 
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $branchwise_datas->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $branchwise_datas->id)->get();
                     foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
@@ -1262,7 +1261,7 @@ class PurchaseController extends Controller
                     }
 
 
-                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $branchwise_datas->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $branchwise_datas->id)->get();
                     foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
 
                         $Extracost_Arr[] = array(
@@ -1275,6 +1274,7 @@ class PurchaseController extends Controller
                     }
 
                     $purchase_data[] = array(
+                        'purchase_order' => $branchwise_datas->purchase_order,
                         'unique_key' => $branchwise_datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
@@ -1323,7 +1323,7 @@ class PurchaseController extends Controller
         if($purchasereport_supplier){
             $GetSupplier = Supplier::findOrFail($purchasereport_supplier);
 
-            $supplierwise_report = Purchase::where('supplier_id', '=', $purchasereport_supplier)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $supplierwise_report = Purchase::where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->get();
             $purchase_data = [];
 
             if($supplierwise_report != ''){
@@ -1336,7 +1336,7 @@ class PurchaseController extends Controller
                     $supplier_name = Supplier::findOrFail($supplierwise_report_datas->supplier_id);
 
 
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $supplierwise_report_datas->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $supplierwise_report_datas->id)->get();
                     foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
@@ -1352,7 +1352,7 @@ class PurchaseController extends Controller
                     }
 
 
-                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $supplierwise_report_datas->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $supplierwise_report_datas->id)->get();
                     foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
 
                         $Extracost_Arr[] = array(
@@ -1366,6 +1366,7 @@ class PurchaseController extends Controller
 
 
                     $purchase_data[] = array(
+                        'purchase_order' => $supplierwise_report_datas->purchase_order,
                         'unique_key' => $supplierwise_report_datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
@@ -1414,7 +1415,7 @@ class PurchaseController extends Controller
 
         if($purchasereport_fromdate != ""){
 
-            $fromdate_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $fromdate_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('soft_delete', '!=', 1)->get();
             $purchase_data = [];
             if($fromdate_report != ''){
                 $fromdate_terms = [];
@@ -1427,7 +1428,7 @@ class PurchaseController extends Controller
                     $supplier_name = Supplier::findOrFail($fromdate_report_datas->supplier_id);
 
 
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $fromdate_report_datas->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $fromdate_report_datas->id)->get();
                     foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
@@ -1443,7 +1444,7 @@ class PurchaseController extends Controller
                     }
 
 
-                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $fromdate_report_datas->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $fromdate_report_datas->id)->get();
                     foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
 
                         $Extracost_Arr[] = array(
@@ -1457,6 +1458,7 @@ class PurchaseController extends Controller
 
 
                     $purchase_data[] = array(
+                        'purchase_order' => $fromdate_report_datas->purchase_order,
                         'unique_key' => $fromdate_report_datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
@@ -1506,7 +1508,7 @@ class PurchaseController extends Controller
 
         if($purchasereport_todate != ""){
 
-            $todate_report = Purchase::where('date', '=', $purchasereport_todate)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $todate_report = Purchase::where('date', '=', $purchasereport_todate)->where('soft_delete', '!=', 1)->get();
             $purchase_data = [];
             if($todate_report != ''){
                 $todate_terms = [];
@@ -1519,7 +1521,7 @@ class PurchaseController extends Controller
                     $supplier_name = Supplier::findOrFail($todate_report_datas->supplier_id);
 
 
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $todate_report_datas->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $todate_report_datas->id)->get();
                     foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
@@ -1534,7 +1536,7 @@ class PurchaseController extends Controller
                         );
                     }
 
-                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $todate_report_datas->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $todate_report_datas->id)->get();
                     foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
 
                         $Extracost_Arr[] = array(
@@ -1548,6 +1550,7 @@ class PurchaseController extends Controller
 
 
                     $purchase_data[] = array(
+                        'purchase_order' => $todate_report_datas->purchase_order,
                         'unique_key' => $todate_report_datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
@@ -1595,7 +1598,7 @@ class PurchaseController extends Controller
         if($purchasereport_fromdate && $purchasereport_supplier){
             $GetSupplier = Supplier::findOrFail($purchasereport_supplier);
 
-            $datefilter_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('supplier_id', '=', $purchasereport_supplier)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $datefilter_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->get();
             $purchase_data = [];
             if($datefilter_report != ''){
                 $todate_terms = [];
@@ -1608,7 +1611,7 @@ class PurchaseController extends Controller
                     $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
 
 
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                     foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
@@ -1623,7 +1626,7 @@ class PurchaseController extends Controller
                         );
                     }
 
-                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                     foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
 
                         $Extracost_Arr[] = array(
@@ -1637,6 +1640,7 @@ class PurchaseController extends Controller
 
 
                     $purchase_data[] = array(
+                        'purchase_order' => $datefilter_report_arr->purchase_order,
                         'unique_key' => $datefilter_report_arr->unique_key,
                         'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
@@ -1682,7 +1686,7 @@ class PurchaseController extends Controller
 
         if($purchasereport_todate && $purchasereport_supplier){
             $GetSupplier = Supplier::findOrFail($purchasereport_supplier);
-            $datefilter_report = Purchase::where('date', '=', $purchasereport_todate)->where('supplier_id', '=', $purchasereport_supplier)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $datefilter_report = Purchase::where('date', '=', $purchasereport_todate)->where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->get();
 
 
             $purchase_data = [];
@@ -1697,7 +1701,7 @@ class PurchaseController extends Controller
                         $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
 
 
-                        $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                        $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                         foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
                             $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
@@ -1713,7 +1717,7 @@ class PurchaseController extends Controller
                         }
 
 
-                        $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                        $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                     foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
 
                         $Extracost_Arr[] = array(
@@ -1727,6 +1731,7 @@ class PurchaseController extends Controller
 
 
                         $purchase_data[] = array(
+                            'purchase_order' => $datefilter_report_arr->purchase_order,
                             'unique_key' => $datefilter_report_arr->unique_key,
                             'branch_name' => $branch_name->shop_name,
                             'supplier_name' => $supplier_name->name,
@@ -1773,7 +1778,7 @@ class PurchaseController extends Controller
             $GetSupplier = Supplier::findOrFail($purchasereport_supplier);
             $GetBrach = Branch::findOrFail($purchasereport_branch);
 
-            $datefilter_report = Purchase::where('branch_id', '=', $purchasereport_branch)->where('supplier_id', '=', $purchasereport_supplier)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $datefilter_report = Purchase::where('branch_id', '=', $purchasereport_branch)->where('supplier_id', '=', $purchasereport_supplier)->where('soft_delete', '!=', 1)->get();
 
             $purchase_data = [];
             if($datefilter_report != ''){
@@ -1787,7 +1792,7 @@ class PurchaseController extends Controller
                     $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
 
 
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                     foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
@@ -1802,7 +1807,7 @@ class PurchaseController extends Controller
                         );
                     }
 
-                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                     foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
 
                         $Extracost_Arr[] = array(
@@ -1816,6 +1821,7 @@ class PurchaseController extends Controller
 
 
                     $purchase_data[] = array(
+                        'purchase_order' => $datefilter_report_arr->purchase_order,
                         'unique_key' => $datefilter_report_arr->unique_key,
                         'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
@@ -1860,7 +1866,7 @@ class PurchaseController extends Controller
 
         if($purchasereport_fromdate && $purchasereport_branch){
             $GetBrach = Branch::findOrFail($purchasereport_branch);
-            $datefilter_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('branch_id', '=', $purchasereport_branch)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $datefilter_report = Purchase::where('date', '=', $purchasereport_fromdate)->where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->get();
 
             $purchase_data = [];
             if($datefilter_report != ''){
@@ -1872,7 +1878,7 @@ class PurchaseController extends Controller
                     $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
                     $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
 
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                     foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
@@ -1888,7 +1894,7 @@ class PurchaseController extends Controller
                     }
 
 
-                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                     foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
 
                         $Extracost_Arr[] = array(
@@ -1901,6 +1907,7 @@ class PurchaseController extends Controller
                     }
 
                     $purchase_data[] = array(
+                        'purchase_order' => $datefilter_report_arr->purchase_order,
                         'unique_key' => $datefilter_report_arr->unique_key,
                         'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
@@ -1945,7 +1952,7 @@ class PurchaseController extends Controller
 
         if($purchasereport_todate && $purchasereport_branch){
             $GetBrach = Branch::findOrFail($purchasereport_branch);
-            $datefilter_report = Purchase::where('date', '=', $purchasereport_todate)->where('branch_id', '=', $purchasereport_branch)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $datefilter_report = Purchase::where('date', '=', $purchasereport_todate)->where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->get();
 
             $purchase_data = [];
             if($datefilter_report != ''){
@@ -1957,7 +1964,7 @@ class PurchaseController extends Controller
                     $branch_name = Branch::findOrFail($datefilter_report_arr->branch_id);
                     $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
 
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                     foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
@@ -1973,7 +1980,7 @@ class PurchaseController extends Controller
                     }
 
 
-                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                     foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
 
                         $Extracost_Arr[] = array(
@@ -1987,6 +1994,7 @@ class PurchaseController extends Controller
 
 
                     $purchase_data[] = array(
+                        'purchase_order' => $datefilter_report_arr->purchase_order,
                         'unique_key' => $datefilter_report_arr->unique_key,
                         'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
@@ -2035,7 +2043,7 @@ class PurchaseController extends Controller
         if($purchasereport_fromdate && $purchasereport_todate){
 
 
-            $datefilter_report = Purchase::whereBetween('date', [$purchasereport_fromdate, $purchasereport_todate])->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+            $datefilter_report = Purchase::whereBetween('date', [$purchasereport_fromdate, $purchasereport_todate])->where('soft_delete', '!=', 1)->get();
             $purchase_data = [];
             if($datefilter_report != ''){
                 $todate_terms = [];
@@ -2047,7 +2055,7 @@ class PurchaseController extends Controller
                     $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
 
 
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                     foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
@@ -2063,7 +2071,7 @@ class PurchaseController extends Controller
                     }
 
 
-                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                     foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
 
                         $Extracost_Arr[] = array(
@@ -2077,6 +2085,7 @@ class PurchaseController extends Controller
 
 
                     $purchase_data[] = array(
+                        'purchase_order' => $datefilter_report_arr->purchase_order,
                         'unique_key' => $datefilter_report_arr->unique_key,
                         'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
@@ -2123,7 +2132,7 @@ class PurchaseController extends Controller
         if($purchasereport_fromdate && $purchasereport_todate && $purchasereport_branch){
             $GetBrach = Branch::findOrFail($purchasereport_branch);
             $datefilter_report = Purchase::whereBetween('date', [$purchasereport_fromdate, $purchasereport_todate])
-                                            ->where('branch_id', '=', $purchasereport_branch)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+                                            ->where('branch_id', '=', $purchasereport_branch)->where('soft_delete', '!=', 1)->get();
             $purchase_data = [];
             if($datefilter_report != ''){
                 $todate_terms = [];
@@ -2135,7 +2144,7 @@ class PurchaseController extends Controller
                     $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
 
 
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                     foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
@@ -2151,7 +2160,7 @@ class PurchaseController extends Controller
                     }
 
 
-                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                    $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                     foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
 
                         $Extracost_Arr[] = array(
@@ -2164,6 +2173,7 @@ class PurchaseController extends Controller
                     }
 
                     $purchase_data[] = array(
+                        'purchase_order' => $datefilter_report_arr->purchase_order,
                         'unique_key' => $datefilter_report_arr->unique_key,
                         'branch_name' => $branch_name->shop_name,
                         'supplier_name' => $supplier_name->name,
@@ -2210,7 +2220,7 @@ class PurchaseController extends Controller
 
             $datefilter_report = Purchase::whereBetween('date', [$purchasereport_fromdate, $purchasereport_todate])
                                                     ->where('supplier_id', '=', $purchasereport_supplier)
-                                                    ->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+                                                    ->where('soft_delete', '!=', 1)->get();
                 $purchase_data = [];
                 if($datefilter_report != ''){
                         $todate_terms = [];
@@ -2222,7 +2232,7 @@ class PurchaseController extends Controller
                         $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
 
 
-                        $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                        $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                         foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
@@ -2238,7 +2248,7 @@ class PurchaseController extends Controller
                         }
 
 
-                        $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                        $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                     foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
 
                         $Extracost_Arr[] = array(
@@ -2252,6 +2262,7 @@ class PurchaseController extends Controller
 
 
                             $purchase_data[] = array(
+                                'purchase_order' => $datefilter_report_arr->purchase_order,
                                 'unique_key' => $datefilter_report_arr->unique_key,
                                 'branch_name' => $branch_name->shop_name,
                                 'supplier_name' => $supplier_name->name,
@@ -2302,7 +2313,7 @@ class PurchaseController extends Controller
                 $datefilter_report = Purchase::whereBetween('date', [$purchasereport_fromdate, $purchasereport_todate])
                                                         ->where('supplier_id', '=', $purchasereport_supplier)
                                                         ->where('branch_id', '=', $purchasereport_branch)
-                                                        ->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+                                                        ->where('soft_delete', '!=', 1)->get();
                     $purchase_data = [];
                     if($datefilter_report != ''){
                             $todate_terms = [];
@@ -2314,7 +2325,7 @@ class PurchaseController extends Controller
                             $supplier_name = Supplier::findOrFail($datefilter_report_arr->supplier_id);
 
 
-                            $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                            $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                             foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
                             $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
@@ -2329,7 +2340,7 @@ class PurchaseController extends Controller
                                 );
                             }
 
-                            $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->where('purchase_order', '=', NULL)->get();
+                            $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datefilter_report_arr->id)->get();
                             foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
 
                                 $Extracost_Arr[] = array(
@@ -2343,6 +2354,7 @@ class PurchaseController extends Controller
 
 
                                 $purchase_data[] = array(
+                                    'purchase_order' => $datefilter_report_arr->purchase_order,
                                     'unique_key' => $datefilter_report_arr->unique_key,
                                     'branch_name' => $branch_name->shop_name,
                                     'supplier_name' => $supplier_name->name,

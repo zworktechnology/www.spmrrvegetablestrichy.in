@@ -20,7 +20,7 @@
                             <a href="{{ route('sales.branchdata', ['branch_id' => '1']) }}"><i data-feather="shopping-cart"></i><span>Sales</span></a>
                         </li>
                         <li class="{{ Route::is('expence.index', 'expence.store', 'expence.create', 'expence.edit', 'expence.update', 'expence.branchdata', 'expence.datefilter') ? 'active' : '' }}">
-                            <a href="{{ route('expence.index') }}"><i data-feather="corner-up-left"></i><span>Expence</span></a>
+                            <a href="{{ route('expence.branchdata', ['branch_id' => '1']) }}"><i data-feather="corner-up-left"></i><span>Expence</span></a>
                         </li>
                     </ul>
                 </li>
@@ -39,10 +39,10 @@
                     <h6 class="submenu-hdr">Payment</h6>
                     <ul>
                         <li class="{{ Route::is('purchasepayment.index', 'purchasepayment.store', 'purchasepayment.create', 'purchasepayment.edit', 'purchasepayment.update', 'purchasepayment.delete', 'purchasepayment.branchdata', 'purchasepayment.datefilter') ? 'active' : '' }}">
-                            <a href="{{ route('purchasepayment.index') }}"><i data-feather="columns"></i></i><span>Purchase Receipt</span></a>
+                            <a href="{{ route('purchasepayment.branchdata', ['branch_id' => '1']) }}"><i data-feather="columns"></i></i><span>Purchase Receipt</span></a>
                         </li>
                         <li class="{{ Route::is('salespayment.index', 'salespayment.store', 'salespayment.create', 'salespayment.store', 'salespayment.edit', 'salespayment.update', 'salespayment.branchdata', 'salespayment.datefilter') ? 'active' : '' }}">
-                            <a href="{{ route('salespayment.index') }}"><i data-feather="pen-tool"></i><span>Sales Receipt</span></a>
+                            <a href="{{ route('salespayment.branchdata', ['branch_id' => '1']) }}"><i data-feather="pen-tool"></i><span>Sales Receipt</span></a>
                         </li>
                     </ul>
                 </li>
