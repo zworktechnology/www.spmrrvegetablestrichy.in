@@ -149,7 +149,6 @@ $pos = $matches[0];
                                                 class="badges bg-lightgreen" style="color: white">View</a>
                                             </li>
                                         </ul>
-
                                     </td>
 
                                 </tr>
