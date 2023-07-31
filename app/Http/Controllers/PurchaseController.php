@@ -67,7 +67,7 @@ class PurchaseController extends Controller
 
             $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             foreach ($All_supplier as $key => $All_supplierarr) {
-                $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('gross_amount', '=', NULL)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->first();
+                $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('gross_amount', '=', NULL)->where('purchase_order', '=', NULL)->orderBy('date', 'asc')->where('soft_delete', '!=', 1)->first();
                 if($PurchaseArray){
                     $null_grossarr[] = $PurchaseArray->id;
                 }
@@ -221,7 +221,7 @@ class PurchaseController extends Controller
            
             $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             foreach ($All_supplier as $key => $All_supplierarr) {
-                $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('purchase_order', '=', NULL)->where('gross_amount', '=', NULL)->where('soft_delete', '!=', 1)->first();
+                $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('purchase_order', '=', NULL)->where('gross_amount', '=', NULL)->orderBy('date', 'asc')->where('soft_delete', '!=', 1)->first();
                 if($PurchaseArray){
                     $null_grossarr[] = $PurchaseArray->id;
                 }
@@ -374,7 +374,7 @@ class PurchaseController extends Controller
 
             $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             foreach ($All_supplier as $key => $All_supplierarr) {
-                $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('purchase_order', '=', NULL)->where('gross_amount', '=', NULL)->where('soft_delete', '!=', 1)->first();
+                $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('purchase_order', '=', NULL)->where('gross_amount', '=', NULL)->orderBy('date', 'asc')->where('soft_delete', '!=', 1)->first();
                 if($PurchaseArray){
                     $null_grossarr[] = $PurchaseArray->id;
                 }
@@ -384,6 +384,7 @@ class PurchaseController extends Controller
                     $lastpattiyalid[] = $last_pattiyal_date->supplier_id;
                 }
             }
+            //dd($null_grossarr);
            
 
             $purchase_data[] = array(

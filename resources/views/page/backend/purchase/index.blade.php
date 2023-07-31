@@ -143,6 +143,16 @@
                                                                     Pattial</a>
                                                         </li>
 
+                                                        @else
+                                                        @if($index == 0)
+                                                        @foreach (array_unique($purchasedata['lastpattiyalDate']) as $index => $lastpattiyalDate)
+                                                        <li>
+
+                                                                <a  class="badges bg-lightgreen" style="color: white;background:#479393;" data-id="{{ $purchasedata['unique_key'] }}">
+                                                                    {{$lastpattiyalDate}}</a>
+                                                        </li>
+                                                        @endforeach
+                                                        @endif
 
                                                         @endif
                                                     @endforeach
