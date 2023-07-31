@@ -32,12 +32,26 @@ class PurchasePaymentController extends Controller
     }
 
 
-    public function branchdata($branch_id)
+    public function purchasepaymentbranch($branch_id)
     {
        
         $data = PurchasePayment::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
        
         $today = Carbon::now()->format('Y-m-d');
+        $timenow = Carbon::now()->format('H:i');
+
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $supplier = Supplier::orderBy('name', 'ASC')->where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        return view('page.backend.purchasepayment.index', compact('data', 'today', 'allbranch', 'supplier', 'timenow'));
+    }
+
+
+    public function purchasepayment_branchdata($today, $branch_id)
+    {
+       
+        $data = PurchasePayment::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+       
+       
         $timenow = Carbon::now()->format('H:i');
 
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();

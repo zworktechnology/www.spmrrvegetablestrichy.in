@@ -132,9 +132,114 @@ class SalesController extends Controller
     }
 
 
-    public function branchdata($branch_id)
+    public function salesbranch($branch_id)
     {
         $today = Carbon::now()->format('Y-m-d');
+        $branchwise_data = Sales::where('date', '=', $today)->where('branch_id', '=', $branch_id)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+        $Sales_data = [];
+        $sales_terms = [];
+        foreach ($branchwise_data as $key => $branchwise_datas) {
+            $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+            $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+            $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->where('sales_order', '=', NULL)->get();
+            foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                $sales_terms[] = array(
+                    'bag' => $SalesProducts_arrdata->bagorkg,
+                    'kgs' => $SalesProducts_arrdata->count,
+                    'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                    'total_price' => $SalesProducts_arrdata->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                );
+            }
+
+            $Sales_data[] = array(
+                'unique_key' => $branchwise_datas->unique_key,
+                'branch_name' => $branch_name->name,
+                'customer_name' => $customer_name->name,
+                'date' => $branchwise_datas->date,
+                'time' => $branchwise_datas->time,
+                'gross_amount' => $branchwise_datas->gross_amount,
+                'bill_no' => $branchwise_datas->bill_no,
+                'id' => $branchwise_datas->id,
+                'sales_terms' => $sales_terms,
+                'status' => $branchwise_datas->status,
+            );
+        }
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+
+        $PSTodayStockArr = [];
+           
+        $sales_branchwise_data = Sales::where('date', '=', $today)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+        $Sales_Branch = [];
+        foreach ($sales_branchwise_data as $key => $sales_Data) {
+            $Sales_Branch[] = $sales_Data->branch_id;
+        }
+      
+       
+        foreach (array_unique($Sales_Branch) as $key => $Merge_Branchs) {
+
+            $merge_salesProduct = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('sales_order', '=', NULL)->where('date', '=', $today)->get();
+            $sales_Array = [];
+            if($merge_salesProduct != ""){
+                foreach ($merge_salesProduct as $key => $merge_salesProducts) {
+                    $sales_Array[] = $merge_salesProducts->productlist_id;
+                }
+            }else {
+                $sales_Array[] = '';
+            }
+
+
+
+            foreach (array_unique($sales_Array) as $key => $sales_productlist) {
+               
+                $getSalebagcount = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('sales_order', '=', NULL)->where('productlist_id', '=', $sales_productlist)->where('bagorkg', '=', 'bag')->sum('count');
+                $getSalekgcount = SalesProduct::where('branch_id', '=', $Merge_Branchs)->where('date', '=', $today)->where('sales_order', '=', NULL)->where('productlist_id', '=', $sales_productlist)->where('bagorkg', '=', 'kg')->sum('count');
+
+
+                if($getSalebagcount != 0){
+                    $bag_count = $getSalebagcount;
+                }else {
+                    $bag_count = '';
+                }
+
+                if($getSalekgcount != 0){
+                    $kg_count = $getSalekgcount;
+                }else {
+                    $kg_count = '';
+                }
+
+
+                    $productlist_ID = Productlist::findOrFail($sales_productlist);
+
+                    $PSTodayStockArr[] = array(
+                        'branch_id' => $Merge_Branchs,
+                        'product_name' => $productlist_ID->name,
+                        'getSalebagcount' => $bag_count,
+                        'getSalekgcount' => $kg_count,
+                        'today' => $today,
+
+                    );
+
+                
+            }
+            
+        }
+
+        $today_date = Carbon::now()->format('Y-m-d');
+        return view('page.backend.sales.index', compact('Sales_data', 'allbranch', 'branch_id', 'today', 'PSTodayStockArr', 'today_date'));
+    }
+
+
+    public function sales_branchdata($today, $branch_id)
+    {
+        
         $branchwise_data = Sales::where('date', '=', $today)->where('branch_id', '=', $branch_id)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
         $Sales_data = [];
         $sales_terms = [];
@@ -2046,7 +2151,7 @@ class SalesController extends Controller
 
             $Sales_data[] = array(
                 'unique_key' => $datas->unique_key,
-                'branch_name' => $branch_name->name,
+                'branch_name' => $branch_name->shop_name,
                 'customer_name' => $customer_name->name,
                 'date' => $datas->date,
                 'time' => $datas->time,
@@ -2066,7 +2171,7 @@ class SalesController extends Controller
     }
 
 
-    public function salesorder_branchdata($branch_id)
+    public function salesorderbranch($branch_id)
     {
         $today = Carbon::now()->format('Y-m-d');
         $branchwise_data = Sales::where('date', '=', $today)->where('branch_id', '=', $branch_id)->where('sales_order', '=', '1')->where('soft_delete', '!=', 1)->get();
@@ -2094,7 +2199,53 @@ class SalesController extends Controller
 
             $Sales_data[] = array(
                 'unique_key' => $branchwise_datas->unique_key,
-                'branch_name' => $branch_name->name,
+                'branch_name' => $branch_name->shop_name,
+                'customer_name' => $customer_name->name,
+                'date' => $branchwise_datas->date,
+                'time' => $branchwise_datas->time,
+                'gross_amount' => $branchwise_datas->gross_amount,
+                'bill_no' => $branchwise_datas->bill_no,
+                'id' => $branchwise_datas->id,
+                'sales_terms' => $sales_terms,
+                'status' => $branchwise_datas->status,
+            );
+        }
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+        $today_date = Carbon::now()->format('Y-m-d');
+        return view('page.backend.salesorder.salesorder_index', compact('Sales_data', 'allbranch', 'branch_id', 'today', 'today_date'));
+    }
+
+
+    public function salesorder_branchdata($today, $branch_id)
+    {
+        
+        $branchwise_data = Sales::where('date', '=', $today)->where('branch_id', '=', $branch_id)->where('sales_order', '=', '1')->where('soft_delete', '!=', 1)->get();
+        $Sales_data = [];
+        $sales_terms = [];
+        foreach ($branchwise_data as $key => $branchwise_datas) {
+            $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+            $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+            $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->where('sales_order', '=', '1')->get();
+            foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                $sales_terms[] = array(
+                    'bag' => $SalesProducts_arrdata->bagorkg,
+                    'kgs' => $SalesProducts_arrdata->count,
+                    'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                    'total_price' => $SalesProducts_arrdata->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                );
+            }
+
+            $Sales_data[] = array(
+                'unique_key' => $branchwise_datas->unique_key,
+                'branch_name' => $branch_name->shop_name,
                 'customer_name' => $customer_name->name,
                 'date' => $branchwise_datas->date,
                 'time' => $branchwise_datas->time,

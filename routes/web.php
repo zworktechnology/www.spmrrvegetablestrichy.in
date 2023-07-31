@@ -76,8 +76,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/customer/delete/{unique_key}', [CustomerController::class, 'delete'])->name('customer.delete');
         // CHECK DUPLICATE
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/customer/checkduplicate', [CustomerController::class, 'checkduplicate'])->name('customer.checkduplicate');
-         // VIEW
-         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/customer/view/{unique_key}', [CustomerController::class, 'view'])->name('customer.view');
          // REPORT VIEW
          Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/customer/viewfilter', [CustomerController::class, 'viewfilter'])->name('customer.viewfilter');
          // INDEX BRANCH WISE
@@ -140,8 +138,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/expence/report', [ExpenceController::class, 'report'])->name('expence.report');
         // REPORT VIEW
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/expence/report_view', [ExpenceController::class, 'report_view'])->name('expence.report_view');
-        // INDEX BRANCH WISE
-        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/expence/branchdata/{branch_id}', [ExpenceController::class, 'branchdata'])->name('expence.branchdata');
+        
         // DATAE FILTER
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/expence/datefilter', [ExpenceController::class, 'datefilter'])->name('expence.datefilter');
     });
@@ -205,14 +202,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/delete/{unique_key}', [PurchaseController::class, 'delete'])->name('purchase.delete');
         // VIEW
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchase/print_view/{unique_key}', [PurchaseController::class, 'print_view'])->name('purchase.print_view');
-        // INDEX BRANCH WISE
-        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchase/branchdata/{branch_id}', [PurchaseController::class, 'branchdata'])->name('purchase.branchdata');
+        
         // REPORT
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchase/report', [PurchaseController::class, 'report'])->name('purchase.report');
         // REPORT VIEW
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/report_view', [PurchaseController::class, 'report_view'])->name('purchase.report_view');
         // DATAE FILTER
-        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/datefilter', [PurchaseController::class, 'datefilter'])->name('purchase.datefilter');
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase', [PurchaseController::class, 'datefilter'])->name('purchase.datefilter');
         // EDIT
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchase/invoiceedit/{unique_key}', [PurchaseController::class, 'invoiceedit'])->name('purchase.invoiceedit');
         // INVOICE UPDATE
@@ -235,10 +231,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchasepayment/update/{unique_key}', [PurchasePaymentController::class, 'update'])->name('purchasepayment.update');
         // DELETE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchasepayment/delete/{unique_key}', [PurchasePaymentController::class, 'delete'])->name('purchasepayment.delete');
-         // INDEX BRANCH WISE
-         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchasepayment/branchdata/{branch_id}', [PurchasePaymentController::class, 'branchdata'])->name('purchasepayment.branchdata');
          // DATAE FILTER
-        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchasepayment/datefilter', [PurchasePaymentController::class, 'datefilter'])->name('purchasepayment.datefilter');
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchasepayment', [PurchasePaymentController::class, 'datefilter'])->name('purchasepayment.datefilter');
     });
 
 
@@ -254,10 +248,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
          Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salespayment/edit/{unique_key}', [SalespaymentController::class, 'edit'])->name('salespayment.edit');
          // UPDATE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/salespayment/update/{unique_key}', [SalespaymentController::class, 'update'])->name('salespayment.update');
-        // INDEX BRANCH WISE
-        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salespayment/branchdata/{branch_id}', [SalespaymentController::class, 'branchdata'])->name('salespayment.branchdata');
         // DATAE FILTER
-        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/salespayment/datefilter', [SalespaymentController::class, 'datefilter'])->name('salespayment.datefilter');
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/salespayment', [SalespaymentController::class, 'datefilter'])->name('salespayment.datefilter');
 
     });
 
@@ -280,16 +272,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/sales/invoice_update/{unique_key}', [SalesController::class, 'invoice_update'])->name('sales.invoice_update');
         // DELETE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/sales/delete/{unique_key}', [SalesController::class, 'delete'])->name('sales.delete');
-        // INDEX BRANCH WISE
-        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/sales/branchdata/{branch_id}', [SalesController::class, 'branchdata'])->name('sales.branchdata');
-         // VIEW
+        // VIEW
          Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/sales/print_view/{unique_key}', [SalesController::class, 'print_view'])->name('sales.print_view');
          // REPORT
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/sales/report', [SalesController::class, 'report'])->name('sales.report');
         // REPORT VIEW
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/sales/report_view', [SalesController::class, 'report_view'])->name('sales.report_view');
         // DATAE FILTER
-        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/sales/datefilter', [SalesController::class, 'datefilter'])->name('sales.datefilter');
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/sales', [SalesController::class, 'datefilter'])->name('sales.datefilter');
     });
 
 
@@ -299,10 +289,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // INDEX
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchaseorder', [PurchaseController::class, 'purchaseorder_index'])->name('purchaseorder.purchaseorder_index');
-         // INDEX BRANCH WISE
-         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchaseorder/purchaseorder_branchdata/{branch_id}', [PurchaseController::class, 'purchaseorder_branchdata'])->name('purchaseorder.purchaseorder_branchdata');
+         
          // DATAE FILTER
-        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchaseorder/purchaseorder_datefilter', [PurchaseController::class, 'purchaseorder_datefilter'])->name('purchaseorder.purchaseorder_datefilter');
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchaseorder', [PurchaseController::class, 'purchaseorder_datefilter'])->name('purchaseorder.purchaseorder_datefilter');
          // CREATE
          Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/purchaseorder/purchaseorder_create', [PurchaseController::class, 'purchaseorder_create'])->name('purchaseorder.purchaseorder_create');
          // STORE
@@ -337,12 +326,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salesorder/salesorder_edit/{unique_key}', [SalesController::class, 'salesorder_edit'])->name('salesorder.salesorder_edit');
         // UPDATE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/salesorder/salesorder_update/{unique_key}', [SalesController::class, 'salesorder_update'])->name('salesorder.salesorder_update');
-        // INDEX BRANCH WISE
-        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salesorder/salesorder_branchdata/{branch_id}', [SalesController::class, 'salesorder_branchdata'])->name('salesorder.salesorder_branchdata');
-         // VIEW
+        // VIEW
          Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/salesorder/salesorder_printview/{unique_key}', [SalesController::class, 'salesorder_printview'])->name('salesorder.salesorder_printview');
         // DATAE FILTER
-        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/salesorder/salesorder_datefilter', [SalesController::class, 'salesorder_datefilter'])->name('salesorder.salesorder_datefilter');
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/salesorder', [SalesController::class, 'salesorder_datefilter'])->name('salesorder.salesorder_datefilter');
     });
 
 });
@@ -375,3 +362,23 @@ Route::get('/allpdf_export', [SupplierController::class, 'allpdf_export']);
 Route::get('/customerpdf_export/{last_word}', [CustomerController::class, 'customerpdf_export']);
 Route::get('/allbranchpdf_export', [CustomerController::class, 'allbranchpdf_export']);
 Route::get('/supplierview/{unique_key}/{last_word}', [SupplierController::class, 'supplierview']);
+Route::get('/customerview/{unique_key}/{last_word}', [CustomerController::class, 'customerview']);
+
+Route::get('/purchasebranch/{branch_id}', [PurchaseController::class, 'purchasebranch']);
+Route::get('/purchase_branchdata/{today}/{branch_id}', [PurchaseController::class, 'purchase_branchdata']);
+Route::get('/purchaseorderbranch/{branch_id}', [PurchaseController::class, 'purchaseorderbranch']);
+Route::get('/purchaseorder_branchdata/{today}/{branch_id}', [PurchaseController::class, 'purchaseorder_branchdata']);
+
+Route::get('/salesbranch/{branch_id}', [SalesController::class, 'salesbranch']);
+Route::get('/sales_branchdata/{today}/{branch_id}', [SalesController::class, 'sales_branchdata']);
+Route::get('/salesorderbranch/{branch_id}', [SalesController::class, 'salesorderbranch']);
+Route::get('/salesorder_branchdata/{today}/{branch_id}', [SalesController::class, 'salesorder_branchdata']);
+
+Route::get('/expensebranch/{branch_id}', [ExpenceController::class, 'expensebranch']);
+Route::get('/expensedata_branch/{today}/{branch_id}', [ExpenceController::class, 'expensedata_branch']);
+
+Route::get('/purchasepaymentbranch/{branch_id}', [PurchasePaymentController::class, 'purchasepaymentbranch']);
+Route::get('/purchasepayment_branchdata/{today}/{branch_id}', [PurchasePaymentController::class, 'purchasepayment_branchdata']);
+
+Route::get('/salespaymentbranch/{branch_id}', [SalespaymentController::class, 'salespaymentbranch']);
+Route::get('/salespayment_branchdata/{today}/{branch_id}', [SalespaymentController::class, 'salespayment_branchdata']);

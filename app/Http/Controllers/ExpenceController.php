@@ -52,14 +52,59 @@ class ExpenceController extends Controller
         return view('page.backend.expence.index', compact('expense_data', 'branch', 'today', 'timenow'));
     }
 
-    public function branchdata($branch_id)
+    public function expensebranch($branch_id)
     {
         $today = Carbon::now()->format('Y-m-d');
         $branch = Branch::where('soft_delete', '!=', 1)->get();
         $timenow = Carbon::now()->format('H:i');
 
 
-        $data = Expence::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+        $data = Expence::where('branch_id', '=', $branch_id)->where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
+        $expense_data = [];
+        $terms = [];
+
+        foreach ($data as $key => $datas) {
+            $branch_name = Branch::findOrFail($datas->branch_id);
+
+            $ExpenseDetails = Expensedetail::where('expense_id', '=', $datas->id)->get();
+            foreach ($ExpenseDetails as $key => $ExpenseDetails_arr) {
+
+                $terms[] = array(
+                    'expense_note' => $ExpenseDetails_arr->expense_note,
+                    'expense_amount' => $ExpenseDetails_arr->expense_amount,
+                    'expense_id' => $ExpenseDetails_arr->expense_id,
+
+                );
+
+            }
+
+            $expense_data[] = array(
+                'branch_name' => $branch_name->shop_name,
+                'date' => $datas->date,
+                'time' => $datas->time,
+                'amount' => $datas->amount,
+                'note' => $datas->note,
+                'unique_key' => $datas->unique_key,
+                'id' => $datas->id,
+                'branch_id' => $datas->branch_id,
+                'terms' => $terms,
+            );
+        }
+
+
+
+        return view('page.backend.expence.index', compact('expense_data', 'branch', 'today', 'timenow'));
+    }
+
+
+    public function expensedata_branch($today, $branch_id)
+    {
+       
+        $branch = Branch::where('soft_delete', '!=', 1)->get();
+        $timenow = Carbon::now()->format('H:i');
+
+
+        $data = Expence::where('branch_id', '=', $branch_id)->where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
         $expense_data = [];
         $terms = [];
 

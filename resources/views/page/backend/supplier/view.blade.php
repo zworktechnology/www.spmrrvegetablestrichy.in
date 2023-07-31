@@ -40,14 +40,14 @@
             <div class="dash-widget">
                 <div class="dash-widgetcontent">
                     <h5>{{ $suppliername }}</h5>
-                    <h6>Branch - Summary</h6>
+                    <h6 style="color:red">Branch - {{$GETBranchname}}</h6>
                 </div>
             </div>
         </div>
         <div class="col-lg-3 col-sm-6 col-12">
             <div class="dash-widget dash1">
                 <div class="dash-widgetcontent">
-                    <h5>₹ <span class="counters" data-count="0"></span></h5>
+                    <h5>₹ <span class="counters" data-count="{{ $tot_purchaseAmount }}"></span></h5>
                     <h6>Total Purchase Value</h6>
                 </div>
             </div>
@@ -55,7 +55,7 @@
         <div class="col-lg-3 col-sm-6 col-12">
             <div class="dash-widget dash2">
                 <div class="dash-widgetcontent">
-                    <h5>₹ <span class="counters" data-count="0"></span></h5>
+                    <h5>₹ <span class="counters" data-count="{{ $total_amount_paid }}"></span></h5>
                     <h6>Total Paid Value</h6>
                 </div>
             </div>
@@ -63,12 +63,13 @@
         <div class="col-lg-3 col-sm-6 col-12">
             <div class="dash-widget dash3">
                 <div class="dash-widgetcontent">
-                    <h5>₹ <span class="counters" data-count="0"></span></h5>
+                    <h5>₹ <span class="counters" data-count="{{ $total_balance }}"></span></h5>
                     <h6>Total Balance Value</h6>
                 </div>
             </div>
         </div>
     </div>
+
 
 
          <div class="col-lg-12 col-sm-12 col-12" style="display: flex;">

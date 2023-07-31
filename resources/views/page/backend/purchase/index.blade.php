@@ -42,6 +42,7 @@
                     </div>
                 </a>
             </div>
+            
                             @php
                             $lastword = Request::url();
                             preg_match("/[^\/]+$/", $lastword, $matches);
@@ -50,7 +51,7 @@
             @foreach ($allbranch as $keydata => $allbranches)
 
                 <div class="col-lg-2 col-sm-4 col-6">
-                    <a href="{{ route('purchase.branchdata', ['branch_id' => $allbranches->id]) }}">
+                    <a href="/purchase_branchdata/{{$today}}/{{ $allbranches->id }}">
                         <div class="dash-widget " @if ($last_word == $allbranches->id)
                     style="border-color:red; background-color: red;"
                     @endif >

@@ -14,13 +14,13 @@
                     <h6 class="submenu-hdr">Bill Management</h6>
                     <ul>
                         <li class="{{ Route::is('purchase.index', 'purchase.store', 'purchase.create', 'purchase.update', 'purchase.delete', 'purchase.print_view', 'purchase.branchdata', 'purchase.datefilter', 'purchase.invoice', 'purchase.invoice_update', 'purchase.invoiceedit', 'purchase.invoiceedit_update') ? 'active' : '' }}">
-                            <a href="{{ route('purchase.branchdata', ['branch_id' => '1']) }}"><i data-feather="shopping-bag"></i><span>Purchase</span></a>
+                            <a href="/purchasebranch/1"><i data-feather="shopping-bag"></i><span>Purchase</span></a>
                         </li>
                         <li class="{{ Route::is('sales.index', 'sales.store', 'sales.create', 'sales.edit', 'sales.update', 'sales.invoice', 'sales.invoice_update', 'sales.delete', 'sales.branchdata', 'sales.print_view', 'sales.report', 'sales.datefilter') ? 'active' : '' }}">
-                            <a href="{{ route('sales.branchdata', ['branch_id' => '1']) }}"><i data-feather="shopping-cart"></i><span>Sales</span></a>
+                            <a href="/salesbranch/1"><i data-feather="shopping-cart"></i><span>Sales</span></a>
                         </li>
                         <li class="{{ Route::is('expence.index', 'expence.store', 'expence.create', 'expence.edit', 'expence.update', 'expence.branchdata', 'expence.datefilter') ? 'active' : '' }}">
-                            <a href="{{ route('expence.branchdata', ['branch_id' => '1']) }}"><i data-feather="corner-up-left"></i><span>Expence</span></a>
+                            <a href="/expensebranch/1"><i data-feather="corner-up-left"></i><span>Expence</span></a>
                         </li>
                     </ul>
                 </li>
@@ -28,10 +28,10 @@
                     <h6 class="submenu-hdr">Order</h6>
                     <ul>
                         <li class="{{ Route::is('purchaseorder.purchaseorder_index', 'purchaseorder.purchaseorder_branchdata', 'purchaseorder.purchaseorder_datefilter', 'purchaseorder.purchaseorder_create', 'purchaseorder.purchaseorder_store', 'purchaseorder.purchaseorder_edit', 'purchaseorder.purchaseorder_update', 'purchaseorder.purchaseorder_invoice', 'purchaseorder.purchaseorder_invoiceupdate', 'purchaseorder.purchaseorder_invoiceedit', 'purchaseorder.purchaseorder_invoiceeditupdate', 'purchaseorder.purchaseorder_printview') ? 'active' : '' }}">
-                            <a href="{{ route('purchaseorder.purchaseorder_branchdata', ['branch_id' => '1']) }}"><i data-feather="shopping-bag"></i><span>Purchase Order</span></a>
+                            <a href="/purchaseorderbranch/1"><i data-feather="shopping-bag"></i><span>Purchase Order</span></a>
                         </li>
                         <li class="{{ Route::is('salesorder.salesorder_index', 'salesorder.salesorder_store', 'salesorder.salesorder_create', 'salesorder.salesorder_edit', 'salesorder.salesorder_update', 'salesorder.salesorder_branchdata', 'salesorder.salesorder_printview', 'salesorder.salesorder_datefilter') ? 'active' : '' }}">
-                            <a href="{{ route('salesorder.salesorder_branchdata', ['branch_id' => '1']) }}"><i data-feather="shopping-cart"></i><span>Sales Order</span></a>
+                            <a href="/salesorderbranch/1"><i data-feather="shopping-cart"></i><span>Sales Order</span></a>
                         </li>
                     </ul>
                 </li>
@@ -39,10 +39,10 @@
                     <h6 class="submenu-hdr">Payment</h6>
                     <ul>
                         <li class="{{ Route::is('purchasepayment.index', 'purchasepayment.store', 'purchasepayment.create', 'purchasepayment.edit', 'purchasepayment.update', 'purchasepayment.delete', 'purchasepayment.branchdata', 'purchasepayment.datefilter') ? 'active' : '' }}">
-                            <a href="{{ route('purchasepayment.branchdata', ['branch_id' => '1']) }}"><i data-feather="columns"></i></i><span>Purchase Receipt</span></a>
+                            <a href="/purchasepaymentbranch/1"><i data-feather="columns"></i></i><span>Purchase Receipt</span></a>
                         </li>
                         <li class="{{ Route::is('salespayment.index', 'salespayment.store', 'salespayment.create', 'salespayment.store', 'salespayment.edit', 'salespayment.update', 'salespayment.branchdata', 'salespayment.datefilter') ? 'active' : '' }}">
-                            <a href="{{ route('salespayment.branchdata', ['branch_id' => '1']) }}"><i data-feather="pen-tool"></i><span>Sales Receipt</span></a>
+                            <a href="/salespaymentbranch/1"><i data-feather="pen-tool"></i><span>Sales Receipt</span></a>
                         </li>
                     </ul>
                 </li>

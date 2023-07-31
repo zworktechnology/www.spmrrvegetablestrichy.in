@@ -31,12 +31,26 @@ class SalespaymentController extends Controller
     }
 
 
-    public function branchdata($branch_id)
+    public function salespaymentbranch($branch_id)
     {
        
         $data = Salespayment::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
        
         $today = Carbon::now()->format('Y-m-d');
+        $timenow = Carbon::now()->format('H:i');
+
+        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        $customer = Customer::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+        return view('page.backend.salespayment.index', compact('data', 'today', 'allbranch', 'customer', 'timenow'));
+    }
+
+
+    public function salespayment_branchdata($today, $branch_id)
+    {
+       
+        $data = Salespayment::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+       
+
         $timenow = Carbon::now()->format('H:i');
 
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();

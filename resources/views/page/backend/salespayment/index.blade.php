@@ -50,7 +50,7 @@
                             @endphp
             @foreach ($allbranch as $keydata => $allbranches)
                 <div class="col-lg-2 col-sm-4 col-6">
-                    <a href="{{ route('salespayment.branchdata', ['branch_id' => $allbranches->id]) }}" style="color: black">
+                    <a href="/salespayment_branchdata/{{$today}}/{{ $allbranches->id }}" style="color: black">
                         <div class="dash-widget"@if ($last_word == $allbranches->id)
                             style="border-color:red; background-color: red;"
                     @endif>
@@ -85,7 +85,7 @@
                                     <td>{{ ++$keydata }}</td>
                                     <td>{{ date('d M Y', strtotime($P_PaymentData->date)) }} -
                                         {{ date('h:i A', strtotime($P_PaymentData->time)) }}</td>
-                                    <td>{{ $P_PaymentData->branch->name }}</td>
+                                    <td>{{ $P_PaymentData->branch->shop_name }}</td>
                                     <td>{{$P_PaymentData->customer->name }}</td>
                                     <td>{{$P_PaymentData->oldblance }}</td>
                                     <td>{{ $P_PaymentData->salespayment_discount }}</td>

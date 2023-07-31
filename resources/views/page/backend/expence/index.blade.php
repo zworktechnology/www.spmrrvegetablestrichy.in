@@ -50,7 +50,7 @@
                             @endphp
             @foreach ($branch as $keydata => $allbranches)
                 <div class="col-lg-2 col-sm-4 col-6">
-                    <a href="{{ route('expence.branchdata', ['branch_id' => $allbranches->id]) }}">
+                    <a href="/expensedata_branch/{{$today}}/{{ $allbranches->id }}">
                         <div class="dash-widget" @if ($last_word == $allbranches->id)
                             style="border-color:red; background-color: red;"
                     @endif>
