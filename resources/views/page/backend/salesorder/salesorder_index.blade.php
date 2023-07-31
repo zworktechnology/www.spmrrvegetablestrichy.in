@@ -27,7 +27,7 @@
        $pos = $matches[0];
        @endphp
             <div class="col-lg-2 col-sm-4 col-6">
-                <a href="{{ route('sales.index') }}">
+                <a href="{{ route('salesorder.salesorder_index') }}">
                     <div class="dash-widget" @if ($pos == "sales")
                     style="border-color:red; background-color: red; margin-bottom:18px;"
                     @endif>
