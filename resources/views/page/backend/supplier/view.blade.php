@@ -32,14 +32,6 @@
                         <input type="submit" class="btn btn-primary" name="submit" value="Search" />
                     </div>
                 </div>
-                <div class="col-lg-2 col-sm-6 col-12" style="margin: 0px 3px;">
-                    <div class="form-group">
-                        <label style="opacity: 0%;">Action</label>
-                        <a href="{{ route('supplier.view', ['unique_key' => $unique_key]) }}">
-                            <input type="button" class="btn btn-primary" name="Show All" value="All" />
-                        </a>
-                    </div>
-                </div>
             </div>
         </form>
     </div>

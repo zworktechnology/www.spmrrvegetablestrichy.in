@@ -572,7 +572,7 @@ class SupplierController extends Controller
 
 
 
-    public function view($unique_key)
+    public function supplierview($unique_key, $last_word)
     {
         $SupplierData = Supplier::where('unique_key', '=', $unique_key)->first();
 

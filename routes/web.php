@@ -98,8 +98,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/supplier/checkbalance/{id}', [SupplierController::class, 'checkbalance'])->name('supplier.checkbalance');
         // CHECK DUPLICATE
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/supplier/checkduplicate', [SupplierController::class, 'checkduplicate'])->name('supplier.checkduplicate');
-        // VIEW
-        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/supplier/view/{unique_key}', [SupplierController::class, 'view'])->name('supplier.view');
+        
         // REPORT VIEW
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/supplier/viewfilter', [SupplierController::class, 'viewfilter'])->name('supplier.viewfilter');
          // INDEX BRANCH WISE
@@ -375,3 +374,4 @@ Route::get('/pdf_export/{last_word}', [SupplierController::class, 'pdf_export'])
 Route::get('/allpdf_export', [SupplierController::class, 'allpdf_export']);
 Route::get('/customerpdf_export/{last_word}', [CustomerController::class, 'customerpdf_export']);
 Route::get('/allbranchpdf_export', [CustomerController::class, 'allbranchpdf_export']);
+Route::get('/supplierview/{unique_key}/{last_word}', [SupplierController::class, 'supplierview']);

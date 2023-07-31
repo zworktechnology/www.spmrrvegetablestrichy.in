@@ -145,7 +145,7 @@ $pos = $matches[0];
                                                     data-bs-target=".checkbalance-modal-xl{{ $suppliertdata['unique_key'] }}" class="badges bg-lightred checkbalance" style="color: white">Check Balance</a>
                                             </li> --}}
                                             <li>
-                                                <a href="{{ route('supplier.view', ['unique_key' => $suppliertdata['unique_key']]) }}"
+                                                <a href="/supplierview/{{ $suppliertdata['unique_key'] }}/{{$last_word}}"
                                                 class="badges bg-lightgreen" style="color: white">View</a>
                                             </li>
                                         </ul>
