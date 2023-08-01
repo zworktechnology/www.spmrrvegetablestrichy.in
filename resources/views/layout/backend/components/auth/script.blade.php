@@ -176,7 +176,6 @@ $(".purchaseclose").click(function() {
                 var total_amount = $(".total_amount").val();
                 var commision_amount = (commission_percent / 100) * total_amount;
                 $('.commission_amount').val(commision_amount.toFixed(2));
-                $('.tot_comm_extracost').val(commision_amount);
 
                 var totalExtraAmount = 0;
             $("input[name='extracost[]']").each(
@@ -189,6 +188,18 @@ $(".purchaseclose").click(function() {
                                     });
             var tot_comm_extracost = Number(totalExtraAmount) + Number(commision_amount);
             $(".tot_comm_extracost").val(tot_comm_extracost);
+
+
+                var total_amount = $(".total_amount").val();
+                var gross_amount = Number(total_amount) - Number(tot_comm_extracost);
+                $('.gross_amount').val(gross_amount.toFixed(2));
+                var old_balance = $(".old_balance").val();
+                var grand_total = Number(old_balance) + Number(gross_amount);
+                $('.grand_total').val(grand_total.toFixed(2));
+
+                var payable_amount = $(".payable_amount").val();
+                var pending_amount = Number(grand_total) - Number(payable_amount);
+                $('.pending_amount').val(pending_amount.toFixed(2));
         });
 
 
@@ -885,9 +896,9 @@ $(".purchaseclose").click(function() {
                                         $('.total_extracost').val(
                                             totalExtraAmount);
                                     });
-            var commission_amount = $(".commission_amount").val();
-            var tot_comm_extracost = Number(totalExtraAmount) + Number(commission_amount);
-            $(".tot_comm_extracost").val(tot_comm_extracost);
+                var commission_amount = $(".commission_amount").val();
+                var tot_comm_extracost = Number(totalExtraAmount) + Number(commission_amount);
+                $(".tot_comm_extracost").val(tot_comm_extracost);
                 var total_amount = $(".total_amount").val();
                 var gross_amount = Number(total_amount) - Number(tot_comm_extracost);
                 $('.gross_amount').val(gross_amount.toFixed(2));
@@ -907,6 +918,8 @@ $(".purchaseclose").click(function() {
                 $('.pending_amount').val(pending_amount.toFixed(2));
             });
 
+
+           
 
             var invoice_supplier = $(".invoice_supplier").val();
             var invoice_branchid = $(".invoice_branchid").val();

@@ -2410,11 +2410,13 @@ class SalesController extends Controller
     public function salesorder_update(Request $request, $unique_key)
     {
 
-        $branch_id = $request->get('sales_branch_id');
-        $sales_customer_id = $request->get('sales_customerid');
+
 
 
         $Sales_Data = Sales::where('unique_key', '=', $unique_key)->where('sales_order', '=', '1')->first();
+
+        $branch_id = $Sales_Data->branch_id;
+        $sales_customer_id = $Sales_Data->customer_id;
 
 
         $SalesbranchwiseData = BranchwiseBalance::where('customer_id', '=', $sales_customer_id)->where('branch_id', '=', $branch_id)->first();

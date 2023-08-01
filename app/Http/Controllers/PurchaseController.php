@@ -3768,12 +3768,96 @@ class PurchaseController extends Controller
 
         $Purchase_Data = Purchase::where('unique_key', '=', $unique_key)->first();
 
+        $purchase_branch_id = $Purchase_Data->branch_id;
+        $purchase_supplier_id = $Purchase_Data->supplier_id;
+
+
+        $PurchasebranchwiseData = BranchwiseBalance::where('supplier_id', '=', $purchase_supplier_id)->where('branch_id', '=', $purchase_branch_id)->first();
+        if($PurchasebranchwiseData != ""){
+
+
+            $old_grossamount = $PurchasebranchwiseData->purchase_amount;
+            $old_paid = $PurchasebranchwiseData->purchase_paid;
+
+            $oldentry_grossamount = $Purchase_Data->gross_amount;
+            $oldentry_paid = $Purchase_Data->paid_amount;
+
+            $gross_amount = $request->get('gross_amount');
+            $payable_amount = $request->get('payable_amount');
+
+
+
+            if($oldentry_grossamount > $gross_amount){
+                $newgross = $oldentry_grossamount - $gross_amount;
+                $updated_gross = $old_grossamount - $newgross;
+            }else if($oldentry_grossamount < $gross_amount){
+                $newgross = $gross_amount - $oldentry_grossamount;
+                $updated_gross = $old_grossamount + $newgross;
+            }else if($oldentry_grossamount == $gross_amount){
+                $updated_gross = $old_grossamount;
+            }
+
+
+            if($oldentry_paid > $payable_amount){
+                $newPaidAmt = $oldentry_paid - $payable_amount;
+                $updated_paid = $old_paid - $newPaidAmt;
+            }else if($oldentry_paid < $payable_amount){
+                $newPaidAmt = $payable_amount - $oldentry_paid;
+                $updated_paid = $old_paid + $newPaidAmt;
+            }else if($oldentry_paid == $payable_amount){
+                $updated_paid = $old_paid;
+            }
+
+            $new_balance = $updated_gross - $updated_paid;
+
+            DB::table('branchwise_balances')->where('supplier_id', $purchase_supplier_id)->where('branch_id', $purchase_branch_id)->update([
+                'purchase_amount' => $updated_gross,  'purchase_paid' => $updated_paid, 'purchase_balance' => $new_balance
+            ]);
+
+        }
+
+        $Purchase_Data->total_amount = $request->get('total_amount');
+        $Purchase_Data->commission_ornet = $request->get('commission_ornet');
+        $Purchase_Data->commission_percent = $request->get('commission_percent');
+        $Purchase_Data->commission_amount = $request->get('commission_amount');
+
+        $Purchase_Data->tot_comm_extracost = $request->get('tot_comm_extracost');
+        $Purchase_Data->gross_amount = $request->get('gross_amount');
+        $Purchase_Data->old_balance = $request->get('old_balance');
+        $Purchase_Data->grand_total = $request->get('grand_total');
+        $Purchase_Data->paid_amount = $request->get('payable_amount');
+        $Purchase_Data->balance_amount = $request->get('pending_amount');
         $Purchase_Data->purchase_remark = $request->get('purchase_remark');
         $Purchase_Data->update();
+
+
+        $PurchaseId = $Purchase_Data->id;
+
+        foreach ($request->get('purchase_detail_id') as $key => $purchase_detail_id) {
+            if ($purchase_detail_id > 0) {
+                $updateproduct_id = $request->product_id[$key];
+
+                    $ids = $purchase_detail_id;
+                    $PurchaseId = $PurchaseId;
+                    $productlist_id = $request->product_id[$key];
+                    $bagorkg = $request->bagorkg[$key];
+                    $count = $request->count[$key];
+                    $price_per_kg = $request->price_per_kg[$key];
+                    $total_price = $request->total_price[$key];
+
+                    DB::table('purchase_products')->where('id', $ids)->update([
+                        'purchase_id' => $PurchaseId,  'productlist_id' => $updateproduct_id,  'bagorkg' => $bagorkg,  'count' => $count, 'price_per_kg' => $price_per_kg, 'total_price' => $total_price
+                    ]);
+
+            }
+
+        }
 
         return redirect()->route('purchaseorder.purchaseorder_index')->with('update', 'Updated Purchase information has been added to your list.');
 
     }
+
+    
 
 
     public function purchaseorder_printview($unique_key)
