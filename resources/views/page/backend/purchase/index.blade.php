@@ -42,7 +42,7 @@
                     </div>
                 </a>
             </div>
-            
+
                             @php
                             $lastword = Request::url();
                             preg_match("/[^\/]+$/", $lastword, $matches);
@@ -121,12 +121,6 @@
                                                 @endif
                                             @endif
                                             <li>
-                                                <a href="#delete{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
-                                                    data-id="{{ $purchasedata['unique_key'] }}"
-                                                    data-bs-target=".purchasedelete-modal-xl{{ $purchasedata['unique_key'] }}"
-                                                    class="badges bg-lightgrey" style="color: white">Delete</a>
-                                            </li>
-                                            <li>
                                                 <a href="#purchaseview{{ $purchasedata['unique_key'] }}"
                                                     data-bs-toggle="modal" data-id="{{ $purchasedata['id'] }}"
                                                     data-bs-target=".purchaseview-modal-xl{{ $purchasedata['unique_key'] }}"
@@ -134,7 +128,7 @@
 
                                             </li>
 
-                                           
+
                                                 @if ($purchasedata['status'] == 0)
                                                     @foreach (array_unique($purchasedata['null_grossarr']) as $index => $null_grossarr)
 
@@ -161,15 +155,21 @@
                                                     @endforeach
 
 
-                                                    
 
-                                                    
+
+
 
                                                 @elseif ($purchasedata['status'] == 1)
                                                     <li>   <a href="{{ route('purchase.print_view', ['unique_key' => $purchasedata['unique_key']]) }}"
                                                         class="badges bg-green" style="color: white">Invoice</a></li>
                                                 @endif
-                                            
+
+                                                <li>
+                                                    <a href="#delete{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
+                                                        data-id="{{ $purchasedata['unique_key'] }}"
+                                                        data-bs-target=".purchasedelete-modal-xl{{ $purchasedata['unique_key'] }}"
+                                                        class="badges bg-lightgrey" style="color: white">Delete</a>
+                                                </li>
 
                                         </ul>
                                     </td>

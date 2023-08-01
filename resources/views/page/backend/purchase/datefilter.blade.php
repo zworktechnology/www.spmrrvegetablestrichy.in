@@ -52,12 +52,6 @@
                                                 <a href="{{ route('purchase.edit', ['unique_key' => $purchasedata['unique_key']]) }}"
                                                     class="badges bg-lightyellow" style="color: white">Edit</a>
                                             </li>
-                                            <li hidden>
-                                                <a href="#delete{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
-                                                    data-id="{{ $purchasedata['unique_key'] }}"
-                                                    data-bs-target=".purchasedelete-modal-xl{{ $purchasedata['unique_key'] }}"
-                                                    class="badges bg-lightgrey" style="color: white">Delete</a>
-                                            </li>
                                             <li>
                                                 <a href="#purchaseview{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
                                                     data-id="{{ $purchasedata['id'] }}"
@@ -68,6 +62,12 @@
                                             <li>
                                                 <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
                                                     class="badges bg-lightgreen" style="color: white">Invoice</a>
+                                            </li>
+                                            <li hidden>
+                                                <a href="#delete{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
+                                                    data-id="{{ $purchasedata['unique_key'] }}"
+                                                    data-bs-target=".purchasedelete-modal-xl{{ $purchasedata['unique_key'] }}"
+                                                    class="badges bg-lightgrey" style="color: white">Delete</a>
                                             </li>
                                         </ul>
                                     </td>

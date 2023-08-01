@@ -30,7 +30,7 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Branch</label>
-                                <select class="select salesreport_branch" name="salesreport_branch"
+                                <select class="select salesreport_branch form-control js-example-basic-single" name="salesreport_branch"
                                     id="salesreport_branch">
                                     <option value=""  selected >Select Branch</option>
                                     @foreach ($branch as $branches)
@@ -42,8 +42,8 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Customer</label>
-                                <select class="select" name="salesreport_customer" id="salesreport_customer">
-                                    <option value=""  selected >Select Customer</option>
+                                <select class="select form-control js-example-basic-single" name="salesreport_customer" id="salesreport_customer">
+                                    <option value="" selected >Select Customer</option>
                                     @foreach ($Customer as $Customers)
                                         <option value="{{ $Customers->id }}">{{ $Customers->name }}</option>
                                     @endforeach
@@ -118,7 +118,7 @@
                                             @if ($Sales_datas['unique_key'] != '')
                                                 <tr>
                                                     <td>{{ ++$keydata }}</td>
-                                                    @if ($Sales_datas['sales_order'] == NULL) 
+                                                    @if ($Sales_datas['sales_order'] == NULL)
                                                     <td style="text-transform: uppercase;color:#198754"> Sales </td>
                                                     @elseif ($Sales_datas['sales_order'] == '1')
                                                     <td style="text-transform: uppercase;color:red;">Sales Order</td>
@@ -138,7 +138,7 @@
                                                     <td>{{ $Sales_datas['gross_amount'] }}</td>
                                                 </tr>
 
-                                                
+
                                             @endif
                                         @endforeach
 
