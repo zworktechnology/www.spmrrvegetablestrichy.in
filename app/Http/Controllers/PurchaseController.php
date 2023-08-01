@@ -169,8 +169,10 @@ class PurchaseController extends Controller
         $bank = Bank::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         $timenow = Carbon::now()->format('H:i');
 
+        $today_date = Carbon::now()->format('Y-m-d');
+
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-        return view('page.backend.purchase.index', compact('purchase_data', 'today', 'productlist', 'allbranch', 'branch', 'supplier', 'timenow', 'bank', 'PSTodayStockArr'));
+        return view('page.backend.purchase.index', compact('purchase_data', 'today', 'productlist', 'allbranch', 'branch', 'supplier', 'timenow', 'bank', 'PSTodayStockArr', 'today_date'));
     }
 
     public function purchasebranch($branch_id)
@@ -316,11 +318,11 @@ class PurchaseController extends Controller
         }
 
 
-       
+        $today_date = Carbon::now()->format('Y-m-d');
 
         
        
-        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'branch_id', 'today', 'PSTodayStockArr'));
+        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'branch_id', 'today', 'PSTodayStockArr', 'today_date'));
     }
 
 
@@ -470,8 +472,8 @@ class PurchaseController extends Controller
        
 
         
-       
-        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'branch_id', 'today', 'PSTodayStockArr'));
+        $today_date = Carbon::now()->format('Y-m-d');
+        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'branch_id', 'today', 'PSTodayStockArr', 'today_date'));
     }
 
 
@@ -613,7 +615,8 @@ class PurchaseController extends Controller
             }
 
         }
-        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'today', 'PSTodayStockArr'));
+        $today_date = Carbon::now()->format('Y-m-d');
+        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'today', 'PSTodayStockArr', 'today_date'));
 
     }
 
@@ -1074,8 +1077,156 @@ class PurchaseController extends Controller
 
         $Purchase_Data = Purchase::where('unique_key', '=', $unique_key)->first();
 
+        $purchase_branch_id = $Purchase_Data->branch_id;
+        $purchase_supplier_id = $Purchase_Data->supplier_id;
+
+
+        $PurchasebranchwiseData = BranchwiseBalance::where('supplier_id', '=', $purchase_supplier_id)->where('branch_id', '=', $purchase_branch_id)->first();
+        if($PurchasebranchwiseData != ""){
+
+
+            $old_grossamount = $PurchasebranchwiseData->purchase_amount;
+            $old_paid = $PurchasebranchwiseData->purchase_paid;
+
+            $oldentry_grossamount = $Purchase_Data->gross_amount;
+            $oldentry_paid = $Purchase_Data->paid_amount;
+
+            $gross_amount = $request->get('gross_amount');
+            $payable_amount = $request->get('payable_amount');
+
+
+
+            if($oldentry_grossamount > $gross_amount){
+                $newgross = $oldentry_grossamount - $gross_amount;
+                $updated_gross = $old_grossamount - $newgross;
+            }else if($oldentry_grossamount < $gross_amount){
+                $newgross = $gross_amount - $oldentry_grossamount;
+                $updated_gross = $old_grossamount + $newgross;
+            }else if($oldentry_grossamount == $gross_amount){
+                $updated_gross = $old_grossamount;
+            }
+
+
+            if($oldentry_paid > $payable_amount){
+                $newPaidAmt = $oldentry_paid - $payable_amount;
+                $updated_paid = $old_paid - $newPaidAmt;
+            }else if($oldentry_paid < $payable_amount){
+                $newPaidAmt = $payable_amount - $oldentry_paid;
+                $updated_paid = $old_paid + $newPaidAmt;
+            }else if($oldentry_paid == $payable_amount){
+                $updated_paid = $old_paid;
+            }
+
+            $new_balance = $updated_gross - $updated_paid;
+
+            DB::table('branchwise_balances')->where('supplier_id', $purchase_supplier_id)->where('branch_id', $purchase_branch_id)->update([
+                'purchase_amount' => $updated_gross,  'purchase_paid' => $updated_paid, 'purchase_balance' => $new_balance
+            ]);
+
+        }
+
+        $Purchase_Data->total_amount = $request->get('total_amount');
+        $Purchase_Data->commission_ornet = $request->get('commission_ornet');
+        $Purchase_Data->commission_percent = $request->get('commission_percent');
+        $Purchase_Data->commission_amount = $request->get('commission_amount');
+
+        $Purchase_Data->tot_comm_extracost = $request->get('tot_comm_extracost');
+        $Purchase_Data->gross_amount = $request->get('gross_amount');
+        $Purchase_Data->old_balance = $request->get('old_balance');
+        $Purchase_Data->grand_total = $request->get('grand_total');
+        $Purchase_Data->paid_amount = $request->get('payable_amount');
+        $Purchase_Data->balance_amount = $request->get('pending_amount');
         $Purchase_Data->purchase_remark = $request->get('purchase_remark');
         $Purchase_Data->update();
+
+
+        $PurchaseId = $Purchase_Data->id;
+
+
+
+
+        foreach ($request->get('purchase_detail_id') as $key => $purchase_detail_id) {
+            if ($purchase_detail_id > 0) {
+                $updateproduct_id = $request->product_id[$key];
+
+                $product_Data = Product::where('soft_delete', '!=', 1)->where('productlist_id', '=', $updateproduct_id)->where('branchtable_id', '=', $purchase_branch_id)->first();
+                    if($product_Data != ""){
+                        $bag_count = $product_Data->available_stockin_bag;
+                        $kg_count = $product_Data->available_stockin_kilograms;
+
+
+                        if($request->bagorkg[$key] == 'bag'){
+                            $getP_Productbag = PurchaseProduct::where('id', '=', $purchase_detail_id)->where('bagorkg', '=', 'bag')->first();
+
+                            $old_count = $getP_Productbag->count;
+                            $new_count = $request->count[$key];
+
+                            if($old_count > $new_count){
+
+                                $total_count = $old_count - $new_count;
+                                $stockbag_count = $bag_count - $total_count;
+
+                                DB::table('products')->where('productlist_id', $updateproduct_id)->where('branchtable_id', $purchase_branch_id)->update([
+                                    'available_stockin_bag' => $stockbag_count
+                                ]);
+                            }else if($old_count < $new_count){
+
+                                $total_count = $new_count - $old_count;
+                                $stockbag_count = $bag_count + $total_count;
+    
+                                DB::table('products')->where('productlist_id', $updateproduct_id)->where('branchtable_id', $purchase_branch_id)->update([
+                                    'available_stockin_bag' => $stockbag_count
+                                ]);
+    
+                            }
+                        }else if($request->bagorkg[$key] == 'kg'){
+                            $getP_Productkg = SalesProduct::where('id', '=', $sales_detail_id)->where('bagorkg', '=', 'kg')->first();
+
+                            $oldkg_count = $getP_Productkg->count;
+                            $newkg_count = $request->count[$key];
+
+
+                            if($oldkg_count > $newkg_count){
+
+                                $total_count = $oldkg_count - $newkg_count;
+                                $stockkg_count = $kg_count - $total_count;
+    
+                                DB::table('products')->where('productlist_id', $updateproduct_id)->where('branchtable_id', $purchase_branch_id)->update([
+                                    'available_stockin_kilograms' => $stockkg_count
+                                ]);
+    
+                            }else if($oldkg_count < $newkg_count){
+    
+                                $total_count = $newkg_count - $oldkg_count;
+                                $stockkg_count = $kg_count + $total_count;
+    
+                                DB::table('products')->where('productlist_id', $updateproduct_id)->where('branchtable_id', $purchase_branch_id)->update([
+                                    'available_stockin_kilograms' => $stockkg_count
+                                ]);
+    
+                            }
+    
+                        }
+                    }
+
+
+
+                    $ids = $purchase_detail_id;
+                    $PurchaseId = $PurchaseId;
+                    $productlist_id = $request->product_id[$key];
+                    $bagorkg = $request->bagorkg[$key];
+                    $count = $request->count[$key];
+                    $price_per_kg = $request->price_per_kg[$key];
+                    $total_price = $request->total_price[$key];
+
+                    DB::table('purchase_products')->where('id', $ids)->update([
+                        'purchase_id' => $PurchaseId,  'productlist_id' => $updateproduct_id,  'bagorkg' => $bagorkg,  'count' => $count, 'price_per_kg' => $price_per_kg, 'total_price' => $total_price
+                    ]);
+
+
+            }
+
+        }
 
         return redirect()->route('purchase.index')->with('update', 'Updated Purchase information has been added to your list.');
 
@@ -1103,64 +1254,95 @@ class PurchaseController extends Controller
 
     public function delete($unique_key)
     {
-        $today = Carbon::now()->format('Y-m-d');
-        $data = Purchase::where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
-        $purchase_data = [];
-        $terms = [];
-        $Extracost_Arr = [];
-        foreach ($data as $key => $datas) {
-            $branch_name = Branch::findOrFail($datas->branch_id);
-            $supplier_name = Supplier::findOrFail($datas->supplier_id);
-
-            $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
-            foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
-
-                $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                $terms[] = array(
-                    'bag' => $PurchaseProducts_arrdata->bagorkg,
-                    'kgs' => $PurchaseProducts_arrdata->count,
-                    'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                    'total_price' => $PurchaseProducts_arrdata->total_price,
-                    'product_name' => $productlist_ID->name,
-                    'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
-
-                );
-            }
+        $Purchase_Data = Purchase::where('unique_key', '=', $unique_key)->first();
 
 
-            $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datas->id)->get();
-            foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
-
-                $Extracost_Arr[] = array(
-                    'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
-                    'extracost' => $PurchaseExtracosts_arr->extracost,
-                    'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
-
-                );
-
-            }
-
-            $purchase_data[] = array(
-                'unique_key' => $datas->unique_key,
-                'branch_id' => $datas->branch_id,
-                'branch_name' => $branch_name->shop_name,
-                'supplier_name' => $supplier_name->name,
-                'date' => $datas->date,
-                'time' => $datas->time,
-                'gross_amount' => $datas->gross_amount,
-                'bill_no' => $datas->bill_no,
-                'id' => $datas->id,
-                'terms' => $terms,
-                'Extracost_Arr' => $Extracost_Arr,
-                'status' => $datas->status,
-            );
+        $getinsertedP_Products = PurchaseProduct::where('purchase_id', '=', $Purchase_Data->id)->get();
+        $Purchaseproducts = array();
+        foreach ($getinsertedP_Products as $key => $getinserted_P_Products) {
+            $Purchaseproducts[] = $getinserted_P_Products->id;
         }
-        $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+
+
+
+        if (!empty($Purchaseproducts)) {
+            foreach ($Purchaseproducts as $key => $differents_id) {
+
+                $getPurchaseOld = PurchaseProduct::where('id', '=', $differents_id)->first();
+
+                $product_Data = Product::where('soft_delete', '!=', 1)->where('productlist_id', '=', $getPurchaseOld->productlist_id)->where('branchtable_id', '=', $Purchase_Data->branch_id)->first();
+                if($Purchase_Data->branch_id == $product_Data->branchtable_id){
+
+                        $bag_count = $product_Data->available_stockin_bag;
+                        $kg_count = $product_Data->available_stockin_kilograms;
+
+
+                        if($getPurchaseOld->bagorkg == 'bag'){
+                            $totalbag_count = $bag_count - $getPurchaseOld->count;
+                            $totalkg_count = $kg_count - 0;
+                        }else if($getPurchaseOld->bagorkg == 'kg'){
+                            $totalkg_count = $kg_count - $getPurchaseOld->count;
+                            $totalbag_count = $bag_count - 0;
+                        }
 
 
 
 
-        return view('page.backend.purchase.index', compact('purchase_data', 'allbranch', 'today'));
+                        DB::table('products')->where('productlist_id', $getPurchaseOld->productlist_id)->where('branchtable_id', $Purchase_Data->branch_id)->update([
+                            'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
+                        ]);
+                    }
+            }
+        }
+
+        if (!empty($Purchaseproducts)) {
+            foreach ($Purchaseproducts as $key => $Purchaseproducts_arr) {
+                PurchaseProduct::where('id', $Purchaseproducts_arr)->delete();
+            }
+        }
+
+
+
+        $getinsertedExtracost = PurchaseExtracost::where('purchase_id', '=', $Purchase_Data->id)->get();
+        if (!empty($getinsertedExtracost)) {
+            foreach ($getinsertedExtracost as $key => $getinsertedExtracosts) {
+                PurchaseExtracost::where('purchase_id', $getinsertedExtracosts->purchase_id)->delete();
+            }
+        }
+
+
+
+
+        $purchase_branch_id = $Purchase_Data->branch_id;
+        $purchase_supplier_id = $Purchase_Data->supplier_id;
+
+
+        $PurchasebranchwiseData = BranchwiseBalance::where('supplier_id', '=', $purchase_supplier_id)->where('branch_id', '=', $purchase_branch_id)->first();
+        if($PurchasebranchwiseData != ""){
+
+
+            $old_grossamount = $PurchasebranchwiseData->purchase_amount;
+            $old_paid = $PurchasebranchwiseData->purchase_paid;
+
+            $oldentry_grossamount = $Purchase_Data->gross_amount;
+            $oldentry_paid = $Purchase_Data->paid_amount;
+
+         
+                $updated_gross = $old_grossamount - $oldentry_grossamount;
+                $updated_paid = $old_paid - $oldentry_paid;
+
+                $new_balance = $updated_gross - $updated_paid;
+
+            DB::table('branchwise_balances')->where('supplier_id', $purchase_supplier_id)->where('branch_id', $purchase_branch_id)->update([
+                'purchase_amount' => $updated_gross,  'purchase_paid' => $updated_paid, 'purchase_balance' => $new_balance
+            ]);
+
+        }
+
+
+        $Purchase_Data->delete();
+
+        return redirect()->route('purchase.index')->with('update', 'Successfully erased the Purchase record !');
 
     }
 

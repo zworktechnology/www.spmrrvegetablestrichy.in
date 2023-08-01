@@ -911,29 +911,33 @@ $(".purchaseclose").click(function() {
             var invoice_supplier = $(".invoice_supplier").val();
             var invoice_branchid = $(".invoice_branchid").val();
 
-            console.log(invoice_branchid);
-            console.log(invoice_supplier);
-            $('.old_balance').val('');
-            $.ajax({
-            url: '/getoldbalance/',
-            type: 'get',
-            data: {_token: "{{ csrf_token() }}",
-                        invoice_supplier: invoice_supplier,
-                        invoice_branchid: invoice_branchid,
-                    },
-            dataType: 'json',
-                success: function(response) {
-                    console.log(response);
-                            $(".old_balance").val(response['data']);
-                            var gross_amount = $(".gross_amount").val();
-                            var grand_total = Number(response['data']) + Number(gross_amount);
-                            $('.grand_total').val(grand_total.toFixed(2));
+            if(invoice_branchid){
+                    console.log(invoice_branchid);
+                    console.log(invoice_supplier);
+                    $('.old_balance').val('');
+                    $.ajax({
+                    url: '/getoldbalance/',
+                    type: 'get',
+                    data: {_token: "{{ csrf_token() }}",
+                                invoice_supplier: invoice_supplier,
+                                invoice_branchid: invoice_branchid,
+                            },
+                    dataType: 'json',
+                        success: function(response) {
+                            console.log(response);
+                                    $(".old_balance").val(response['data']);
+                                    var gross_amount = $(".gross_amount").val();
+                                    var grand_total = Number(response['data']) + Number(gross_amount);
+                                    $('.grand_total').val(grand_total.toFixed(2));
 
-                            var payable_amount = $(".payable_amount").val();
-                            var pending_amount = Number(grand_total) - Number(payable_amount);
-                            $('.pending_amount').val(pending_amount.toFixed(2));
-                }
-            });
+                                    var payable_amount = $(".payable_amount").val();
+                                    var pending_amount = Number(grand_total) - Number(payable_amount);
+                                    $('.pending_amount').val(pending_amount.toFixed(2));
+                        }
+                    });
+            }
+
+            
         });
 
 
@@ -1285,6 +1289,8 @@ $(document).on('click', '.remove-salestr', function() {
 
             var sales_branch_id = $(".sales_branch_id").val();
             var sales_customerid = $(".sales_customerid").val();
+
+            if(sales_customerid){
                 $('.sales_old_balance').html('');
                 $.ajax({
                 url: '/getoldbalanceforSales/',
@@ -1312,6 +1318,8 @@ $(document).on('click', '.remove-salestr', function() {
 
                     }
                 });
+            }
+                
 
 
 

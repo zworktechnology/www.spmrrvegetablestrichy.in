@@ -85,7 +85,7 @@
                            <td><input type="text" class="form-control" id="bagorkg" readonly name="bagorkg[]" placeholder="bagorkg" value="{{ $Purchase_Products->bagorkg }}"  /></td>
                            <td><input type="text" class="form-control count" id="count" readonly name="count[]" placeholder="count" value="{{ $Purchase_Products->count }}"  /></td>
                            <td><input type="text" class="form-control price_per_kg" id="price_per_kg"
-                                                    name="price_per_kg[]" placeholder="Price Per count" readonly value="{{ $Purchase_Products->price_per_kg }}" /></td>
+                                                    name="price_per_kg[]" placeholder="Price Per count"  value="{{ $Purchase_Products->price_per_kg }}" /></td>
                                             <td></td>
                                             <td class="text-end"><input type="text" class="form-control total_price" readonly
                                                     id="total_price" style="background-color: #e9ecef;"
@@ -117,7 +117,7 @@
                                                 </label>
                                             </div>
                                         </td>
-                                        <td colspan="1"><input type="text" readonly value="{{ $PurchaseData->commission_percent }}" class="form-control commission_percent" name="commission_percent" id="commission_percent"/></td>
+                                        <td colspan="1"><input type="text"  value="{{ $PurchaseData->commission_percent }}" class="form-control commission_percent" name="commission_percent" id="commission_percent"/></td>
                                         <td colspan="1"><input type="text" class="form-control commission_amount" readonly  name="commission_amount" id="commission_amount" value="{{ $PurchaseData->commission_amount }}"/></td>
                                         
                                     </tr>
@@ -128,7 +128,7 @@
                                         <td style="font-size:15px; color: black;" class="text-end">Extra Cost<span
                                             style="color: red;">*</span></td>
                                         <td colspan="2"><input type="hidden" name="purchase_extracost_id"/>
-                                            <input type="text" class="form-control"readonly
+                                            <input type="text" class="form-control" readonly
                                                 id="extracost_note" placeholder="Note" value="{{ $Purchase_Extracosts->extracost_note }}"
                                                 name="extracost_note[]"  /></td>
                                         
@@ -173,7 +173,7 @@
                                     <tr>
                                         <td colspan="4" class="text-end" style="font-size:15px;color: black;">Payable
                                             Amount<span style="color: red;">*</span></td>
-                                        <td colspan="2"><input type="text" class="form-control payable_amount" readonly
+                                        <td colspan="2"><input type="text" class="form-control payable_amount" 
                                                 name="payable_amount" placeholder="Payable Amount" required
                                                 value="{{ $PurchaseData->paid_amount }}" id="payable_amount"></td>
                                     </tr>

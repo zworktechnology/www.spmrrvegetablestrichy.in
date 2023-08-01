@@ -113,12 +113,14 @@
                                                 </li>
                                             @endif
                                             @if ($purchasedata['status'] == 1)
+                                            @if ($purchasedata['date'] == $today_date)
                                                 <li>
                                                     <a href="{{ route('purchase.invoiceedit', ['unique_key' => $purchasedata['unique_key']]) }}"
                                                         class="badges bg-lightyellow" style="color: white">Edit</a>
                                                 </li>
+                                                @endif
                                             @endif
-                                            <li hidden>
+                                            <li>
                                                 <a href="#delete{{ $purchasedata['unique_key'] }}" data-bs-toggle="modal"
                                                     data-id="{{ $purchasedata['unique_key'] }}"
                                                     data-bs-target=".purchasedelete-modal-xl{{ $purchasedata['unique_key'] }}"
