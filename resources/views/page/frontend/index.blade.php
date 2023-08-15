@@ -142,7 +142,7 @@
                                     alt="">
                             </div>
                         </div>
-                        <p class="about-one__text-1">We’ve 20 years of agriculture farming experience.</p>
+                        <p class="about-one__text-1">We’ve 80 years of agriculture farming experience.</p>
                         <p class="about-one__text-2">Welcome to our vegetable paradise! Explore a bountiful world of fresh,
                             locally sourced produce that celebrates the goodness of Mother Nature. Discover a delightful
                             assortment of vibrant, nutrient-rich vegetables, handpicked and cultivated with love. Immerse
