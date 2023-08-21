@@ -66,6 +66,7 @@ $pos = $matches[0];
 @endforeach
 </div>
 
+
 <div class="row">
     <div class="col-lg-3 col-sm-6 col-12">
         <div class="dash-widget">
@@ -78,7 +79,7 @@ $pos = $matches[0];
     <div class="col-lg-3 col-sm-6 col-12">
         <div class="dash-widget dash1">
             <div class="dash-widgetcontent">
-                <h5>₹ <span class="counters" data-count="{{ $totsaleAmount }}"></span></h5>
+                <h5>₹ <span class="counters" data-count="{{ $totalSAleAmount }}"></span></h5>
                 <h6>Total Sales Value</h6>
             </div>
         </div>
@@ -86,15 +87,18 @@ $pos = $matches[0];
     <div class="col-lg-3 col-sm-6 col-12">
         <div class="dash-widget dash2">
             <div class="dash-widgetcontent">
-                <h5>₹ <span class="counters" data-count="{{$total_saleamount_paid}}"></span></h5>
+                <h5>₹ <span class="counters" data-count="{{$TotaSalePaid}}"></span></h5>
                 <h6>Total Paid Value</h6>
             </div>
         </div>
     </div>
+    @php 
+    $total = $totalSAleAmount - $TotaSalePaid;
+    @endphp
     <div class="col-lg-3 col-sm-6 col-12">
         <div class="dash-widget dash3">
             <div class="dash-widgetcontent">
-                <h5>₹ <span class="counters" data-count="{{$saletotal_balance }}"></span></h5>
+                <h5>₹ <span class="counters" data-count="{{$total }}"></span></h5>
                 <h6>Total Balance Value</h6>
             </div>
         </div>
