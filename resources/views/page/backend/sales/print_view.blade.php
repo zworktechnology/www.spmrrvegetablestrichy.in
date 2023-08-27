@@ -4,17 +4,17 @@
 
 
 <div class="content">
-<button  onclick="printDiv('printableArea')"  class="btn-success btn-sm" ><i class="fa fa-print"></i> Print</button> 
+<button  onclick="printDiv('printableArea')"  class="btn-success btn-sm" ><i class="fa fa-print"></i> Print</button>
       <a href="{{ route('sales.index') }}"><button  class="btn-danger btn-sm" style="color:white"> back</button> </a>
-   
+
       <div  id="printableArea">
-   
-   <div class="card">
+
+   <div class="card" style="text-transform: uppercase;">
       <div class="card-body">
       <div class="page-header">
          <div class="page-title">
          <h4>Sales - Bill</h4>
-         
+
          </div>
       </div>
          <div style="background-color: #dbe4d629;">
@@ -111,15 +111,15 @@
                                     <h4 style="font-size: 13px;color:green;font-weight: 600;">Nett Balance</h4>
                                     <h5 style="font-size: 13px;color:green;font-weight: 600;">₹ <span  class="">{{ $SalesData->balance_amount}}</span></h5>
                                  </li>
-                              </ul>    
+                              </ul>
                            </div>
                         </div>
                   </div>
 
-            
+
          </div>
-            
-         
+
+
       </div>
    </div>
 </div>
