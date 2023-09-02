@@ -1,9 +1,10 @@
+
 @extends('layout.backend.auth')
 
 @section('content')
     <div class="content">
 
-    
+
                 @php
 
             preg_match("/[^\/]+$/", Request::url(), $matches);
@@ -24,6 +25,8 @@
             <div class="page-btn">
                 <div style="display:flex;">
 
+                    <input type="button" style="margin-right:10px" class="btn btn-lightgreen waves-effect waves-light btn-added badges bg-green" id="viewtotal" value="View Total">
+
                     <button type="button" style="margin-right:10px" class="btn btn-primary waves-effect waves-light btn-added" data-bs-toggle="modal"
                         data-bs-target=".cusomer-modal-xl">Add Customer</button>
 
@@ -32,6 +35,8 @@
                         @else
                         <a href="/allbranchpdf_export" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
                         @endif
+
+
                 </div>
             </div>
         </div>
@@ -49,7 +54,7 @@
                     </div>
                 </a>
             </div>
-                
+
             @foreach ($allbranch as $keydata => $allbranches)
 
                 <div class="col-lg-2 col-sm-4 col-6">
@@ -65,9 +70,6 @@
                 </div>
             @endforeach
         </div>
-            <div>
-                <input type="button" id="viewtotal" class="badges bg-green" value="View Total">
-            </div>
 
         <div class="row" style="display:none" id="totaldiv">
             <div class="col-lg-3 col-sm-6 col-12">
@@ -94,7 +96,7 @@
                     </div>
                 </div>
             </div>
-            @php 
+            @php
             $total = $totalSAleAmount - $TotaSalePaid;
             @endphp
             <div class="col-lg-3 col-sm-6 col-12">

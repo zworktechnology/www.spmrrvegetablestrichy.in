@@ -4,24 +4,24 @@
 
 
 <div class="content">
-<button  onclick="printDiv('printableArea')"  class="btn-success btn-sm" ><i class="fa fa-print"></i> Print</button> 
+<button  onclick="printDiv('printableArea')"  class="btn-success btn-sm" ><i class="fa fa-print"></i> Print</button>
       <a href="{{ route('salesorder.salesorder_index') }}"><button  class="btn-danger btn-sm" style="color:white"> back</button> </a>
-   
+
    <div  id="printableArea">
-   
+
       <div class="card">
          <div class="card-body">
          <div class="page-header">
             <div class="page-title">
             <h4>Sales Order - InvoiceBill</h4>
-            
+
             </div>
          </div>
          <div style="background-color: #dbe4d629;">
 
                <div class="row py-2" style="margin-bottom: 20px;">
                   <div class="col-lg-6  col-sm-5 col-4">
-                  <img src="{{ asset('assets/backend/img/spm.jpg') }}" alt="Logo" style="width: 100px">
+                  <img src="{{ asset('assets/backend/img/spmlogo.png') }}" alt="Logo" style="width: 100px">
                   </div>
                   <div class="col-lg-6  col-sm-7 col-8" style="margin-top: 5px;">
                      <span style="font-weight:600">SPM, NS83, 84 | RR, OT166, 167, 117, Gandhi Market, Trichy 8.</span>
@@ -111,15 +111,15 @@
                                        <h4 style="font-size: 13px;color:red;font-weight: 600;">Nett Balance</h4>
                                        <h5 style="font-size: 13px;color:red;font-weight: 600;">₹ <span  class="">{{ $SalesData->balance_amount}}</span></h5>
                                     </li>
-                                 </ul>    
+                                 </ul>
                               </div>
                            </div>
                      </div>
 
-               
+
             </div>
-               
-            
+
+
          </div>
       </div>
    </div>

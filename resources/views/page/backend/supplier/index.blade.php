@@ -16,13 +16,15 @@
                 @endphp
 
 
-                
+
         <div class="page-header">
             <div class="page-title">
                 <h4>Supplier</h4>
             </div>
             <div class="page-btn">
                 <div style="display:flex;">
+
+                    <input type="button" style="margin-right:10px" class="btn btn-lightgreen waves-effect waves-light btn-added badges bg-green" id="viewtotal" value="View Total">
 
                     <button type="button" style="margin-right:10px" class="btn btn-primary waves-effect waves-light btn-added" data-bs-toggle="modal"
                         data-bs-target=".supplier-modal-xl">Add Supplier</button>
@@ -33,12 +35,12 @@
                     <a href="/allpdf_export" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
                     @endif
                 </div>
-               
+
             </div>
         </div>
 
 
- 
+
         <div class="row py-2" style="margin-bottom:10px;">
             <div class="col-lg-2 col-sm-4 col-6">
                 <a href="{{ route('supplier.index') }}" style="color: black">
@@ -51,7 +53,7 @@
                     </div>
                 </a>
             </div>
-                
+
             @foreach ($allbranch as $keydata => $allbranches)
             <input type="hidden" name="branchwise_id" id="branchwise_id" value="{{$last_word}}" />
 
@@ -69,9 +71,6 @@
             @endforeach
         </div>
 
-                <div>
-                <input type="button" id="viewsuppliertotal" class="badges bg-green" value="View Total">
-            </div>
         <div class="row" style="display:none" id="suppliertotaldiv">
             <div class="col-lg-3 col-sm-6 col-12">
                 <div class="dash-widget">
