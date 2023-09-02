@@ -3,11 +3,11 @@
 @section('content')
     <div class="content">
 
-    @php
+                @php
 
-preg_match("/[^\/]+$/", Request::url(), $matches);
-$pos = $matches[0];
-@endphp
+            preg_match("/[^\/]+$/", Request::url(), $matches);
+            $pos = $matches[0];
+            @endphp
 
                 @php
                 $lastword = Request::url();
@@ -39,70 +39,73 @@ $pos = $matches[0];
 
 
  
-<div class="row py-2" style="margin-bottom:10px;">
-<div class="col-lg-2 col-sm-4 col-6">
-    <a href="{{ route('supplier.index') }}" style="color: black">
-        <div class="dash-widget" @if ($pos == "supplier")
-        style="border-color:red; background-color: red; margin-bottom:18px;"
-        @endif>
-            <div class="dash-widgetcontent">
-                <h6 @if ($pos == "supplier") style="font-weight: bold; color:white" @endif>All</h6>
+        <div class="row py-2" style="margin-bottom:10px;">
+            <div class="col-lg-2 col-sm-4 col-6">
+                <a href="{{ route('supplier.index') }}" style="color: black">
+                    <div class="dash-widget" @if ($pos == "supplier")
+                    style="border-color:red; background-color: red; margin-bottom:18px;"
+                    @endif>
+                        <div class="dash-widgetcontent">
+                            <h6 @if ($pos == "supplier") style="font-weight: bold; color:white" @endif>All</h6>
+                        </div>
+                    </div>
+                </a>
             </div>
-        </div>
-    </a>
-</div>
                 
-@foreach ($allbranch as $keydata => $allbranches)
-<input type="hidden" name="branchwise_id" id="branchwise_id" value="{{$last_word}}" />
+            @foreach ($allbranch as $keydata => $allbranches)
+            <input type="hidden" name="branchwise_id" id="branchwise_id" value="{{$last_word}}" />
 
-    <div class="col-lg-2 col-sm-4 col-6">
-        <a href="{{ route('supplier.branchdata', ['branch_id' => $allbranches->id]) }}">
-            <div class="dash-widget " @if ($last_word == $allbranches->id)
-        style="border-color:red; background-color: red;"
-        @endif >
-                <div class="dash-widgetcontent">
-                    <h6 @if ($last_word == $allbranches->id) style="font-weight: bold; color:white" @endif>{{ $allbranches->shop_name }}</h6>
+                <div class="col-lg-2 col-sm-4 col-6">
+                    <a href="{{ route('supplier.branchdata', ['branch_id' => $allbranches->id]) }}">
+                        <div class="dash-widget " @if ($last_word == $allbranches->id)
+                    style="border-color:red; background-color: red;"
+                    @endif >
+                            <div class="dash-widgetcontent">
+                                <h6 @if ($last_word == $allbranches->id) style="font-weight: bold; color:white" @endif>{{ $allbranches->shop_name }}</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+
+                <div>
+                <input type="button" id="viewsuppliertotal" class="badges bg-green" value="View Total">
+            </div>
+        <div class="row" style="display:none" id="suppliertotaldiv">
+            <div class="col-lg-3 col-sm-6 col-12">
+                <div class="dash-widget">
+                    <div class="dash-widgetcontent">
+                        <h5>Summary</h5>
+                        <h6 style="opacity: 0%;">Summary</h6>
+                    </div>
                 </div>
             </div>
-        </a>
-    </div>
-@endforeach
-</div>
-
-            
-<div class="row">
-    <div class="col-lg-3 col-sm-6 col-12">
-        <div class="dash-widget">
-            <div class="dash-widgetcontent">
-                <h5>Summary</h5>
-                <h6 style="opacity: 0%;">Summary</h6>
+            <div class="col-lg-3 col-sm-6 col-12">
+                <div class="dash-widget dash1">
+                    <div class="dash-widgetcontent">
+                        <h5>₹ <span class="counters" data-count="{{ $total_purchaseAmount }}"></span></h5>
+                        <h6>Total Purchase Value</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 col-12">
+                <div class="dash-widget dash2">
+                    <div class="dash-widgetcontent">
+                        <h5>₹ <span class="counters" data-count="{{$totalamount_paid}}"></span></h5>
+                        <h6>Total Paid Value</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 col-12">
+                <div class="dash-widget dash3">
+                    <div class="dash-widgetcontent">
+                        <h5>₹ <span class="counters" data-count="{{$totalbalance }}"></span></h5>
+                        <h6>Total Balance Value</h6>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-3 col-sm-6 col-12">
-        <div class="dash-widget dash1">
-            <div class="dash-widgetcontent">
-                <h5>₹ <span class="counters" data-count="{{ $total_purchaseAmount }}"></span></h5>
-                <h6>Total Purchase Value</h6>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3 col-sm-6 col-12">
-        <div class="dash-widget dash2">
-            <div class="dash-widgetcontent">
-                <h5>₹ <span class="counters" data-count="{{$totalamount_paid}}"></span></h5>
-                <h6>Total Paid Value</h6>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3 col-sm-6 col-12">
-        <div class="dash-widget dash3">
-            <div class="dash-widgetcontent">
-                <h5>₹ <span class="counters" data-count="{{$totalbalance }}"></span></h5>
-                <h6>Total Balance Value</h6>
-            </div>
-        </div>
-    </div>
 
 
         <div class="card">
@@ -148,6 +151,11 @@ $pos = $matches[0];
                                                 <a href="/supplierview/{{ $suppliertdata['unique_key'] }}/{{$last_word}}"
                                                 class="badges bg-lightgreen" style="color: white">View</a>
                                             </li>
+                                            @if ($suppliertdata['LastPattityal'] != "")
+                                            <li>
+                                                <a class="badges bg-lightred" style="color: white">{{ date('d-m-Y', strtotime($suppliertdata['LastPattityal'])) }}</a>
+                                            </li>
+                                            @endif
                                         </ul>
                                     </td>
 

@@ -4,14 +4,14 @@
     <div class="content">
 
     
-    @php
+                @php
 
-preg_match("/[^\/]+$/", Request::url(), $matches);
-$pos = $matches[0];
-@endphp
+            preg_match("/[^\/]+$/", Request::url(), $matches);
+            $pos = $matches[0];
+            @endphp
 
 
-@php
+                @php
                 $lastword = Request::url();
                 preg_match("/[^\/]+$/", $lastword, $matches);
                 $last_word = $matches[0];
@@ -37,72 +37,78 @@ $pos = $matches[0];
         </div>
 
 
-<div class="row py-2" style="margin-bottom:10px;">
-<div class="col-lg-2 col-sm-4 col-6">
-    <a href="{{ route('customer.index') }}" style="color: black">
-        <div class="dash-widget" @if ($pos == "customer")
-        style="border-color:red; background-color: red; margin-bottom:18px;"
-        @endif>
-            <div class="dash-widgetcontent">
-                <h6 @if ($pos == "customer") style="font-weight: bold; color:white" @endif>All</h6>
+        <div class="row py-2" style="margin-bottom:10px;">
+            <div class="col-lg-2 col-sm-4 col-6">
+                <a href="{{ route('customer.index') }}" style="color: black">
+                    <div class="dash-widget" @if ($pos == "customer")
+                    style="border-color:red; background-color: red; margin-bottom:18px;"
+                    @endif>
+                        <div class="dash-widgetcontent">
+                            <h6 @if ($pos == "customer") style="font-weight: bold; color:white" @endif>All</h6>
+                        </div>
+                    </div>
+                </a>
             </div>
-        </div>
-    </a>
-</div>
                 
-@foreach ($allbranch as $keydata => $allbranches)
+            @foreach ($allbranch as $keydata => $allbranches)
 
-    <div class="col-lg-2 col-sm-4 col-6">
-        <a href="{{ route('customer.branchdata', ['branch_id' => $allbranches->id]) }}">
-            <div class="dash-widget " @if ($last_word == $allbranches->id)
-        style="border-color:red; background-color: red;"
-        @endif >
-                <div class="dash-widgetcontent">
-                    <h6 @if ($last_word == $allbranches->id) style="font-weight: bold; color:white" @endif>{{ $allbranches->shop_name }}</h6>
+                <div class="col-lg-2 col-sm-4 col-6">
+                    <a href="{{ route('customer.branchdata', ['branch_id' => $allbranches->id]) }}">
+                        <div class="dash-widget " @if ($last_word == $allbranches->id)
+                    style="border-color:red; background-color: red;"
+                    @endif >
+                            <div class="dash-widgetcontent">
+                                <h6 @if ($last_word == $allbranches->id) style="font-weight: bold; color:white" @endif>{{ $allbranches->shop_name }}</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+            <div>
+                <input type="button" id="viewtotal" class="badges bg-green" value="View Total">
+            </div>
+
+        <div class="row" style="display:none" id="totaldiv">
+            <div class="col-lg-3 col-sm-6 col-12">
+                <div class="dash-widget">
+                    <div class="dash-widgetcontent">
+                        <h5>Summary</h5>
+                        <h6 style="opacity: 0%;">Summary</h6>
+                    </div>
                 </div>
             </div>
-        </a>
-    </div>
-@endforeach
-</div>
+            <div class="col-lg-3 col-sm-6 col-12">
+                <div class="dash-widget dash1">
+                    <div class="dash-widgetcontent">
+                        <h5>₹ <span class="counters" data-count="{{ $totalSAleAmount }}"></span></h5>
+                        <h6>Total Sales Value</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 col-12">
+                <div class="dash-widget dash2">
+                    <div class="dash-widgetcontent">
+                        <h5>₹ <span class="counters" data-count="{{$TotaSalePaid}}"></span></h5>
+                        <h6>Total Paid Value</h6>
+                    </div>
+                </div>
+            </div>
+            @php 
+            $total = $totalSAleAmount - $TotaSalePaid;
+            @endphp
+            <div class="col-lg-3 col-sm-6 col-12">
+                <div class="dash-widget dash3">
+                    <div class="dash-widgetcontent">
+                        <h5>₹ <span class="counters" data-count="{{$total }}"></span></h5>
+                        <h6>Total Balance Value</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
-<div class="row">
-    <div class="col-lg-3 col-sm-6 col-12">
-        <div class="dash-widget">
-            <div class="dash-widgetcontent">
-                <h5>Summary</h5>
-                <h6 style="opacity: 0%;">Summary</h6>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3 col-sm-6 col-12">
-        <div class="dash-widget dash1">
-            <div class="dash-widgetcontent">
-                <h5>₹ <span class="counters" data-count="{{ $totalSAleAmount }}"></span></h5>
-                <h6>Total Sales Value</h6>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3 col-sm-6 col-12">
-        <div class="dash-widget dash2">
-            <div class="dash-widgetcontent">
-                <h5>₹ <span class="counters" data-count="{{$TotaSalePaid}}"></span></h5>
-                <h6>Total Paid Value</h6>
-            </div>
-        </div>
-    </div>
-    @php 
-    $total = $totalSAleAmount - $TotaSalePaid;
-    @endphp
-    <div class="col-lg-3 col-sm-6 col-12">
-        <div class="dash-widget dash3">
-            <div class="dash-widgetcontent">
-                <h5>₹ <span class="counters" data-count="{{$total }}"></span></h5>
-                <h6>Total Balance Value</h6>
-            </div>
-        </div>
-    </div>
+
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">

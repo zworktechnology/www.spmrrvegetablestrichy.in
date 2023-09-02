@@ -1433,7 +1433,16 @@ $(document).on('click', '.remove-salestr', function() {
 
 
 
+    $(document).ready(function () {
+        $("#viewtotal").click(function () {
+            $("#totaldiv").toggle();
+        });
 
+
+        $("#viewsuppliertotal").click(function () {
+            $("#suppliertotaldiv").toggle();
+        });
+    });
 
 
 

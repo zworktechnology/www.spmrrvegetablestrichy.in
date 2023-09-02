@@ -77,7 +77,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // CHECK DUPLICATE
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/customer/checkduplicate', [CustomerController::class, 'checkduplicate'])->name('customer.checkduplicate');
          // REPORT VIEW
-         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/customer/viewfilter', [CustomerController::class, 'viewfilter'])->name('customer.viewfilter');
+         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/customer/viewfilter/{unique_key}/{last_word}', [CustomerController::class, 'viewfilter'])->name('customer.viewfilter');
          // INDEX BRANCH WISE
          Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/customer/branchdata/{branch_id}', [CustomerController::class, 'branchdata'])->name('customer.branchdata');
     });
@@ -98,7 +98,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->post('/zworktech-pos/supplier/checkduplicate', [SupplierController::class, 'checkduplicate'])->name('supplier.checkduplicate');
         
         // REPORT VIEW
-        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/supplier/viewfilter', [SupplierController::class, 'viewfilter'])->name('supplier.viewfilter');
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/supplier/viewfilter/{unique_key}/{last_word}', [SupplierController::class, 'viewfilter'])->name('supplier.viewfilter');
          // INDEX BRANCH WISE
          Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/supplier/branchdata/{branch_id}', [SupplierController::class, 'branchdata'])->name('supplier.branchdata');
 
@@ -214,6 +214,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // INVOICE UPDATE
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/purchase/invoiceedit_update/{unique_key}', [PurchaseController::class, 'invoiceedit_update'])->name('purchase.invoiceedit_update');
     });
+
 
 
 

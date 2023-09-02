@@ -130,32 +130,12 @@
 
 
                                                 @if ($purchasedata['status'] == 0)
-                                                    @foreach (array_unique($purchasedata['null_grossarr']) as $index => $null_grossarr)
-
-                                                        @if ($purchasedata['id'] == $null_grossarr)
                                                         <li>
 
                                                                 <a href="{{ route('purchase.invoice', ['unique_key' => $purchasedata['unique_key']]) }}"
                                                                     class="badges bg-lightgreen purchase_pattiyal" style="color: white" data-id="{{ $purchasedata['unique_key'] }}">
                                                                     Pattial</a>
                                                         </li>
-
-                                                        @else
-                                                        @if($index == 0)
-                                                        @foreach (array_unique($purchasedata['lastpattiyalDate']) as $index => $lastpattiyalDate)
-                                                        <li>
-
-                                                                <a  class="badges bg-lightgreen" style="color: white;background:#479393;" data-id="{{ $purchasedata['unique_key'] }}">
-                                                                    {{$lastpattiyalDate}}</a>
-                                                        </li>
-                                                        @endforeach
-                                                        @endif
-
-                                                        @endif
-                                                    @endforeach
-
-
-
 
 
 

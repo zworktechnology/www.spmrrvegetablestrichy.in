@@ -7,7 +7,15 @@
         <div class="page-title">
             <h4>Supplier View</h4>
         </div>
-        <form autocomplete="off" method="POST" action="{{ route('supplier.viewfilter') }}" enctype="multipart/form-data">
+
+        @php
+                $lastword = Request::url();
+                preg_match("/[^\/]+$/", $lastword, $matches);
+                $last_word = $matches[0];
+                @endphp
+
+
+        <form autocomplete="off" method="POST" action="{{ route('supplier.viewfilter', ['unique_key' => $unique_key, 'last_word' => $last_word]) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
             <div class="page-btn" style="display: flex">
@@ -26,6 +34,7 @@
                 </div>
                 <input type="hidden" name="supplierid" id="supplierid" value="{{$supplier_id}}"/>
                 <input type="hidden" name="uniquekey" id="uniquekey" value="{{$unique_key}}"/>
+                    <input type="hidden" name="branchid" id="branchid" value="{{ $last_word }}" />
                 <div class="col-lg-2 col-sm-6 col-12" style="margin: 0px 3px;">
                     <div class="form-group">
                         <label style="opacity: 0%;">Action</label>
@@ -34,6 +43,7 @@
                 </div>
             </div>
         </form>
+        <a href="{{ route('supplier.index') }}" class="badges bg-green" style="color: white;margin-right: 10px;">Back</a>   
     </div>
     <div class="row">
         <div class="col-lg-3 col-sm-6 col-12">

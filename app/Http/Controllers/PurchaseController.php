@@ -65,20 +65,6 @@ class PurchaseController extends Controller
 
             }
 
-            $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-            foreach ($All_supplier as $key => $All_supplierarr) {
-                $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('gross_amount', '=', NULL)->where('purchase_order', '=', NULL)->orderBy('date', 'asc')->where('soft_delete', '!=', 1)->first();
-                if($PurchaseArray){
-                    $null_grossarr[] = $PurchaseArray->id;
-                }
-                $last_pattiyal_date = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('gross_amount', '!=', NULL)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->latest('id')->first();
-                if($last_pattiyal_date){
-                    $lastpattiyalDate[] = $last_pattiyal_date->date;
-                    $lastpattiyalid[] = $last_pattiyal_date->supplier_id;
-                }
-            }
-
-
 
 
             $purchase_data[] = array(
@@ -96,10 +82,7 @@ class PurchaseController extends Controller
                 'status' => $datas->status,
                 'terms' => $terms,
                 'Extracost_Arr' => $Extracost_Arr,
-                'null_grossarr' => $null_grossarr,
                 'supplier_id' => $datas->supplier_id,
-                'lastpattiyalDate' => $lastpattiyalDate,
-                'lastpattiyalid' => $lastpattiyalid,
             );
         }
 
@@ -219,21 +202,6 @@ class PurchaseController extends Controller
             }
 
            
-            $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-            foreach ($All_supplier as $key => $All_supplierarr) {
-                $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('purchase_order', '=', NULL)->where('gross_amount', '=', NULL)->orderBy('date', 'asc')->where('soft_delete', '!=', 1)->first();
-                if($PurchaseArray){
-                    $null_grossarr[] = $PurchaseArray->id;
-                }
-                
-                $last_pattiyal_date = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('gross_amount', '!=', NULL)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->latest('id')->first();
-                if($last_pattiyal_date){
-                    $lastpattiyalDate[] = $last_pattiyal_date->date;
-                    $lastpattiyalid[] = $last_pattiyal_date->supplier_id;
-                }
-
-            }
-
            
            // dd($null_status);
 
@@ -252,9 +220,7 @@ class PurchaseController extends Controller
                 'terms' => $terms,
                 'status' => $branchwise_datas->status,
                 'Extracost_Arr' => $Extracost_Arr,
-                'null_grossarr' => $null_grossarr,
                 'supplier_id' => $branchwise_datas->supplier_id,
-                'lastpattiyalDate' => $lastpattiyalDate,
             );
         }
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -368,23 +334,6 @@ class PurchaseController extends Controller
                 );
 
             }
-
-           
-            $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-            foreach ($All_supplier as $key => $All_supplierarr) {
-                $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('purchase_order', '=', NULL)->where('gross_amount', '=', NULL)->orderBy('date', 'asc')->where('soft_delete', '!=', 1)->first();
-                if($PurchaseArray){
-                    $null_grossarr[] = $PurchaseArray->id;
-                }
-                
-                $last_pattiyal_date = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('gross_amount', '!=', NULL)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->latest('id')->first();
-                if($last_pattiyal_date){
-                    $lastpattiyalDate[] = $last_pattiyal_date->date;
-                    $lastpattiyalid[] = $last_pattiyal_date->supplier_id;
-                }
-
-            }
-
            
            // dd($null_status);
 
@@ -403,9 +352,7 @@ class PurchaseController extends Controller
                 'terms' => $terms,
                 'status' => $branchwise_datas->status,
                 'Extracost_Arr' => $Extracost_Arr,
-                'null_grossarr' => $null_grossarr,
                 'supplier_id' => $branchwise_datas->supplier_id,
-                'lastpattiyalDate' => $lastpattiyalDate,
             );
         }
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -521,19 +468,6 @@ class PurchaseController extends Controller
                 );
 
             }
-
-            $All_supplier = Supplier::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-            foreach ($All_supplier as $key => $All_supplierarr) {
-                $PurchaseArray = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('purchase_order', '=', NULL)->where('gross_amount', '=', NULL)->orderBy('date', 'asc')->where('soft_delete', '!=', 1)->first();
-                if($PurchaseArray){
-                    $null_grossarr[] = $PurchaseArray->id;
-                }
-                $last_pattiyal_date = Purchase::where('supplier_id', '=', $All_supplierarr->id)->where('gross_amount', '!=', NULL)->where('purchase_order', '=', NULL)->where('soft_delete', '!=', 1)->latest('id')->first();
-                if($last_pattiyal_date){
-                    $lastpattiyalDate[] = $last_pattiyal_date->date;
-                    $lastpattiyalid[] = $last_pattiyal_date->supplier_id;
-                }
-            }
             //dd($null_grossarr);
            
 
@@ -550,8 +484,6 @@ class PurchaseController extends Controller
                 'id' => $datas->id,
                 'terms' => $terms,
                 'Extracost_Arr' => $Extracost_Arr,
-                'null_grossarr' => $null_grossarr,
-                'lastpattiyalDate' => $lastpattiyalDate,
                 'status' => $datas->status,
             );
         }
