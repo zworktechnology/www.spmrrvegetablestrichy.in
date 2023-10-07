@@ -102,6 +102,7 @@
                                         <th>Bill No</th>
                                         <th>Bill Type</th>
                                         <th>Product</th>
+                                        <th>Paid</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -123,6 +124,7 @@
                                                     @endif
                                                 @endforeach
                                             </td>
+                                            <td>{ $Sales_datas['paid_amount'] }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
