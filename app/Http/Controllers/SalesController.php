@@ -624,6 +624,7 @@ class SalesController extends Controller
             $customer_upper = strtoupper($customer_idname->name);
             $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $SalesProduct_darta = SalesProduct::where('sales_id', '=', $SalesData->id)->where('sales_order', '=', NULL)->get();
+            
 
         return view('page.backend.sales.print_view', compact('customer_upper', 'SalesData', 'customer_idname', 'branchname', 'bankname', 'SalesProduct_darta', 'productlist'));
     }

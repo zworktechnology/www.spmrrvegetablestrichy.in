@@ -22,12 +22,8 @@
          <div style="background-color: #dbe4d629;">
 
             <div class="row py-2" style="margin-bottom: 20px;">
-               <div class="col-lg-6  col-sm-5 col-4">
-               <img src="{{ asset('assets/backend/img/spmlogo.png') }}" alt="Logo" style="width: 100px">
-               </div>
-               <div class="col-lg-6  col-sm-7 col-8" style="margin-top: 5px;">
-                  <span style="font-weight:600">SPM, NS83, 84 | RR, OT166, 167, 117, Gandhi Market, Trichy 8.</span>
-                  <span style="font-weight:600"><p><img src="{{ asset('assets/backend/img/mobileicon.png') }}" style="margin-top:4px;">&nbsp; <span>9842428882, 9994065696, 9842528789</span></p></span>
+               <div class="col-lg-12  col-sm-12 col-12">
+               <img src="{{ asset('assets/backend/img/spmheader.jpg') }}">
                </div>
             </div>
                <h4 class="py-1" style="font-size:18px;color: black; font-weight:800">{{ $supplier_upper }}</h4>
@@ -42,19 +38,19 @@
 
                   <table style="width: 100%;line-height: inherit;text-align: left;overflow: auto;margin:15px auto;">
                      <tr class="heading " style="background:#eee;">
-                        <td style="padding: 5px;vertical-align: middle;font-weight: 600;color: black;font-size: 13px;padding: 10px; ">
+                        <td style="padding: 5px;vertical-align: middle;font-weight: 800;color: black;font-size: 13px;padding: 10px; ">
                         Product Name
                         </td>
-                        <td style="padding: 5px;vertical-align: middle;font-weight: 600;color: black;font-size: 13px;padding: 10px; ">
+                        <td style="padding: 5px;vertical-align: middle;font-weight: 800;color: black;font-size: 13px;padding: 10px; ">
                         Bag / Kg
                         </td>
-                        <td style="padding: 5px;vertical-align: middle;font-weight: 600;color: black;font-size: 13px;padding: 10px; ">
+                        <td style="padding: 5px;vertical-align: middle;font-weight: 800;color: black;font-size: 13px;padding: 10px; ">
                         Count
                         </td>
-                        <td style="padding: 5px;vertical-align: middle;font-weight: 600;color: black;font-size: 13px;padding: 10px; ">
+                        <td style="padding: 5px;vertical-align: middle;font-weight: 800;color: black;font-size: 13px;padding: 10px; ">
                         Price / Count
                         </td>
-                        <td style="padding: 5px;vertical-align: middle;font-weight: 600;color: black;font-size: 13px;padding: 10px; ">
+                        <td style="padding: 5px;vertical-align: middle;font-weight: 800;color: black;font-size: 13px;padding: 10px; ">
                         Amount
                         </td>
                      </tr>
@@ -84,6 +80,26 @@
                      @endif
                         @endforeach
                   </table>
+
+
+<br/>
+               @if ($Purchaseextracosts)
+                  <table style="width: 100%;line-height: inherit;text-align: left;overflow: auto;margin:15px auto;">
+                     <tr class="heading " style="background:#eee;">
+                        <td style="padding: 5px;vertical-align: middle;font-weight: 800;color: black;font-size: 13px;padding: 10px; ">ExtraCost Note</td>
+                        <td style="padding: 5px;vertical-align: middle;font-weight: 800;color: black;font-size: 13px;padding: 10px; ">Cost</td>
+                     </tr>
+                     @foreach ($Purchaseextracosts as $index => $Purchaseextracosts_arr)
+                     <tr class="details" style="border-bottom:1px solid #E9ECEF ;">
+                        <td style="padding: 10px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 13px;color:#000;font-weight: 600;">{{ $Purchaseextracosts_arr->extracost_note }}</td>
+                        <td style="padding: 10px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 13px;color:#000;font-weight: 600;">{{ $Purchaseextracosts_arr->extracost }}</td>
+                     </tr>
+                     @endforeach
+                  </table>
+               @endif
+               <br/>
+
+
                   <div class="row">
                         <div class="col-lg-7  col-sm-5 col-3"></div>
                         <div class="col-lg-5  col-sm-7 col-9">
@@ -91,7 +107,7 @@
                               <ul>
                                  <li>
                                     <h4 style="font-size: 13px;color:blue;font-weight: 600;">Commission Amount</h4>
-                                    <h5 style="font-size: 13px;color:blue;font-weight: 600;">₹ <span  class="">{{ $PurchaseData->commission_amount}}</span></h5>
+                                    <h5 style="font-size: 13px;color:blue;font-weight: 600;">₹ <span  class="">{{ $PurchaseData->commission_amount}}({{$PurchaseData->commission_percent}} %)</span></h5>
                                  </li>
                                  <li>
                                     <h4 style="font-size: 13px;color:green;font-weight: 600;">Extra Charge</h4>

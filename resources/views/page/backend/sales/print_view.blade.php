@@ -20,12 +20,8 @@
          <div style="background-color: #dbe4d629;">
 
             <div class="row py-2" style="margin-bottom: 20px;">
-               <div class="col-lg-6  col-sm-5 col-4">
-               <img src="{{ asset('assets/backend/img/spmlogo.png') }}" alt="Logo" style="width: 100px">
-               </div>
-               <div class="col-lg-6  col-sm-7 col-8" style="margin-top: 5px;">
-                  <span style="font-weight:600">SPM, NS83, 84 | RR, OT166, 167, 117, Gandhi Market, Trichy 8.</span>
-                  <span style="font-weight:600"><p><img src="{{ asset('assets/backend/img/mobileicon.png') }}" style="margin-top:4px;">&nbsp; <span>9842428882, 9994065696, 9842528789</span></p></span>
+               <div class="col-lg-12  col-sm-12 col-12">
+                  <img src="{{ asset('assets/backend/img/spmheader.jpg') }}">
                </div>
             </div>
             <h4 class="py-1" style="font-size:18px;color: black; font-weight:800">{{ $customer_upper }}</h4>
@@ -82,6 +78,25 @@
                      @endif
                         @endforeach
                   </table>
+
+
+
+                  <br/>
+               @if ($SalesData->extra_cost)
+                  <table style="width: 100%;line-height: inherit;text-align: left;overflow: auto;margin:15px auto;">
+                     <tr class="heading " style="background:#eee;">
+                        <td style="padding: 5px;vertical-align: middle;font-weight: 800;color: black;font-size: 13px;padding: 10px; ">ExtraCost Note</td>
+                        <td style="padding: 5px;vertical-align: middle;font-weight: 800;color: black;font-size: 13px;padding: 10px; ">Cost</td>
+                     </tr>
+                     <tr class="details" style="border-bottom:1px solid #E9ECEF ;">
+                        <td style="padding: 10px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 13px;color:#000;font-weight: 600;">{{ $SalesData->note }}</td>
+                        <td style="padding: 10px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 13px;color:#000;font-weight: 600;">{{ $SalesData->extra_cost }}</td>
+                     </tr>
+                  </table>
+               @endif
+
+               <br/>
+
                   <div class="row">
                         <div class="col-lg-7  col-sm-5 col-3"></div>
                         <div class="col-lg-5  col-sm-7 col-9">

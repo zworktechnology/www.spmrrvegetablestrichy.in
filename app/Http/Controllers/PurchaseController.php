@@ -1180,7 +1180,9 @@ class PurchaseController extends Controller
         $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $PurchaseData->id)->where('purchase_order', '=', NULL)->get();
         $extracostamount = $PurchaseData->tot_comm_extracost - $PurchaseData->commission_amount;
 
-        return view('page.backend.purchase.print_view', compact('PurchaseData', 'suppliername', 'branchname', 'bankname', 'PurchaseProducts', 'productlist', 'supplier_upper', 'extracostamount'));
+        $Purchaseextracosts = PurchaseExtracost::where('purchase_id', '=', $PurchaseData->id)->get();
+
+        return view('page.backend.purchase.print_view', compact('PurchaseData', 'suppliername', 'branchname', 'bankname', 'PurchaseProducts', 'productlist', 'supplier_upper', 'extracostamount', 'Purchaseextracosts'));
     }
 
 
