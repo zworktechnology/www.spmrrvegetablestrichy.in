@@ -73,7 +73,7 @@
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Discount<span
                                         style="color: red;">*</span></label>
-                                    <input type="text" name="purchasepayment_discount" id="purchasepayment_discount" style="color:black" value="0"class="purchasepayment_discount" placeholder="Enter Discount Amount">
+                                    <input type="text" name="purchasepayment_discount" required id="purchasepayment_discount" style="color:black" value="0" class="purchasepayment_discount" placeholder="Enter Discount Amount">
                             </div>
                         </div>
 
@@ -92,7 +92,7 @@
                         <div class="col-lg-3 col-sm-3 col-3">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Payable Amount <span style="color: red;">*</span></label>
-                                <input type="text" name="payment_payableamount" id="payment_payableamount"  style="color:black"  class="payment_payableamount" placeholder="Enter Amount">
+                                <input type="text" name="payment_payableamount" id="payment_payableamount"  required style="color:black"  class="payment_payableamount" placeholder="Enter Amount">
                             </div>
                         </div>
 

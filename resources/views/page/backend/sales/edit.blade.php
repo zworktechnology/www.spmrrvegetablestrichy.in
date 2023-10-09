@@ -140,7 +140,7 @@
                         </tr>
                         <tr>
                            <td colspan="4" class="text-end" style="font-size:15px;color: black;">Payable Amount<span style="color: red;">*</span></td>
-                           <td><input type="text" class="form-control salespayable_amount" name="salespayable_amount" placeholder="Payable Amount" value="{{ $SalesData->paid_amount }}" id="salespayable_amount"></td>
+                           <td><input type="text" class="form-control salespayable_amount" name="salespayable_amount" required placeholder="Payable Amount" value="{{ $SalesData->paid_amount }}" id="salespayable_amount"></td>
                         </tr>
                         <tr>
                            <td colspan="4" class="text-end" style="font-size:15px;color: black;">Pending Amount</td>

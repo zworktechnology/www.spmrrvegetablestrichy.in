@@ -124,7 +124,7 @@
                                                     @endif
                                                 @endforeach
                                             </td>
-                                            <td>{ $Sales_datas['paid_amount'] }}</td>
+                                            <td>₹ {{ $Sales_datas['paid_amount'] }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -160,7 +160,7 @@
                                             <td>{{ $salesPayment_datas['branch_name'] }}</td>
                                             <td>{{ date('d-m-Y', strtotime($salesPayment_datas['date'])) }}</td>
                                             <td>{{ $salesPayment_datas['salespayment_discount'] }}</td>
-                                            <td>{{ $salesPayment_datas['paid_amount'] }}</td>
+                                            <td>₹ {{ $salesPayment_datas['paid_amount'] }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

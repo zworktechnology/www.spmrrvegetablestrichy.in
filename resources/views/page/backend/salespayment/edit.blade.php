@@ -73,7 +73,7 @@
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Discount<span
                                         style="color: red;">*</span></label>
-                                        <input type="text" name="salespayment_discount" id="salespayment_discount" style="color:black" value="{{ $SalespaymentData->salespayment_discount }}"class="salespayment_discount" placeholder="Enter Discount Amount">
+                                        <input type="text" name="salespayment_discount" id="salespayment_discount" required style="color:black" value="{{ $SalespaymentData->salespayment_discount }}" class="salespayment_discount" placeholder="Enter Discount Amount">
                             </div>
                         </div>
 
@@ -92,7 +92,7 @@
                         <div class="col-lg-3 col-sm-3 col-3">
                             <div class="form-group">
                                 <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Payable Amount <span style="color: red;">*</span></label>
-                                <input type="text" name="spayment_payableamount" id="spayment_payableamount" value="{{ $SalespaymentData->amount }}" style="color:black"  class="spayment_payableamount" placeholder="Enter Amount">
+                                <input type="text" name="spayment_payableamount" id="spayment_payableamount" required value="{{ $SalespaymentData->amount }}" style="color:black"  class="spayment_payableamount" placeholder="Enter Amount">
                             </div>
                         </div>
 
