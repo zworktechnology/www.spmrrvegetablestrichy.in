@@ -434,11 +434,15 @@ class CustomerController extends Controller
             // Total Balance
             $saletotal_balance = $totsaleAmount - $total_saleamount_paid;
 
+            $today = Carbon::now()->format('Y-m-d');
+
+
             $pdf = Pdf::loadView('page.backend.customer.pdfexport_view', [
                 'customerarr_data' => $customerarr_data,
                 'totsaleAmount' => $totsaleAmount,
                 'total_saleamount_paid' => $total_saleamount_paid,
                 'saletotal_balance' => $saletotal_balance,
+                'today' => date('d-m-Y', strtotime($today)),
                 'branch_name' => 'All Branches',
     
             ]);
@@ -566,12 +570,17 @@ class CustomerController extends Controller
             // Total Balance
             $saletotal_balance = $totsaleAmount - $total_saleamount_paid;
             $branch_name = Branch::findOrFail($last_word);
+
+            $today = Carbon::now()->format('Y-m-d');
+
+
             $pdf = Pdf::loadView('page.backend.customer.pdfexport_view', [
                 'customerarr_data' => $customerarr_data,
                 'totsaleAmount' => $totsaleAmount,
                 'total_saleamount_paid' => $total_saleamount_paid,
                 'saletotal_balance' => $saletotal_balance,
                 'branch_name' => $branch_name->shop_name,
+                'today' => date('d-m-Y', strtotime($today)),
     
             ]);
     
