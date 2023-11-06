@@ -11,11 +11,6 @@
 
    <div class="card" style="text-transform: uppercase;">
       <div class="card-body">
-      <div class="page-header">
-         <div class="page-title">
-         <h4>Sales Bill</h4>
-         </div>
-      </div>
          <div style="background-color: #fff;">
 
             <div class="row py-2">
@@ -23,7 +18,7 @@
                   <img src="{{ asset('assets/backend/img/spmheader.jpg') }}">
                </div>
             </div>
-            <h4 class="py-1" style="font-size:15px;color: black; font-weight:800">{{ $customer_upper }}</h4>
+            <h6 class="py-1" style="font-size:15px;color: black; font-weight:500">Customer : {{ $customer_upper }}</h6>
             <div class="row">
                <div class="col-lg-10  col-sm-8 col-8">
                <span style="font-size:11px" >Bill No.  &nbsp;<span style="font-weight:600"># {{ $SalesData->bill_no}}</span></span>
@@ -34,7 +29,7 @@
             </div>
 
                   <table style="width: 100%;line-height: inherit;text-align: left;overflow: auto;margin:15px auto;">
-                     <tr class="heading " style="background:#eee;">
+                     <tr class="heading " style="background:#eee; border: 1px solid;">
                         <td style="padding: 3px;vertical-align: middle;font-weight: 600;color: black;font-size: 11px;">
                         Product Name
                         </td>
@@ -53,7 +48,7 @@
                      </tr>
                      @foreach ($SalesProduct_darta as $index => $SalesProduct_darta_arr)
                            @if ($SalesProduct_darta_arr->sales_id == $SalesData->id)
-                     <tr class="details" style="border-bottom:1px solid #E9ECEF ;">
+                     <tr class="details" style="border-bottom:1px solid ;">
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;">
                         @foreach ($productlist as $products)
                                     @if ($products->id == $SalesProduct_darta_arr->productlist_id)
@@ -100,28 +95,28 @@
                            <div class="total-order w-100 max-widthauto">
                               <ul>
                                  <li>
-                                    <h4 style="font-size: 11px;color:blue;font-weight: 600;">Extra Charge</h4>
-                                    <h5 style="font-size: 11px;color:blue;font-weight: 600;">₹ <span  class="">{{ $SalesData->extra_cost}}</span></h5>
+                                    <h4 style="font-size: 11px;color:blue;font-weight: 600; padding: 2px;">Extra Charge</h4>
+                                    <h5 style="font-size: 11px;color:blue;font-weight: 600; padding: 2px;">₹ <span  class="">{{ $SalesData->extra_cost}}</span></h5>
                                  </li>
                                  <li>
-                                    <h4 style="font-size: 11px;color:green;font-weight: 600;">Gross Amount</h4>
-                                    <h5 style="font-size: 11px;color:green;font-weight: 600;">₹ <span  class="">{{ $SalesData->gross_amount}}</span></h5>
+                                    <h4 style="font-size: 11px;color:green;font-weight: 600; padding: 2px;">Gross Amount</h4>
+                                    <h5 style="font-size: 11px;color:green;font-weight: 600; padding: 2px;">₹ <span  class="">{{ $SalesData->gross_amount}}</span></h5>
                                  </li>
                                  <li class="">
-                                    <h4 style="font-size: 11px;color:blue;font-weight: 600;">Old Balance</h4>
-                                    <h5 style="font-size: 11px;color:blue;font-weight: 600;">₹ <span  class="">{{ $SalesData->old_balance}}</span></h5>
+                                    <h4 style="font-size: 11px;color:blue;font-weight: 600; padding: 2px;">Old Balance</h4>
+                                    <h5 style="font-size: 11px;color:blue;font-weight: 600; padding: 2px;">₹ <span  class="">{{ $SalesData->old_balance}}</span></h5>
                                  </li>
                                  <li class="">
-                                    <h4 style="font-size: 11px;color:red;font-weight: 600;">Grand Total</h4>
-                                    <h5 style="font-size: 11px;color:red;font-weight: 600;">₹ <span  class="">{{ $SalesData->grand_total}}</span></h5>
+                                    <h4 style="font-size: 11px;color:red;font-weight: 600; padding: 2px;">Grand Total</h4>
+                                    <h5 style="font-size: 11px;color:red;font-weight: 600; padding: 2px;">₹ <span  class="">{{ $SalesData->grand_total}}</span></h5>
                                  </li>
                                  <li>
-                                    <h4 style="font-size: 11px;color:blue;font-weight: 600;">Paid Amount</h4>
-                                    <h5 style="font-size: 11px;color:blue;font-weight: 600;">₹ <span  class="">{{ $SalesData->paid_amount}}</span></h5>
+                                    <h4 style="font-size: 11px;color:blue;font-weight: 600; padding: 2px;">Paid Amount</h4>
+                                    <h5 style="font-size: 11px;color:blue;font-weight: 600; padding: 2px;">₹ <span  class="">{{ $SalesData->paid_amount}}</span></h5>
                                  </li>
                                  <li class="">
-                                    <h4 style="font-size: 11px;color:red;font-weight: 600;">Nett Balance</h4>
-                                    <h5 style="font-size: 11px;color:red;font-weight: 600;">₹ <span  class="">{{ $SalesData->balance_amount}}</span></h5>
+                                    <h4 style="font-size: 11px;color:red;font-weight: 600; padding: 2px;">Nett Balance</h4>
+                                    <h5 style="font-size: 11px;color:red;font-weight: 600; padding: 2px;">₹ <span  class="">{{ $SalesData->balance_amount}}</span></h5>
                                  </li>
                               </ul>
                            </div>
