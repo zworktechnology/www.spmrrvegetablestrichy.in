@@ -114,8 +114,14 @@
                                             <li>
 
                                                 @if ($Sales_datas['status'] == 1)
+                                                    <a href="{{ route('sales.generate_print', ['unique_key' => $Sales_datas['unique_key']]) }}"
+                                                        class="badges bg-green" style="color: white">Generate Invoice</a>
+                                                @elseif ($Sales_datas['status'] == 2)
+                                                    <a href="{{ route('sales.generate_print', ['unique_key' => $Sales_datas['unique_key']]) }}"
+                                                        class="badges" style="color: white;background: green;">Generated</a>
+                                                @elseif ($Sales_datas['status'] == 3)
                                                     <a href="{{ route('sales.print_view', ['unique_key' => $Sales_datas['unique_key']]) }}"
-                                                        class="badges bg-green" style="color: white">Generated Invoice</a>
+                                                        class="badges" style="color: white;background: #622222;">Generated</a>
                                                 @endif
                                             </li>
 

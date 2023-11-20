@@ -1,13 +1,14 @@
-@extends('layout.backend.auth')
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+<meta name="description" content="Zwork Technology - POS System - Vegtable Shop">
+<meta name="author" content="Zwork Technology">
 
-@section('content')
+<title>Zwork Technology - POS - Shop Billing - Custom Software</title>
+<link rel="stylesheet" href="{{ asset('assets/backend/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/backend/css/style.css') }}">
 
 
 <div class="content">
-<button  onclick="printDiv('printableArea')"  class="btn-success btn-sm" ><i class="fa fa-print"></i> Print</button>
-      <a href="{{ route('sales.index') }}"><button  class="btn-danger btn-sm" style="color:white"> back</button> </a>
-
-      <div  id="printableArea">
 
    <div class="card" style="text-transform: uppercase;">
       <div class="card-body">
@@ -29,43 +30,43 @@
             </div>
 
                   <table style="width: 100%;line-height: inherit;text-align: left;overflow: auto;margin:15px auto;">
-                     <tr class="heading " style="background:#eee; border: 1px solid;">
-                        <td style="padding: 3px;vertical-align: middle;font-weight: 600;color: black;font-size: 11px;">
+                     <tr class="heading " style="background:#eee; border: 1px solid #E9ECEF;">
+                        <td style="padding: 3px;vertical-align: middle;font-weight: 600;color: black;font-size: 11px;border: 1px solid #E9ECEF;">
                         Product Name
                         </td>
-                        <td style="padding: 3px;vertical-align: middle;font-weight: 600;color: black;font-size: 11px;">
+                        <td style="padding: 3px;vertical-align: middle;font-weight: 600;color: black;font-size: 11px;border: 1px solid #E9ECEF;">
                         Bag / Kg
                         </td>
-                        <td style="padding: 3px;vertical-align: middle;font-weight: 600;color: black;font-size: 11px;">
+                        <td style="padding: 3px;vertical-align: middle;font-weight: 600;color: black;font-size: 11px;border: 1px solid #E9ECEF;">
                         Count
                         </td>
-                        <td style="padding: 3px;vertical-align: middle;font-weight: 600;color: black;font-size: 11px;">
+                        <td style="padding: 3px;vertical-align: middle;font-weight: 600;color: black;font-size: 11px;border: 1px solid #E9ECEF;">
                         Price / Count
                         </td>
-                        <td style="padding: 3px;vertical-align: middle;font-weight: 600;color: black;font-size: 11px;">
+                        <td style="padding: 3px;vertical-align: middle;font-weight: 600;color: black;font-size: 11px;border: 1px solid #E9ECEF;">
                         Amount
                         </td>
                      </tr>
                      @foreach ($SalesProduct_darta as $index => $SalesProduct_darta_arr)
                            @if ($SalesProduct_darta_arr->sales_id == $SalesData->id)
-                     <tr class="details" style="border-bottom:1px solid ;">
-                        <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;">
+                     <tr class="details" style="border-bottom:1px solid #E9ECEF;">
+                        <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;border: 1px solid #E9ECEF;">
                         @foreach ($productlist as $products)
                                     @if ($products->id == $SalesProduct_darta_arr->productlist_id)
                                     {{ $products->name }}
                                     @endif
                                  @endforeach
                         </td>
-                        <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;">
+                        <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;border: 1px solid #E9ECEF;">
                         {{ $SalesProduct_darta_arr->bagorkg }}
                         </td>
-                        <td style="padding: 7px;vertical-align: top;vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;">
+                        <td style="padding: 7px;vertical-align: top;vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;border: 1px solid #E9ECEF;">
                         {{ $SalesProduct_darta_arr->count }}
                         </td>
-                        <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;">
+                        <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;border: 1px solid #E9ECEF;">
                         {{ $SalesProduct_darta_arr->price_per_kg }}
                         </td>
-                        <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;">
+                        <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;border: 1px solid #E9ECEF;">
                         {{ $SalesProduct_darta_arr->total_price }}
                         </td>
                      </tr>
@@ -78,12 +79,12 @@
                @if ($SalesData->extra_cost)
                   <table style="width: 100%;line-height: inherit;text-align: left;overflow: auto;margin:15px auto;">
                      <tr class="heading " style="background:#eee;">
-                        <td style="padding: 3px;vertical-align: middle;font-weight: 800;color: black;font-size: 11px; ">ExtraCost Note</td>
-                        <td style="padding: 3px;vertical-align: middle;font-weight: 800;color: black;font-size: 11px; ">Cost</td>
+                        <td style="padding: 3px;vertical-align: middle;font-weight: 800;color: black;font-size: 11px;border: 1px solid #E9ECEF; ">ExtraCost Note</td>
+                        <td style="padding: 3px;vertical-align: middle;font-weight: 800;color: black;font-size: 11px;border: 1px solid #E9ECEF; ">Cost</td>
                      </tr>
                      <tr class="details" style="border-bottom:1px solid #E9ECEF ;">
-                        <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;">{{ $SalesData->note }}</td>
-                        <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;">{{ $SalesData->extra_cost }}</td>
+                        <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;border: 1px solid #E9ECEF;">{{ $SalesData->note }}</td>
+                        <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;border: 1px solid #E9ECEF;">{{ $SalesData->extra_cost }}</td>
                      </tr>
                   </table>
                @endif
@@ -130,7 +131,10 @@
       </div>
    </div>
 </div>
-
-</div>
-
-@endsection
+<script>
+        //setTimeout(window.close, 7000);
+        window.onload=function(){self.print();}
+        window.onafterprint = function() {
+            history.go(-1);
+        };
+    </script>

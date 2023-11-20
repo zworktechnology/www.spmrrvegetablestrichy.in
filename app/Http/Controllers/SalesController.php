@@ -13,10 +13,12 @@ use App\Models\SalesProduct;
 use App\Models\Purchase;
 use App\Models\PurchaseProduct;
 use App\Models\BranchwiseBalance;
+use App\Models\Salespayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use PDF;
 
 class SalesController extends Controller
 {
@@ -671,33 +673,17 @@ class SalesController extends Controller
                 $payable_amount = $request->get('salespayable_amount');
 
 
-                if($oldentry_grossamount > $gross_amount){
-                    $newgross = $oldentry_grossamount - $gross_amount;
-                    $updated_gross = $old_grossamount - $newgross;
-                }else if($oldentry_grossamount < $gross_amount){
-                    $newgross = $gross_amount - $oldentry_grossamount;
-                    $updated_gross = $old_grossamount + $newgross;
-                }else if($oldentry_grossamount == $gross_amount){
-                    $updated_gross = $old_grossamount;
-                }
-
-
-                if($oldentry_paid > $payable_amount){
-                    $newPaidAmt = $oldentry_paid - $payable_amount;
-                    $updated_paid = $old_paid - $newPaidAmt;
-                }else if($oldentry_paid < $payable_amount){
-                    $newPaidAmt = $payable_amount - $oldentry_paid;
-                    $updated_paid = $old_paid + $newPaidAmt;
-                }else if($oldentry_paid == $payable_amount){
-                    $updated_paid = $old_paid;
-                }
+                $edited_gross = $old_grossamount - $oldentry_grossamount;
+                $new_gross = $edited_gross + $gross_amount;
+                $edited_paid = $old_paid - $oldentry_paid;
+                $new_paid = $edited_paid + $payable_amount;
+                $new_balance = $new_gross - $new_paid;
 
 
                 
-                $new_balance = $updated_gross - $updated_paid;
 
                 DB::table('branchwise_balances')->where('customer_id', $sales_customer_id)->where('branch_id', $branch_id)->update([
-                    'sales_amount' => $updated_gross,  'sales_paid' => $updated_paid, 'sales_balance' => $new_balance
+                    'sales_amount' => $new_gross,  'sales_paid' => $new_paid, 'sales_balance' => $new_balance
                 ]);
                 
             } 
@@ -719,6 +705,23 @@ class SalesController extends Controller
 
         // Purchase Products Table
 
+
+
+        $getinsertedP_Products = SalesProduct::where('sales_id', '=', $SalesId)->get();
+        $Purchaseproducts = array();
+        foreach ($getinsertedP_Products as $key => $getinserted_P_Products) {
+            $Purchaseproducts[] = $getinserted_P_Products->id;
+        }
+
+        $updatedpurchaseproduct_id = $request->sales_detail_id;
+        $updated_PurchaseProduct_id = array_filter($updatedpurchaseproduct_id);
+        $different_ids = array_merge(array_diff($Purchaseproducts, $updated_PurchaseProduct_id), array_diff($updated_PurchaseProduct_id, $Purchaseproducts));
+
+        if (!empty($different_ids)) {
+            foreach ($different_ids as $key => $different_id) {
+                SalesProduct::where('id', $different_id)->delete();
+            }
+        }
 
        
             
@@ -802,7 +805,53 @@ class SalesController extends Controller
                     'sales_id' => $Sales_Id,  'productlist_id' => $updatesales_product_id,  'bagorkg' => $bagorkg,  'count' => $count, 'price_per_kg' => $price_per_kg, 'total_price' => $total_price
                 ]);
 
-            } 
+            }else if ($sales_detail_id == '') {
+
+
+                $salesuprandomkey = Str::random(5);
+
+                $UpdateSalesProduct = new SalesProduct;
+                $UpdateSalesProduct->unique_key = $salesuprandomkey;
+                $UpdateSalesProduct->sales_id = $SalesId;
+                $UpdateSalesProduct->date = $request->get('sales_date');
+                $UpdateSalesProduct->branch_id = $branch_id;
+                $UpdateSalesProduct->productlist_id = $request->sales_product_id[$key];
+                $UpdateSalesProduct->bagorkg = $request->sales_bagorkg[$key];
+                $UpdateSalesProduct->count = $request->sales_count[$key];
+                $UpdateSalesProduct->price_per_kg = $request->sales_priceperkg[$key];
+                $UpdateSalesProduct->total_price = $request->sales_total_price[$key];
+                $UpdateSalesProduct->save();
+
+                $product_ids = $request->sales_product_id[$key];
+
+
+                $product_Data = Product::where('productlist_id', '=', $product_ids)->where('branchtable_id', '=', $branch_id)->first();
+
+                if($product_Data != ""){
+                    if($branch_id == $product_Data->branchtable_id){
+
+                        $bag_count = $product_Data->available_stockin_bag;
+                        $kg_count = $product_Data->available_stockin_kilograms;
+
+
+                        if($request->sales_bagorkg[$key] == 'bag'){
+                            $totalbag_count = $bag_count - $request->sales_count[$key];
+                            $totalkg_count = $kg_count - 0;
+                        }else if($request->sales_bagorkg[$key] == 'kg'){
+                            $totalkg_count = $kg_count - $request->sales_count[$key];
+                            $totalbag_count = $bag_count - 0;
+                        }
+
+
+
+                        DB::table('products')->where('productlist_id', $product_ids)->where('branchtable_id', $branch_id)->update([
+                            'available_stockin_bag' => $totalbag_count,  'available_stockin_kilograms' => $totalkg_count
+                        ]);
+                    }
+                }
+
+
+            }
         }
 
        
@@ -879,10 +928,23 @@ class SalesController extends Controller
         $Customer = Customer::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
         
 
+       // $sales = [];
         $data = Sales::where('soft_delete', '!=', 1)->get();
+        foreach ($data as $key => $data_arr) {
+            $sales[] = $data_arr;
+        }
+        $salepayment_s = [];
+        $Salespaymentdata = Salespayment::where('soft_delete', '!=', 1)->get();
+        foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+            $salepayment_s[] = $Salespaymentdatas;
+        }
+
+
         $Sales_data = [];
         $sales_terms = [];
-        foreach ($data as $key => $datas) {
+
+        $merge = array_merge($sales, $salepayment_s);
+        foreach ($merge as $key => $datas) {
             $branch_name = Branch::findOrFail($datas->branch_id);
             $customer_name = Customer::findOrFail($datas->customer_id);
 
@@ -901,6 +963,14 @@ class SalesController extends Controller
                 );
             }
 
+            if($datas->status != ""){
+                $paid = $datas->paid_amount;
+                $balance = $datas->balance_amount;
+            }else {
+                $paid = $datas->amount + $datas->salespayment_discount;
+                $balance = $datas->payment_pending;
+            }
+
 
 
             $Sales_data[] = array(
@@ -911,6 +981,9 @@ class SalesController extends Controller
                 'date' => $datas->date,
                 'time' => $datas->time,
                 'gross_amount' => $datas->gross_amount,
+                'grand_total' => $datas->grand_total,
+                'paid_amount' => $paid,
+                'balance_amount' => $balance,
                 'bill_no' => $datas->bill_no,
                 'id' => $datas->id,
                 'sales_terms' => $sales_terms,
@@ -923,8 +996,14 @@ class SalesController extends Controller
         }
 
 
+        $fromdate = '';
+        $todate = '';
+        $customer_id = '';
+        $branch_id = '';
 
-        return view('page.backend.sales.report', compact('branch', 'Customer', 'Sales_data'));
+
+
+        return view('page.backend.sales.report', compact('branch', 'Customer', 'Sales_data', 'fromdate', 'todate', 'customer_id', 'branch_id'));
     }
 
 
@@ -945,8 +1024,26 @@ class SalesController extends Controller
             $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ""){
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
                 $sales_terms = [];
-                foreach ($branchwise_report as $key => $branchwise_datas) {
+
+                $merge = array_merge($sales, $salepayment_s);
+
+                
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
@@ -956,8 +1053,8 @@ class SalesController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
                         $sales_terms[] = array(
-                            'bag' => $SalesProducts_arrdata->bag,
-                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
                             'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
                             'total_price' => $SalesProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -966,16 +1063,25 @@ class SalesController extends Controller
                         );
                     }
 
-
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
 
                     $Sales_data[] = array(
                         'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'customer_name' => $customer_name->name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -996,6 +1102,9 @@ class SalesController extends Controller
                     'date' => '',
                     'time' => '',
                     'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
@@ -1006,6 +1115,11 @@ class SalesController extends Controller
                     'todateheading' => '',
                 );
             }
+
+            $fromdate = '';
+            $todate = '';
+            $customer_id = '';
+            $branch_id = $salesreport_branch;
         }
 
 
@@ -1018,8 +1132,26 @@ class SalesController extends Controller
             $branchwise_report = Sales::where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
                 $sales_terms = [];
-                foreach ($branchwise_report as $key => $branchwise_datas) {
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
@@ -1029,8 +1161,8 @@ class SalesController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
                         $sales_terms[] = array(
-                            'bag' => $SalesProducts_arrdata->bag,
-                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
                             'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
                             'total_price' => $SalesProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1039,16 +1171,25 @@ class SalesController extends Controller
                         );
                     }
 
-
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
 
                     $Sales_data[] = array(
                         'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'customer_name' => $customer_name->name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1069,6 +1210,9 @@ class SalesController extends Controller
                     'date' => '',
                     'time' => '',
                     'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
@@ -1080,6 +1224,11 @@ class SalesController extends Controller
 
                 );
             }
+
+            $fromdate = '';
+            $todate = '';
+            $customer_id = $salesreport_customer;
+            $branch_id = '';
         }
 
 
@@ -1091,8 +1240,28 @@ class SalesController extends Controller
             $branchwise_report = Sales::where('date', '=', $salesreport_fromdate)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('date', '=', $salesreport_fromdate)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
                 $sales_terms = [];
-                foreach ($branchwise_report as $key => $branchwise_datas) {
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
@@ -1102,8 +1271,8 @@ class SalesController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
                         $sales_terms[] = array(
-                            'bag' => $SalesProducts_arrdata->bag,
-                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
                             'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
                             'total_price' => $SalesProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1113,15 +1282,26 @@ class SalesController extends Controller
                     }
 
 
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
 
                     $Sales_data[] = array(
                         'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'customer_name' => $customer_name->name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1142,6 +1322,9 @@ class SalesController extends Controller
                     'date' => '',
                     'time' => '',
                     'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
@@ -1152,6 +1335,11 @@ class SalesController extends Controller
                     'todateheading' => '',
                 );
             }
+
+            $fromdate = $salesreport_fromdate;
+            $todate = '';
+            $customer_id = '';
+            $branch_id = '';
         }
 
 
@@ -1162,8 +1350,27 @@ class SalesController extends Controller
             $branchwise_report = Sales::where('date', '=', $salesreport_todate)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('date', '=', $salesreport_todate)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
                 $sales_terms = [];
-                foreach ($branchwise_report as $key => $branchwise_datas) {
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
@@ -1173,8 +1380,8 @@ class SalesController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
                         $sales_terms[] = array(
-                            'bag' => $SalesProducts_arrdata->bag,
-                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
                             'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
                             'total_price' => $SalesProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1184,15 +1391,26 @@ class SalesController extends Controller
                     }
 
 
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
 
                     $Sales_data[] = array(
                         'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'customer_name' => $customer_name->name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1213,6 +1431,9 @@ class SalesController extends Controller
                     'date' => '',
                     'time' => '',
                     'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
@@ -1224,6 +1445,11 @@ class SalesController extends Controller
                 );
             }
 
+            $fromdate = '';
+            $todate = $salesreport_todate;
+            $customer_id = '';
+            $branch_id = '';
+
         }
 
 
@@ -1233,8 +1459,27 @@ class SalesController extends Controller
             $branchwise_report = Sales::where('date', '=', $salesreport_fromdate)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('date', '=', $salesreport_fromdate)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
                 $sales_terms = [];
-                foreach ($branchwise_report as $key => $branchwise_datas) {
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
@@ -1244,8 +1489,8 @@ class SalesController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
                         $sales_terms[] = array(
-                            'bag' => $SalesProducts_arrdata->bag,
-                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
                             'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
                             'total_price' => $SalesProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1255,15 +1500,27 @@ class SalesController extends Controller
                     }
 
 
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
 
                     $Sales_data[] = array(
                         'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'customer_name' => $customer_name->name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1284,6 +1541,9 @@ class SalesController extends Controller
                     'date' => '',
                     'time' => '',
                     'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
@@ -1294,6 +1554,11 @@ class SalesController extends Controller
                     'todateheading' => '',
                 );
             }
+
+            $fromdate = $salesreport_fromdate;
+            $todate = '';
+            $customer_id = $salesreport_customer;
+            $branch_id = '';
 
 
         }
@@ -1308,8 +1573,27 @@ class SalesController extends Controller
             $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
                 $sales_terms = [];
-                foreach ($branchwise_report as $key => $branchwise_datas) {
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
@@ -1319,8 +1603,8 @@ class SalesController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
                         $sales_terms[] = array(
-                            'bag' => $SalesProducts_arrdata->bag,
-                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
                             'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
                             'total_price' => $SalesProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1331,14 +1615,28 @@ class SalesController extends Controller
 
 
 
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
+
+
                     $Sales_data[] = array(
                         'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'customer_name' => $customer_name->name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1359,6 +1657,9 @@ class SalesController extends Controller
                     'date' => '',
                     'time' => '',
                     'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
@@ -1371,7 +1672,10 @@ class SalesController extends Controller
                 );
             }
 
-
+            $fromdate = $salesreport_fromdate;
+            $todate = $salesreport_todate;
+            $customer_id = '';
+            $branch_id = '';
 
         }
 
@@ -1383,8 +1687,28 @@ class SalesController extends Controller
             $branchwise_report = Sales::where('date', '=', $salesreport_todate)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('date', '=', $salesreport_todate)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
                 $sales_terms = [];
-                foreach ($branchwise_report as $key => $branchwise_datas) {
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
@@ -1394,8 +1718,8 @@ class SalesController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
                         $sales_terms[] = array(
-                            'bag' => $SalesProducts_arrdata->bag,
-                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
                             'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
                             'total_price' => $SalesProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1405,15 +1729,27 @@ class SalesController extends Controller
                     }
 
 
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
 
                     $Sales_data[] = array(
                         'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'customer_name' => $customer_name->name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1434,6 +1770,9 @@ class SalesController extends Controller
                     'date' => '',
                     'time' => '',
                     'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
@@ -1444,7 +1783,10 @@ class SalesController extends Controller
                     'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
                 );
             }
-
+            $fromdate = '';
+            $todate = $salesreport_todate;
+            $customer_id = $salesreport_customer;
+            $branch_id = '';
 
         }
 
@@ -1460,8 +1802,27 @@ class SalesController extends Controller
             $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('branch_id', '=', $salesreport_branch)->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
                 $sales_terms = [];
-                foreach ($branchwise_report as $key => $branchwise_datas) {
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
@@ -1471,8 +1832,8 @@ class SalesController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
                         $sales_terms[] = array(
-                            'bag' => $SalesProducts_arrdata->bag,
-                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
                             'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
                             'total_price' => $SalesProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1482,15 +1843,27 @@ class SalesController extends Controller
                     }
 
 
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
 
                     $Sales_data[] = array(
                         'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'customer_name' => $customer_name->name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1511,6 +1884,9 @@ class SalesController extends Controller
                     'date' => '',
                     'time' => '',
                     'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
@@ -1522,7 +1898,10 @@ class SalesController extends Controller
                 );
             }
 
-
+            $fromdate = '';
+            $todate = '';
+            $customer_id = $salesreport_customer;
+            $branch_id = $salesreport_branch;
         }
 
 
@@ -1533,8 +1912,28 @@ class SalesController extends Controller
             $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('date', '=', $salesreport_fromdate)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('branch_id', '=', $salesreport_branch)->where('date', '=', $salesreport_fromdate)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
                 $sales_terms = [];
-                foreach ($branchwise_report as $key => $branchwise_datas) {
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
@@ -1544,8 +1943,8 @@ class SalesController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
                         $sales_terms[] = array(
-                            'bag' => $SalesProducts_arrdata->bag,
-                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
                             'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
                             'total_price' => $SalesProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1556,14 +1955,26 @@ class SalesController extends Controller
 
 
 
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
                     $Sales_data[] = array(
                         'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'customer_name' => $customer_name->name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1584,6 +1995,9 @@ class SalesController extends Controller
                     'date' => '',
                     'time' => '',
                     'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
@@ -1595,7 +2009,10 @@ class SalesController extends Controller
                 );
             }
 
-
+            $fromdate = $salesreport_fromdate;
+            $todate = '';
+            $customer_id = '';
+            $branch_id = $salesreport_branch;
         }
 
 
@@ -1607,8 +2024,28 @@ class SalesController extends Controller
             $branchwise_report = Sales::where('branch_id', '=', $salesreport_branch)->where('date', '=', $salesreport_todate)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('branch_id', '=', $salesreport_branch)->where('date', '=', $salesreport_todate)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
                 $sales_terms = [];
-                foreach ($branchwise_report as $key => $branchwise_datas) {
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
@@ -1618,8 +2055,8 @@ class SalesController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
                         $sales_terms[] = array(
-                            'bag' => $SalesProducts_arrdata->bag,
-                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
                             'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
                             'total_price' => $SalesProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1629,15 +2066,26 @@ class SalesController extends Controller
                     }
 
 
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
 
                     $Sales_data[] = array(
                         'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'customer_name' => $customer_name->name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1658,6 +2106,9 @@ class SalesController extends Controller
                     'date' => '',
                     'time' => '',
                     'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
@@ -1669,7 +2120,10 @@ class SalesController extends Controller
                 );
             }
 
-
+            $fromdate = '';
+            $todate = $salesreport_todate;
+            $customer_id = '';
+            $branch_id = $salesreport_branch;
         }
 
 
@@ -1681,8 +2135,28 @@ class SalesController extends Controller
             $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
                 $sales_terms = [];
-                foreach ($branchwise_report as $key => $branchwise_datas) {
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
@@ -1692,8 +2166,8 @@ class SalesController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
                         $sales_terms[] = array(
-                            'bag' => $SalesProducts_arrdata->bag,
-                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
                             'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
                             'total_price' => $SalesProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1703,15 +2177,27 @@ class SalesController extends Controller
                     }
 
 
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
 
                     $Sales_data[] = array(
                         'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'customer_name' => $customer_name->name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1732,6 +2218,9 @@ class SalesController extends Controller
                     'date' => '',
                     'time' => '',
                     'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
@@ -1743,7 +2232,10 @@ class SalesController extends Controller
                 );
             }
 
-
+            $fromdate = $salesreport_fromdate;
+            $todate = $salesreport_todate;
+            $customer_id = '';
+            $branch_id = $salesreport_branch;
         }
 
 
@@ -1755,8 +2247,27 @@ class SalesController extends Controller
             $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('customer_id', '=', $salesreport_customer)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
                 $sales_terms = [];
-                foreach ($branchwise_report as $key => $branchwise_datas) {
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
@@ -1766,8 +2277,8 @@ class SalesController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
                         $sales_terms[] = array(
-                            'bag' => $SalesProducts_arrdata->bag,
-                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
                             'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
                             'total_price' => $SalesProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1777,15 +2288,26 @@ class SalesController extends Controller
                     }
 
 
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
 
                     $Sales_data[] = array(
                         'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'customer_name' => $customer_name->name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1806,6 +2328,9 @@ class SalesController extends Controller
                     'date' => '',
                     'time' => '',
                     'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
@@ -1817,7 +2342,10 @@ class SalesController extends Controller
                 );
             }
 
-
+            $fromdate = $salesreport_fromdate;
+            $todate = $salesreport_todate;
+            $customer_id = $salesreport_customer;
+            $branch_id = '';
 
         }
 
@@ -1832,8 +2360,28 @@ class SalesController extends Controller
             $branchwise_report = Sales::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('customer_id', '=', $salesreport_customer)->where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->get();
             $Sales_data = [];
             if($branchwise_report != ''){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::whereBetween('date', [$salesreport_fromdate, $salesreport_todate])->where('customer_id', '=', $salesreport_customer)->where('branch_id', '=', $salesreport_branch)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
                 $sales_terms = [];
-                foreach ($branchwise_report as $key => $branchwise_datas) {
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
                     $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
                     $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
 
@@ -1843,8 +2391,8 @@ class SalesController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
                         $sales_terms[] = array(
-                            'bag' => $SalesProducts_arrdata->bag,
-                            'kgs' => $SalesProducts_arrdata->kgs,
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
                             'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
                             'total_price' => $SalesProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1855,14 +2403,25 @@ class SalesController extends Controller
 
 
 
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
                     $Sales_data[] = array(
                         'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
-                        'branch_name' => $branch_name->name,
+                        'branch_name' => $branch_name->shop_name,
                         'customer_name' => $customer_name->name,
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1883,6 +2442,9 @@ class SalesController extends Controller
                     'date' => '',
                     'time' => '',
                     'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
                     'bill_no' => '',
                     'id' => '',
                     'sales_terms' => '',
@@ -1894,7 +2456,10 @@ class SalesController extends Controller
                 );
             }
 
-
+            $fromdate = $salesreport_fromdate;
+            $todate = $salesreport_todate;
+            $customer_id = $salesreport_customer;
+            $branch_id = $salesreport_branch;
 
         }
 
@@ -1904,7 +2469,7 @@ class SalesController extends Controller
 
 
 
-        return view('page.backend.sales.report', compact('Sales_data', 'branch', 'Customer'));
+        return view('page.backend.sales.report', compact('Sales_data', 'branch', 'Customer', 'fromdate', 'todate', 'customer_id', 'branch_id'));
 
 
     }
@@ -1912,7 +2477,30 @@ class SalesController extends Controller
 
 
 
+    public function generate_print($unique_key)
+    {
+        $SalesData = Sales::where('unique_key', '=', $unique_key)->where('sales_order', '=', NULL)->first();
 
+        if($SalesData->status == 1){
+            $SalesData->status = 2;
+            $SalesData->update();
+        }else if($SalesData->status == 2){
+            $SalesData->status = 3;
+            $SalesData->update();
+        }
+        
+
+
+        $customer_idname = Customer::where('id', '=', $SalesData->customer_id)->first();
+            $branchname = Branch::where('id', '=', $SalesData->branch_id)->first();
+            $bankname = Bank::where('id', '=', $SalesData->bank_id)->first();
+            $customer_upper = strtoupper($customer_idname->name);
+            $productlist = Productlist::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
+            $SalesProduct_darta = SalesProduct::where('sales_id', '=', $SalesData->id)->where('sales_order', '=', NULL)->get();
+            
+
+        return view('page.backend.sales.print_view', compact('customer_upper', 'SalesData', 'customer_idname', 'branchname', 'bankname', 'SalesProduct_darta', 'productlist'));
+    }
 
 
 
@@ -2575,6 +3163,1702 @@ class SalesController extends Controller
 
         return view('page.backend.salesorder.salesorder_printview', compact('customer_upper', 'SalesData', 'customer_idname', 'branchname', 'bankname', 'SalesProduct_darta', 'productlist'));
     }
+
+
+
+
+
+
+
+
+
+    public function f_sales_pdfexport($fromdate) 
+    {
+        if($fromdate != ""){
+
+            $branchwise_report = Sales::where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->get();
+            $Sales_data = [];
+            if($branchwise_report != ''){
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+
+
+
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
+
+                    $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
+                        'branchheading' => '',
+                        'customerheading' => '',
+                        'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
+                        'todateheading' => '',
+
+                    );
+                }
+            }else{
+
+                $Sales_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'status' => '',
+                    'branchheading' => '',
+                    'customerheading' => '',
+                    'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
+                    'todateheading' => '',
+                );
+            }
+
+            
+
+
+            $pdf = Pdf::loadView('page.backend.sales.f_pdfexport_view', [
+                'Sales_data' => $Sales_data,
+                'fromdate' => $fromdate,
+            ]);
+    
+    
+            $name = 'SalesReport.' . 'pdf';
+        
+                return $pdf->stream($name);
+        }
+    }
+
+
+    public function t_sales_pdfexport($todate) 
+    {
+        if($todate != ""){
+
+            $branchwise_report = Sales::where('date', '=', $todate)->where('soft_delete', '!=', 1)->get();
+            $Sales_data = [];
+            if($branchwise_report != ''){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('date', '=', $todate)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+
+
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
+                    $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
+                        'branchheading' => '',
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => date('d-M-Y', strtotime($todate)),
+
+                    );
+                }
+            }else{
+
+                $Sales_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'status' => '',
+                    'branchheading' => '',
+                    'customerheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => date('d-M-Y', strtotime($todate)),
+                );
+            }
+
+            
+
+            $pdf = Pdf::loadView('page.backend.sales.t_pdfexport_view', [
+                'Sales_data' => $Sales_data,
+                'todate' => $todate,
+            ]);
+    
+    
+            $name = 'SalesReport.' . 'pdf';
+        
+                return $pdf->stream($name);
+
+        }
+    }
+
+
+    public function b_sales_pdfexport($branch_id) 
+    {
+        if($branch_id != ""){
+            $GetBranch = Branch::findOrFail($branch_id);
+
+            $branchwise_report = Sales::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+            $Sales_data = [];
+            if($branchwise_report != ""){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
+                    $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
+                        'branchheading' => $GetBranch->shop_name,
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+
+                    );
+                }
+            }else{
+
+                $Sales_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'status' => '',
+                    'branchheading' => $GetBranch->shop_name,
+                    'customerheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => '',
+                );
+            }
+
+            $pdf = Pdf::loadView('page.backend.sales.b_pdfexport_view', [
+                'Sales_data' => $Sales_data,
+                'branch' => $GetBranch->shop_name,
+            ]);
+    
+    
+            $name = 'SalesReport.' . 'pdf';
+        
+                return $pdf->stream($name);
+        }
+    }
+
+
+    public function c_sales_pdfexport($customer_id) 
+    {
+        if($customer_id != ""){
+            $GetCustomer = Customer::findOrFail($customer_id);
+    
+            $branchwise_report = Sales::where('customer_id', '=', $customer_id)->where('soft_delete', '!=', 1)->get();
+            $Sales_data = [];
+            if($branchwise_report != ''){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('customer_id', '=', $customer_id)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+    
+    
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+    
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+    
+                        );
+                    }
+    
+    
+
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
+    
+                    $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'old_balance' => $branchwise_datas->old_balance,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
+                        'branchheading' => '',
+                        'customerheading' => $GetCustomer->name,
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+    
+                    );
+                }
+            }else{
+    
+                $Sales_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'status' => '',
+                    'branchheading' => '',
+                    'customerheading' => $GetCustomer->name,
+                    'fromdateheading' => '',
+                    'todateheading' => '',
+    
+                );
+            }
+    
+
+
+            $pdf = Pdf::loadView('page.backend.sales.c_pdfexport_view', [
+                'Sales_data' => $Sales_data,
+                'customer' => $GetCustomer->name,
+            ]);
+    
+    
+            $name = 'SalesReport.' . 'pdf';
+        
+                return $pdf->stream($name);
+        }
+    }
+
+
+
+    public function ft_sales_pdfexport($fromdate, $todate) 
+    {
+        if($fromdate && $todate){
+
+
+            $branchwise_report = Sales::whereBetween('date', [$fromdate, $todate])->where('soft_delete', '!=', 1)->get();
+            $Sales_data = [];
+            if($branchwise_report != ''){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::whereBetween('date', [$fromdate, $todate])->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+
+
+
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
+
+                    $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
+                        'branchheading' => '',
+                        'customerheading' => '',
+                        'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
+                        'todateheading' => date('d-M-Y', strtotime($todate)),
+
+                    );
+                }
+            }else{
+
+                $Sales_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'status' => '',
+                    'branchheading' => '',
+                    'customerheading' => '',
+                    'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
+                    'todateheading' => date('d-M-Y', strtotime($todate)),
+
+                );
+            }
+
+           
+
+
+            $pdf = Pdf::loadView('page.backend.sales.ft_pdfexport_view', [
+                'Sales_data' => $Sales_data,
+                'fromdate' => date('d M Y', strtotime($fromdate)),
+                'todate' => date('d M Y', strtotime($todate)),
+            ]);
+    
+    
+            $name = 'SalesReport.' . 'pdf';
+        
+                return $pdf->stream($name);
+
+        }
+    }
+
+
+    public function fb_sales_pdfexport($fromdate, $branch_id) 
+    {
+        if($branch_id && $fromdate){
+            $GetBranch = Branch::findOrFail($branch_id);
+
+            $branchwise_report = Sales::where('branch_id', '=', $branch_id)->where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->get();
+            $Sales_data = [];
+            if($branchwise_report != ''){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('branch_id', '=', $branch_id)->where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+
+
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
+
+
+                    $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
+                        'branchheading' => $GetBranch->shop_name,
+                        'customerheading' => '',
+                        'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
+                        'todateheading' => '',
+
+                    );
+                }
+            }else{
+
+                $Sales_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'status' => '',
+                    'branchheading' => $GetBranch->shop_name,
+                    'customerheading' => '',
+                    'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
+                    'todateheading' => '',
+                );
+            }
+
+
+
+            $pdf = Pdf::loadView('page.backend.sales.fb_pdfexport_view', [
+                'Sales_data' => $Sales_data,
+                'fromdate' => date('d M Y', strtotime($fromdate)),
+                'branch' => $GetBranch->shop_name,
+            ]);
+    
+    
+            $name = 'SalesReport.' . 'pdf';
+        
+                return $pdf->stream($name);
+        }
+    }
+
+
+    public function fc_sales_pdfexport($fromdate, $customer_id) 
+    {
+        if($fromdate && $customer_id){
+            $GetCustomer = Customer::findOrFail($customer_id);
+
+            $branchwise_report = Sales::where('date', '=', $fromdate)->where('customer_id', '=', $customer_id)->where('soft_delete', '!=', 1)->get();
+            $Sales_data = [];
+            if($branchwise_report != ''){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('date', '=', $fromdate)->where('customer_id', '=', $customer_id)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+
+
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
+
+                    $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
+                        'branchheading' => '',
+                        'customerheading' => $GetCustomer->name,
+                        'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
+                        'todateheading' => '',
+
+                    );
+                }
+            }else{
+
+                $Sales_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'status' => '',
+                    'branchheading' => '',
+                    'customerheading' => $GetCustomer->name,
+                    'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
+                    'todateheading' => '',
+                );
+            }
+
+           
+
+
+            $pdf = Pdf::loadView('page.backend.sales.fc_pdfexport_view', [
+                'Sales_data' => $Sales_data,
+                'fromdate' => date('d M Y', strtotime($fromdate)),
+                'customer' => $GetCustomer->name,
+            ]);
+    
+    
+            $name = 'SalesReport.' . 'pdf';
+        
+                return $pdf->stream($name);
+
+
+        }
+    }
+
+
+    public function tb_sales_pdfexport($todate, $branch_id) 
+    {
+        if($branch_id && $todate){
+            $GetBranch = Branch::findOrFail($branch_id);
+
+            $branchwise_report = Sales::where('branch_id', '=', $branch_id)->where('date', '=', $todate)->where('soft_delete', '!=', 1)->get();
+            $Sales_data = [];
+            if($branchwise_report != ''){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('branch_id', '=', $branch_id)->where('date', '=', $todate)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+
+
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
+
+                    $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
+                        'branchheading' => $GetBranch->shop_name,
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => date('d-M-Y', strtotime($todate)),
+
+                    );
+                }
+            }else{
+
+                $Sales_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'status' => '',
+                    'branchheading' => $GetBranch->shop_name,
+                    'customerheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => date('d-M-Y', strtotime($todate)),
+                );
+            }
+
+           
+
+
+            $pdf = Pdf::loadView('page.backend.sales.tb_pdfexport_view', [
+                'Sales_data' => $Sales_data,
+                'todate' => date('d M Y', strtotime($todate)),
+                'branch' => $GetBranch->shop_name,
+            ]);
+    
+    
+            $name = 'SalesReport.' . 'pdf';
+        
+                return $pdf->stream($name);
+        }
+    }
+
+
+    public function tc_sales_pdfexport($todate, $customer_id) 
+    {
+        if($todate && $customer_id){
+            $GetCustomer = Customer::findOrFail($customer_id);
+
+            $branchwise_report = Sales::where('date', '=', $todate)->where('customer_id', '=', $customer_id)->where('soft_delete', '!=', 1)->get();
+            $Sales_data = [];
+            if($branchwise_report != ''){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('date', '=', $todate)->where('customer_id', '=', $customer_id)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+
+
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
+
+                    $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
+                        'branchheading' => '',
+                        'customerheading' => $GetCustomer->name,
+                        'fromdateheading' => '',
+                        'todateheading' => date('d-M-Y', strtotime($todate)),
+
+                    );
+                }
+            }else{
+
+                $Sales_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'status' => '',
+                    'branchheading' => '',
+                    'customerheading' => $GetCustomer->name,
+                    'fromdateheading' => '',
+                    'todateheading' => date('d-M-Y', strtotime($todate)),
+                );
+            }
+
+
+            $pdf = Pdf::loadView('page.backend.sales.tc_pdfexport_view', [
+                'Sales_data' => $Sales_data,
+                'todate' => date('d M Y', strtotime($todate)),
+                'customer' => $GetCustomer->name,
+            ]);
+    
+    
+            $name = 'SalesReport.' . 'pdf';
+        
+                return $pdf->stream($name);
+
+        }
+
+    }
+
+
+    public function bc_sales_pdfexport($branch_id, $customer_id) 
+    {
+        if($branch_id && $customer_id){
+
+            $GetBranch = Branch::findOrFail($branch_id);
+            $GetCustomer = Customer::findOrFail($customer_id);
+
+            $branchwise_report = Sales::where('branch_id', '=', $branch_id)->where('customer_id', '=', $customer_id)->where('soft_delete', '!=', 1)->get();
+            $Sales_data = [];
+            if($branchwise_report != ''){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('branch_id', '=', $branch_id)->where('customer_id', '=', $customer_id)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+
+
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
+
+                    $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
+                        'branchheading' => $GetBranch->shop_name,
+                        'customerheading' => $GetCustomer->name,
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+
+                    );
+                }
+            }else{
+
+                $Sales_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'status' => '',
+                    'branchheading' => $GetBranch->shop_name,
+                    'customerheading' => $GetCustomer->name,
+                    'fromdateheading' => '',
+                    'todateheading' => '',
+                );
+            }
+
+           
+
+            $pdf = Pdf::loadView('page.backend.sales.bc_pdfexport_view', [
+                'Sales_data' => $Sales_data,
+                'customer' => $GetCustomer->name,
+                'branch' => $GetBranch->shop_name,
+            ]);
+    
+    
+            $name = 'SalesReport.' . 'pdf';
+        
+                return $pdf->stream($name);
+        }
+    }
+
+
+    public function ftc_sales_pdfexport($fromdate, $todate, $customer_id) 
+    {
+        if($fromdate && $todate && $customer_id){
+
+            $GetCustomer = Customer::findOrFail($customer_id);
+
+            $branchwise_report = Sales::whereBetween('date', [$fromdate, $todate])->where('customer_id', '=', $customer_id)->where('soft_delete', '!=', 1)->get();
+            $Sales_data = [];
+            if($branchwise_report != ''){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::whereBetween('date', [$fromdate, $todate])->where('customer_id', '=', $customer_id)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
+                    $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $branch_name->shop_name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
+                        'branchheading' => '',
+                        'customerheading' => $GetCustomer->name,
+                        'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
+                        'todateheading' => date('d-M-Y', strtotime($todate)),
+
+                    );
+                }
+            }else{
+
+                $Sales_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'status' => '',
+                    'branchheading' => '',
+                    'customerheading' => $GetCustomer->name,
+                    'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
+                    'todateheading' => date('d-M-Y', strtotime($todate)),
+                );
+            }
+
+          
+
+            $pdf = Pdf::loadView('page.backend.sales.ftc_pdfexport_view', [
+                'Sales_data' => $Sales_data,
+                'fromdate' => date('d M Y', strtotime($fromdate)),
+                'todate' => date('d M Y', strtotime($todate)),
+                'customer' => $GetCustomer->name,
+            ]);
+    
+    
+            $name = 'SalesReport.' . 'pdf';
+        
+                return $pdf->stream($name);
+
+        }
+    }
+
+
+    public function ftb_sales_pdfexport($fromdate, $todate, $branch_id) 
+    {
+        if($fromdate && $todate && $branch_id){
+            $GetBrach = Branch::findOrFail($branch_id);
+
+            $branchwise_report = Sales::whereBetween('date', [$fromdate, $todate])->where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+            $Sales_data = [];
+            if($branchwise_report != ''){
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::whereBetween('date', [$fromdate, $todate])->where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+
+
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
+
+                    $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $GetBrach->shop_name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
+                        'branchheading' => $GetBrach->shop_name,
+                        'customerheading' => '',
+                        'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
+                        'todateheading' => date('d-M-Y', strtotime($todate)),
+
+                    );
+                }
+            }else{
+
+                $Sales_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'status' => '',
+                    'branchheading' => $GetBrach->shop_name,
+                    'customerheading' => '',
+                    'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
+                    'todateheading' => date('d-M-Y', strtotime($todate)),
+                );
+            }
+
+           
+
+
+            $pdf = Pdf::loadView('page.backend.sales.ftb_pdfexport_view', [
+                'Sales_data' => $Sales_data,
+                'fromdate' => date('d M Y', strtotime($fromdate)),
+                'todate' => date('d M Y', strtotime($todate)),
+                'branch' => $GetBrach->shop_name,
+            ]);
+    
+    
+            $name = 'SalesReport.' . 'pdf';
+        
+                return $pdf->stream($name);
+        }
+    }
+
+
+    public function ftbc_sales_pdfexport($fromdate, $todate, $branch_id, $customer_id) 
+    {
+        if($fromdate && $todate && $customer_id && $branch_id){
+
+            $GetCustomer = Customer::findOrFail($customer_id);
+            $GetBrach = Branch::findOrFail($branch_id);
+
+            $branchwise_report = Sales::whereBetween('date', [$fromdate, $todate])->where('customer_id', '=', $customer_id)->where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+            $Sales_data = [];
+            if($branchwise_report != ''){
+
+
+                $sales = [];
+                foreach ($branchwise_report as $key => $data_arr) {
+                    $sales[] = $data_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::whereBetween('date', [$fromdate, $todate])->where('customer_id', '=', $customer_id)->where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+                $sales_terms = [];
+                foreach ($merge as $key => $branchwise_datas) {
+                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+                    $customer_name = Customer::findOrFail($branchwise_datas->customer_id);
+
+
+                    $SalesProducts = SalesProduct::where('sales_id', '=', $branchwise_datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                        $sales_terms[] = array(
+                            'bag' => $SalesProducts_arrdata->bagorkg,
+                            'kgs' => $SalesProducts_arrdata->count,
+                            'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                            'total_price' => $SalesProducts_arrdata->total_price,
+                            'product_name' => $productlist_ID->name,
+                            'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                        );
+                    }
+
+
+
+
+                    if($branchwise_datas->status != ""){
+                        $paid = $branchwise_datas->paid_amount;
+                        $balance = $branchwise_datas->balance_amount;
+                    }else {
+                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $balance = $branchwise_datas->payment_pending;
+                    }
+
+
+
+                    $Sales_data[] = array(
+                        'sales_order' => $branchwise_datas->sales_order,
+                        'unique_key' => $branchwise_datas->unique_key,
+                        'branch_name' => $GetBrach->shop_name,
+                        'customer_name' => $customer_name->name,
+                        'date' => $branchwise_datas->date,
+                        'time' => $branchwise_datas->time,
+                        'gross_amount' => $branchwise_datas->gross_amount,
+                        'grand_total' => $branchwise_datas->grand_total,
+                        'paid_amount' => $paid,
+                        'balance_amount' => $balance,
+                        'bill_no' => $branchwise_datas->bill_no,
+                        'id' => $branchwise_datas->id,
+                        'sales_terms' => $sales_terms,
+                        'status' => $branchwise_datas->status,
+                        'branchheading' => $GetBrach->shop_name,
+                        'customerheading' => $GetCustomer->name,
+                        'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
+                        'todateheading' => date('d-M-Y', strtotime($todate)),
+
+                    );
+                }
+            }else{
+
+                $Sales_data[] = array(
+                    'unique_key' => '',
+                    'branch_name' => '',
+                    'customer_name' => '',
+                    'date' => '',
+                    'time' => '',
+                    'gross_amount' => '',
+                    'grand_total' => '',
+                    'paid_amount' => '',
+                    'balance_amount' => '',
+                    'bill_no' => '',
+                    'id' => '',
+                    'sales_terms' => '',
+                    'status' => '',
+                    'branchheading' => $GetBrach->shop_name,
+                    'customerheading' => $GetCustomer->name,
+                    'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
+                    'todateheading' => date('d-M-Y', strtotime($todate)),
+                );
+            }
+
+          
+
+
+            $pdf = Pdf::loadView('page.backend.sales.ftbc_pdfexport_view', [
+                'Sales_data' => $Sales_data,
+                'fromdate' => date('d M Y', strtotime($fromdate)),
+                'todate' => date('d M Y', strtotime($todate)),
+                'branch' => $GetBrach->shop_name,
+                'customer' => $GetCustomer->name,
+            ]);
+    
+    
+            $name = 'SalesReport.' . 'pdf';
+        
+                return $pdf->stream($name);
+
+        }
+    }
+
+
+
+
+    public function sales_pdfexport() 
+    {
+       
+        
+            $data = Sales::where('soft_delete', '!=', 1)->get();
+
+            foreach ($data as $key => $data_arr) {
+                $sales[] = $data_arr;
+            }
+            $salepayment_s = [];
+            $Salespaymentdata = Salespayment::where('soft_delete', '!=', 1)->get();
+            foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                $salepayment_s[] = $Salespaymentdatas;
+            }
+    
+    
+            $Sales_data = [];
+            $sales_terms = [];
+    
+            $merge = array_merge($sales, $salepayment_s);
+
+
+            foreach ($merge as $key => $datas) {
+                $branch_name = Branch::findOrFail($datas->branch_id);
+                $customer_name = Customer::findOrFail($datas->customer_id);
+    
+                $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->get();
+                foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+    
+                    $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                    $sales_terms[] = array(
+                        'bag' => $SalesProducts_arrdata->bagorkg,
+                        'kgs' => $SalesProducts_arrdata->count,
+                        'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                        'total_price' => $SalesProducts_arrdata->total_price,
+                        'product_name' => $productlist_ID->name,
+                        'sales_id' => $SalesProducts_arrdata->sales_id,
+    
+                    );
+                }
+
+
+                if($datas->status != ""){
+                    $paid = $datas->paid_amount;
+                    $balance = $datas->balance_amount;
+                }else {
+                    $paid = $datas->amount + $datas->salespayment_discount;
+                    $balance = $datas->payment_pending;
+                }
+    
+    
+    
+    
+                $Sales_data[] = array(
+                    'sales_order' => $datas->sales_order,
+                    'unique_key' => $datas->unique_key,
+                    'branch_name' => $branch_name->shop_name,
+                    'customer_name' => $customer_name->name,
+                    'date' => $datas->date,
+                    'time' => $datas->time,
+                    'gross_amount' => $datas->gross_amount,
+                    'grand_total' => $datas->grand_total,
+                    'paid_amount' => $paid,
+                    'balance_amount' => $balance,
+                    'bill_no' => $datas->bill_no,
+                    'id' => $datas->id,
+                    'sales_terms' => $sales_terms,
+                    'status' => $datas->status,
+                    'branchheading' => $branch_name->shop_name,
+                    'customerheading' => $customer_name->name,
+                    'fromdateheading' => date('d-M-Y', strtotime($datas->date)),
+                    'todateheading' => date('d-M-Y', strtotime($datas->date)),
+                );
+            }
+    
+    
+        
+
+        $pdf = Pdf::loadView('page.backend.sales.pdfexport_view', [
+            'Sales_data' => $Sales_data,
+        ]);
+
+
+        $name = 'SalesReport.' . 'pdf';
+    
+            return $pdf->stream($name);
+
+    }
+
+
+
+
+
+   
 
 }
 

@@ -92,22 +92,26 @@
                            
                         </tr>
                      </thead>
-                     <tbody id="sales_productfields">
+                     <tbody class="sales_productfields">
                      @foreach ($SalesProducts as $index => $Sales_Products)
                         <tr>
                            <td class="">
                               <input type="hidden"id="sales_detail_id"name="sales_detail_id[]" value="{{ $Sales_Products->id }}"/>
-                              @foreach ($productlist as $products)
-                                 @if ($products->id == $Sales_Products->productlist_id)
-                                    <input type="text"class="form-control" name="product_name[]" value="{{ $products->name }}" readonly>
-                                    <input type="hidden" id="sales_product_id" name="sales_product_id[]" value="{{ $Sales_Products->productlist_id }}" />
-                                 @endif
-                              @endforeach
+
+                              <select class="select form-control" name="sales_product_id[]" id="sales_product_id">
+                                 <option value="" disabled selected hiddden>Select Product</option>
+                                 @foreach ($productlist as $products)
+                                    <option value="{{ $products->id }}"@if ($products->id === $Sales_Products->productlist_id) selected='selected' @endif>{{ $products->name }}</option>
+                                 @endforeach
+                              </select>
                            </td>
-                           <td><input type="text" class="form-control" id="sales_bagorkg" readonly name="sales_bagorkg[]" placeholder="Bag" value="{{ $Sales_Products->bagorkg }}" required /></td>
+                           <td><input type="text" class="form-control" id="sales_bagorkg"  name="sales_bagorkg[]" placeholder="Bag" value="{{ $Sales_Products->bagorkg }}" required /></td>
                            <td><input type="text" class="form-control sales_count" id="sales_count"  name="sales_count[]" placeholder="kgs" value="{{ $Sales_Products->count }}" required /></td>
                            <td><input type="text" class="form-control sales_priceperkg"  id="sales_priceperkg" name="sales_priceperkg[]" placeholder="Price Per Count" value="{{ $Sales_Products->price_per_kg }}" required /></td>
                            <td class="text-end"><input type="text" class="form-control sales_total_price" readonly id="sales_total_price"  style="background-color: #e9ecef;" name="sales_total_price[]" placeholder="" value="{{ $Sales_Products->total_price }}" required /></td>
+                           <td><button style=" width: 35px;"class="addsalesproductfields py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-primary"
+                              type="button" id="" value="Add">+</button>
+                            <button style="width: 35px;" class="py-1 text-white font-medium rounded-lg text-sm  text-center btn btn-danger remove-salestr" type="button" >-</button></td>
                            
                         </tr>
                         @endforeach

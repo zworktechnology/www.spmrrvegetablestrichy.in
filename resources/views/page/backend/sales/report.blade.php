@@ -18,10 +18,10 @@
                         <div class="col-lg-2 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>From Date</label>
-                                <input type="date" name="salesreport_fromdate" id="salesreport_fromdate">
+                                <input type="date" name="salesreport_fromdate" id="salesreport_fromdate" >
                             </div>
                         </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
+                        <div class="col-lg-2 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>To Date</label>
                                 <input type="date" name="salesreport_todate" id="salesreport_todate">
@@ -54,6 +54,56 @@
                             <div class="form-group">
                                 <label style="color: white">Action</label>
                                 <input type="submit" class="btn btn-primary" name="submit" value="Search" />
+                            </div>
+                        </div>
+                        <div class="col-lg-1 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label style="color: white">Prit</label>
+
+                                @if (($fromdate != '') && ($todate == '') && ($branch_id == '') && ($customer_id == ''))
+                                <a href="/f_sales_pdfexport/{{$fromdate}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($todate != '') && ($fromdate == '') && ($branch_id == '') && ($customer_id == ''))
+                                <a href="/t_sales_pdfexport/{{$todate}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($branch_id != '') && ($fromdate == '') && ($todate == '') && ($customer_id == ''))
+                                <a href="/b_sales_pdfexport/{{$branch_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($customer_id != '') && ($fromdate == '') && ($todate == '') && ($branch_id == ''))
+                                <a href="/c_sales_pdfexport/{{$customer_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($fromdate != '') && ($todate != '') && ($customer_id == '') && ($branch_id == ''))
+                                <a href="/ft_sales_pdfexport/{{$fromdate}}/{{$todate}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($fromdate != '') && ($branch_id != '') && ($todate == '') && ($customer_id == ''))
+                                <a href="/fb_sales_pdfexport/{{$fromdate}}/{{$branch_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($fromdate != '') && ($customer_id != '') && ($todate == '') && ($branch_id == ''))
+                                <a href="/fc_sales_pdfexport/{{$fromdate}}/{{$customer_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($todate != '') && ($branch_id != '') && ($fromdate == '') && ($customer_id == ''))
+                                <a href="/tb_sales_pdfexport/{{$todate}}/{{$branch_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($todate != '') && ($customer_id != '') && ($fromdate == '') && ($branch_id == ''))
+                                <a href="/tc_sales_pdfexport/{{$todate}}/{{$customer_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($branch_id != '') && ($customer_id != '') && ($fromdate == '') && ($todate == ''))
+                                <a href="/bc_sales_pdfexport/{{$branch_id}}/{{$customer_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($fromdate != '') && ($todate != '') && ($customer_id != '') && ($branch_id == ''))
+                                <a href="/ftc_sales_pdfexport/{{$fromdate}}/{{$todate}}/{{$customer_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($fromdate != '') && ($todate != '') && ($branch_id != '') && ($customer_id == ''))
+                                <a href="/ftb_sales_pdfexport/{{$fromdate}}/{{$todate}}/{{$branch_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($fromdate != '') && ($todate != '') && ($branch_id != '') && ($customer_id != ''))
+                                <a href="/ftbc_sales_pdfexport/{{$fromdate}}/{{$todate}}/{{$branch_id}}/{{$customer_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @else
+                                <a href="/sales_pdfexport" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @endif
+
                             </div>
                         </div>
                     </div>
@@ -95,6 +145,7 @@
             </div>
 
             <div class="card">
+            
                 <div class="card-body">
                     <div class="row">
                         @if ($Sales_data != '')
@@ -102,14 +153,14 @@
                                 <table class="table  customerdatanew">
                                     <thead style="background: #5e54c966;">
                                         <tr>
-                                            <th>S.No</th>
-                                            <th>Type</th>
-                                            <th>Bill No</th>
                                             <th>Date & Time</th>
                                             <th>Customer</th>
                                             <th>Branch</th>
+                                            <th>Bill No</th>
                                             <th>Products</th>
                                             <th>Grand Total</th>
+                                            <th>Paid</th>
+                                            <th>Balance</th>
                                         </tr>
                                     </thead>
                                     <tbody style="background: #f8f9fa;">
@@ -117,25 +168,22 @@
                                         @foreach ($Sales_data as $keydata => $Sales_datas)
                                             @if ($Sales_datas['unique_key'] != '')
                                                 <tr>
-                                                    <td>{{ ++$keydata }}</td>
-                                                    @if ($Sales_datas['sales_order'] == NULL)
-                                                    <td style="text-transform: uppercase;color:#198754"> Sales </td>
-                                                    @elseif ($Sales_datas['sales_order'] == '1')
-                                                    <td style="text-transform: uppercase;color:red;">Sales Order</td>
-                                                    @endif
-                                                    <td>#{{ $Sales_datas['bill_no'] }}</td>
-                                                    <td>{{ date('d M Y', strtotime($Sales_datas['date'])) }} -
-                                                        {{ date('h:i A', strtotime($Sales_datas['time'])) }}</td>
+                                                    <td>{{ date('d-m-Y', strtotime($Sales_datas['date'])) }}</td>
                                                     <td>{{ $Sales_datas['customer_name'] }}</td>
                                                     <td>{{ $Sales_datas['branch_name'] }}</td>
+                                                    <td>{{ $Sales_datas['bill_no'] }}</td>
                                                     <td style="text-transform: uppercase;">
                                                     @foreach ($Sales_datas['sales_terms'] as $index => $terms_array)
                                                     @if ($terms_array['sales_id'] == $Sales_datas['id'])
-                                                    {{ $terms_array['product_name'] }} - {{ $terms_array['kgs'] }}{{ $terms_array['bag'] }},<br/>
+                                                    {{ $terms_array['product_name'] }} - {{ $terms_array['kgs'] }}{{ $terms_array['bag'] }}<br/>
                                                     @endif
                                                     @endforeach
                                                     </td>
-                                                    <td>{{ $Sales_datas['gross_amount'] }}</td>
+
+                                                    <td>{{ $Sales_datas['grand_total'] }}</td>
+                                                    
+                                                    <td>{{ $Sales_datas['paid_amount'] }}</td>
+                                                    <td>{{ $Sales_datas['balance_amount'] }}</td>
                                                 </tr>
 
 

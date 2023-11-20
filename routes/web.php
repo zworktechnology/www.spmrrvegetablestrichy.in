@@ -281,6 +281,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/sales/report_view', [SalesController::class, 'report_view'])->name('sales.report_view');
         // DATAE FILTER
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/sales', [SalesController::class, 'datefilter'])->name('sales.datefilter');
+        // GENERATE AND PRINT
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/sales/generate_print/{unique_key}', [SalesController::class, 'generate_print'])->name('sales.generate_print');
     });
 
 
@@ -383,3 +385,20 @@ Route::get('/purchasepayment_branchdata/{today}/{branch_id}', [PurchasePaymentCo
 
 Route::get('/salespaymentbranch/{branch_id}', [SalespaymentController::class, 'salespaymentbranch']);
 Route::get('/salespayment_branchdata/{today}/{branch_id}', [SalespaymentController::class, 'salespayment_branchdata']);
+
+
+
+Route::get('/f_sales_pdfexport/{fromdate}', [SalesController::class, 'f_sales_pdfexport']);
+Route::get('/t_sales_pdfexport/{todate}', [SalesController::class, 't_sales_pdfexport']);
+Route::get('/b_sales_pdfexport/{branch_id}', [SalesController::class, 'b_sales_pdfexport']);
+Route::get('/c_sales_pdfexport/{customer_id}', [SalesController::class, 'c_sales_pdfexport']);
+Route::get('/ft_sales_pdfexport/{fromdate}/{todate}', [SalesController::class, 'ft_sales_pdfexport']);
+Route::get('/fb_sales_pdfexport/{fromdate}/{branch_id}', [SalesController::class, 'fb_sales_pdfexport']);
+Route::get('/fc_sales_pdfexport/{fromdate}/{customer_id}', [SalesController::class, 'fc_sales_pdfexport']);
+Route::get('/tb_sales_pdfexport/{todate}/{branch_id}', [SalesController::class, 'tb_sales_pdfexport']);
+Route::get('/tc_sales_pdfexport/{todate}/{customer_id}', [SalesController::class, 'tc_sales_pdfexport']);
+Route::get('/bc_sales_pdfexport/{branch_id}/{customer_id}', [SalesController::class, 'bc_sales_pdfexport']);
+Route::get('/ftc_sales_pdfexport/{fromdate}/{todate}/{customer_id}', [SalesController::class, 'ftc_sales_pdfexport']);
+Route::get('/ftb_sales_pdfexport/{fromdate}/{todate}/{branch_id}', [SalesController::class, 'ftb_sales_pdfexport']);
+Route::get('/ftbc_sales_pdfexport/{fromdate}/{todate}/{branch_id}/{customer_id}', [SalesController::class, 'ftbc_sales_pdfexport']);
+Route::get('/sales_pdfexport', [SalesController::class, 'sales_pdfexport']);
