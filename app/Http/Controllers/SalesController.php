@@ -3276,7 +3276,11 @@ class SalesController extends Controller
                 );
             }
 
-            
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
 
 
             $pdf = Pdf::loadView('page.backend.sales.f_pdfexport_view', [
@@ -3396,7 +3400,11 @@ class SalesController extends Controller
                 );
             }
 
-            
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
 
             $pdf = Pdf::loadView('page.backend.sales.t_pdfexport_view', [
                 'Sales_data' => $Sales_data,
@@ -3514,6 +3522,14 @@ class SalesController extends Controller
                     'todateheading' => '',
                 );
             }
+
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
+
 
             $pdf = Pdf::loadView('page.backend.sales.b_pdfexport_view', [
                 'Sales_data' => $Sales_data,
@@ -3637,6 +3653,11 @@ class SalesController extends Controller
             }
     
 
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
 
             $pdf = Pdf::loadView('page.backend.sales.c_pdfexport_view', [
                 'Sales_data' => $Sales_data,
@@ -3761,7 +3782,11 @@ class SalesController extends Controller
             }
 
            
-
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
 
             $pdf = Pdf::loadView('page.backend.sales.ft_pdfexport_view', [
                 'Sales_data' => $Sales_data,
@@ -3884,7 +3909,11 @@ class SalesController extends Controller
                 );
             }
 
-
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
 
             $pdf = Pdf::loadView('page.backend.sales.fb_pdfexport_view', [
                 'Sales_data' => $Sales_data,
@@ -4004,7 +4033,11 @@ class SalesController extends Controller
                 );
             }
 
-           
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
 
 
             $pdf = Pdf::loadView('page.backend.sales.fc_pdfexport_view', [
@@ -4129,7 +4162,11 @@ class SalesController extends Controller
             }
 
            
-
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
 
             $pdf = Pdf::loadView('page.backend.sales.tb_pdfexport_view', [
                 'Sales_data' => $Sales_data,
@@ -4249,6 +4286,15 @@ class SalesController extends Controller
                     'todateheading' => date('d-M-Y', strtotime($todate)),
                 );
             }
+
+
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
+
 
 
             $pdf = Pdf::loadView('page.backend.sales.tc_pdfexport_view', [
@@ -4374,6 +4420,11 @@ class SalesController extends Controller
                 );
             }
 
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
            
 
             $pdf = Pdf::loadView('page.backend.sales.bc_pdfexport_view', [
@@ -4494,7 +4545,13 @@ class SalesController extends Controller
                 );
             }
 
-          
+
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
 
             $pdf = Pdf::loadView('page.backend.sales.ftc_pdfexport_view', [
                 'Sales_data' => $Sales_data,
@@ -4616,7 +4673,11 @@ class SalesController extends Controller
                 );
             }
 
-           
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
 
 
             $pdf = Pdf::loadView('page.backend.sales.ftb_pdfexport_view', [
@@ -4743,7 +4804,11 @@ class SalesController extends Controller
                 );
             }
 
-          
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
 
 
             $pdf = Pdf::loadView('page.backend.sales.ftbc_pdfexport_view', [
@@ -4840,7 +4905,11 @@ class SalesController extends Controller
                 );
             }
     
-    
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
         
 
         $pdf = Pdf::loadView('page.backend.sales.pdfexport_view', [

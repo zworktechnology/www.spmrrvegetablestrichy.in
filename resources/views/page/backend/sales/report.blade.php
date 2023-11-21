@@ -157,10 +157,10 @@
                                             <th>Customer</th>
                                             <th>Branch</th>
                                             <th>Bill No</th>
-                                            <th>Products</th>
-                                            <th>Grand Total</th>
-                                            <th>Paid</th>
-                                            <th>Balance</th>
+                                            <th style="font-size:14px;">Particulars</th>
+                                            <th style="font-size:14px;">Debit</th>
+                                            <th style="font-size:14px;">Credit</th>
+                                            <th style="font-size:14px;">Total</th>
                                         </tr>
                                     </thead>
                                     <tbody style="background: #f8f9fa;">
@@ -180,7 +180,7 @@
                                                     @endforeach
                                                     </td>
 
-                                                    <td>{{ $Sales_datas['grand_total'] }}</td>
+                                                    <td>{{ $Sales_datas['gross_amount'] }}</td>
                                                     
                                                     <td>{{ $Sales_datas['paid_amount'] }}</td>
                                                     <td>{{ $Sales_datas['balance_amount'] }}</td>

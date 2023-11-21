@@ -105,10 +105,10 @@
                <th style="font-size:14px;">Branch</th>
                <th style="font-size:14px;">Customer</th>
                <th style="font-size:14px;">BillNo</th>
-               <th style="font-size:14px;">Products</th>
-               <th style="font-size:14px;">GrandTotal</th>
-               <th style="font-size:14px;">Paid</th>
-               <th style="font-size:14px;">Balance</th>
+               <th style="font-size:14px;">Particulars</th>
+               <th style="font-size:14px;">Debit</th>
+               <th style="font-size:14px;">Credit</th>
+               <th style="font-size:14px;">Total</th>
             </tr>
         </thead>
         <tbody id="customer_index">
@@ -126,7 +126,7 @@
                                                     @endforeach
                                                     </td>
 
-                  <td style="font-size:14px;">{{ $Sales_datas['grand_total'] }}</td>
+                  <td style="font-size:14px;">{{ $Sales_datas['gross_amount'] }}</td>
                   <td style="font-size:14px;">{{ $Sales_datas['paid_amount'] }}</td>
                   <td style="font-size:14px;">{{ $Sales_datas['balance_amount'] }}</td>
             </tr>
