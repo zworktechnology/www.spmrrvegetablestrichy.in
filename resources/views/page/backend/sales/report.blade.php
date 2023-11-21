@@ -153,7 +153,7 @@
                                 <table class="table  customerdatanew">
                                     <thead style="background: #5e54c966;">
                                         <tr>
-                                            <th>Date & Time</th>
+                                            <th>Date</th>
                                             <th>Customer</th>
                                             <th>Branch</th>
                                             <th>Type</th>
