@@ -156,11 +156,12 @@
                                             <th>Date & Time</th>
                                             <th>Customer</th>
                                             <th>Branch</th>
+                                            <th>Type</th>
                                             <th>Bill No</th>
-                                            <th style="font-size:14px;">Particulars</th>
-                                            <th style="font-size:14px;">Debit</th>
-                                            <th style="font-size:14px;">Credit</th>
-                                            <th style="font-size:14px;">Total</th>
+                                            <th style="">Particulars</th>
+                                            <th style="">Debit</th>
+                                            <th style="">Credit</th>
+                                            <th style="">Total</th>
                                         </tr>
                                     </thead>
                                     <tbody style="background: #f8f9fa;">
@@ -171,6 +172,7 @@
                                                     <td>{{ date('d-m-Y', strtotime($Sales_datas['date'])) }}</td>
                                                     <td>{{ $Sales_datas['customer_name'] }}</td>
                                                     <td>{{ $Sales_datas['branch_name'] }}</td>
+                                                    <td>{{ $Sales_datas['type'] }}</td>
                                                     <td>{{ $Sales_datas['bill_no'] }}</td>
                                                     <td style="text-transform: uppercase;">
                                                     @foreach ($Sales_datas['sales_terms'] as $index => $terms_array)

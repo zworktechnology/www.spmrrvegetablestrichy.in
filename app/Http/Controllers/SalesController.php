@@ -966,9 +966,11 @@ class SalesController extends Controller
             if($datas->status != ""){
                 $paid = $datas->paid_amount;
                 $balance = $datas->balance_amount;
+                $type='SALES';
             }else {
                 $paid = $datas->amount + $datas->salespayment_discount;
                 $balance = $datas->payment_pending;
+                $type='PAYMENT';
             }
 
 
@@ -984,6 +986,7 @@ class SalesController extends Controller
                 'grand_total' => $datas->grand_total,
                 'paid_amount' => $paid,
                 'balance_amount' => $balance,
+                'type' => $type,
                 'bill_no' => $datas->bill_no,
                 'id' => $datas->id,
                 'sales_terms' => $sales_terms,
@@ -1066,11 +1069,12 @@ class SalesController extends Controller
                     if($branchwise_datas->status != ""){
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
+                        $type='SALES';
                     }else {
                         $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
                         $balance = $branchwise_datas->payment_pending;
+                        $type='PAYMENT';
                     }
-
                     $Sales_data[] = array(
                         'sales_order' => $branchwise_datas->sales_order,
                         'unique_key' => $branchwise_datas->unique_key,
@@ -1082,6 +1086,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1174,9 +1179,11 @@ class SalesController extends Controller
                     if($branchwise_datas->status != ""){
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
+                        $type='SALES';
                     }else {
                         $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
                         $balance = $branchwise_datas->payment_pending;
+                        $type='PAYMENT';
                     }
 
                     $Sales_data[] = array(
@@ -1190,6 +1197,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1285,9 +1293,11 @@ class SalesController extends Controller
                     if($branchwise_datas->status != ""){
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
+                        $type='SALES';
                     }else {
                         $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
                         $balance = $branchwise_datas->payment_pending;
+                        $type='PAYMENT';
                     }
 
 
@@ -1302,6 +1312,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1394,9 +1405,11 @@ class SalesController extends Controller
                     if($branchwise_datas->status != ""){
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
+                        $type='SALES';
                     }else {
                         $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
                         $balance = $branchwise_datas->payment_pending;
+                        $type='PAYMENT';
                     }
 
 
@@ -1411,6 +1424,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1503,11 +1517,12 @@ class SalesController extends Controller
                     if($branchwise_datas->status != ""){
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
+                        $type='SALES';
                     }else {
                         $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
                         $balance = $branchwise_datas->payment_pending;
+                        $type='PAYMENT';
                     }
-
 
 
                     $Sales_data[] = array(
@@ -1521,6 +1536,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1618,9 +1634,11 @@ class SalesController extends Controller
                     if($branchwise_datas->status != ""){
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
+                        $type='SALES';
                     }else {
                         $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
                         $balance = $branchwise_datas->payment_pending;
+                        $type='PAYMENT';
                     }
 
 
@@ -1637,6 +1655,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1732,10 +1751,13 @@ class SalesController extends Controller
                     if($branchwise_datas->status != ""){
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
+                        $type='SALES';
                     }else {
                         $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
                         $balance = $branchwise_datas->payment_pending;
+                        $type='PAYMENT';
                     }
+
 
 
 
@@ -1750,6 +1772,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1846,9 +1869,11 @@ class SalesController extends Controller
                     if($branchwise_datas->status != ""){
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
+                        $type='SALES';
                     }else {
                         $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
                         $balance = $branchwise_datas->payment_pending;
+                        $type='PAYMENT';
                     }
 
 
@@ -1864,6 +1889,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -1958,9 +1984,11 @@ class SalesController extends Controller
                     if($branchwise_datas->status != ""){
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
+                        $type='SALES';
                     }else {
                         $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
                         $balance = $branchwise_datas->payment_pending;
+                        $type='PAYMENT';
                     }
 
 
@@ -1975,6 +2003,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -2069,9 +2098,11 @@ class SalesController extends Controller
                     if($branchwise_datas->status != ""){
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
+                        $type='SALES';
                     }else {
                         $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
                         $balance = $branchwise_datas->payment_pending;
+                        $type='PAYMENT';
                     }
 
 
@@ -2086,6 +2117,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -2180,9 +2212,11 @@ class SalesController extends Controller
                     if($branchwise_datas->status != ""){
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
+                        $type='SALES';
                     }else {
                         $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
                         $balance = $branchwise_datas->payment_pending;
+                        $type='PAYMENT';
                     }
 
 
@@ -2198,6 +2232,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -2291,9 +2326,11 @@ class SalesController extends Controller
                     if($branchwise_datas->status != ""){
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
+                        $type='SALES';
                     }else {
                         $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
                         $balance = $branchwise_datas->payment_pending;
+                        $type='PAYMENT';
                     }
 
 
@@ -2308,6 +2345,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
@@ -2406,9 +2444,11 @@ class SalesController extends Controller
                     if($branchwise_datas->status != ""){
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
+                        $type='SALES';
                     }else {
                         $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
                         $balance = $branchwise_datas->payment_pending;
+                        $type='PAYMENT';
                     }
 
                     $Sales_data[] = array(
@@ -2422,6 +2462,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'sales_terms' => $sales_terms,
