@@ -1105,6 +1105,7 @@ class SalesController extends Controller
                         'todateheading' => '',
 
                     );
+                    
                 }
             }else{
 
@@ -1128,6 +1129,12 @@ class SalesController extends Controller
                     'todateheading' => '',
                 );
             }
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
 
             $fromdate = '';
             $todate = '';
@@ -1245,6 +1252,12 @@ class SalesController extends Controller
             $todate = '';
             $customer_id = $salesreport_customer;
             $branch_id = '';
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
         }
 
 
@@ -1359,6 +1372,13 @@ class SalesController extends Controller
             $todate = '';
             $customer_id = '';
             $branch_id = '';
+
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
         }
 
 
@@ -1472,6 +1492,13 @@ class SalesController extends Controller
             $customer_id = '';
             $branch_id = '';
 
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
+
         }
 
 
@@ -1583,6 +1610,13 @@ class SalesController extends Controller
             $todate = '';
             $customer_id = $salesreport_customer;
             $branch_id = '';
+
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
 
 
         }
@@ -1704,6 +1738,14 @@ class SalesController extends Controller
             $customer_id = '';
             $branch_id = '';
 
+
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
+
         }
 
 
@@ -1818,6 +1860,13 @@ class SalesController extends Controller
             $todate = $salesreport_todate;
             $customer_id = $salesreport_customer;
             $branch_id = '';
+
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
 
         }
 
@@ -1936,6 +1985,12 @@ class SalesController extends Controller
             $todate = '';
             $customer_id = $salesreport_customer;
             $branch_id = $salesreport_branch;
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
         }
 
 
@@ -2050,6 +2105,12 @@ class SalesController extends Controller
             $todate = '';
             $customer_id = '';
             $branch_id = $salesreport_branch;
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
         }
 
 
@@ -2164,6 +2225,13 @@ class SalesController extends Controller
             $todate = $salesreport_todate;
             $customer_id = '';
             $branch_id = $salesreport_branch;
+
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
         }
 
 
@@ -2279,6 +2347,13 @@ class SalesController extends Controller
             $todate = $salesreport_todate;
             $customer_id = '';
             $branch_id = $salesreport_branch;
+
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
         }
 
 
@@ -2392,6 +2467,13 @@ class SalesController extends Controller
             $todate = $salesreport_todate;
             $customer_id = $salesreport_customer;
             $branch_id = '';
+
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
 
         }
 
@@ -2509,6 +2591,13 @@ class SalesController extends Controller
             $todate = $salesreport_todate;
             $customer_id = $salesreport_customer;
             $branch_id = $salesreport_branch;
+
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return $value1 - $value2;
+             });
 
         }
 

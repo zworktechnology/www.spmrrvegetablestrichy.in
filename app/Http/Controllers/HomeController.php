@@ -12,6 +12,7 @@ use App\Models\Branch;
 use App\Models\SalesProduct;
 use App\Models\PurchaseProduct;
 use Carbon\Carbon;
+use DateTime;
 
 class HomeController extends Controller
 {
@@ -34,6 +35,10 @@ class HomeController extends Controller
     {
         $today = Carbon::now()->format('Y-m-d');
 
+        
+
+
+
         $total_purchase_amt_billing = Purchase::where('soft_delete', '!=', 1)->where('date', '=', $today)->sum('gross_amount');
             if($total_purchase_amt_billing != ""){
                 $tot_purchaseAmount = $total_purchase_amt_billing;
@@ -134,16 +139,33 @@ class HomeController extends Controller
                 
             }
 
+            $day = date('w');
+            $week_start = date('Y-m-d', strtotime('-'.$day.' days'));
+            $week_end = date('Y-m-d', strtotime('+'.(6-$day).' days'));
 
 
-        return view('home', compact('today', 'tot_purchaseAmount', 'total_purchase_payment', 'tot_saleAmount', 'total_sale_payment', 'tot_expenseAmount', 'dashbord_table'));
+            $today_bills = Sales::where('soft_delete', '!=', 1)->where('date', '=', $today)->where('status', '!=', '1')->get();
+            $today_generated_bills = count(collect($today_bills));
+
+            $this_week_bills = Sales::whereBetween('date', [$week_start, $week_end])->where('soft_delete', '!=', 1)->where('status', '!=', '1')->get();
+            $thisweek_bills = count(collect($this_week_bills));
+
+
+            $first_day = date("Y-m-01", strtotime($today));
+            $last_day = date("Y-m-t", strtotime($today));
+
+
+            $this_month_bills = Sales::whereBetween('date', [$first_day, $last_day])->where('soft_delete', '!=', 1)->where('status', '!=', '1')->get();
+            $thismonth_bills = count(collect($this_month_bills));
+
+        return view('home', compact('today', 'tot_purchaseAmount', 'total_purchase_payment', 'tot_saleAmount', 'total_sale_payment', 'tot_expenseAmount', 'dashbord_table', 'week_start', 'week_end', 'today_generated_bills', 'thisweek_bills', 'thismonth_bills'));
     }
 
 
     public function datefilter(Request $request) {
         $today = $request->get('from_date');
 
-
+        
 
         $total_purchase_amt_billing = Purchase::where('soft_delete', '!=', 1)->where('date', '=', $today)->sum('gross_amount');
             if($total_purchase_amt_billing != ""){
@@ -244,10 +266,45 @@ class HomeController extends Controller
                 );
                 
             }
+            $day = date('w', strtotime($today));
+            $year = date('Y', strtotime($today));
+            $date = new DateTime($today);
+            $week = $date->format("W");
+
+            function week_start_date($week, $year, $format = 'Y-m-d', $date = FALSE) {
+   
+                if ($date) {
+                    $week = date("W", strtotime($date));
+                    $year = date("o", strtotime($date));
+                }
+            
+                $week = sprintf("%02s", $week);
+            
+                $desiredMonday = date($format, strtotime("$year-W$week-1"));
+            
+                return $desiredMonday;
+            }
+            
+
+          
+            $week_start = week_start_date($week, $year);
+            $week_end = date('Y-m-d', strtotime('+6 days', strtotime($week_start)));
+
+            $today_bills = Sales::where('soft_delete', '!=', 1)->where('date', '=', $today)->where('status', '!=', '1')->get();
+            $today_generated_bills = count(collect($today_bills));
 
 
+            $this_week_bills = Sales::whereBetween('date', [$week_start, $week_end])->where('soft_delete', '!=', 1)->where('status', '!=', '1')->get();
+            $thisweek_bills = count(collect($this_week_bills));
 
-        return view('home', compact('today', 'tot_purchaseAmount', 'total_purchase_payment', 'tot_saleAmount', 'total_sale_payment', 'tot_expenseAmount', 'dashbord_table'));
+
+            $first_day = date("Y-m-01", strtotime($today));
+            $last_day = date("Y-m-t", strtotime($today));
+
+            $this_month_bills = Sales::whereBetween('date', [$first_day, $last_day])->where('soft_delete', '!=', 1)->where('status', '!=', '1')->get();
+            $thismonth_bills = count(collect($this_month_bills));
+
+        return view('home', compact('today', 'tot_purchaseAmount', 'total_purchase_payment', 'tot_saleAmount', 'total_sale_payment', 'tot_expenseAmount', 'dashbord_table', 'week_start', 'week_end', 'today_generated_bills', 'thisweek_bills', 'thismonth_bills'));
 
     }
 }

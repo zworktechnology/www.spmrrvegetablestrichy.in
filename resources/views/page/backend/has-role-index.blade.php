@@ -73,6 +73,33 @@
 
                     </div>
                 </div>
+                <div class="row" style="margin-top: 1%;">
+                    <div class="col-lg-4 col-sm-6 col-12 d-flex">
+                        <div class="dash-count">
+                            <div class="dash-counts">
+                                <h4>{{$today_generated_bills}}</h4>
+                                <h5>Today Genereated Bills</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-12 d-flex">
+                        <div class="dash-count das1">
+                            <div class="dash-counts">
+                                <h4>{{$thisweek_bills}}</h4>
+                                <h5>This Week Generated Bills - <br/>({{$week_start}} - {{$week_end}})</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-12 d-flex">
+                        <div class="dash-count das2">
+                            <div class="dash-counts">
+                                <h4>{{$thismonth_bills}}</h4>
+                                <h5>This Month Generated Bills</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
             </div>
         </div>
 
