@@ -83,7 +83,7 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table customerdatanew">
-                        <thead>
+                        <thead style="background: #5e54c966;">
                             <tr>
                                 <th>Sl. No</th>
                                 <th>Branch</th>

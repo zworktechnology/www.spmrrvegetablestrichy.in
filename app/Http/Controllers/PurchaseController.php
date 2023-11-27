@@ -1420,63 +1420,63 @@ class PurchaseController extends Controller
         $purchase_data = [];
         $terms = [];
         $Extracost_Arr = [];
-        foreach ($data as $key => $datas) {
-            $branch_name = Branch::findOrFail($datas->branch_id);
-            $supplier_name = Supplier::findOrFail($datas->supplier_id);
+        // foreach ($data as $key => $datas) {
+        //     $branch_name = Branch::findOrFail($datas->branch_id);
+        //     $supplier_name = Supplier::findOrFail($datas->supplier_id);
 
-            $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
-            foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+        //     $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+        //     foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
 
-                $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                $terms[] = array(
-                    'bag' => $PurchaseProducts_arrdata->bagorkg,
-                    'kgs' => $PurchaseProducts_arrdata->count,
-                    'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                    'total_price' => $PurchaseProducts_arrdata->total_price,
-                    'product_name' => $productlist_ID->name,
-                    'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+        //         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+        //         $terms[] = array(
+        //             'bag' => $PurchaseProducts_arrdata->bagorkg,
+        //             'kgs' => $PurchaseProducts_arrdata->count,
+        //             'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
+        //             'total_price' => $PurchaseProducts_arrdata->total_price,
+        //             'product_name' => $productlist_ID->name,
+        //             'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
 
-                );
+        //         );
 
-            }
-
-
-            $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datas->id)->get();
-            foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
-
-                $Extracost_Arr[] = array(
-                    'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
-                    'extracost' => $PurchaseExtracosts_arr->extracost,
-                    'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
-
-                );
-
-            }
+        //     }
 
 
+        //     $PurchaseExtracosts = PurchaseExtracost::where('purchase_id', '=', $datas->id)->get();
+        //     foreach ($PurchaseExtracosts as $key => $PurchaseExtracosts_arr) {
 
-            $purchase_data[] = array(
-                'purchase_order' => $datas->purchase_order,
-                'unique_key' => $datas->unique_key,
-                'branch_id' => $datas->branch_id,
-                'branch_name' => $branch_name->shop_name,
-                'supplier_name' => $supplier_name->name,
-                'date' => $datas->date,
-                'time' => $datas->time,
-                'gross_amount' => $datas->gross_amount,
-                'bill_no' => $datas->bill_no,
-                'id' => $datas->id,
-                'supplier_id' => $datas->supplier_id,
-                'bank_id' => $datas->bank_id,
-                'status' => $datas->status,
-                'terms' => $terms,
-                'Extracost_Arr' => $Extracost_Arr,
-                'branchheading' => $branch_name->shop_name,
-                'supplierheading' => $supplier_name->name,
-                'fromdateheading' => date('d-M-Y', strtotime($datas->date)),
-                'todateheading' => date('d-M-Y', strtotime($datas->date)),
-            );
-        }
+        //         $Extracost_Arr[] = array(
+        //             'extracost_note' => $PurchaseExtracosts_arr->extracost_note,
+        //             'extracost' => $PurchaseExtracosts_arr->extracost,
+        //             'purchase_id' => $PurchaseExtracosts_arr->purchase_id,
+
+        //         );
+
+        //     }
+
+
+
+        //     $purchase_data[] = array(
+        //         'purchase_order' => $datas->purchase_order,
+        //         'unique_key' => $datas->unique_key,
+        //         'branch_id' => $datas->branch_id,
+        //         'branch_name' => $branch_name->shop_name,
+        //         'supplier_name' => $supplier_name->name,
+        //         'date' => $datas->date,
+        //         'time' => $datas->time,
+        //         'gross_amount' => $datas->gross_amount,
+        //         'bill_no' => $datas->bill_no,
+        //         'id' => $datas->id,
+        //         'supplier_id' => $datas->supplier_id,
+        //         'bank_id' => $datas->bank_id,
+        //         'status' => $datas->status,
+        //         'terms' => $terms,
+        //         'Extracost_Arr' => $Extracost_Arr,
+        //         'branchheading' => $branch_name->shop_name,
+        //         'supplierheading' => $supplier_name->name,
+        //         'fromdateheading' => date('d-M-Y', strtotime($datas->date)),
+        //         'todateheading' => date('d-M-Y', strtotime($datas->date)),
+        //     );
+        // }
 
 
 
@@ -1515,8 +1515,8 @@ class PurchaseController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                         $terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bag,
-                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
                             'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
                             'total_price' => $PurchaseProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1546,6 +1546,7 @@ class PurchaseController extends Controller
                         'date' => $branchwise_datas->date,
                         'time' => $branchwise_datas->time,
                         'gross_amount' => $branchwise_datas->gross_amount,
+                        'paid_amount' => $branchwise_datas->paid_amount,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
                         'terms' => $terms,
@@ -1568,6 +1569,7 @@ class PurchaseController extends Controller
                     'time' => '',
                     'gross_amount' => '',
                     'bill_no' => '',
+                    'paid_amount' => '',
                     'id' => '',
                     'terms' => '',
                     'status' => '',
@@ -1606,8 +1608,8 @@ class PurchaseController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                         $supplier_terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bag,
-                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
                             'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
                             'total_price' => $PurchaseProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1638,6 +1640,7 @@ class PurchaseController extends Controller
                         'date' => $supplierwise_report_datas->date,
                         'time' => $supplierwise_report_datas->time,
                         'gross_amount' => $supplierwise_report_datas->gross_amount,
+                        'paid_amount' => $supplierwise_report_datas->paid_amount,
                         'bill_no' => $supplierwise_report_datas->bill_no,
                         'id' => $supplierwise_report_datas->id,
                         'terms' => $supplier_terms,
@@ -1662,6 +1665,7 @@ class PurchaseController extends Controller
                     'time' => '',
                     'gross_amount' => '',
                     'bill_no' => '',
+                    'paid_amount' => '',
                     'id' => '',
                     'terms' => '',
                     'status' => '',
@@ -1698,8 +1702,8 @@ class PurchaseController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                         $fromdate_terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bag,
-                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
                             'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
                             'total_price' => $PurchaseProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1730,6 +1734,7 @@ class PurchaseController extends Controller
                         'date' => $fromdate_report_datas->date,
                         'time' => $fromdate_report_datas->time,
                         'gross_amount' => $fromdate_report_datas->gross_amount,
+                        'paid_amount' => $fromdate_report_datas->paid_amount,
                         'bill_no' => $fromdate_report_datas->bill_no,
                         'id' => $fromdate_report_datas->id,
                         'terms' => $fromdate_terms,
@@ -1754,6 +1759,7 @@ class PurchaseController extends Controller
                     'time' => '',
                     'gross_amount' => '',
                     'bill_no' => '',
+                    'paid_amount' => '',
                     'id' => '',
                     'terms' => '',
                     'status' => '',
@@ -1791,8 +1797,8 @@ class PurchaseController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                         $todate_terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bag,
-                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
                             'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
                             'total_price' => $PurchaseProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1822,6 +1828,7 @@ class PurchaseController extends Controller
                         'date' => $todate_report_datas->date,
                         'time' => $todate_report_datas->time,
                         'gross_amount' => $todate_report_datas->gross_amount,
+                        'paid_amount' => $todate_report_datas->paid_amount,
                         'bill_no' => $todate_report_datas->bill_no,
                         'id' => $todate_report_datas->id,
                         'terms' => $todate_terms,
@@ -1845,6 +1852,7 @@ class PurchaseController extends Controller
                     'time' => '',
                     'gross_amount' => '',
                     'bill_no' => '',
+                    'paid_amount' => '',
                     'id' => '',
                     'terms' => '',
                     'status' => '',
@@ -1881,8 +1889,8 @@ class PurchaseController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                         $todate_terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bag,
-                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
                             'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
                             'total_price' => $PurchaseProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -1912,6 +1920,7 @@ class PurchaseController extends Controller
                         'date' => $datefilter_report_arr->date,
                         'time' => $datefilter_report_arr->time,
                         'gross_amount' => $datefilter_report_arr->gross_amount,
+                        'paid_amount' => $datefilter_report_arr->paid_amount,
                         'bill_no' => $datefilter_report_arr->bill_no,
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
@@ -1934,6 +1943,7 @@ class PurchaseController extends Controller
                     'time' => '',
                     'gross_amount' => '',
                     'bill_no' => '',
+                    'paid_amount' => '',
                     'id' => '',
                     'terms' => '',
                     'status' => '',
@@ -1971,8 +1981,8 @@ class PurchaseController extends Controller
 
                             $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                             $todate_terms[] = array(
-                                'bag' => $PurchaseProducts_arrdata->bag,
-                                'kgs' => $PurchaseProducts_arrdata->kgs,
+                                'bag' => $PurchaseProducts_arrdata->bagorkg,
+                                'kgs' => $PurchaseProducts_arrdata->count,
                                 'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
                                 'total_price' => $PurchaseProducts_arrdata->total_price,
                                 'product_name' => $productlist_ID->name,
@@ -2003,6 +2013,7 @@ class PurchaseController extends Controller
                             'date' => $datefilter_report_arr->date,
                             'time' => $datefilter_report_arr->time,
                             'gross_amount' => $datefilter_report_arr->gross_amount,
+                            'paid_amount' => $datefilter_report_arr->paid_amount,
                             'bill_no' => $datefilter_report_arr->bill_no,
                             'id' => $datefilter_report_arr->id,
                             'terms' => $todate_terms,
@@ -2025,6 +2036,7 @@ class PurchaseController extends Controller
                     'time' => '',
                     'gross_amount' => '',
                     'bill_no' => '',
+                    'paid_amount' => '',
                     'id' => '',
                     'terms' => '',
                     'status' => '',
@@ -2062,8 +2074,8 @@ class PurchaseController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                         $todate_terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bag,
-                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
                             'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
                             'total_price' => $PurchaseProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -2093,6 +2105,7 @@ class PurchaseController extends Controller
                         'date' => $datefilter_report_arr->date,
                         'time' => $datefilter_report_arr->time,
                         'gross_amount' => $datefilter_report_arr->gross_amount,
+                        'paid_amount' => $datefilter_report_arr->paid_amount,
                         'bill_no' => $datefilter_report_arr->bill_no,
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
@@ -2115,6 +2128,7 @@ class PurchaseController extends Controller
                     'time' => '',
                     'gross_amount' => '',
                     'bill_no' => '',
+                    'paid_amount' => '',
                     'id' => '',
                     'terms' => '',
                     'status' => '',
@@ -2148,8 +2162,8 @@ class PurchaseController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                         $todate_terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bag,
-                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
                             'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
                             'total_price' => $PurchaseProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -2179,6 +2193,7 @@ class PurchaseController extends Controller
                         'date' => $datefilter_report_arr->date,
                         'time' => $datefilter_report_arr->time,
                         'gross_amount' => $datefilter_report_arr->gross_amount,
+                        'paid_amount' => $datefilter_report_arr->paid_amount,
                         'bill_no' => $datefilter_report_arr->bill_no,
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
@@ -2201,6 +2216,7 @@ class PurchaseController extends Controller
                     'time' => '',
                     'gross_amount' => '',
                     'bill_no' => '',
+                    'paid_amount' => '',
                     'id' => '',
                     'terms' => '',
                     'status' => '',
@@ -2234,8 +2250,8 @@ class PurchaseController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                         $todate_terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bag,
-                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
                             'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
                             'total_price' => $PurchaseProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -2266,6 +2282,7 @@ class PurchaseController extends Controller
                         'date' => $datefilter_report_arr->date,
                         'time' => $datefilter_report_arr->time,
                         'gross_amount' => $datefilter_report_arr->gross_amount,
+                        'paid_amount' => $datefilter_report_arr->paid_amount,
                         'bill_no' => $datefilter_report_arr->bill_no,
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
@@ -2287,6 +2304,7 @@ class PurchaseController extends Controller
                     'date' => '',
                     'time' => '',
                     'gross_amount' => '',
+                    'paid_amount' => '',
                     'bill_no' => '',
                     'id' => '',
                     'terms' => '',
@@ -2325,8 +2343,8 @@ class PurchaseController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                         $todate_terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bag,
-                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
                             'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
                             'total_price' => $PurchaseProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -2357,6 +2375,7 @@ class PurchaseController extends Controller
                         'date' => $datefilter_report_arr->date,
                         'time' => $datefilter_report_arr->time,
                         'gross_amount' => $datefilter_report_arr->gross_amount,
+                        'paid_amount' => $datefilter_report_arr->paid_amount,
                         'bill_no' => $datefilter_report_arr->bill_no,
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
@@ -2378,6 +2397,7 @@ class PurchaseController extends Controller
                     'date' => '',
                     'time' => '',
                     'gross_amount' => '',
+                    'paid_amount' => '',
                     'bill_no' => '',
                     'id' => '',
                     'terms' => '',
@@ -2414,8 +2434,8 @@ class PurchaseController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                         $todate_terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bag,
-                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
                             'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
                             'total_price' => $PurchaseProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -2445,6 +2465,7 @@ class PurchaseController extends Controller
                         'date' => $datefilter_report_arr->date,
                         'time' => $datefilter_report_arr->time,
                         'gross_amount' => $datefilter_report_arr->gross_amount,
+                        'paid_amount' => $datefilter_report_arr->paid_amount,
                         'bill_no' => $datefilter_report_arr->bill_no,
                         'id' => $datefilter_report_arr->id,
                         'terms' => $todate_terms,
@@ -2467,6 +2488,7 @@ class PurchaseController extends Controller
                     'time' => '',
                     'gross_amount' => '',
                     'bill_no' => '',
+                    'paid_amount' => '',
                     'id' => '',
                     'terms' => '',
                     'status' => '',
@@ -2502,8 +2524,8 @@ class PurchaseController extends Controller
 
                         $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                             $todate_terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bag,
-                            'kgs' => $PurchaseProducts_arrdata->kgs,
+                            'bag' => $PurchaseProducts_arrdata->bagorkg,
+                            'kgs' => $PurchaseProducts_arrdata->count,
                             'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
                             'total_price' => $PurchaseProducts_arrdata->total_price,
                             'product_name' => $productlist_ID->name,
@@ -2534,6 +2556,7 @@ class PurchaseController extends Controller
                                 'date' => $datefilter_report_arr->date,
                                 'time' => $datefilter_report_arr->time,
                                 'gross_amount' => $datefilter_report_arr->gross_amount,
+                                'paid_amount' => $datefilter_report_arr->paid_amount,
                                 'bill_no' => $datefilter_report_arr->bill_no,
                                 'id' => $datefilter_report_arr->id,
                                 'terms' => $todate_terms,
@@ -2556,6 +2579,7 @@ class PurchaseController extends Controller
                         'time' => '',
                         'gross_amount' => '',
                         'bill_no' => '',
+                        'paid_amount' => '',
                         'id' => '',
                         'terms' => '',
                         'status' => '',
@@ -2595,8 +2619,8 @@ class PurchaseController extends Controller
 
                             $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
                                 $todate_terms[] = array(
-                                'bag' => $PurchaseProducts_arrdata->bag,
-                                'kgs' => $PurchaseProducts_arrdata->kgs,
+                                'bag' => $PurchaseProducts_arrdata->bagorkg,
+                                'kgs' => $PurchaseProducts_arrdata->count,
                                 'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
                                 'total_price' => $PurchaseProducts_arrdata->total_price,
                                 'product_name' => $productlist_ID->name,
@@ -2626,6 +2650,7 @@ class PurchaseController extends Controller
                                     'date' => $datefilter_report_arr->date,
                                     'time' => $datefilter_report_arr->time,
                                     'gross_amount' => $datefilter_report_arr->gross_amount,
+                                    'paid_amount' => $datefilter_report_arr->paid_amount,
                                     'bill_no' => $datefilter_report_arr->bill_no,
                                     'id' => $datefilter_report_arr->id,
                                     'terms' => $todate_terms,
@@ -2648,6 +2673,7 @@ class PurchaseController extends Controller
                             'time' => '',
                             'gross_amount' => '',
                             'bill_no' => '',
+                            'paid_amount' => '',
                             'id' => '',
                             'terms' => '',
                             'status' => '',

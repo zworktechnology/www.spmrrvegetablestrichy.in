@@ -112,6 +112,7 @@
                                             <th>Branch</th>
                                             <th>Products</th>
                                             <th>Grand Total</th>
+                                            <th>Paid</th>
                                         </tr>
                                     </thead>
                                     <tbody style="background: #f8f9fa;">
@@ -127,8 +128,7 @@
                                                     <td style="text-transform: uppercase;color:red;">Purchase Order</td>
                                                     @endif
                                                     <td>#{{ $purchasedata['bill_no'] }}</td>
-                                                    <td>{{ date('d M Y', strtotime($purchasedata['date'])) }} -
-                                                        {{ date('h:i A', strtotime($purchasedata['time'])) }}</td>
+                                                    <td>{{ date('d M Y', strtotime($purchasedata['date'])) }}</td>
                                                     <td>{{ $purchasedata['supplier_name'] }}</td>
                                                     <td>{{ $purchasedata['branch_name'] }}</td>
                                                     <td style="text-transform: uppercase;">
@@ -139,6 +139,7 @@
                                                     @endforeach
                                                     </td>
                                                     <td>{{ $purchasedata['gross_amount'] }}</td>
+                                                    <td>{{ $purchasedata['paid_amount'] }}</td>
                                                 </tr>
 
                                                 <div class="modal fade purchaseview-modal-xl{{ $purchasedata['unique_key'] }}"

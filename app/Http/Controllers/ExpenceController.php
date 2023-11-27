@@ -338,39 +338,39 @@ class ExpenceController extends Controller
             $branchwise_report = Expence::where('soft_delete', '!=', 1)->get();
             $expense_data = [];
             $terms = [];
-            if($branchwise_report != ''){
-                foreach ($branchwise_report as $key => $branchwise_datas) {
+            // if($branchwise_report != ''){
+            //     foreach ($branchwise_report as $key => $branchwise_datas) {
 
-                    $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
+            //         $branch_name = Branch::findOrFail($branchwise_datas->branch_id);
 
-                    $ExpenseDetails = Expensedetail::where('expense_id', '=', $branchwise_datas->id)->get();
-                    foreach ($ExpenseDetails as $key => $ExpenseDetails_arr) {
+            //         $ExpenseDetails = Expensedetail::where('expense_id', '=', $branchwise_datas->id)->get();
+            //         foreach ($ExpenseDetails as $key => $ExpenseDetails_arr) {
         
-                        $terms[] = array(
-                            'expense_note' => $ExpenseDetails_arr->expense_note,
-                            'expense_amount' => $ExpenseDetails_arr->expense_amount,
-                            'expense_id' => $ExpenseDetails_arr->expense_id,
+            //             $terms[] = array(
+            //                 'expense_note' => $ExpenseDetails_arr->expense_note,
+            //                 'expense_amount' => $ExpenseDetails_arr->expense_amount,
+            //                 'expense_id' => $ExpenseDetails_arr->expense_id,
         
-                        );
+            //             );
         
-                    }
+            //         }
 
-                    $expense_data[] = array(
-                        'branch_name' => $branch_name->shop_name,
-                        'date' => $branchwise_datas->date,
-                        'time' => $branchwise_datas->time,
-                        'amount' => $branchwise_datas->amount,
-                        'note' => $branchwise_datas->note,
-                        'unique_key' => $branchwise_datas->unique_key,
-                        'id' => $branchwise_datas->id,
-                        'terms' => $terms,
-                        'branch_id' => $branchwise_datas->branch_id,
-                        'branchheading' => $branch_name->shop_name,
-                        'fromdateheading' => '',
-                        'todateheading' => '',
-                    );
-                }
-            }
+            //         $expense_data[] = array(
+            //             'branch_name' => $branch_name->shop_name,
+            //             'date' => $branchwise_datas->date,
+            //             'time' => $branchwise_datas->time,
+            //             'amount' => $branchwise_datas->amount,
+            //             'note' => $branchwise_datas->note,
+            //             'unique_key' => $branchwise_datas->unique_key,
+            //             'id' => $branchwise_datas->id,
+            //             'terms' => $terms,
+            //             'branch_id' => $branchwise_datas->branch_id,
+            //             'branchheading' => $branch_name->shop_name,
+            //             'fromdateheading' => '',
+            //             'todateheading' => '',
+            //         );
+            //     }
+            // }
         return view('page.backend.expence.report', compact('branch', 'expense_data', 'today', 'timenow'));
     }
 

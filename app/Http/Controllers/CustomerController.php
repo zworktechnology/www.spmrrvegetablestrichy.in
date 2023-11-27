@@ -638,8 +638,26 @@ class CustomerController extends Controller
 
             $today = Carbon::now()->format('Y-m-d');
             $data = Sales::where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $last_word)->where('soft_delete', '!=', 1)->get();
-            $Sales_data = [];
-            foreach ($data as $key => $datas) {
+
+
+                $sales = [];
+                foreach ($data as $key => $datas_arr) {
+                    $sales[] = $datas_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('branch_id', '=', $last_word)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
+                $terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+            foreach ($merge as $key => $datas) {
     
                 $branch_name = Branch::findOrFail($datas->branch_id);
                 $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->where('branch_id', '=', $last_word)->get();
@@ -657,19 +675,38 @@ class CustomerController extends Controller
                     );
     
                 }
-    
+
+
+                if($datas->status != ""){
+                    $paid = $datas->paid_amount;
+                    $balance = $datas->balance_amount;
+                    $type='SALES';
+                }else {
+                    $paid = $datas->amount + $datas->salespayment_discount;
+                    $balance = $datas->payment_pending;
+                    $type='PAYMENT';
+                }
     
                 $Sales_data[] = array(
                     'unique_key' => $datas->unique_key,
                     'branch_name' => $branch_name->shop_name,
-                    'Customer_name' => $CustomerData->name,
+                    'customer_name' => $CustomerData->name,
                     'date' => $datas->date,
                     'gross_amount' => $datas->gross_amount,
-                    'paid_amount' => $datas->paid_amount,
+                    'paid_amount' => $paid,
                     'bill_no' => $datas->bill_no,
                     'sales_order' => $datas->sales_order,
+                    'grand_total' => $datas->grand_total,
+                    'balance_amount' => $balance,
+                    'type' => $type,
                     'id' => $datas->id,
-                    'terms' => $terms,
+                    'sales_terms' => $terms,
+                    'status' => $datas->status,
+                    'branchheading' => $branch_name->shop_name,
+                    'customerheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => '',
+
                 );
             }
     
@@ -683,23 +720,6 @@ class CustomerController extends Controller
     
     
     
-    
-            $Salespayment = Salespayment::where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $last_word)->where('soft_delete', '!=', 1)->get();
-            $salesPayment_data = [];
-    
-            foreach ($Salespayment as $key => $Salespayments) {
-                $branch_name = Branch::findOrFail($Salespayments->branch_id);
-    
-    
-                $salesPayment_data[] = array(
-                    'unique_key' => $Salespayments->unique_key,
-                    'branch_name' => $branch_name->shop_name,
-                    'customer_name' => $CustomerData->name,
-                    'date' => $Salespayments->date,
-                    'paid_amount' => $Salespayments->amount,
-                    'salespayment_discount' => $Salespayments->salespayment_discount,
-                );
-            }
     
     
             $fromdate = '';
@@ -763,7 +783,7 @@ class CustomerController extends Controller
             $GETBranchname = $GETbranch->shop_name;
     
             return view('page.backend.customer.view', compact('CustomerData', 'Sales_data', 'branch', 'Customer', 'Customername', 'customer_id', 'unique_key', 'today',
-                         'fromdate','todate', 'branchid', 'customerid', 'salesPayment_data', 'tot_saleAmount', 'total_amount_paid', 'total_balance', 'GETBranchname'));
+                         'fromdate','todate', 'branchid', 'customerid',  'tot_saleAmount', 'total_amount_paid', 'total_balance', 'GETBranchname'));
 
 
         }else if($last_word == 'customer'){
@@ -771,41 +791,77 @@ class CustomerController extends Controller
             $CustomerData = Customer::where('unique_key', '=', $unique_key)->first();
 
             $today = Carbon::now()->format('Y-m-d');
+
             $data = Sales::where('customer_id', '=', $CustomerData->id)->where('soft_delete', '!=', 1)->get();
-            $Sales_data = [];
-            foreach ($data as $key => $datas) {
-    
-                $branch_name = Branch::findOrFail($datas->branch_id);
-                $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->get();
-                foreach ($SalesProducts as $key => $SalesProducts_arr) {
-    
-                    $productlist_ID = Productlist::findOrFail($SalesProducts_arr->productlist_id);
-                    $terms[] = array(
-                        'bag' => $SalesProducts_arr->bagorkg,
-                        'kgs' => $SalesProducts_arr->count,
-                        'price_per_kg' => $SalesProducts_arr->price_per_kg,
-                        'total_price' => $SalesProducts_arr->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'sales_id' => $SalesProducts_arr->sales_id,
-    
-                    );
-    
-                }
-    
-    
-                $Sales_data[] = array(
-                    'unique_key' => $datas->unique_key,
-                    'branch_name' => $branch_name->shop_name,
-                    'Customer_name' => $CustomerData->name,
-                    'date' => $datas->date,
-                    'gross_amount' => $datas->gross_amount,
-                    'paid_amount' => $datas->paid_amount,
-                    'bill_no' => $datas->bill_no,
-                    'sales_order' => $datas->sales_order,
-                    'id' => $datas->id,
-                    'terms' => $terms,
-                );
+            $sales = [];
+            foreach ($data as $key => $datas_arr) {
+                $sales[] = $datas_arr;
             }
+            $salepayment_s = [];
+            $Salespaymentdata = Salespayment::where('soft_delete', '!=', 1)->get();
+            foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                $salepayment_s[] = $Salespaymentdatas;
+            }
+
+
+            $Sales_data = [];
+            $terms = [];
+
+            $merge = array_merge($sales, $salepayment_s);
+
+
+        foreach ($merge as $key => $datas) {
+
+            $branch_name = Branch::findOrFail($datas->branch_id);
+            $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->get();
+            foreach ($SalesProducts as $key => $SalesProducts_arr) {
+
+                $productlist_ID = Productlist::findOrFail($SalesProducts_arr->productlist_id);
+                $terms[] = array(
+                    'bag' => $SalesProducts_arr->bagorkg,
+                    'kgs' => $SalesProducts_arr->count,
+                    'price_per_kg' => $SalesProducts_arr->price_per_kg,
+                    'total_price' => $SalesProducts_arr->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'sales_id' => $SalesProducts_arr->sales_id,
+
+                );
+
+            }
+
+
+            if($datas->status != ""){
+                $paid = $datas->paid_amount;
+                $balance = $datas->balance_amount;
+                $type='SALES';
+            }else {
+                $paid = $datas->amount + $datas->salespayment_discount;
+                $balance = $datas->payment_pending;
+                $type='PAYMENT';
+            }
+
+            $Sales_data[] = array(
+                'unique_key' => $datas->unique_key,
+                'branch_name' => $branch_name->shop_name,
+                'customer_name' => $CustomerData->name,
+                'date' => $datas->date,
+                'gross_amount' => $datas->gross_amount,
+                'paid_amount' => $paid,
+                'bill_no' => $datas->bill_no,
+                'sales_order' => $datas->sales_order,
+                'grand_total' => $datas->grand_total,
+                'balance_amount' => $balance,
+                'type' => $type,
+                'id' => $datas->id,
+                'sales_terms' => $terms,
+                'status' => $datas->status,
+                'branchheading' => $branch_name->shop_name,
+                'customerheading' => '',
+                'fromdateheading' => '',
+                'todateheading' => '',
+
+            );
+        }
     
             $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
             $Customer = Customer::where('soft_delete', '!=', 1)->get();
@@ -815,25 +871,7 @@ class CustomerController extends Controller
             $customer_id = $CustomerData->id;
             $unique_key = $CustomerData->unique_key;
     
-    
-    
-    
-            $Salespayment = Salespayment::where('customer_id', '=', $CustomerData->id)->where('soft_delete', '!=', 1)->get();
-            $salesPayment_data = [];
-    
-            foreach ($Salespayment as $key => $Salespayments) {
-                $branch_name = Branch::findOrFail($Salespayments->branch_id);
-    
-    
-                $salesPayment_data[] = array(
-                    'unique_key' => $Salespayments->unique_key,
-                    'branch_name' => $branch_name->shop_name,
-                    'customer_name' => $CustomerData->name,
-                    'date' => $Salespayments->date,
-                    'paid_amount' => $Salespayments->amount,
-                    'salespayment_discount' => $Salespayments->salespayment_discount,
-                );
-            }
+         
     
     
             $fromdate = '';
@@ -888,7 +926,7 @@ class CustomerController extends Controller
             $GETBranchname = 'All Branch';
     
             return view('page.backend.customer.view', compact('CustomerData', 'Sales_data', 'branch', 'Customer', 'Customername', 'customer_id', 'unique_key', 'today',
-                         'fromdate', 'todate', 'branchid', 'customerid', 'salesPayment_data', 'tot_saleAmount', 'total_amount_paid', 'total_balance', 'GETBranchname'));
+                         'fromdate', 'todate', 'branchid', 'customerid', 'tot_saleAmount', 'total_amount_paid', 'total_balance', 'GETBranchname'));
 
         }
         
@@ -916,8 +954,28 @@ class CustomerController extends Controller
                 $GETBranchname = $GETbranch->shop_name;
 
                 $data = Sales::where('date', '=', $fromdate)->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->get();
+                
+                $sales = [];
+                foreach ($data as $key => $datas_arr) {
+                    $sales[] = $datas_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('date', '=', $fromdate)->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
                 $Sales_data = [];
-                foreach ($data as $key => $datas) {
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+
+
+                foreach ($merge as $key => $datas) {
         
                     $branch_name = Branch::findOrFail($datas->branch_id);
                     $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->where('branch_id', '=', $branchid)->get();
@@ -937,43 +995,42 @@ class CustomerController extends Controller
                     }
         
         
+                    if($datas->status != ""){
+                        $paid = $datas->paid_amount;
+                        $balance = $datas->balance_amount;
+                        $type='SALES';
+                    }else {
+                        $paid = $datas->amount + $datas->salespayment_discount;
+                        $balance = $datas->payment_pending;
+                        $type='PAYMENT';
+                    }
+        
                     $Sales_data[] = array(
                         'unique_key' => $datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
-                        'Customer_name' => $CustomerData->name,
+                        'customer_name' => $CustomerData->name,
                         'date' => $datas->date,
                         'gross_amount' => $datas->gross_amount,
-                        'paid_amount' => $datas->paid_amount,
+                        'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
                         'sales_order' => $datas->sales_order,
+                        'grand_total' => $datas->grand_total,
+                        'balance_amount' => $balance,
+                        'type' => $type,
                         'id' => $datas->id,
-                        'terms' => $terms,
+                        'sales_terms' => $terms,
+                        'status' => $datas->status,
+                        'branchheading' => $branch_name->shop_name,
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+        
                     );
                 }
 
                 $Customername = $CustomerData->name;
                 $customer_id = $CustomerData->id;
                 $unique_key = $CustomerData->unique_key;
-
-
-                $Salespayment = Salespayment::where('date', '=', $fromdate)->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->get();
-                $salesPayment_data = [];
-        
-                foreach ($Salespayment as $key => $Salespayments) {
-                    $branch_name = Branch::findOrFail($Salespayments->branch_id);
-        
-        
-                    $salesPayment_data[] = array(
-                        'unique_key' => $Salespayments->unique_key,
-                        'branch_name' => $branch_name->shop_name,
-                        'customer_name' => $CustomerData->name,
-                        'date' => $Salespayments->date,
-                        'paid_amount' => $Salespayments->amount,
-                        'salespayment_discount' => $Salespayments->salespayment_discount,
-                    );
-                }
-
-
                 $customerid = $CustomerData->id;
 
 
@@ -1024,7 +1081,24 @@ class CustomerController extends Controller
 
                 $data = Sales::where('date', '=', $todate)->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->get();
                 $Sales_data = [];
-                foreach ($data as $key => $datas) {
+
+
+                $sales = [];
+                foreach ($data as $key => $datas_arr) {
+                    $sales[] = $datas_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('date', '=', $todate)->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
+                $Sales_data = [];
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+                foreach ($merge as $key => $datas) {
         
                     $branch_name = Branch::findOrFail($datas->branch_id);
                     $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->where('branch_id', '=', $branchid)->get();
@@ -1044,43 +1118,42 @@ class CustomerController extends Controller
                     }
         
         
+                    if($datas->status != ""){
+                        $paid = $datas->paid_amount;
+                        $balance = $datas->balance_amount;
+                        $type='SALES';
+                    }else {
+                        $paid = $datas->amount + $datas->salespayment_discount;
+                        $balance = $datas->payment_pending;
+                        $type='PAYMENT';
+                    }
+        
                     $Sales_data[] = array(
                         'unique_key' => $datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
-                        'Customer_name' => $CustomerData->name,
+                        'customer_name' => $CustomerData->name,
                         'date' => $datas->date,
                         'gross_amount' => $datas->gross_amount,
-                        'paid_amount' => $datas->paid_amount,
+                        'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
                         'sales_order' => $datas->sales_order,
+                        'grand_total' => $datas->grand_total,
+                        'balance_amount' => $balance,
+                        'type' => $type,
                         'id' => $datas->id,
-                        'terms' => $terms,
+                        'sales_terms' => $terms,
+                        'status' => $datas->status,
+                        'branchheading' => $branch_name->shop_name,
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+        
                     );
                 }
 
                 $Customername = $CustomerData->name;
                 $customer_id = $CustomerData->id;
                 $unique_key = $CustomerData->unique_key;
-
-
-                $Salespayment = Salespayment::where('date', '=', $todate)->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->get();
-                $salesPayment_data = [];
-        
-                foreach ($Salespayment as $key => $Salespayments) {
-                    $branch_name = Branch::findOrFail($Salespayments->branch_id);
-        
-        
-                    $salesPayment_data[] = array(
-                        'unique_key' => $Salespayments->unique_key,
-                        'branch_name' => $branch_name->shop_name,
-                        'customer_name' => $CustomerData->name,
-                        'date' => $Salespayments->date,
-                        'paid_amount' => $Salespayments->amount,
-                        'salespayment_discount' => $Salespayments->salespayment_discount,
-                    );
-                }
-
-
                 $customerid = $CustomerData->id;
 
 
@@ -1123,8 +1196,22 @@ class CustomerController extends Controller
                 $GETBranchname = $GETbranch->shop_name;
 
                 $data = Sales::whereBetween('date', [$fromdate, $todate])->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->get();
+                $sales = [];
+                foreach ($data as $key => $datas_arr) {
+                    $sales[] = $datas_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::whereBetween('date', [$fromdate, $todate])->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
                 $Sales_data = [];
-                foreach ($data as $key => $datas) {
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+                foreach ($merge as $key => $datas) {
         
                     $branch_name = Branch::findOrFail($datas->branch_id);
                     $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->where('branch_id', '=', $branchid)->get();
@@ -1144,43 +1231,42 @@ class CustomerController extends Controller
                     }
         
         
+                    if($datas->status != ""){
+                        $paid = $datas->paid_amount;
+                        $balance = $datas->balance_amount;
+                        $type='SALES';
+                    }else {
+                        $paid = $datas->amount + $datas->salespayment_discount;
+                        $balance = $datas->payment_pending;
+                        $type='PAYMENT';
+                    }
+        
                     $Sales_data[] = array(
                         'unique_key' => $datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
-                        'Customer_name' => $CustomerData->name,
+                        'customer_name' => $CustomerData->name,
                         'date' => $datas->date,
                         'gross_amount' => $datas->gross_amount,
-                        'paid_amount' => $datas->paid_amount,
+                        'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
                         'sales_order' => $datas->sales_order,
+                        'grand_total' => $datas->grand_total,
+                        'balance_amount' => $balance,
+                        'type' => $type,
                         'id' => $datas->id,
-                        'terms' => $terms,
+                        'sales_terms' => $terms,
+                        'status' => $datas->status,
+                        'branchheading' => $branch_name->shop_name,
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+        
                     );
                 }
 
                 $Customername = $CustomerData->name;
                 $customer_id = $CustomerData->id;
                 $unique_key = $CustomerData->unique_key;
-
-
-                $Salespayment = Salespayment::whereBetween('date', [$fromdate, $todate])->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->get();
-                $salesPayment_data = [];
-        
-                foreach ($Salespayment as $key => $Salespayments) {
-                    $branch_name = Branch::findOrFail($Salespayments->branch_id);
-        
-        
-                    $salesPayment_data[] = array(
-                        'unique_key' => $Salespayments->unique_key,
-                        'branch_name' => $branch_name->shop_name,
-                        'customer_name' => $CustomerData->name,
-                        'date' => $Salespayments->date,
-                        'paid_amount' => $Salespayments->amount,
-                        'salespayment_discount' => $Salespayments->salespayment_discount,
-                    );
-                }
-
-
                 $customerid = $CustomerData->id;
 
 
@@ -1227,10 +1313,29 @@ class CustomerController extends Controller
 
 
                 $data = Sales::where('date', '=', $fromdate)->where('customer_id', '=', $CustomerData->id)->where('soft_delete', '!=', 1)->get();
+                $sales = [];
+                foreach ($data as $key => $datas_arr) {
+                    $sales[] = $datas_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('date', '=', $fromdate)->where('customer_id', '=', $CustomerData->id)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
                 $Sales_data = [];
-                foreach ($data as $key => $datas) {
-        
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+
+
+                foreach ($merge as $key => $datas) {
                     $branch_name = Branch::findOrFail($datas->branch_id);
+
                     $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arr) {
         
@@ -1248,42 +1353,42 @@ class CustomerController extends Controller
                     }
         
         
+                    if($datas->status != ""){
+                        $paid = $datas->paid_amount;
+                        $balance = $datas->balance_amount;
+                        $type='SALES';
+                    }else {
+                        $paid = $datas->amount + $datas->salespayment_discount;
+                        $balance = $datas->payment_pending;
+                        $type='PAYMENT';
+                    }
+        
                     $Sales_data[] = array(
                         'unique_key' => $datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
-                        'Customer_name' => $CustomerData->name,
+                        'customer_name' => $CustomerData->name,
                         'date' => $datas->date,
                         'gross_amount' => $datas->gross_amount,
-                        'paid_amount' => $datas->paid_amount,
+                        'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
                         'sales_order' => $datas->sales_order,
+                        'grand_total' => $datas->grand_total,
+                        'balance_amount' => $balance,
+                        'type' => $type,
                         'id' => $datas->id,
-                        'terms' => $terms,
+                        'sales_terms' => $terms,
+                        'status' => $datas->status,
+                        'branchheading' => $branch_name->shop_name,
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+        
                     );
                 }
 
                 $Customername = $CustomerData->name;
                 $customer_id = $CustomerData->id;
                 $unique_key = $CustomerData->unique_key;
-
-
-                $Salespayment = Salespayment::where('date', '=', $fromdate)->where('customer_id', '=', $CustomerData->id)->where('soft_delete', '!=', 1)->get();
-                $salesPayment_data = [];
-        
-                foreach ($Salespayment as $key => $Salespayments) {
-                    $branch_name = Branch::findOrFail($Salespayments->branch_id);
-        
-        
-                    $salesPayment_data[] = array(
-                        'unique_key' => $Salespayments->unique_key,
-                        'branch_name' => $branch_name->shop_name,
-                        'customer_name' => $CustomerData->name,
-                        'date' => $Salespayments->date,
-                        'paid_amount' => $Salespayments->amount,
-                        'salespayment_discount' => $Salespayments->salespayment_discount,
-                    );
-                }
-
 
                 $customerid = $CustomerData->id;
 
@@ -1328,10 +1433,26 @@ class CustomerController extends Controller
 
                 $GETBranchname = 'All Branch';
                 $data = Sales::where('date', '=', $todate)->where('customer_id', '=', $CustomerData->id)->where('soft_delete', '!=', 1)->get();
+                $sales = [];
+                foreach ($data as $key => $datas_arr) {
+                    $sales[] = $datas_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::where('date', '=', $todate)->where('customer_id', '=', $CustomerData->id)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
                 $Sales_data = [];
-                foreach ($data as $key => $datas) {
-        
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+                foreach ($merge as $key => $datas) {
+
                     $branch_name = Branch::findOrFail($datas->branch_id);
+
+        
                     $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arr) {
         
@@ -1349,43 +1470,42 @@ class CustomerController extends Controller
                     }
         
         
+                    if($datas->status != ""){
+                        $paid = $datas->paid_amount;
+                        $balance = $datas->balance_amount;
+                        $type='SALES';
+                    }else {
+                        $paid = $datas->amount + $datas->salespayment_discount;
+                        $balance = $datas->payment_pending;
+                        $type='PAYMENT';
+                    }
+        
                     $Sales_data[] = array(
                         'unique_key' => $datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
-                        'Customer_name' => $CustomerData->name,
+                        'customer_name' => $CustomerData->name,
                         'date' => $datas->date,
                         'gross_amount' => $datas->gross_amount,
-                        'paid_amount' => $datas->paid_amount,
+                        'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
                         'sales_order' => $datas->sales_order,
+                        'grand_total' => $datas->grand_total,
+                        'balance_amount' => $balance,
+                        'type' => $type,
                         'id' => $datas->id,
-                        'terms' => $terms,
+                        'sales_terms' => $terms,
+                        'status' => $datas->status,
+                        'branchheading' => $branch_name->shop_name,
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+        
                     );
                 }
 
                 $Customername = $CustomerData->name;
                 $customer_id = $CustomerData->id;
                 $unique_key = $CustomerData->unique_key;
-
-
-                $Salespayment = Salespayment::where('date', '=', $todate)->where('customer_id', '=', $CustomerData->id)->where('soft_delete', '!=', 1)->get();
-                $salesPayment_data = [];
-        
-                foreach ($Salespayment as $key => $Salespayments) {
-                    $branch_name = Branch::findOrFail($Salespayments->branch_id);
-        
-        
-                    $salesPayment_data[] = array(
-                        'unique_key' => $Salespayments->unique_key,
-                        'branch_name' => $branch_name->shop_name,
-                        'customer_name' => $CustomerData->name,
-                        'date' => $Salespayments->date,
-                        'paid_amount' => $Salespayments->amount,
-                        'salespayment_discount' => $Salespayments->salespayment_discount,
-                    );
-                }
-
-
                 $customerid = $CustomerData->id;
 
 
@@ -1424,12 +1544,28 @@ class CustomerController extends Controller
             }
 
             if($fromdate && $todate){
+
                 $GETBranchname = 'All Branch';
                 $data = Sales::whereBetween('date', [$fromdate, $todate])->where('customer_id', '=', $CustomerData->id)->where('soft_delete', '!=', 1)->get();
+                $sales = [];
+                foreach ($data as $key => $datas_arr) {
+                    $sales[] = $datas_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = Salespayment::whereBetween('date', [$fromdate, $todate])->where('customer_id', '=', $CustomerData->id)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
+
+
                 $Sales_data = [];
-                foreach ($data as $key => $datas) {
-        
+                $sales_terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+                foreach ($merge as $key => $datas) {
+
                     $branch_name = Branch::findOrFail($datas->branch_id);
+
                     $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->get();
                     foreach ($SalesProducts as $key => $SalesProducts_arr) {
         
@@ -1447,42 +1583,42 @@ class CustomerController extends Controller
                     }
         
         
+                    if($datas->status != ""){
+                        $paid = $datas->paid_amount;
+                        $balance = $datas->balance_amount;
+                        $type='SALES';
+                    }else {
+                        $paid = $datas->amount + $datas->salespayment_discount;
+                        $balance = $datas->payment_pending;
+                        $type='PAYMENT';
+                    }
+        
                     $Sales_data[] = array(
                         'unique_key' => $datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
-                        'Customer_name' => $CustomerData->name,
+                        'customer_name' => $CustomerData->name,
                         'date' => $datas->date,
                         'gross_amount' => $datas->gross_amount,
-                        'paid_amount' => $datas->paid_amount,
+                        'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
                         'sales_order' => $datas->sales_order,
+                        'grand_total' => $datas->grand_total,
+                        'balance_amount' => $balance,
+                        'type' => $type,
                         'id' => $datas->id,
-                        'terms' => $terms,
+                        'sales_terms' => $terms,
+                        'status' => $datas->status,
+                        'branchheading' => $branch_name->shop_name,
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+        
                     );
                 }
 
                 $Customername = $CustomerData->name;
                 $customer_id = $CustomerData->id;
                 $unique_key = $CustomerData->unique_key;
-
-
-                $Salespayment = Salespayment::whereBetween('date', [$fromdate, $todate])->where('customer_id', '=', $CustomerData->id)->where('soft_delete', '!=', 1)->get();
-                $salesPayment_data = [];
-        
-                foreach ($Salespayment as $key => $Salespayments) {
-                    $branch_name = Branch::findOrFail($Salespayments->branch_id);
-        
-        
-                    $salesPayment_data[] = array(
-                        'unique_key' => $Salespayments->unique_key,
-                        'branch_name' => $branch_name->shop_name,
-                        'customer_name' => $CustomerData->name,
-                        'date' => $Salespayments->date,
-                        'paid_amount' => $Salespayments->amount,
-                        'salespayment_discount' => $Salespayments->salespayment_discount,
-                    );
-                }
-
 
                 $customerid = $CustomerData->id;
 
@@ -1528,7 +1664,7 @@ class CustomerController extends Controller
 
 
             return view('page.backend.customer.view', compact('CustomerData', 'Sales_data', 'Customer', 'Customername', 'customer_id', 'unique_key', 
-            'branchid', 'customerid', 'salesPayment_data', 'tot_saleAmount', 'total_amount_paid', 'total_balance', 'GETBranchname', 'last_word', 'fromdate', 'todate',));
+            'branchid', 'customerid', 'tot_saleAmount', 'total_amount_paid', 'total_balance', 'GETBranchname', 'last_word', 'fromdate', 'todate',));
     }
 
 

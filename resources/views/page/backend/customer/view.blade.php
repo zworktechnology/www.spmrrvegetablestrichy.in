@@ -83,92 +83,70 @@
         </div>
 
 
-        <div class="col-lg-12 col-sm-12 col-12" style="display: flex;">
-            <div class="col-lg-6 col-sm-6 col-6" style="margin-right: 5px;">
+        <div class="col-lg-12 col-sm-12 col-12" >
                 <div class="page-header">
                     <div class="page-title">
                         <h4>Sales</h4>
                     </div>
                 </div>
 
+
                 <div class="card">
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table  supplierdatanew">
-                                <thead>
-                                    <tr>
-                                        <th>Branch</th>
-                                        <th>Date</th>
-                                        <th>Bill No</th>
-                                        <th>Bill Type</th>
-                                        <th>Product</th>
-                                        <th>Paid</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($Sales_data as $keydata => $Sales_datas)
+                    @if ($Sales_data != '')
+                            <div class="table-responsive">
+                                <table class="table  customerdatanew">
+                                    <thead style="background: #5e54c966;">
                                         <tr>
-                                            <td>{{ $Sales_datas['branch_name'] }}</td>
-                                            <td>{{ date('d-m-Y', strtotime($Sales_datas['date'])) }}</td>
-                                            <td>{{ $Sales_datas['bill_no'] }}</td>
-                                            @if ($Sales_datas['sales_order'] == '1')
-                                                <td> Sales Order </td>
-                                            @elseif ($Sales_datas['sales_order'] == null)
-                                                <td> Sales </td>
-                                            @endif
-                                            <td>
-                                                @foreach ($Sales_datas['terms'] as $index => $terms_array)
+                                            <th>Date</th>
+                                            <th>Customer</th>
+                                            <th>Branch</th>
+                                            <th>Type</th>
+                                            <th>Bill No</th>
+                                            <th style="">Particulars</th>
+                                            <th style="">Debit</th>
+                                            <th style="">Credit</th>
+                                            <th style="">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="background: #f8f9fa;">
+
+                                        @foreach ($Sales_data as $keydata => $Sales_datas)
+                                            @if ($Sales_datas['unique_key'] != '')
+                                                <tr>
+                                                    <td>{{ date('d-m-Y', strtotime($Sales_datas['date'])) }}</td>
+                                                    <td>{{ $Sales_datas['customer_name'] }}</td>
+                                                    <td>{{ $Sales_datas['branch_name'] }}</td>
+                                                    <td>{{ $Sales_datas['type'] }}</td>
+                                                    <td>{{ $Sales_datas['bill_no'] }}</td>
+                                                    <td style="text-transform: uppercase;">
+                                                    @foreach ($Sales_datas['sales_terms'] as $index => $terms_array)
                                                     @if ($terms_array['sales_id'] == $Sales_datas['id'])
-                                                        {{ $terms_array['product_name'] }} -
-                                                        {{ $terms_array['kgs'] }}{{ $terms_array['bag'] }},<br />
+                                                    {{ $terms_array['product_name'] }} - {{ $terms_array['kgs'] }}{{ $terms_array['bag'] }}<br/>
                                                     @endif
-                                                @endforeach
-                                            </td>
-                                            <td>₹ {{ $Sales_datas['paid_amount'] }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                                    @endforeach
+                                                    </td>
 
-            <div class="col-lg-6 col-sm-6 col-6" style="margin-left: 5px;">
+                                                    <td>{{ $Sales_datas['gross_amount'] }}</td>
+                                                    
+                                                    <td>{{ $Sales_datas['paid_amount'] }}</td>
+                                                    <td>{{ $Sales_datas['balance_amount'] }}</td>
+                                                </tr>
 
 
-                <div class="page-header">
-                    <div class="page-title">
-                        <h4>Sales Receipt</h4>
+                                            @endif
+                                        @endforeach
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table  supplierdatanew">
-                                <thead>
-                                    <tr>
-                                        <th>Branch</th>
-                                        <th>Date</th>
-                                        <th>Discount</th>
-                                        <th>Paid</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($salesPayment_data as $keydata => $salesPayment_datas)
-                                        <tr>
-                                            <td>{{ $salesPayment_datas['branch_name'] }}</td>
-                                            <td>{{ date('d-m-Y', strtotime($salesPayment_datas['date'])) }}</td>
-                                            <td>{{ $salesPayment_datas['salespayment_discount'] }}</td>
-                                            <td>₹ {{ $salesPayment_datas['paid_amount'] }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
+
+            
 
 
 

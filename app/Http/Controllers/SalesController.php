@@ -943,60 +943,60 @@ class SalesController extends Controller
         $Sales_data = [];
         $sales_terms = [];
 
-        $merge = array_merge($sales, $salepayment_s);
-        foreach ($merge as $key => $datas) {
-            $branch_name = Branch::findOrFail($datas->branch_id);
-            $customer_name = Customer::findOrFail($datas->customer_id);
+        // $merge = array_merge($sales, $salepayment_s);
+        // foreach ($merge as $key => $datas) {
+        //     $branch_name = Branch::findOrFail($datas->branch_id);
+        //     $customer_name = Customer::findOrFail($datas->customer_id);
 
-            $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->get();
-            foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+        //     $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->get();
+        //     foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
 
-                $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
-                $sales_terms[] = array(
-                    'bag' => $SalesProducts_arrdata->bagorkg,
-                    'kgs' => $SalesProducts_arrdata->count,
-                    'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
-                    'total_price' => $SalesProducts_arrdata->total_price,
-                    'product_name' => $productlist_ID->name,
-                    'sales_id' => $SalesProducts_arrdata->sales_id,
+        //         $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+        //         $sales_terms[] = array(
+        //             'bag' => $SalesProducts_arrdata->bagorkg,
+        //             'kgs' => $SalesProducts_arrdata->count,
+        //             'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+        //             'total_price' => $SalesProducts_arrdata->total_price,
+        //             'product_name' => $productlist_ID->name,
+        //             'sales_id' => $SalesProducts_arrdata->sales_id,
 
-                );
-            }
+        //         );
+        //     }
 
-            if($datas->status != ""){
-                $paid = $datas->paid_amount;
-                $balance = $datas->balance_amount;
-                $type='SALES';
-            }else {
-                $paid = $datas->amount + $datas->salespayment_discount;
-                $balance = $datas->payment_pending;
-                $type='PAYMENT';
-            }
+        //     if($datas->status != ""){
+        //         $paid = $datas->paid_amount;
+        //         $balance = $datas->balance_amount;
+        //         $type='SALES';
+        //     }else {
+        //         $paid = $datas->amount + $datas->salespayment_discount;
+        //         $balance = $datas->payment_pending;
+        //         $type='PAYMENT';
+        //     }
 
 
 
-            $Sales_data[] = array(
-                'sales_order' => $datas->sales_order,
-                'unique_key' => $datas->unique_key,
-                'branch_name' => $branch_name->shop_name,
-                'customer_name' => $customer_name->name,
-                'date' => $datas->date,
-                'time' => $datas->time,
-                'gross_amount' => $datas->gross_amount,
-                'grand_total' => $datas->grand_total,
-                'paid_amount' => $paid,
-                'balance_amount' => $balance,
-                'type' => $type,
-                'bill_no' => $datas->bill_no,
-                'id' => $datas->id,
-                'sales_terms' => $sales_terms,
-                'status' => $datas->status,
-                'branchheading' => $branch_name->shop_name,
-                'customerheading' => $customer_name->name,
-                'fromdateheading' => date('d-M-Y', strtotime($datas->date)),
-                'todateheading' => date('d-M-Y', strtotime($datas->date)),
-            );
-        }
+        //     $Sales_data[] = array(
+        //         'sales_order' => $datas->sales_order,
+        //         'unique_key' => $datas->unique_key,
+        //         'branch_name' => $branch_name->shop_name,
+        //         'customer_name' => $customer_name->name,
+        //         'date' => $datas->date,
+        //         'time' => $datas->time,
+        //         'gross_amount' => $datas->gross_amount,
+        //         'grand_total' => $datas->grand_total,
+        //         'paid_amount' => $paid,
+        //         'balance_amount' => $balance,
+        //         'type' => $type,
+        //         'bill_no' => $datas->bill_no,
+        //         'id' => $datas->id,
+        //         'sales_terms' => $sales_terms,
+        //         'status' => $datas->status,
+        //         'branchheading' => $branch_name->shop_name,
+        //         'customerheading' => $customer_name->name,
+        //         'fromdateheading' => date('d-M-Y', strtotime($datas->date)),
+        //         'todateheading' => date('d-M-Y', strtotime($datas->date)),
+        //     );
+        // }
 
 
         $fromdate = '';
