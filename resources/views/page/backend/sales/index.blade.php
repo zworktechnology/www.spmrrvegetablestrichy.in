@@ -1,11 +1,23 @@
 @extends('layout.backend.auth')
 
 @section('content')
+
+@php
+
+           preg_match("/[^\/]+$/", Request::url(), $matches);
+       $pos = $matches[0];
+       @endphp
+
     <div class="content">
         <div class="page-header">
             <div class="page-title">
                 <h4>Sales</h4>
             </div>
+            @php
+                            $lastword = Request::url();
+                            preg_match("/[^\/]+$/", $lastword, $matches);
+                            $last_word = $matches[0];
+                            @endphp
             <div style="display: flex;">
                 <form autocomplete="off" method="POST" action="{{ route('sales.datefilter') }}" style="display: flex;">
                     @method('PUT')
@@ -17,15 +29,18 @@
                         </div>
                     </div>
                 </form>
-                <a href="{{ route('sales.create') }}" class="btn btn-added">Add Sales</a>
+                <a href="{{ route('sales.create') }}" class="btn btn-added" style="margin-right:5px;">Add Sales</a>
+
+                @if ($last_word == "sales")
+                <a href="/salesindex_pdfexport/{{ $today }}" target="_blank" class="btn btn-warning">PDF Export</a>
+                @else
+                <a href="/salesindex_pdfexport_branchwise/{{$last_word}}/{{ $today }}" target="_blank" class="btn btn-warning">PDF Export</a>
+                @endif
+                
             </div>
         </div>
         <div class="row py-2" style="margin-bottom:10px;">
-        @php
-
-           preg_match("/[^\/]+$/", Request::url(), $matches);
-       $pos = $matches[0];
-       @endphp
+        
             <div class="col-lg-2 col-sm-4 col-6">
                 <a href="{{ route('sales.index') }}">
                     <div class="dash-widget" @if ($pos == "sales")
@@ -37,11 +52,7 @@
                     </div>
                 </a>
             </div>
-                            @php
-                            $lastword = Request::url();
-                            preg_match("/[^\/]+$/", $lastword, $matches);
-                            $last_word = $matches[0];
-                            @endphp
+                            
             @foreach ($allbranch as $keydata => $allbranches)
                 <div class="col-lg-2 col-sm-4 col-6">
                     <a href="/sales_branchdata/{{$today}}/{{ $allbranches->id }}">
@@ -76,6 +87,8 @@
                                 <th>Branch</th>
                                 <th>Product Details</th>
                                 <th>Total</th>
+                                <th>Old Balance</th>
+                                <th>Grand Total</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -94,6 +107,8 @@
                                                     @endforeach
                                     </td>
                                     <td>{{ $Sales_datas['gross_amount'] }}</td>
+                                    <td>{{ $Sales_datas['old_balance'] }}</td>
+                                    <td>{{ $Sales_datas['grand_total'] }}</td>
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
                                         @if ($Sales_datas['date'] == $today_date)

@@ -57,6 +57,8 @@ class SalesController extends Controller
                 'date' => $datas->date,
                 'time' => $datas->time,
                 'gross_amount' => $datas->gross_amount,
+                'old_balance' => $datas->old_balance,
+                'grand_total' => $datas->grand_total,
                 'bill_no' => $datas->bill_no,
                 'id' => $datas->id,
                 'sales_terms' => $sales_terms,
@@ -167,6 +169,8 @@ class SalesController extends Controller
                 'date' => $branchwise_datas->date,
                 'time' => $branchwise_datas->time,
                 'gross_amount' => $branchwise_datas->gross_amount,
+                'old_balance' => $branchwise_datas->old_balance,
+                'grand_total' => $branchwise_datas->grand_total,
                 'bill_no' => $branchwise_datas->bill_no,
                 'id' => $branchwise_datas->id,
                 'sales_terms' => $sales_terms,
@@ -272,6 +276,8 @@ class SalesController extends Controller
                 'date' => $branchwise_datas->date,
                 'time' => $branchwise_datas->time,
                 'gross_amount' => $branchwise_datas->gross_amount,
+                'old_balance' => $branchwise_datas->old_balance,
+                'grand_total' => $branchwise_datas->grand_total,
                 'bill_no' => $branchwise_datas->bill_no,
                 'id' => $branchwise_datas->id,
                 'sales_terms' => $sales_terms,
@@ -380,6 +386,8 @@ class SalesController extends Controller
                 'date' => $datas->date,
                 'time' => $datas->time,
                 'gross_amount' => $datas->gross_amount,
+                'old_balance' => $datas->old_balance,
+                'grand_total' => $datas->grand_total,
                 'bill_no' => $datas->bill_no,
                 'id' => $datas->id,
                 'sales_terms' => $sales_terms,
@@ -4968,7 +4976,113 @@ class SalesController extends Controller
 
 
 
-   
+    public function salesindex_pdfexport($today) 
+    {
+        $data = Sales::where('date', '=', $today)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+        $Sales_data = [];
+        $sales_terms = [];
+        foreach ($data as $key => $datas) {
+            $branch_name = Branch::findOrFail($datas->branch_id);
+            $customer_name = Customer::findOrFail($datas->customer_id);
+
+            $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->where('sales_order', '=', NULL)->get();
+            foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                $sales_terms[] = array(
+                    'bag' => $SalesProducts_arrdata->bagorkg,
+                    'kgs' => $SalesProducts_arrdata->count,
+                    'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                    'total_price' => $SalesProducts_arrdata->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                );
+            }
+
+
+
+            $Sales_data[] = array(
+                'unique_key' => $datas->unique_key,
+                'branch_name' => $branch_name->shop_name,
+                'customer_name' => $customer_name->name,
+                'date' => $datas->date,
+                'time' => $datas->time,
+                'gross_amount' => $datas->gross_amount,
+                'old_balance' => $datas->old_balance,
+                'grand_total' => $datas->grand_total,
+                'bill_no' => $datas->bill_no,
+                'id' => $datas->id,
+                'sales_terms' => $sales_terms,
+                'status' => $datas->status,
+            );
+        }
+
+
+        $pdf = Pdf::loadView('page.backend.sales.pdf.salesindex_pdfexport', [
+            'Sales_data' => $Sales_data,
+            'today' => date('d-m-Y', strtotime($today)),
+        ]);
+
+        $name = 'sales.' . 'pdf';
+
+        return $pdf->stream($name);
+    }
+
+
+
+    public function salesindex_pdfexport_branchwise($last_word, $today) 
+    {
+        $data = Sales::where('date', '=', $today)->where('branch_id', '=', $last_word)->where('sales_order', '=', NULL)->where('soft_delete', '!=', 1)->get();
+        $Sales_data = [];
+        $sales_terms = [];
+        foreach ($data as $key => $datas) {
+            $branch_name = Branch::findOrFail($datas->branch_id);
+            $customer_name = Customer::findOrFail($datas->customer_id);
+
+            $SalesProducts = SalesProduct::where('sales_id', '=', $datas->id)->where('sales_order', '=', NULL)->get();
+            foreach ($SalesProducts as $key => $SalesProducts_arrdata) {
+
+                $productlist_ID = Productlist::findOrFail($SalesProducts_arrdata->productlist_id);
+                $sales_terms[] = array(
+                    'bag' => $SalesProducts_arrdata->bagorkg,
+                    'kgs' => $SalesProducts_arrdata->count,
+                    'price_per_kg' => $SalesProducts_arrdata->price_per_kg,
+                    'total_price' => $SalesProducts_arrdata->total_price,
+                    'product_name' => $productlist_ID->name,
+                    'sales_id' => $SalesProducts_arrdata->sales_id,
+
+                );
+            }
+
+
+
+            $Sales_data[] = array(
+                'unique_key' => $datas->unique_key,
+                'branch_name' => $branch_name->shop_name,
+                'customer_name' => $customer_name->name,
+                'date' => $datas->date,
+                'time' => $datas->time,
+                'gross_amount' => $datas->gross_amount,
+                'old_balance' => $datas->old_balance,
+                'grand_total' => $datas->grand_total,
+                'bill_no' => $datas->bill_no,
+                'id' => $datas->id,
+                'sales_terms' => $sales_terms,
+                'status' => $datas->status,
+            );
+        }
+
+
+        $pdf = Pdf::loadView('page.backend.sales.pdf.salesindex_pdfexport', [
+            'Sales_data' => $Sales_data,
+            'today' => date('d-m-Y', strtotime($today)),
+        ]);
+
+        $name = 'sales.' . 'pdf';
+
+        return $pdf->stream($name);
+    }
 
 }
 

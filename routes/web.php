@@ -402,3 +402,8 @@ Route::get('/ftc_sales_pdfexport/{fromdate}/{todate}/{customer_id}', [SalesContr
 Route::get('/ftb_sales_pdfexport/{fromdate}/{todate}/{branch_id}', [SalesController::class, 'ftb_sales_pdfexport']);
 Route::get('/ftbc_sales_pdfexport/{fromdate}/{todate}/{branch_id}/{customer_id}', [SalesController::class, 'ftbc_sales_pdfexport']);
 Route::get('/sales_pdfexport', [SalesController::class, 'sales_pdfexport']);
+
+
+
+Route::get('/salesindex_pdfexport/{today}', [SalesController::class, 'salesindex_pdfexport']);
+Route::get('/salesindex_pdfexport_branchwise/{last_word}/{today}', [SalesController::class, 'salesindex_pdfexport_branchwise']);
