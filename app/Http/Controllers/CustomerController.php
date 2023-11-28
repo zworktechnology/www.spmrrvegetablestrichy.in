@@ -645,7 +645,7 @@ class CustomerController extends Controller
                     $sales[] = $datas_arr;
                 }
                 $salepayment_s = [];
-                $Salespaymentdata = Salespayment::where('branch_id', '=', $last_word)->where('soft_delete', '!=', 1)->get();
+                $Salespaymentdata = Salespayment::where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $last_word)->where('soft_delete', '!=', 1)->get();
                 foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
                     $salepayment_s[] = $Salespaymentdatas;
                 }
@@ -805,7 +805,7 @@ class CustomerController extends Controller
                 $sales[] = $datas_arr;
             }
             $salepayment_s = [];
-            $Salespaymentdata = Salespayment::where('soft_delete', '!=', 1)->get();
+            $Salespaymentdata = Salespayment::where('customer_id', '=', $CustomerData->id)->where('soft_delete', '!=', 1)->get();
             foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
                 $salepayment_s[] = $Salespaymentdatas;
             }
