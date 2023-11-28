@@ -35,7 +35,7 @@ class PurchasePaymentController extends Controller
     public function purchasepaymentbranch($branch_id)
     {
        
-        $data = PurchasePayment::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+        $data = PurchasePayment::where('branch_id', '=', $branch_id)->where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
        
         $today = Carbon::now()->format('Y-m-d');
         $timenow = Carbon::now()->format('H:i');
@@ -49,7 +49,7 @@ class PurchasePaymentController extends Controller
     public function purchasepayment_branchdata($today, $branch_id)
     {
        
-        $data = PurchasePayment::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+        $data = PurchasePayment::where('branch_id', '=', $branch_id)->where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
        
        
         $timenow = Carbon::now()->format('H:i');

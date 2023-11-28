@@ -34,7 +34,7 @@ class SalespaymentController extends Controller
     public function salespaymentbranch($branch_id)
     {
        
-        $data = Salespayment::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+        $data = Salespayment::where('branch_id', '=', $branch_id)->where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
        
         $today = Carbon::now()->format('Y-m-d');
         $timenow = Carbon::now()->format('H:i');
@@ -48,7 +48,7 @@ class SalespaymentController extends Controller
     public function salespayment_branchdata($today, $branch_id)
     {
        
-        $data = Salespayment::where('branch_id', '=', $branch_id)->where('soft_delete', '!=', 1)->get();
+        $data = Salespayment::where('branch_id', '=', $branch_id)->where('date', '=', $today)->where('soft_delete', '!=', 1)->get();
        
 
         $timenow = Carbon::now()->format('H:i');

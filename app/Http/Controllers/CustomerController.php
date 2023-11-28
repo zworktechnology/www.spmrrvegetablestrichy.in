@@ -781,6 +781,13 @@ class CustomerController extends Controller
 
             $GETbranch = Branch::findOrFail($last_word);
             $GETBranchname = $GETbranch->shop_name;
+
+
+            usort($Sales_data, function($a1, $a2) {
+                $value1 = strtotime($a1['date']);
+                $value2 = strtotime($a2['date']);
+                return ($value1 < $value2) ? 1 : -1;
+             });
     
             return view('page.backend.customer.view', compact('CustomerData', 'Sales_data', 'branch', 'Customer', 'Customername', 'customer_id', 'unique_key', 'today',
                          'fromdate','todate', 'branchid', 'customerid',  'tot_saleAmount', 'total_amount_paid', 'total_balance', 'GETBranchname'));
