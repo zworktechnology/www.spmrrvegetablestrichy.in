@@ -98,6 +98,7 @@
                                 <table class="table  customerdatanew">
                                     <thead style="background: #5e54c966;">
                                         <tr>
+                                        <th>S.No</th>
                                             <th>Date</th>
                                             <th>Customer</th>
                                             <th>Branch</th>
@@ -114,17 +115,20 @@
                                         @foreach ($Sales_data as $keydata => $Sales_datas)
                                             @if ($Sales_datas['unique_key'] != '')
                                                 <tr>
-                                                    <td>{{ date('d-m-Y', strtotime($Sales_datas['date'])) }}</td>
+                                                <td>{{ ++$keydata }}</td>
+                                                    <td>{{ $Sales_datas['date'] }}</td>
                                                     <td>{{ $Sales_datas['customer_name'] }}</td>
                                                     <td>{{ $Sales_datas['branch_name'] }}</td>
                                                     <td>{{ $Sales_datas['type'] }}</td>
                                                     <td>{{ $Sales_datas['bill_no'] }}</td>
                                                     <td style="text-transform: uppercase;">
+                                                    @if ($Sales_datas['type'] == 'SALES')
                                                     @foreach ($Sales_datas['sales_terms'] as $index => $terms_array)
                                                     @if ($terms_array['sales_id'] == $Sales_datas['id'])
                                                     {{ $terms_array['product_name'] }} - {{ $terms_array['kgs'] }}{{ $terms_array['bag'] }}-{{ $terms_array['price_per_kg'] }},<br/>
                                                     @endif
                                                     @endforeach
+                                                    @endif
                                                     </td>
 
                                                     <td>{{ $Sales_datas['gross_amount'] }}</td>
