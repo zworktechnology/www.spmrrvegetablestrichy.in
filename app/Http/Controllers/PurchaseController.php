@@ -890,6 +890,12 @@ class PurchaseController extends Controller
     {
 
 
+        if($request->get('payable_amount') == ''){
+            $paidamount = 0;
+        }else if($request->get('payable_amount') != ''){
+            $paidamount = $request->get('payable_amount');
+        }
+
         $Purchase_Data = Purchase::where('unique_key', '=', $unique_key)->first();
 
         $Purchase_Data->bank_id = $request->get('bank_id');
@@ -903,7 +909,7 @@ class PurchaseController extends Controller
         $Purchase_Data->gross_amount = $request->get('gross_amount');
         $Purchase_Data->old_balance = $request->get('old_balance');
         $Purchase_Data->grand_total = $request->get('grand_total');
-        $Purchase_Data->paid_amount = $request->get('payable_amount');
+        $Purchase_Data->paid_amount = $paidamount;
         $Purchase_Data->balance_amount = $request->get('pending_amount');
         $Purchase_Data->status = 1;
         $Purchase_Data->update();
@@ -959,7 +965,7 @@ class PurchaseController extends Controller
             $old_paid = $PurchseData->purchase_paid;
 
             $gross_amount = $request->get('gross_amount');
-            $payable_amount = $request->get('payable_amount');
+            $payable_amount = $paidamount;
 
             $new_grossamount = $old_grossamount + $gross_amount;
             $new_paid = $old_paid + $payable_amount;
@@ -971,7 +977,7 @@ class PurchaseController extends Controller
 
         }else {
             $gross_amount = $request->get('gross_amount');
-            $payable_amount = $request->get('payable_amount');
+            $payable_amount = $paidamount;
             $balance_amount = $gross_amount - $payable_amount;
 
             $data = new BranchwiseBalance();
@@ -979,7 +985,7 @@ class PurchaseController extends Controller
             $data->supplier_id = $Purchase_Data->supplier_id;
             $data->branch_id = $Purchase_Data->branch_id;
             $data->purchase_amount = $request->get('gross_amount');
-            $data->purchase_paid = $request->get('payable_amount');
+            $data->purchase_paid = $paidamount;
             $data->purchase_balance = $balance_amount;
             $data->save();
         }

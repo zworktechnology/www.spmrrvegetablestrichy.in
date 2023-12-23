@@ -163,7 +163,7 @@
 
             
             <div class="modal-footer">
-            <input type="submit" class="btn btn-primary" />
+            <input type="submit" class="btn btn-primary" onclick="salessubmitForm(this);"/>
                <a href="{{ route('sales.index') }}" class="btn btn-danger" value="">Cancel</a>
             </div>
          </form>

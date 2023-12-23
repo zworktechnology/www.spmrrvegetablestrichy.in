@@ -502,6 +502,14 @@ class SalesController extends Controller
             }
 
 
+
+            if($request->get('salespayable_amount') == ''){
+                $paidamount = 0;
+            }else if($request->get('salespayable_amount') != ''){
+                $paidamount = $request->get('salespayable_amount');
+            }
+
+
             $randomkey = Str::random(5);
 
             $data = new Sales();
@@ -520,7 +528,7 @@ class SalesController extends Controller
             $data->gross_amount = $request->get('sales_gross_amount');
             $data->old_balance = $request->get('sales_old_balance');
             $data->grand_total = $request->get('sales_grand_total');
-            $data->paid_amount = $request->get('salespayable_amount');
+            $data->paid_amount = $paidamount;
             $data->balance_amount = $request->get('sales_pending_amount');
             $data->bill_no = $invoiceno;
             $data->status = 1;
@@ -586,7 +594,7 @@ class SalesController extends Controller
                 $old_paid = $SalesbranchwiseData->sales_paid;
 
                 $gross_amount = $request->get('sales_gross_amount');
-                $payable_amount = $request->get('salespayable_amount');
+                $payable_amount = $paidamount;
 
                 $new_grossamount = $old_grossamount + $gross_amount;
                 $new_paid = $old_paid + $payable_amount;
@@ -598,7 +606,7 @@ class SalesController extends Controller
                 
             }else {
                 $gross_amount = $request->get('sales_gross_amount');
-                $payable_amount = $request->get('salespayable_amount');
+                $payable_amount = $paidamount;
                 $balance_amount = $gross_amount - $payable_amount;
 
                 $data = new BranchwiseBalance();
