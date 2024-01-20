@@ -16,7 +16,7 @@
                         <li class="{{ Route::is('purchase.index', 'purchase.store', 'purchase.create', 'purchase.update', 'purchase.delete', 'purchase.print_view', 'purchase.branchdata', 'purchase.datefilter', 'purchase.invoice', 'purchase.invoice_update', 'purchase.invoiceedit', 'purchase.invoiceedit_update') ? 'active' : '' }}">
                             <a href="/purchasebranch/1"><i data-feather="shopping-bag"></i><span>Purchase</span></a>
                         </li>
-                        <li class="{{ Route::is('sales.index', 'sales.store', 'sales.create', 'sales.edit', 'sales.update', 'sales.invoice', 'sales.invoice_update', 'sales.delete', 'sales.branchdata', 'sales.print_view', 'sales.report', 'sales.datefilter') ? 'active' : '' }}">
+                        <li class="{{ Route::is('sales.index', 'sales.store', 'sales.create', 'sales.edit', 'sales.update', 'sales.invoice', 'sales.invoice_update', 'sales.delete', 'sales.branchdata', 'sales.print_view', 'sales.datefilter') ? 'active' : '' }}">
                             <a href="/salesbranch/1"><i data-feather="shopping-cart"></i><span>Sales</span></a>
                         </li>
                         <li class="{{ Route::is('expence.index', 'expence.store', 'expence.create', 'expence.edit', 'expence.update', 'expence.branchdata', 'expence.datefilter') ? 'active' : '' }}">

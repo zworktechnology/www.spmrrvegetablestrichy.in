@@ -58,7 +58,7 @@
                         </div>
                         <div class="col-lg-1 col-sm-6 col-12">
                             <div class="form-group">
-                                <label style="color: white">Prit</label>
+                                <label style="color: white">Print</label>
 
                                 @if (($fromdate != '') && ($todate == '') && ($branch_id == '') && ($customer_id == ''))
                                 <a href="/f_sales_pdfexport/{{$fromdate}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
@@ -109,6 +109,7 @@
                     </div>
                 </div>
             </div>
+
 
             <div class="card">
                 <div class="card-body">
@@ -162,6 +163,7 @@
                                             <th style="">Particulars</th>
                                             <th style="">Debit</th>
                                             <th style="">Credit</th>
+                                            <th style="">Discount</th>
                                             <th style="">Total</th>
                                         </tr>
                                     </thead>
@@ -171,7 +173,7 @@
                                             @if ($Sales_datas['unique_key'] != '')
                                                 <tr>
                                                 <td>{{ ++$keydata }}</td>
-                                                    <td>{{ $Sales_datas['date'] }}</td>
+                                                    <td>{{ date('Y-m-d', strtotime($Sales_datas['date'])) }} - {{ date('h:i A', strtotime($Sales_datas['time'])) }}</td>
                                                     <td>{{ $Sales_datas['customer_name'] }}</td>
                                                     <td>{{ $Sales_datas['branch_name'] }}</td>
                                                     <td>{{ $Sales_datas['type'] }}</td>
@@ -188,8 +190,8 @@
                                                     </td>
 
                                                     <td>{{ $Sales_datas['gross_amount'] }}</td>
-                                                    
-                                                    <td>{{ $Sales_datas['paid_amount'] }}</td>
+                                                    <td>{{ $Sales_datas['balance_amount'] }}</td>
+                                                    <td>{{ $Sales_datas['discount'] }}</td>
                                                     <td>{{ $Sales_datas['balance_amount'] }}</td>
                                                 </tr>
 

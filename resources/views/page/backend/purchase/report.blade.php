@@ -21,7 +21,7 @@
                                 <input type="date" name="purchasereport_fromdate" id="purchasereport_fromdate">
                             </div>
                         </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
+                        <div class="col-lg-2 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>To Date</label>
                                 <input type="date" name="purchasereport_todate" id="purchasereport_todate">
@@ -56,6 +56,56 @@
                                 <input type="submit" class="btn btn-primary" name="submit" value="Search" />
                             </div>
                         </div>
+                        <div class="col-lg-1 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label style="color: white">Print</label>
+
+                                @if (($fromdate != '') && ($todate == '') && ($branch_id == '') && ($supplier_id == ''))
+                                <a href="/f_purchase_pdfexport/{{$fromdate}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($todate != '') && ($fromdate == '') && ($branch_id == '') && ($supplier_id == ''))
+                                <a href="/t_purchase_pdfexport/{{$todate}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($branch_id != '') && ($fromdate == '') && ($todate == '') && ($supplier_id == ''))
+                                <a href="/b_purchase_pdfexport/{{$branch_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($supplier_id != '') && ($fromdate == '') && ($todate == '') && ($branch_id == ''))
+                                <a href="/s_purchase_pdfexport/{{$supplier_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($fromdate != '') && ($todate != '') && ($supplier_id == '') && ($branch_id == ''))
+                                <a href="/ft_purchase_pdfexport/{{$fromdate}}/{{$todate}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($fromdate != '') && ($branch_id != '') && ($todate == '') && ($supplier_id == ''))
+                                <a href="/fb_purchase_pdfexport/{{$fromdate}}/{{$branch_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($fromdate != '') && ($supplier_id != '') && ($todate == '') && ($branch_id == ''))
+                                <a href="/fs_purchase_pdfexport/{{$fromdate}}/{{$supplier_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($todate != '') && ($branch_id != '') && ($fromdate == '') && ($supplier_id == ''))
+                                <a href="/tb_purchase_pdfexport/{{$todate}}/{{$branch_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($todate != '') && ($supplier_id != '') && ($fromdate == '') && ($branch_id == ''))
+                                <a href="/ts_purchase_pdfexport/{{$todate}}/{{$supplier_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($branch_id != '') && ($supplier_id != '') && ($fromdate == '') && ($todate == ''))
+                                <a href="/bs_purchase_pdfexport/{{$branch_id}}/{{$supplier_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($fromdate != '') && ($todate != '') && ($supplier_id != '') && ($branch_id == ''))
+                                <a href="/fts_purchase_pdfexport/{{$fromdate}}/{{$todate}}/{{$supplier_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($fromdate != '') && ($todate != '') && ($branch_id != '') && ($supplier_id == ''))
+                                <a href="/ftb_purchase_pdfexport/{{$fromdate}}/{{$todate}}/{{$branch_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @elseif (($fromdate != '') && ($todate != '') && ($branch_id != '') && ($supplier_id != ''))
+                                <a href="/ftbs_purchase_pdfexport/{{$fromdate}}/{{$todate}}/{{$branch_id}}/{{$supplier_id}}" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @else
+                                <a href="/purchases_pdfexport" class="badges bg-lightgrey btn btn-added">Pdf Export</a>
+
+                                @endif
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -65,7 +115,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                    @foreach ($purchase_data as $keydata => $purchase)
+                    @foreach ($Purchase_data as $keydata => $purchase)
                         @if ($purchase['unique_key'] != '')
 
                         @if($keydata == 0)
@@ -99,62 +149,48 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        @if ($purchase_data != '')
+                        @if ($Purchase_data != '')
                             <div class="table-responsive">
                                 <table class="table  customerdatanew">
                                     <thead style="background: #5e54c966;">
                                         <tr>
+
                                             <th>S.No</th>
-                                            <th>Type</th>
-                                            <th>Bill No</th>
                                             <th>Date & Time</th>
                                             <th>Supplier</th>
                                             <th>Branch</th>
-                                            <th>Products</th>
-                                            <th>Grand Total</th>
-                                            <th>Paid</th>
+                                            <th>Type</th>
+                                            <th>Bill No</th>
+                                            <th style="">Particulars</th>
+                                            <th style="">Debit</th>
+                                            <th style="">Credit</th>
+                                            <th>Discount</th>
+                                            <th style="">Total</th>
                                         </tr>
                                     </thead>
                                     <tbody style="background: #f8f9fa;">
 
-                                        @foreach ($purchase_data as $keydata => $purchasedata)
+                                        @foreach ($Purchase_data as $keydata => $purchasedata)
                                             @if ($purchasedata['unique_key'] != '')
                                                 <tr>
-
                                                     <td>{{ ++$keydata }}</td>
-                                                    @if ($purchasedata['purchase_order'] == NULL) 
-                                                    <td style="text-transform: uppercase;color:#198754"> Purchase </td>
-                                                    @elseif ($purchasedata['purchase_order'] == '1')
-                                                    <td style="text-transform: uppercase;color:red;">Purchase Order</td>
-                                                    @endif
-                                                    <td>#{{ $purchasedata['bill_no'] }}</td>
-                                                    <td>{{ date('d M Y', strtotime($purchasedata['date'])) }}</td>
+                                                    <td>{{ date('Y-m-d', strtotime($purchasedata['date'])) }} - {{ date('h:i A', strtotime($purchasedata['time'])) }}</td>
                                                     <td>{{ $purchasedata['supplier_name'] }}</td>
                                                     <td>{{ $purchasedata['branch_name'] }}</td>
-                                                    <td style="text-transform: uppercase;">
+                                                    <td>{{ $purchasedata['type'] }}</td>
+                                                    <td>#{{ $purchasedata['bill_no'] }}</td>
+                                                    <td>
                                                     @foreach ($purchasedata['terms'] as $index => $terms_array)
                                                     @if ($terms_array['purchase_id'] == $purchasedata['id'])
-                                                    {{ $terms_array['product_name'] }} - {{ $terms_array['kgs'] }}{{ $terms_array['bag'] }},<br/>
+                                                    {{ $terms_array['product_name'] }} - {{ $terms_array['kgs'] }} {{ $terms_array['bag'] }} - ₹ {{ $terms_array['price_per_kg'] }}<br/>
                                                     @endif
                                                     @endforeach
                                                     </td>
                                                     <td>{{ $purchasedata['gross_amount'] }}</td>
                                                     <td>{{ $purchasedata['paid_amount'] }}</td>
+                                                    <td>{{ $purchasedata['discount'] }}</td>
+                                                    <td>{{ $purchasedata['balance_amount'] }}</td> 
                                                 </tr>
-
-                                                <div class="modal fade purchaseview-modal-xl{{ $purchasedata['unique_key'] }}"
-                                                    tabindex="-1" role="dialog" data-bs-backdrop="static"
-                                                    aria-labelledby="purchaseviewLargeModalLabel{{ $purchasedata['unique_key'] }}"
-                                                    aria-hidden="true">
-                                                    @include('page.backend.purchase.view')
-                                                </div>
-
-                                                <div class="modal fade purchasedelete-modal-xl{{ $purchasedata['unique_key'] }}"
-                                                    tabindex="-1" role="dialog"
-                                                    aria-labelledby="purchasedeleteLargeModalLabel{{ $purchasedata['unique_key'] }}"
-                                                    aria-hidden="true">
-                                                    @include('page.backend.purchase.delete')
-                                                </div>
                                             @endif
                                         @endforeach
                                     </tbody>

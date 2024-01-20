@@ -1011,6 +1011,7 @@ class SalesController extends Controller
         //         'customerheading' => $customer_name->name,
         //         'fromdateheading' => date('d-M-Y', strtotime($datas->date)),
         //         'todateheading' => date('d-M-Y', strtotime($datas->date)),
+        //        'datetime' => $datas->date . $datas->time,
         //     );
         // }
 
@@ -1086,10 +1087,12 @@ class SalesController extends Controller
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $paid = $branchwise_datas->amount;
                         $balance = $branchwise_datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $branchwise_datas->salespayment_discount;
                     }
                     $Sales_data[] = array(
                         'sales_order' => $branchwise_datas->sales_order,
@@ -1102,6 +1105,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
@@ -1111,6 +1115,7 @@ class SalesController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => '',
                         'todateheading' => '',
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                     
@@ -1135,6 +1140,7 @@ class SalesController extends Controller
                     'customerheading' => '',
                     'fromdateheading' => '',
                     'todateheading' => '',
+                    'datetime' => '',
                 );
             }
 
@@ -1198,10 +1204,12 @@ class SalesController extends Controller
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $paid = $branchwise_datas->amount;
                         $balance = $branchwise_datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $branchwise_datas->salespayment_discount;
                     }
 
                     $Sales_data[] = array(
@@ -1215,6 +1223,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
@@ -1224,6 +1233,7 @@ class SalesController extends Controller
                         'customerheading' => $GetCustomer->name,
                         'fromdateheading' => '',
                         'todateheading' => '',
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
 
@@ -1250,6 +1260,7 @@ class SalesController extends Controller
                     'customerheading' => $GetCustomer->name,
                     'fromdateheading' => '',
                     'todateheading' => '',
+                    'datetime' => '',
 
                 );
             }
@@ -1317,10 +1328,12 @@ class SalesController extends Controller
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $paid = $branchwise_datas->amount;
                         $balance = $branchwise_datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $branchwise_datas->salespayment_discount;
                     }
 
 
@@ -1335,6 +1348,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
@@ -1344,6 +1358,7 @@ class SalesController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
                         'todateheading' => '',
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -1367,6 +1382,7 @@ class SalesController extends Controller
                     'customerheading' => '',
                     'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
                     'todateheading' => '',
+                    'datetime' => '',
                 );
             }
 
@@ -1430,10 +1446,12 @@ class SalesController extends Controller
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $paid = $branchwise_datas->amount;
                         $balance = $branchwise_datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $branchwise_datas->salespayment_discount;
                     }
 
 
@@ -1448,6 +1466,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
@@ -1457,6 +1476,7 @@ class SalesController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => '',
                         'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -1480,6 +1500,7 @@ class SalesController extends Controller
                     'customerheading' => '',
                     'fromdateheading' => '',
                     'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+                    'datetime' => '',
                 );
             }
 
@@ -1544,10 +1565,12 @@ class SalesController extends Controller
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $paid = $branchwise_datas->amount;
                         $balance = $branchwise_datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $branchwise_datas->salespayment_discount;
                     }
 
 
@@ -1562,6 +1585,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
@@ -1571,6 +1595,7 @@ class SalesController extends Controller
                         'customerheading' => $GetCustomer->name,
                         'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
                         'todateheading' => '',
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -1594,6 +1619,7 @@ class SalesController extends Controller
                     'customerheading' => $GetCustomer->name,
                     'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
                     'todateheading' => '',
+                    'datetime' => '',
                 );
             }
 
@@ -1662,10 +1688,12 @@ class SalesController extends Controller
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $paid = $branchwise_datas->amount;
                         $balance = $branchwise_datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $branchwise_datas->salespayment_discount;
                     }
 
 
@@ -1682,6 +1710,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
@@ -1691,6 +1720,7 @@ class SalesController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
                         'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -1714,6 +1744,7 @@ class SalesController extends Controller
                     'customerheading' => '',
                     'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
                     'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+                    'datetime' => '',
 
                 );
             }
@@ -1781,10 +1812,12 @@ class SalesController extends Controller
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $paid = $branchwise_datas->amount;
                         $balance = $branchwise_datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $branchwise_datas->salespayment_discount;
                     }
 
 
@@ -1801,6 +1834,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
@@ -1810,6 +1844,7 @@ class SalesController extends Controller
                         'customerheading' => $GetCustomer->name,
                         'fromdateheading' => '',
                         'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -1833,6 +1868,7 @@ class SalesController extends Controller
                     'customerheading' => $GetCustomer->name,
                     'fromdateheading' => '',
                     'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+                    'datetime' => '',
                 );
             }
             $fromdate = '';
@@ -1901,10 +1937,12 @@ class SalesController extends Controller
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $paid = $branchwise_datas->amount;
                         $balance = $branchwise_datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $branchwise_datas->salespayment_discount;
                     }
 
 
@@ -1920,6 +1958,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
@@ -1929,6 +1968,7 @@ class SalesController extends Controller
                         'customerheading' => $GetCustomer->name,
                         'fromdateheading' => '',
                         'todateheading' => '',
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -1952,6 +1992,7 @@ class SalesController extends Controller
                     'customerheading' => $GetCustomer->name,
                     'fromdateheading' => '',
                     'todateheading' => '',
+                    'datetime' => '',
                 );
             }
 
@@ -2017,10 +2058,12 @@ class SalesController extends Controller
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $paid = $branchwise_datas->amount;
                         $balance = $branchwise_datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $branchwise_datas->salespayment_discount;
                     }
 
 
@@ -2035,6 +2078,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
@@ -2044,6 +2088,7 @@ class SalesController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
                         'todateheading' => '',
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -2067,6 +2112,7 @@ class SalesController extends Controller
                     'customerheading' => '',
                     'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
                     'todateheading' => '',
+                    'datetime' => '',
                 );
             }
 
@@ -2132,10 +2178,12 @@ class SalesController extends Controller
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $paid = $branchwise_datas->amount;
                         $balance = $branchwise_datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $branchwise_datas->salespayment_discount;
                     }
 
 
@@ -2150,6 +2198,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
@@ -2159,6 +2208,7 @@ class SalesController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => '',
                         'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -2182,6 +2232,7 @@ class SalesController extends Controller
                     'customerheading' => '',
                     'fromdateheading' => '',
                     'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+                    'datetime' => '',
                 );
             }
 
@@ -2247,10 +2298,12 @@ class SalesController extends Controller
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $paid = $branchwise_datas->amount;
                         $balance = $branchwise_datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $branchwise_datas->salespayment_discount;
                     }
 
 
@@ -2266,6 +2319,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
@@ -2275,6 +2329,7 @@ class SalesController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
                         'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -2298,6 +2353,7 @@ class SalesController extends Controller
                     'customerheading' => '',
                     'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
                     'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+                    'datetime' => '',
                 );
             }
 
@@ -2362,10 +2418,12 @@ class SalesController extends Controller
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $paid = $branchwise_datas->amount;
                         $balance = $branchwise_datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $branchwise_datas->salespayment_discount;
                     }
 
 
@@ -2380,6 +2438,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
@@ -2389,6 +2448,7 @@ class SalesController extends Controller
                         'customerheading' => $GetCustomer->name,
                         'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
                         'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -2412,6 +2472,7 @@ class SalesController extends Controller
                     'customerheading' => $GetCustomer->name,
                     'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
                     'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+                    'datetime' => '',
                 );
             }
 
@@ -2481,10 +2542,12 @@ class SalesController extends Controller
                         $paid = $branchwise_datas->paid_amount;
                         $balance = $branchwise_datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $branchwise_datas->amount + $branchwise_datas->salespayment_discount;
+                        $paid = $branchwise_datas->amount;
                         $balance = $branchwise_datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $branchwise_datas->salespayment_discount;
                     }
 
                     $Sales_data[] = array(
@@ -2498,6 +2561,7 @@ class SalesController extends Controller
                         'grand_total' => $branchwise_datas->grand_total,
                         'paid_amount' => $paid,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'bill_no' => $branchwise_datas->bill_no,
                         'id' => $branchwise_datas->id,
@@ -2507,6 +2571,7 @@ class SalesController extends Controller
                         'customerheading' => $GetCustomer->name,
                         'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
                         'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -2530,6 +2595,7 @@ class SalesController extends Controller
                     'customerheading' => $GetCustomer->name,
                     'fromdateheading' => date('d-M-Y', strtotime($salesreport_fromdate)),
                     'todateheading' => date('d-M-Y', strtotime($salesreport_todate)),
+                    'datetime' => '',
                 );
             }
 
@@ -2545,8 +2611,8 @@ class SalesController extends Controller
 
         
         usort($Sales_data, function($a1, $a2) {
-            $value1 = strtotime($a1['date']);
-            $value2 = strtotime($a2['date']);
+            $value1 = strtotime($a1['datetime']);
+            $value2 = strtotime($a2['datetime']);
             return ($value1 < $value2) ? 1 : -1;
          });
 

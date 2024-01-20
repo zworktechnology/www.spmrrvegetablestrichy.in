@@ -681,10 +681,12 @@ class CustomerController extends Controller
                     $paid = $datas->paid_amount;
                     $balance = $datas->balance_amount;
                     $type='SALES';
+                    $discount = '';
                 }else {
-                    $paid = $datas->amount + $datas->salespayment_discount;
+                    $paid = $datas->amount;
                     $balance = $datas->payment_pending;
                     $type='PAYMENT';
+                    $discount = $datas->salespayment_discount;
                 }
     
                 $Sales_data[] = array(
@@ -698,6 +700,7 @@ class CustomerController extends Controller
                     'sales_order' => $datas->sales_order,
                     'grand_total' => $datas->grand_total,
                     'balance_amount' => $balance,
+                    'discount' => $discount,
                     'type' => $type,
                     'id' => $datas->id,
                     'sales_terms' => $terms,
@@ -841,10 +844,12 @@ class CustomerController extends Controller
                 $paid = $datas->paid_amount;
                 $balance = $datas->balance_amount;
                 $type='SALES';
+                $discount = '';
             }else {
-                $paid = $datas->amount + $datas->salespayment_discount;
+                $paid = $datas->amount;
                 $balance = $datas->payment_pending;
                 $type='PAYMENT';
+                $discount = $datas->salespayment_discount;
             }
 
             $Sales_data[] = array(
@@ -858,6 +863,7 @@ class CustomerController extends Controller
                 'sales_order' => $datas->sales_order,
                 'grand_total' => $datas->grand_total,
                 'balance_amount' => $balance,
+                'discount' => $discount,
                 'type' => $type,
                 'id' => $datas->id,
                 'sales_terms' => $terms,
@@ -981,7 +987,7 @@ class CustomerController extends Controller
 
 
                 $Sales_data = [];
-                $sales_terms = [];
+                $terms = [];
 
                 $merge = array_merge($sales, $salepayment_s);
 
@@ -1013,10 +1019,12 @@ class CustomerController extends Controller
                         $paid = $datas->paid_amount;
                         $balance = $datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $datas->amount + $datas->salespayment_discount;
+                        $paid = $datas->amount;
                         $balance = $datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $datas->salespayment_discount;
                     }
         
                     $Sales_data[] = array(
@@ -1030,6 +1038,7 @@ class CustomerController extends Controller
                         'sales_order' => $datas->sales_order,
                         'grand_total' => $datas->grand_total,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'id' => $datas->id,
                         'sales_terms' => $terms,
@@ -1109,7 +1118,7 @@ class CustomerController extends Controller
 
 
                 $Sales_data = [];
-                $sales_terms = [];
+                $terms = [];
 
                 $merge = array_merge($sales, $salepayment_s);
                 foreach ($merge as $key => $datas) {
@@ -1136,10 +1145,13 @@ class CustomerController extends Controller
                         $paid = $datas->paid_amount;
                         $balance = $datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $datas->amount + $datas->salespayment_discount;
+                        $paid = $datas->amount;
                         $balance = $datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $datas->salespayment_discount;
+                        
                     }
         
                     $Sales_data[] = array(
@@ -1153,6 +1165,7 @@ class CustomerController extends Controller
                         'sales_order' => $datas->sales_order,
                         'grand_total' => $datas->grand_total,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'id' => $datas->id,
                         'sales_terms' => $terms,
@@ -1222,7 +1235,7 @@ class CustomerController extends Controller
 
 
                 $Sales_data = [];
-                $sales_terms = [];
+                $terms = [];
 
                 $merge = array_merge($sales, $salepayment_s);
                 foreach ($merge as $key => $datas) {
@@ -1249,10 +1262,12 @@ class CustomerController extends Controller
                         $paid = $datas->paid_amount;
                         $balance = $datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $datas->amount + $datas->salespayment_discount;
+                        $paid = $datas->amount;
                         $balance = $datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $datas->salespayment_discount;
                     }
         
                     $Sales_data[] = array(
@@ -1266,6 +1281,7 @@ class CustomerController extends Controller
                         'sales_order' => $datas->sales_order,
                         'grand_total' => $datas->grand_total,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'id' => $datas->id,
                         'sales_terms' => $terms,
@@ -1339,7 +1355,7 @@ class CustomerController extends Controller
 
 
                 $Sales_data = [];
-                $sales_terms = [];
+                $terms = [];
 
                 $merge = array_merge($sales, $salepayment_s);
 
@@ -1371,10 +1387,12 @@ class CustomerController extends Controller
                         $paid = $datas->paid_amount;
                         $balance = $datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $datas->amount + $datas->salespayment_discount;
+                        $paid = $datas->amount;
                         $balance = $datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $datas->salespayment_discount;
                     }
         
                     $Sales_data[] = array(
@@ -1388,6 +1406,7 @@ class CustomerController extends Controller
                         'sales_order' => $datas->sales_order,
                         'grand_total' => $datas->grand_total,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'id' => $datas->id,
                         'sales_terms' => $terms,
@@ -1459,7 +1478,7 @@ class CustomerController extends Controller
 
 
                 $Sales_data = [];
-                $sales_terms = [];
+                $terms = [];
 
                 $merge = array_merge($sales, $salepayment_s);
                 foreach ($merge as $key => $datas) {
@@ -1488,10 +1507,12 @@ class CustomerController extends Controller
                         $paid = $datas->paid_amount;
                         $balance = $datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $datas->amount + $datas->salespayment_discount;
+                        $paid = $datas->amount;
                         $balance = $datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $datas->salespayment_discount;
                     }
         
                     $Sales_data[] = array(
@@ -1505,6 +1526,7 @@ class CustomerController extends Controller
                         'sales_order' => $datas->sales_order,
                         'grand_total' => $datas->grand_total,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'id' => $datas->id,
                         'sales_terms' => $terms,
@@ -1573,7 +1595,7 @@ class CustomerController extends Controller
 
 
                 $Sales_data = [];
-                $sales_terms = [];
+                $terms = [];
 
                 $merge = array_merge($sales, $salepayment_s);
                 foreach ($merge as $key => $datas) {
@@ -1601,10 +1623,12 @@ class CustomerController extends Controller
                         $paid = $datas->paid_amount;
                         $balance = $datas->balance_amount;
                         $type='SALES';
+                        $discount = '';
                     }else {
-                        $paid = $datas->amount + $datas->salespayment_discount;
+                        $paid = $datas->amount;
                         $balance = $datas->payment_pending;
                         $type='PAYMENT';
+                        $discount = $datas->salespayment_discount;
                     }
         
                     $Sales_data[] = array(
@@ -1618,6 +1642,7 @@ class CustomerController extends Controller
                         'sales_order' => $datas->sales_order,
                         'grand_total' => $datas->grand_total,
                         'balance_amount' => $balance,
+                        'discount' => $discount,
                         'type' => $type,
                         'id' => $datas->id,
                         'sales_terms' => $terms,

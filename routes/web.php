@@ -404,6 +404,22 @@ Route::get('/ftbc_sales_pdfexport/{fromdate}/{todate}/{branch_id}/{customer_id}'
 Route::get('/sales_pdfexport', [SalesController::class, 'sales_pdfexport']);
 
 
+Route::get('/f_purchase_pdfexport/{fromdate}', [PurchaseController::class, 'f_purchase_pdfexport']);
+Route::get('/t_purchase_pdfexport/{todate}', [PurchaseController::class, 't_purchase_pdfexport']);
+Route::get('/b_purchase_pdfexport/{branch_id}', [PurchaseController::class, 'b_purchase_pdfexport']);
+Route::get('/s_purchase_pdfexport/{supplier_id}', [PurchaseController::class, 's_purchase_pdfexport']);
+Route::get('/ft_purchase_pdfexport/{fromdate}/{todate}', [PurchaseController::class, 'ft_purchase_pdfexport']);
+Route::get('/fb_purchase_pdfexport/{fromdate}/{branch_id}', [PurchaseController::class, 'fb_purchase_pdfexport']);
+Route::get('/fs_purchase_pdfexport/{fromdate}/{supplier_id}', [PurchaseController::class, 'fs_purchase_pdfexport']);
+Route::get('/tb_purchase_pdfexport/{todate}/{branch_id}', [PurchaseController::class, 'tb_purchase_pdfexport']);
+Route::get('/ts_purchase_pdfexport/{todate}/{supplier_id}', [PurchaseController::class, 'ts_purchase_pdfexport']);
+Route::get('/bs_purchase_pdfexport/{branch_id}/{supplier_id}', [PurchaseController::class, 'bs_purchase_pdfexport']);
+Route::get('/fts_purchase_pdfexport/{fromdate}/{todate}/{supplier_id}', [PurchaseController::class, 'fts_purchase_pdfexport']);
+Route::get('/ftb_purchase_pdfexport/{fromdate}/{todate}/{branch_id}', [PurchaseController::class, 'ftb_purchase_pdfexport']);
+Route::get('/ftbs_purchase_pdfexport/{fromdate}/{todate}/{branch_id}/{supplier_id}', [PurchaseController::class, 'ftbs_purchase_pdfexport']);
+Route::get('/purchases_pdfexport', [PurchaseController::class, 'purchases_pdfexport']);
+
+
 
 Route::get('/salesindex_pdfexport/{today}', [SalesController::class, 'salesindex_pdfexport']);
 Route::get('/salesindex_pdfexport_branchwise/{last_word}/{today}', [SalesController::class, 'salesindex_pdfexport_branchwise']);

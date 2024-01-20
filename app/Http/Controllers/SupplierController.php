@@ -634,70 +634,96 @@ class SupplierController extends Controller
 
             $today = Carbon::now()->format('Y-m-d');
             $data = Purchase::where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $last_word)->where('soft_delete', '!=', 1)->get();
-            $purchase_data = [];
-            foreach ($data as $key => $datas) {
-    
+
+
+                $purchases = [];
+                foreach ($data as $key => $datas_arr) {
+                    $purchases[] = $datas_arr;
+                }
+                $purhcasepayment_s = [];
+                $Purchasepaymentdata = PurchasePayment::where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $last_word)->where('soft_delete', '!=', 1)->get();
+                foreach ($Purchasepaymentdata as $key => $Purchasepaymentdatas) {
+                    $purhcasepayment_s[] = $Purchasepaymentdatas;
+                }
+
+
+                $Purchase_data = [];
+                $terms = [];
+
+                $merge = array_merge($purchases, $purhcasepayment_s);
+
+
+            foreach ($merge as $key => $datas) {
+
                 $branch_name = Branch::findOrFail($datas->branch_id);
                 $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->where('branch_id', '=', $last_word)->get();
-                foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
-    
-                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                foreach ($PurchaseProducts as $key => $PurchaseProducts_arr) {
+
+                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arr->productlist_id);
                     $terms[] = array(
-                        'bag' => $PurchaseProducts_arrdata->bagorkg,
-                        'kgs' => $PurchaseProducts_arrdata->count,
-                        'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                        'total_price' => $PurchaseProducts_arrdata->total_price,
+                        'bag' => $PurchaseProducts_arr->bagorkg,
+                        'kgs' => $PurchaseProducts_arr->count,
+                        'price_per_kg' => $PurchaseProducts_arr->price_per_kg,
+                        'total_price' => $PurchaseProducts_arr->total_price,
                         'product_name' => $productlist_ID->name,
-                        'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
-    
+                        'purchase_id' => $PurchaseProducts_arr->purchase_id,
+
                     );
-    
+
                 }
-    
-    
-                $purchase_data[] = array(
+
+
+                if($datas->status != ""){
+                    $paid = $datas->paid_amount;
+                    $balance = $datas->balance_amount;
+                    $type='PURHCASE';
+                    $discount = '';
+                }else {
+                    $paid = $datas->amount;
+                    $balance = $datas->payment_pending;
+                    $type='PAYMENT';
+                    $discount = $datas->purchasepayment_discount;
+                }
+                
+
+                $Purchase_data[] = array(
                     'unique_key' => $datas->unique_key,
                     'branch_name' => $branch_name->shop_name,
                     'supplier_name' => $SupplierData->name,
                     'date' => $datas->date,
+                    'time' => $datas->time,
                     'gross_amount' => $datas->gross_amount,
-                    'paid_amount' => $datas->paid_amount,
-                    'purchase_order' => $datas->purchase_order,
+                    'paid_amount' => $paid,
                     'bill_no' => $datas->bill_no,
+                    'purchase_order' => $datas->purchase_order,
+                    'grand_total' => $datas->grand_total,
+                    'balance_amount' => $balance,
+                    'type' => $type,
                     'id' => $datas->id,
-                    'terms' => $terms,
+                    'sales_terms' => $terms,
+                    'discount' => $discount,
+                    'status' => $datas->status,
+                    'branchheading' => '',
+                    'customerheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => '',
+                    'datetime' => $datas->date . $datas->time,
+
                 );
             }
-    
+
             $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-            $supplier = Supplier::where('soft_delete', '!=', 1)->get();
-    
-    
-            $suppliername = $SupplierData->name;
+            $Supplier = Supplier::where('soft_delete', '!=', 1)->get();
+
+
+            $Suppliername = $SupplierData->name;
             $supplier_id = $SupplierData->id;
             $unique_key = $SupplierData->unique_key;
-    
-    
-    
-    
-            $PurchasePayment = PurchasePayment::where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $last_word)->where('soft_delete', '!=', 1)->get();
-            $PurchasePayment_data = [];
-    
-            foreach ($PurchasePayment as $key => $PurchasePayments) {
-                $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
-    
-    
-                $PurchasePayment_data[] = array(
-                    'unique_key' => $PurchasePayments->unique_key,
-                    'branch_name' => $branch_name->shop_name,
-                    'supplier_name' => $SupplierData->name,
-                    'date' => $PurchasePayments->date,
-                    'paid_amount' => $PurchasePayments->amount,
-                    'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
-                );
-            }
-    
-    
+
+
+
+
+
             $fromdate = '';
             $todate = '';
             $branchid = '';
@@ -705,166 +731,252 @@ class SupplierController extends Controller
 
 
 
+            // $total_sale_amt = Sales::where('soft_delete', '!=', 1)->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $last_word)->sum('gross_amount');
+            // if($total_sale_amt != ""){
+            //     $tot_saleAmount = $total_sale_amt;
+            // }else {
+            //     $tot_saleAmount = '0';
+            // }
 
-            $total_purchase_amt = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $last_word)->sum('gross_amount');
-            if($total_purchase_amt != ""){
-                $tot_purchaseAmount = $total_purchase_amt;
+
+
+            // $total_paid = Sales::where('soft_delete', '!=', 1)->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $last_word)->sum('paid_amount');
+            // if($total_paid != ""){
+            //     $total_paid_Amount = $total_paid;
+            // }else {
+            //     $total_paid_Amount = '0';
+            // }
+            // $payment_total_paid = Salespayment::where('soft_delete', '!=', 1)->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $last_word)->sum('amount');
+            // if($payment_total_paid != ""){
+            //     $total_payment_paid = $payment_total_paid;
+            // }else {
+            //     $total_payment_paid = '0';
+            // }
+
+
+            // $payment_discount = Salespayment::where('soft_delete', '!=', 1)->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $last_word)->sum('salespayment_discount');
+            // if($payment_discount != ""){
+            //     $totpayment_discount = $payment_discount;
+            // }else {
+            //     $totpayment_discount = '0';
+            // }
+            // $total_amount_paid = $total_paid_Amount + $total_payment_paid + $totpayment_discount;
+
+
+
+            // $total_balance = $tot_saleAmount - $total_amount_paid;
+
+
+
+            $totalsaleAmt = BranchwiseBalance::where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $last_word)->first();
+            if($totalsaleAmt != ""){
+                $tot_purchaseAmounts = $totalsaleAmt->purchase_amount;
+                $total_amount_paid = $totalsaleAmt->purchase_paid;
+                $total_balance = $totalsaleAmt->purchase_balance;
             }else {
-                $tot_purchaseAmount = '0';
+                $tot_purchaseAmounts = '0';
+                $total_amount_paid = '0';
+                $total_balance = '0';
             }
 
-            // Total Paid
-            $total_paid = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $last_word)->sum('paid_amount');
-            if($total_paid != ""){
-                $total_paid_Amount = $total_paid;
-            }else {
-                $total_paid_Amount = '0';
-            }
-            $payment_total_paid = PurchasePayment::where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $last_word)->sum('amount');
-            if($payment_total_paid != ""){
-                $total_payment_paid = $payment_total_paid;
-            }else {
-                $total_payment_paid = '0';
-            }
-
-            $total_discount = PurchasePayment::where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $last_word)->sum('purchasepayment_discount');
-            if($total_discount != ""){
-                $total_discount_amont = $total_discount;
-            }else {
-                $total_discount_amont = '0';
-            }
-
-            $total_amount_paid = $total_paid_Amount + $total_payment_paid + $total_discount_amont;
             
 
+            $payment_purchase_discount = PurchasePayment::where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $last_word)->where('soft_delete', '!=', 1)->sum('purchasepayment_discount');
+            if($payment_purchase_discount != ""){
+                $paymentpurchase_discount = $payment_purchase_discount;
+            }else {
+                $paymentpurchase_discount = '0';
+            }
+            $tot_purchaseAmount = $tot_purchaseAmounts + $paymentpurchase_discount;
 
-            // Total Balance
-            $total_balance = $tot_purchaseAmount - $total_amount_paid;
+
             $GETbranch = Branch::findOrFail($last_word);
             $GETBranchname = $GETbranch->shop_name;
-    
-            return view('page.backend.supplier.view', compact('SupplierData', 'purchase_data', 'branch', 'supplier', 'suppliername', 'supplier_id', 'unique_key', 'today',
-                         'fromdate','todate', 'branchid', 'supplierid', 'PurchasePayment_data', 'tot_purchaseAmount', 'total_amount_paid', 'total_balance', 'GETBranchname'));
 
+
+            usort($Purchase_data, function($a1, $a2) {
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
+             });
+
+            return view('page.backend.supplier.view', compact('SupplierData', 'Purchase_data', 'branch', 'Supplier', 'Suppliername', 'supplier_id', 'unique_key', 'today',
+                         'fromdate','todate', 'branchid', 'supplierid',  'tot_purchaseAmount', 'total_amount_paid', 'total_balance', 'GETBranchname', 'paymentpurchase_discount'));
 
 
         }else if($last_word == 'supplier'){
-
 
             $SupplierData = Supplier::where('unique_key', '=', $unique_key)->first();
 
             $today = Carbon::now()->format('Y-m-d');
             $data = Purchase::where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
-            $purchase_data = [];
-            foreach ($data as $key => $datas) {
-    
-                $branch_name = Branch::findOrFail($datas->branch_id);
-                $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
-                foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
-    
-                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
-                    $terms[] = array(
-                        'bag' => $PurchaseProducts_arrdata->bagorkg,
-                        'kgs' => $PurchaseProducts_arrdata->count,
-                        'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                        'total_price' => $PurchaseProducts_arrdata->total_price,
-                        'product_name' => $productlist_ID->name,
-                        'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
-    
-                    );
-    
+
+
+                $purchases = [];
+                foreach ($data as $key => $datas_arr) {
+                    $purchases[] = $datas_arr;
                 }
-    
-    
-                $purchase_data[] = array(
+                $purhcasepayment_s = [];
+                $Purchasepaymentdata = PurchasePayment::where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
+                foreach ($Purchasepaymentdata as $key => $Purchasepaymentdatas) {
+                    $purhcasepayment_s[] = $Purchasepaymentdatas;
+                }
+
+
+                $Purchase_data = [];
+                $terms = [];
+
+                $merge = array_merge($purchases, $purhcasepayment_s);
+
+
+            foreach ($merge as $key => $datas) {
+
+                $branch_name = Branch::findOrFail($datas->branch_id);
+                $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->where('branch_id', '=', $last_word)->get();
+                foreach ($PurchaseProducts as $key => $PurchaseProducts_arr) {
+
+                    $productlist_ID = Productlist::findOrFail($PurchaseProducts_arr->productlist_id);
+                    $terms[] = array(
+                        'bag' => $PurchaseProducts_arr->bagorkg,
+                        'kgs' => $PurchaseProducts_arr->count,
+                        'price_per_kg' => $PurchaseProducts_arr->price_per_kg,
+                        'total_price' => $PurchaseProducts_arr->total_price,
+                        'product_name' => $productlist_ID->name,
+                        'purchase_id' => $PurchaseProducts_arr->purchase_id,
+
+                    );
+
+                }
+
+
+                if($datas->status != ""){
+                    $paid = $datas->paid_amount;
+                    $balance = $datas->balance_amount;
+                    $type='PURHCASE';
+                    $discount = '';
+                }else {
+                    $paid = $datas->amount;
+                    $balance = $datas->payment_pending;
+                    $type='PAYMENT';
+                    $discount = $datas->purchasepayment_discount;
+                }
+
+                $Purchase_data[] = array(
                     'unique_key' => $datas->unique_key,
                     'branch_name' => $branch_name->shop_name,
                     'supplier_name' => $SupplierData->name,
                     'date' => $datas->date,
+                    'time' => $datas->time,
                     'gross_amount' => $datas->gross_amount,
-                    'paid_amount' => $datas->paid_amount,
-                    'purchase_order' => $datas->purchase_order,
+                    'paid_amount' => $paid,
                     'bill_no' => $datas->bill_no,
+                    'purchase_order' => $datas->purchase_order,
+                    'grand_total' => $datas->grand_total,
+                    'balance_amount' => $balance,
+                    'type' => $type,
                     'id' => $datas->id,
-                    'terms' => $terms,
+                    'sales_terms' => $terms,
+                    'discount' => $discount,
+                    'status' => $datas->status,
+                    'branchheading' => '',
+                    'customerheading' => '',
+                    'fromdateheading' => '',
+                    'todateheading' => '',
+                    'datetime' => $datas->date . $datas->time,
+
                 );
             }
-    
+
             $branch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
-            $supplier = Supplier::where('soft_delete', '!=', 1)->get();
-    
-    
-            $suppliername = $SupplierData->name;
+            $Supplier = Supplier::where('soft_delete', '!=', 1)->get();
+
+
+            $Suppliername = $SupplierData->name;
             $supplier_id = $SupplierData->id;
             $unique_key = $SupplierData->unique_key;
-    
-    
-    
-    
-            $PurchasePayment = PurchasePayment::where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
-            $PurchasePayment_data = [];
-    
-            foreach ($PurchasePayment as $key => $PurchasePayments) {
-                $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
-    
-    
-                $PurchasePayment_data[] = array(
-                    'unique_key' => $PurchasePayments->unique_key,
-                    'branch_name' => $branch_name->shop_name,
-                    'supplier_name' => $SupplierData->name,
-                    'date' => $PurchasePayments->date,
-                    'paid_amount' => $PurchasePayments->amount,
-                    'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
-                );
-            }
-    
-    
+
+
+
+
+
             $fromdate = '';
             $todate = '';
             $branchid = '';
             $supplierid = $SupplierData->id;
 
 
-            $total_purchase_amt = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('gross_amount');
-            if($total_purchase_amt != ""){
-                $tot_purchaseAmount = $total_purchase_amt;
+
+            // $total_sale_amt = Sales::where('soft_delete', '!=', 1)->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $last_word)->sum('gross_amount');
+            // if($total_sale_amt != ""){
+            //     $tot_saleAmount = $total_sale_amt;
+            // }else {
+            //     $tot_saleAmount = '0';
+            // }
+
+
+
+            // $total_paid = Sales::where('soft_delete', '!=', 1)->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $last_word)->sum('paid_amount');
+            // if($total_paid != ""){
+            //     $total_paid_Amount = $total_paid;
+            // }else {
+            //     $total_paid_Amount = '0';
+            // }
+            // $payment_total_paid = Salespayment::where('soft_delete', '!=', 1)->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $last_word)->sum('amount');
+            // if($payment_total_paid != ""){
+            //     $total_payment_paid = $payment_total_paid;
+            // }else {
+            //     $total_payment_paid = '0';
+            // }
+
+
+            // $payment_discount = Salespayment::where('soft_delete', '!=', 1)->where('customer_id', '=', $CustomerData->id)->where('branch_id', '=', $last_word)->sum('salespayment_discount');
+            // if($payment_discount != ""){
+            //     $totpayment_discount = $payment_discount;
+            // }else {
+            //     $totpayment_discount = '0';
+            // }
+            // $total_amount_paid = $total_paid_Amount + $total_payment_paid + $totpayment_discount;
+
+
+
+            // $total_balance = $tot_saleAmount - $total_amount_paid;
+
+
+
+            $totalsaleAmt = BranchwiseBalance::where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $last_word)->first();
+            if($totalsaleAmt != ""){
+                $tot_purchaseAmounts = $totalsaleAmt->purchase_amount;
+                $total_amount_paid = $totalsaleAmt->purchase_paid;
+                $total_balance = $totalsaleAmt->purchase_balance;
             }else {
-                $tot_purchaseAmount = '0';
+                $tot_purchaseAmounts = '0';
+                $total_amount_paid = '0';
+                $total_balance = '0';
             }
 
-            // Total Paid
-            $total_paid = Purchase::where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('paid_amount');
-            if($total_paid != ""){
-                $total_paid_Amount = $total_paid;
-            }else {
-                $total_paid_Amount = '0';
-            }
-            $payment_total_paid = PurchasePayment::where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('amount');
-            if($payment_total_paid != ""){
-                $total_payment_paid = $payment_total_paid;
-            }else {
-                $total_payment_paid = '0';
-            }
-
-            $total_discount = PurchasePayment::where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('purchasepayment_discount');
-            if($total_discount != ""){
-                $total_discount_amont = $total_discount;
-            }else {
-                $total_discount_amont = '0';
-            }
-
-            $total_amount_paid = $total_paid_Amount + $total_payment_paid + $total_discount_amont;
             
 
+            $payment_purchase_discount = PurchasePayment::where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $last_word)->where('soft_delete', '!=', 1)->sum('purchasepayment_discount');
+            if($payment_purchase_discount != ""){
+                $paymentpurchase_discount = $payment_purchase_discount;
+            }else {
+                $paymentpurchase_discount = '0';
+            }
+            $tot_purchaseAmount = $tot_purchaseAmounts + $paymentpurchase_discount;
 
-            // Total Balance
-            $total_balance = $tot_purchaseAmount - $total_amount_paid;
-            $GETBranchname = 'ALL';
-    
-            return view('page.backend.supplier.view', compact('SupplierData', 'purchase_data', 'branch', 'supplier', 'suppliername', 'supplier_id', 'unique_key', 'today',
-                         'fromdate','todate', 'branchid', 'supplierid', 'PurchasePayment_data', 'tot_purchaseAmount', 'total_amount_paid', 'total_balance', 'GETBranchname'));
+
+           
+            $GETBranchname = 'All Branches';
 
 
+            usort($Purchase_data, function($a1, $a2) {
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
+             });
+
+            return view('page.backend.supplier.view', compact('SupplierData', 'Purchase_data', 'branch', 'Supplier', 'Suppliername', 'supplier_id', 'unique_key', 'today',
+                         'fromdate','todate', 'branchid', 'supplierid',  'tot_purchaseAmount', 'total_amount_paid', 'total_balance', 'GETBranchname', 'paymentpurchase_discount'));
 
         }
       
@@ -886,391 +998,533 @@ class SupplierController extends Controller
         $todate = $request->get('todate');
 
 
-        if($last_word != 'supplier'){
+        if($branchid != 'supplier'){
 
             if($fromdate){
-                $GetBranch = Branch::findOrFail($branchid);
+                $GETbranch = Branch::findOrFail($branchid);
+                $GETBranchname = $GETbranch->shop_name;
+
+                $data = Purchase::where('date', '=', $fromdate)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->get();
+
+                $sales = [];
+                foreach ($data as $key => $datas_arr) {
+                    $sales[] = $datas_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = PurchasePayment::where('date', '=', $fromdate)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
 
 
-                $data = Purchase::where('date', '=', $fromdate)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
-                $purchase_data = [];
-                foreach ($data as $key => $datas) {
+                $Purchase_data = [];
+                $terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+
+
+                foreach ($merge as $key => $datas) {
 
                     $branch_name = Branch::findOrFail($datas->branch_id);
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
-                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+                    $SalesProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->where('branch_id', '=', $branchid)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arr) {
 
-                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arr->productlist_id);
                         $terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bagorkg,
-                            'kgs' => $PurchaseProducts_arrdata->count,
-                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'bag' => $SalesProducts_arr->bagorkg,
+                            'kgs' => $SalesProducts_arr->count,
+                            'price_per_kg' => $SalesProducts_arr->price_per_kg,
+                            'total_price' => $SalesProducts_arr->total_price,
                             'product_name' => $productlist_ID->name,
-                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+                            'purchase_id' => $SalesProducts_arr->purchase_id,
 
                         );
+
                     }
 
 
-                    $purchase_data[] = array(
+                    if($datas->status != ""){
+                        $paid = $datas->paid_amount;
+                        $balance = $datas->balance_amount;
+                        $type='PURHCASE';
+                        $discount = '';
+                    }else {
+                        $paid = $datas->amount;
+                        $balance = $datas->payment_pending;
+                        $type='PAYMENT';
+                        $discount = $datas->purchasepayment_discount;
+                    }
+
+                    $Purchase_data[] = array(
                         'unique_key' => $datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
-                        'supplier_name' => $SupplierData->name,
+                        'customer_name' => $SupplierData->name,
                         'date' => $datas->date,
+                        'time' => $datas->time,
                         'gross_amount' => $datas->gross_amount,
-                        'paid_amount' => $datas->paid_amount,
+                        'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
                         'purchase_order' => $datas->purchase_order,
+                        'grand_total' => $datas->grand_total,
+                        'balance_amount' => $balance,
+                        'type' => $type,
                         'id' => $datas->id,
-                        'terms' => $terms,
+                        'sales_terms' => $terms,
+                        'discount' => $discount,
+                        'status' => $datas->status,
+                        'branchheading' => '',
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+                        'datetime' => $datas->date . $datas->time,
+
                     );
                 }
 
-                $suppliername = $SupplierData->name;
+                $Suppliername = $SupplierData->name;
                 $supplier_id = $SupplierData->id;
                 $unique_key = $SupplierData->unique_key;
-
-
-                $PurchasePayment_data = [];
-
-                $PurchasePayment = PurchasePayment::where('date', '=', $fromdate)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
-                if($PurchasePayment != ''){
-                    
-                    foreach ($PurchasePayment as $key => $PurchasePayments) {
-                        $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
-
-
-                        $PurchasePayment_data[] = array(
-                            'unique_key' => $PurchasePayments->unique_key,
-                            'branch_name' => $branch_name->shop_name,
-                            'supplier_name' => $SupplierData->name,
-                            'date' => $PurchasePayments->date,
-                            'paid_amount' => $PurchasePayments->amount,
-                            'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
-                        );
-                    }
-                }
-
                 $supplierid = $SupplierData->id;
 
-                $total_purchase_amt = Purchase::where('date', '=', $fromdate)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('gross_amount');
-                if($total_purchase_amt != ""){
-                    $tot_purchaseAmount = $total_purchase_amt;
+
+                $total_sale_amt = Purchase::where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('gross_amount');
+                if($total_sale_amt != ""){
+                    $tot_purchaseAmount = $total_sale_amt;
                 }else {
                     $tot_purchaseAmount = '0';
                 }
 
+
                 // Total Paid
-                $total_paid = Purchase::where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->sum('paid_amount');
+                $total_paid = Purchase::where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('payment_paid_amount');
                 if($total_paid != ""){
                     $total_paid_Amount = $total_paid;
                 }else {
                     $total_paid_Amount = '0';
                 }
-                $payment_total_paid = PurchasePayment::where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->sum('amount');
+                $payment_total_paid = PurchasePayment::where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('amount');
                 if($payment_total_paid != ""){
                     $total_payment_paid = $payment_total_paid;
                 }else {
                     $total_payment_paid = '0';
                 }
 
-                $total_discount = PurchasePayment::where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->sum('purchasepayment_discount');
-                if($total_discount != ""){
-                    $total_discount_amont = $total_discount;
+
+                $payment_discount = PurchasePayment::where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('purchasepayment_discount');
+                if($payment_discount != ""){
+                    $totpayment_discount = $payment_discount;
                 }else {
-                    $total_discount_amont = '0';
+                    $totpayment_discount = '0';
+                }
+                $total_amount_paid = $total_paid_Amount + $total_payment_paid + $totpayment_discount;
+                $total_balance = $tot_purchaseAmount - $total_amount_paid;
+
+
+                // $tot_saleAmount = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_amount');
+                // $total_amount_paid = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_paid');
+                // $total_balance = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_balance');
+    
+                $payment_sale_discount = PurchasePayment::where('date', '=', $fromdate)->
+                                                        where('supplier_id', '=', $SupplierData->id)
+                                                        ->where('branch_id', '=', $branchid)
+                                                        ->where('soft_delete', '!=', 1)
+                                                        ->sum('purchasepayment_discount');
+                if($payment_sale_discount != ""){
+                    $paymentpurchase_discount = $payment_sale_discount;
+                }else {
+                    $paymentpurchase_discount = '0';
                 }
 
-                $total_amount_paid = $total_paid_Amount + $total_payment_paid + $total_discount_amont;
-                $total_balance = $tot_purchaseAmount - $total_amount_paid;
-                $GETBranchname = $GetBranch->shop_name;
+
             }
+
+
 
             if($todate){
+                $GETbranch = Branch::findOrFail($branchid);
+                $GETBranchname = $GETbranch->shop_name;
+
+                $data = Purchase::where('date', '=', $todate)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->get();
+
+                $sales = [];
+                foreach ($data as $key => $datas_arr) {
+                    $sales[] = $datas_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = PurchasePayment::where('date', '=', $todate)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
 
 
-                $GetBranch = Branch::findOrFail($branchid);
+                $Purchase_data = [];
+                $terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
 
 
-                $data = Purchase::where('date', '=', $todate)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
-                $purchase_data = [];
-                foreach ($data as $key => $datas) {
+
+
+
+                foreach ($merge as $key => $datas) {
 
                     $branch_name = Branch::findOrFail($datas->branch_id);
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
-                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+                    $SalesProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->where('branch_id', '=', $branchid)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arr) {
 
-                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arr->productlist_id);
                         $terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bagorkg,
-                            'kgs' => $PurchaseProducts_arrdata->count,
-                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'bag' => $SalesProducts_arr->bagorkg,
+                            'kgs' => $SalesProducts_arr->count,
+                            'price_per_kg' => $SalesProducts_arr->price_per_kg,
+                            'total_price' => $SalesProducts_arr->total_price,
                             'product_name' => $productlist_ID->name,
-                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+                            'purchase_id' => $SalesProducts_arr->purchase_id,
 
                         );
+
                     }
 
 
-                    $purchase_data[] = array(
+                    if($datas->status != ""){
+                        $paid = $datas->paid_amount;
+                        $balance = $datas->balance_amount;
+                        $type='PURHCASE';
+                        $discount = '';
+                    }else {
+                        $paid = $datas->amount;
+                        $balance = $datas->payment_pending;
+                        $type='PAYMENT';
+                        $discount = $datas->purchasepayment_discount;
+                    }
+
+                    $Purchase_data[] = array(
                         'unique_key' => $datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
-                        'supplier_name' => $SupplierData->name,
+                        'customer_name' => $SupplierData->name,
                         'date' => $datas->date,
+                        'time' => $datas->time,
                         'gross_amount' => $datas->gross_amount,
-                        'paid_amount' => $datas->paid_amount,
+                        'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
                         'purchase_order' => $datas->purchase_order,
+                        'grand_total' => $datas->grand_total,
+                        'balance_amount' => $balance,
+                        'type' => $type,
                         'id' => $datas->id,
-                        'terms' => $terms,
+                        'sales_terms' => $terms,
+                        'discount' => $discount,
+                        'status' => $datas->status,
+                        'branchheading' => '',
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+                        'datetime' => $datas->date . $datas->time,
+
                     );
                 }
 
-                $suppliername = $SupplierData->name;
+                $Suppliername = $SupplierData->name;
                 $supplier_id = $SupplierData->id;
                 $unique_key = $SupplierData->unique_key;
-
-
-                $PurchasePayment_data = [];
-
-                $PurchasePayment = PurchasePayment::where('date', '=', $todate)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
-                if($PurchasePayment != ''){
-                    
-                    foreach ($PurchasePayment as $key => $PurchasePayments) {
-                        $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
-
-
-                        $PurchasePayment_data[] = array(
-                            'unique_key' => $PurchasePayments->unique_key,
-                            'branch_name' => $branch_name->shop_name,
-                            'supplier_name' => $SupplierData->name,
-                            'date' => $PurchasePayments->date,
-                            'paid_amount' => $PurchasePayments->amount,
-                            'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
-                        );
-                    }
-                }
-
                 $supplierid = $SupplierData->id;
 
-                $total_purchase_amt = Purchase::where('date', '=', $todate)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('gross_amount');
-                if($total_purchase_amt != ""){
-                    $tot_purchaseAmount = $total_purchase_amt;
+
+                $total_sale_amt = Purchase::where('date', '=', $todate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('gross_amount');
+                if($total_sale_amt != ""){
+                    $tot_purchaseAmount = $total_sale_amt;
                 }else {
                     $tot_purchaseAmount = '0';
                 }
 
+
                 // Total Paid
-                $total_paid = Purchase::where('date', '=', $todate)->where('soft_delete', '!=', 1)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->sum('paid_amount');
+                $total_paid = Purchase::where('date', '=', $todate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('payment_paid_amount');
                 if($total_paid != ""){
                     $total_paid_Amount = $total_paid;
                 }else {
                     $total_paid_Amount = '0';
                 }
-                $payment_total_paid = PurchasePayment::where('date', '=', $todate)->where('soft_delete', '!=', 1)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->sum('amount');
+                $payment_total_paid = PurchasePayment::where('date', '=', $todate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('amount');
                 if($payment_total_paid != ""){
                     $total_payment_paid = $payment_total_paid;
                 }else {
                     $total_payment_paid = '0';
                 }
 
-                $total_discount = PurchasePayment::where('date', '=', $todate)->where('soft_delete', '!=', 1)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->sum('purchasepayment_discount');
-                if($total_discount != ""){
-                    $total_discount_amont = $total_discount;
-                }else {
-                    $total_discount_amont = '0';
-                }
 
-                $total_amount_paid = $total_paid_Amount + $total_payment_paid + $total_discount_amont;
+                $payment_discount = PurchasePayment::where('date', '=', $todate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('purchasepayment_discount');
+                if($payment_discount != ""){
+                    $totpayment_discount = $payment_discount;
+                }else {
+                    $totpayment_discount = '0';
+                }
+                $total_amount_paid = $total_paid_Amount + $total_payment_paid + $totpayment_discount;
                 $total_balance = $tot_purchaseAmount - $total_amount_paid;
-                $GETBranchname = $GetBranch->shop_name;
+
+
+                // $tot_saleAmount = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_amount');
+                // $total_amount_paid = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_paid');
+                // $total_balance = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_balance');
+    
+                $payment_sale_discount = PurchasePayment::where('date', '=', $todate)->where('supplier_id', '=', $SupplierData->id)
+                                                        ->where('branch_id', '=', $branchid)
+                                                        ->where('soft_delete', '!=', 1)
+                                                        ->sum('purchasepayment_discount');
+                if($payment_sale_discount != ""){
+                    $paymentpurchase_discount = $payment_sale_discount;
+                }else {
+                    $paymentpurchase_discount = '0';
+                }
 
 
             }
-
 
             if($fromdate && $todate){
+                $GETbranch = Branch::findOrFail($branchid);
+                $GETBranchname = $GETbranch->shop_name;
+                $terms = [];
+
+                $data = Purchase::whereBetween('date', [$fromdate, $todate])->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->get();
+
+                $sales = [];
+                foreach ($data as $key => $datas_arr) {
+                    $sales[] = $datas_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = PurchasePayment::whereBetween('date', [$fromdate, $todate])->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
 
 
-                $GetBranch = Branch::findOrFail($branchid);
+                $Purchase_data = [];
+                
+
+                $merge = array_merge($sales, $salepayment_s);
 
 
-                $data = Purchase::whereBetween('date', [$fromdate, $todate])->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
-                $purchase_data = [];
-                foreach ($data as $key => $datas) {
+
+
+
+                foreach ($merge as $key => $datas) {
 
                     $branch_name = Branch::findOrFail($datas->branch_id);
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
-                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+                    $SalesProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->where('branch_id', '=', $branchid)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arr) {
 
-                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arr->productlist_id);
                         $terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bagorkg,
-                            'kgs' => $PurchaseProducts_arrdata->count,
-                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'bag' => $SalesProducts_arr->bagorkg,
+                            'kgs' => $SalesProducts_arr->count,
+                            'price_per_kg' => $SalesProducts_arr->price_per_kg,
+                            'total_price' => $SalesProducts_arr->total_price,
                             'product_name' => $productlist_ID->name,
-                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+                            'purchase_id' => $SalesProducts_arr->purchase_id,
 
                         );
+
                     }
 
 
-                    $purchase_data[] = array(
+                    if($datas->status != ""){
+                        $paid = $datas->paid_amount;
+                        $balance = $datas->balance_amount;
+                        $type='PURHCASE';
+                        $discount = '';
+                    }else {
+                        $paid = $datas->amount;
+                        $balance = $datas->payment_pending;
+                        $type='PAYMENT';
+                        $discount = $datas->purchasepayment_discount;
+                    }
+
+                    $Purchase_data[] = array(
                         'unique_key' => $datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
-                        'supplier_name' => $SupplierData->name,
+                        'customer_name' => $SupplierData->name,
                         'date' => $datas->date,
+                        'time' => $datas->time,
                         'gross_amount' => $datas->gross_amount,
-                        'paid_amount' => $datas->paid_amount,
+                        'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
                         'purchase_order' => $datas->purchase_order,
+                        'grand_total' => $datas->grand_total,
+                        'balance_amount' => $balance,
+                        'type' => $type,
                         'id' => $datas->id,
-                        'terms' => $terms,
+                        'sales_terms' => $terms,
+                        'discount' => $discount,
+                        'status' => $datas->status,
+                        'branchheading' => '',
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+                        'datetime' => $datas->date . $datas->time,
+
                     );
                 }
 
-                $suppliername = $SupplierData->name;
+                $Suppliername = $SupplierData->name;
                 $supplier_id = $SupplierData->id;
                 $unique_key = $SupplierData->unique_key;
-
-
-                $PurchasePayment_data = [];
-
-                $PurchasePayment = PurchasePayment::whereBetween('date', [$fromdate, $todate])->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
-                if($PurchasePayment != ''){
-                    
-                    foreach ($PurchasePayment as $key => $PurchasePayments) {
-                        $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
-
-
-                        $PurchasePayment_data[] = array(
-                            'unique_key' => $PurchasePayments->unique_key,
-                            'branch_name' => $branch_name->shop_name,
-                            'supplier_name' => $SupplierData->name,
-                            'date' => $PurchasePayments->date,
-                            'paid_amount' => $PurchasePayments->amount,
-                            'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
-                        );
-                    }
-                }
-
                 $supplierid = $SupplierData->id;
 
-                $total_purchase_amt = Purchase::whereBetween('date', [$fromdate, $todate])->where('branch_id', '=', $branchid)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('gross_amount');
-                if($total_purchase_amt != ""){
-                    $tot_purchaseAmount = $total_purchase_amt;
+
+                $total_sale_amt = Purchase::whereBetween('date', [$fromdate, $todate])->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('gross_amount');
+                if($total_sale_amt != ""){
+                    $tot_purchaseAmount = $total_sale_amt;
                 }else {
                     $tot_purchaseAmount = '0';
                 }
 
+
                 // Total Paid
-                $total_paid = Purchase::whereBetween('date', [$fromdate, $todate])->where('soft_delete', '!=', 1)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->sum('paid_amount');
+                $total_paid = Purchase::whereBetween('date', [$fromdate, $todate])->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('payment_paid_amount');
                 if($total_paid != ""){
                     $total_paid_Amount = $total_paid;
                 }else {
                     $total_paid_Amount = '0';
                 }
-                $payment_total_paid = PurchasePayment::whereBetween('date', [$fromdate, $todate])->where('soft_delete', '!=', 1)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->sum('amount');
+                $payment_total_paid = PurchasePayment::whereBetween('date', [$fromdate, $todate])->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('amount');
                 if($payment_total_paid != ""){
                     $total_payment_paid = $payment_total_paid;
                 }else {
                     $total_payment_paid = '0';
                 }
 
-                $total_discount = PurchasePayment::whereBetween('date', [$fromdate, $todate])->where('soft_delete', '!=', 1)->where('branch_id', '=', $branchid)->where('supplier_id', '=', $SupplierData->id)->sum('purchasepayment_discount');
-                if($total_discount != ""){
-                    $total_discount_amont = $total_discount;
+
+                $payment_discount = PurchasePayment::whereBetween('date', [$fromdate, $todate])->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('purchasepayment_discount');
+                if($payment_discount != ""){
+                    $totpayment_discount = $payment_discount;
                 }else {
-                    $total_discount_amont = '0';
+                    $totpayment_discount = '0';
                 }
-
-                $total_amount_paid = $total_paid_Amount + $total_payment_paid + $total_discount_amont;
+                $total_amount_paid = $total_paid_Amount + $total_payment_paid + $totpayment_discount;
                 $total_balance = $tot_purchaseAmount - $total_amount_paid;
-                $GETBranchname = $GetBranch->shop_name;
 
 
+                // $tot_saleAmount = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_amount');
+                // $total_amount_paid = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_paid');
+                // $total_balance = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_balance');
+    
+                $payment_sale_discount = PurchasePayment::whereBetween('date', [$fromdate, $todate])->where('supplier_id', '=', $SupplierData->id)
+                                                        ->where('branch_id', '=', $branchid)
+                                                        ->where('soft_delete', '!=', 1)
+                                                        ->sum('purchasepayment_discount');
+                if($payment_sale_discount != ""){
+                    $paymentpurchase_discount = $payment_sale_discount;
+                }else {
+                    $paymentpurchase_discount = '0';
+                }
 
             }
 
-        }else if($last_word == 'supplier'){
+
+        }else if($branchid == 'supplier'){
+
 
             if($fromdate){
-
+                $GETBranchname = '';
 
                 $data = Purchase::where('date', '=', $fromdate)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
-                $purchase_data = [];
-                foreach ($data as $key => $datas) {
 
-                    $branch_name = Branch::findOrFail($datas->branch_id);
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
-                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+                $sales = [];
+                foreach ($data as $key => $datas_arr) {
+                    $sales[] = $datas_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = PurchasePayment::where('date', '=', $fromdate)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
 
-                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+
+                $Purchase_data = [];
+                $terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+
+
+                foreach ($merge as $key => $datas) {
+
+                    $SalesProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arr) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arr->productlist_id);
                         $terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bagorkg,
-                            'kgs' => $PurchaseProducts_arrdata->count,
-                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'bag' => $SalesProducts_arr->bagorkg,
+                            'kgs' => $SalesProducts_arr->count,
+                            'price_per_kg' => $SalesProducts_arr->price_per_kg,
+                            'total_price' => $SalesProducts_arr->total_price,
                             'product_name' => $productlist_ID->name,
-                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+                            'purchase_id' => $SalesProducts_arr->purchase_id,
 
                         );
+
                     }
 
 
-                    $purchase_data[] = array(
+                    if($datas->status != ""){
+                        $paid = $datas->paid_amount;
+                        $balance = $datas->balance_amount;
+                        $type='PURHCASE';
+                        $discount = '';
+                    }else {
+                        $paid = $datas->amount;
+                        $balance = $datas->payment_pending;
+                        $type='PAYMENT';
+                        $discount = $datas->purchasepayment_discount;
+                    }
+
+                    $Purchase_data[] = array(
                         'unique_key' => $datas->unique_key,
                         'branch_name' => $branch_name->shop_name,
-                        'supplier_name' => $SupplierData->name,
+                        'customer_name' => $SupplierData->name,
                         'date' => $datas->date,
+                        'time' => $datas->time,
                         'gross_amount' => $datas->gross_amount,
-                        'paid_amount' => $datas->paid_amount,
+                        'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
                         'purchase_order' => $datas->purchase_order,
+                        'grand_total' => $datas->grand_total,
+                        'balance_amount' => $balance,
+                        'type' => $type,
                         'id' => $datas->id,
-                        'terms' => $terms,
+                        'sales_terms' => $terms,
+                        'discount' => $discount,
+                        'status' => $datas->status,
+                        'branchheading' => '',
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+                        'datetime' => $datas->date . $datas->time,
+
                     );
                 }
 
-                $suppliername = $SupplierData->name;
+                $Suppliername = $SupplierData->name;
                 $supplier_id = $SupplierData->id;
                 $unique_key = $SupplierData->unique_key;
-
-
-                $PurchasePayment_data = [];
-
-                $PurchasePayment = PurchasePayment::where('date', '=', $fromdate)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
-                if($PurchasePayment != ''){
-                    
-                    foreach ($PurchasePayment as $key => $PurchasePayments) {
-                        $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
-
-
-                        $PurchasePayment_data[] = array(
-                            'unique_key' => $PurchasePayments->unique_key,
-                            'branch_name' => $branch_name->shop_name,
-                            'supplier_name' => $SupplierData->name,
-                            'date' => $PurchasePayments->date,
-                            'paid_amount' => $PurchasePayments->amount,
-                            'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
-                        );
-                    }
-                }
-
                 $supplierid = $SupplierData->id;
 
-                $total_purchase_amt = Purchase::where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('gross_amount');
-                if($total_purchase_amt != ""){
-                    $tot_purchaseAmount = $total_purchase_amt;
+
+                $total_sale_amt = Purchase::where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('gross_amount');
+                if($total_sale_amt != ""){
+                    $tot_purchaseAmount = $total_sale_amt;
                 }else {
                     $tot_purchaseAmount = '0';
                 }
 
+
                 // Total Paid
-                $total_paid = Purchase::where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('paid_amount');
+                $total_paid = Purchase::where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('payment_paid_amount');
                 if($total_paid != ""){
                     $total_paid_Amount = $total_paid;
                 }else {
@@ -1283,92 +1537,133 @@ class SupplierController extends Controller
                     $total_payment_paid = '0';
                 }
 
-                $total_discount = PurchasePayment::where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('purchasepayment_discount');
-                if($total_discount != ""){
-                    $total_discount_amont = $total_discount;
+
+                $payment_discount = PurchasePayment::where('date', '=', $fromdate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('purchasepayment_discount');
+                if($payment_discount != ""){
+                    $totpayment_discount = $payment_discount;
                 }else {
-                    $total_discount_amont = '0';
+                    $totpayment_discount = '0';
+                }
+                $total_amount_paid = $total_paid_Amount + $total_payment_paid + $totpayment_discount;
+                $total_balance = $tot_purchaseAmount - $total_amount_paid;
+
+
+                // $tot_saleAmount = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_amount');
+                // $total_amount_paid = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_paid');
+                // $total_balance = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_balance');
+    
+                $payment_sale_discount = PurchasePayment::where('date', '=', $fromdate)->where('supplier_id', '=', $SupplierData->id)
+                                                        ->where('soft_delete', '!=', 1)
+                                                        ->sum('purchasepayment_discount');
+                if($payment_sale_discount != ""){
+                    $paymentpurchase_discount = $payment_sale_discount;
+                }else {
+                    $paymentpurchase_discount = '0';
                 }
 
-                $total_amount_paid = $total_paid_Amount + $total_payment_paid + $total_discount_amont;
-                $total_balance = $tot_purchaseAmount - $total_amount_paid;
-                $GETBranchname = 'All Branch';
+
             }
 
-            if($todate){
 
+
+            if($todate){
+                $GETBranchname = '';
 
                 $data = Purchase::where('date', '=', $todate)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
-                $purchase_data = [];
-                foreach ($data as $key => $datas) {
 
-                    $branch_name = Branch::findOrFail($datas->branch_id);
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
-                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+                $sales = [];
+                foreach ($data as $key => $datas_arr) {
+                    $sales[] = $datas_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = PurchasePayment::where('date', '=', $todate)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
 
-                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+
+                $Purchase_data = [];
+                $terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+
+
+                foreach ($merge as $key => $datas) {
+
+                    $SalesProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arr) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arr->productlist_id);
                         $terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bagorkg,
-                            'kgs' => $PurchaseProducts_arrdata->count,
-                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'bag' => $SalesProducts_arr->bagorkg,
+                            'kgs' => $SalesProducts_arr->count,
+                            'price_per_kg' => $SalesProducts_arr->price_per_kg,
+                            'total_price' => $SalesProducts_arr->total_price,
                             'product_name' => $productlist_ID->name,
-                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+                            'purchase_id' => $SalesProducts_arr->purchase_id,
 
                         );
+
                     }
 
 
-                    $purchase_data[] = array(
+                    if($datas->status != ""){
+                        $paid = $datas->paid_amount;
+                        $balance = $datas->balance_amount;
+                        $type='PURHCASE';
+                        $discount = '';
+                    }else {
+                        $paid = $datas->amount;
+                        $balance = $datas->payment_pending;
+                        $type='PAYMENT';
+                        $discount = $datas->purchasepayment_discount;
+                    }
+
+                    $Purchase_data[] = array(
                         'unique_key' => $datas->unique_key,
-                        'branch_name' => $branch_name->shop_name,
-                        'supplier_name' => $SupplierData->name,
+                        'branch_name' => '',
+                        'customer_name' => $SupplierData->name,
                         'date' => $datas->date,
+                        'time' => $datas->time,
                         'gross_amount' => $datas->gross_amount,
-                        'paid_amount' => $datas->paid_amount,
+                        'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
                         'purchase_order' => $datas->purchase_order,
+                        'grand_total' => $datas->grand_total,
+                        'balance_amount' => $balance,
+                        'type' => $type,
                         'id' => $datas->id,
-                        'terms' => $terms,
+                        'sales_terms' => $terms,
+                        'discount' => $discount,
+                        'status' => $datas->status,
+                        'branchheading' => '',
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+                        'datetime' => $datas->date . $datas->time,
+
                     );
                 }
 
-                $suppliername = $SupplierData->name;
+                $Suppliername = $SupplierData->name;
                 $supplier_id = $SupplierData->id;
                 $unique_key = $SupplierData->unique_key;
-
-
-                $PurchasePayment_data = [];
-
-                $PurchasePayment = PurchasePayment::where('date', '=', $todate)->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
-                if($PurchasePayment != ''){
-                    
-                    foreach ($PurchasePayment as $key => $PurchasePayments) {
-                        $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
-
-
-                        $PurchasePayment_data[] = array(
-                            'unique_key' => $PurchasePayments->unique_key,
-                            'branch_name' => $branch_name->shop_name,
-                            'supplier_name' => $SupplierData->name,
-                            'date' => $PurchasePayments->date,
-                            'paid_amount' => $PurchasePayments->amount,
-                            'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
-                        );
-                    }
-                }
-
                 $supplierid = $SupplierData->id;
 
-                $total_purchase_amt = Purchase::where('date', '=', $todate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('gross_amount');
-                if($total_purchase_amt != ""){
-                    $tot_purchaseAmount = $total_purchase_amt;
+
+                $total_sale_amt = Purchase::where('date', '=', $todate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('gross_amount');
+                if($total_sale_amt != ""){
+                    $tot_purchaseAmount = $total_sale_amt;
                 }else {
                     $tot_purchaseAmount = '0';
                 }
 
+
                 // Total Paid
-                $total_paid = Purchase::where('date', '=', $todate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('paid_amount');
+                $total_paid = Purchase::where('date', '=', $todate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('payment_paid_amount');
                 if($total_paid != ""){
                     $total_paid_Amount = $total_paid;
                 }else {
@@ -1381,95 +1676,131 @@ class SupplierController extends Controller
                     $total_payment_paid = '0';
                 }
 
-                $total_discount = PurchasePayment::where('date', '=', $todate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('purchasepayment_discount');
-                if($total_discount != ""){
-                    $total_discount_amont = $total_discount;
-                }else {
-                    $total_discount_amont = '0';
-                }
 
-                $total_amount_paid = $total_paid_Amount + $total_payment_paid + $total_discount_amont;
+                $payment_discount = PurchasePayment::where('date', '=', $todate)->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('purchasepayment_discount');
+                if($payment_discount != ""){
+                    $totpayment_discount = $payment_discount;
+                }else {
+                    $totpayment_discount = '0';
+                }
+                $total_amount_paid = $total_paid_Amount + $total_payment_paid + $totpayment_discount;
                 $total_balance = $tot_purchaseAmount - $total_amount_paid;
-                $GETBranchname = 'All Branch';
+
+
+                // $tot_saleAmount = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_amount');
+                // $total_amount_paid = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_paid');
+                // $total_balance = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_balance');
+    
+                $payment_sale_discount = PurchasePayment::where('date', '=', $todate)->where('supplier_id', '=', $SupplierData->id)
+                                                        ->where('soft_delete', '!=', 1)
+                                                        ->sum('purchasepayment_discount');
+                if($payment_sale_discount != ""){
+                    $paymentpurchase_discount = $payment_sale_discount;
+                }else {
+                    $paymentpurchase_discount = '0';
+                }
 
 
             }
 
-
             if($fromdate && $todate){
-
+                $GETBranchname = '';
 
                 $data = Purchase::whereBetween('date', [$fromdate, $todate])->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
-                $purchase_data = [];
-                foreach ($data as $key => $datas) {
 
-                    $branch_name = Branch::findOrFail($datas->branch_id);
-                    $PurchaseProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
-                    foreach ($PurchaseProducts as $key => $PurchaseProducts_arrdata) {
+                $sales = [];
+                foreach ($data as $key => $datas_arr) {
+                    $sales[] = $datas_arr;
+                }
+                $salepayment_s = [];
+                $Salespaymentdata = PurchasePayment::whereBetween('date', [$fromdate, $todate])->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
+                foreach ($Salespaymentdata as $key => $Salespaymentdatas) {
+                    $salepayment_s[] = $Salespaymentdatas;
+                }
 
-                        $productlist_ID = Productlist::findOrFail($PurchaseProducts_arrdata->productlist_id);
+
+                $Purchase_data = [];
+                $terms = [];
+
+                $merge = array_merge($sales, $salepayment_s);
+
+
+
+
+
+                foreach ($merge as $key => $datas) {
+
+                    $SalesProducts = PurchaseProduct::where('purchase_id', '=', $datas->id)->get();
+                    foreach ($SalesProducts as $key => $SalesProducts_arr) {
+
+                        $productlist_ID = Productlist::findOrFail($SalesProducts_arr->productlist_id);
                         $terms[] = array(
-                            'bag' => $PurchaseProducts_arrdata->bagorkg,
-                            'kgs' => $PurchaseProducts_arrdata->count,
-                            'price_per_kg' => $PurchaseProducts_arrdata->price_per_kg,
-                            'total_price' => $PurchaseProducts_arrdata->total_price,
+                            'bag' => $SalesProducts_arr->bagorkg,
+                            'kgs' => $SalesProducts_arr->count,
+                            'price_per_kg' => $SalesProducts_arr->price_per_kg,
+                            'total_price' => $SalesProducts_arr->total_price,
                             'product_name' => $productlist_ID->name,
-                            'purchase_id' => $PurchaseProducts_arrdata->purchase_id,
+                            'purchase_id' => $SalesProducts_arr->purchase_id,
 
                         );
+
                     }
 
 
-                    $purchase_data[] = array(
+                    if($datas->status != ""){
+                        $paid = $datas->paid_amount;
+                        $balance = $datas->balance_amount;
+                        $type='PURHCASE';
+                        $discount = '';
+                    }else {
+                        $paid = $datas->amount;
+                        $balance = $datas->payment_pending;
+                        $type='PAYMENT';
+                        $discount = $datas->purchasepayment_discount;
+                    }
+
+                    $Purchase_data[] = array(
                         'unique_key' => $datas->unique_key,
-                        'branch_name' => $branch_name->shop_name,
-                        'supplier_name' => $SupplierData->name,
+                        'branch_name' => '',
+                        'customer_name' => $SupplierData->name,
                         'date' => $datas->date,
+                        'time' => $datas->time,
                         'gross_amount' => $datas->gross_amount,
-                        'paid_amount' => $datas->paid_amount,
+                        'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
                         'purchase_order' => $datas->purchase_order,
+                        'grand_total' => $datas->grand_total,
+                        'balance_amount' => $balance,
+                        'type' => $type,
                         'id' => $datas->id,
-                        'terms' => $terms,
+                        'sales_terms' => $terms,
+                        'discount' => $discount,
+                        'status' => $datas->status,
+                        'branchheading' => '',
+                        'customerheading' => '',
+                        'fromdateheading' => '',
+                        'todateheading' => '',
+                        'datetime' => $datas->date . $datas->time,
+
                     );
                 }
 
-                $suppliername = $SupplierData->name;
+                $Suppliername = $SupplierData->name;
                 $supplier_id = $SupplierData->id;
                 $unique_key = $SupplierData->unique_key;
-
-
-                $PurchasePayment_data = [];
-
-                $PurchasePayment = PurchasePayment::whereBetween('date', [$fromdate, $todate])->where('supplier_id', '=', $SupplierData->id)->where('soft_delete', '!=', 1)->get();
-                if($PurchasePayment != ''){
-                    
-                    foreach ($PurchasePayment as $key => $PurchasePayments) {
-                        $branch_name = Branch::findOrFail($PurchasePayments->branch_id);
-
-
-                        $PurchasePayment_data[] = array(
-                            'unique_key' => $PurchasePayments->unique_key,
-                            'branch_name' => $branch_name->shop_name,
-                            'supplier_name' => $SupplierData->name,
-                            'date' => $PurchasePayments->date,
-                            'paid_amount' => $PurchasePayments->amount,
-                            'purchasepayment_discount' => $PurchasePayments->purchasepayment_discount,
-                        );
-                    }
-                }
-
                 $supplierid = $SupplierData->id;
 
-                $total_purchase_amt = Purchase::whereBetween('date', [$fromdate, $todate])->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('gross_amount');
-                if($total_purchase_amt != ""){
-                    $tot_purchaseAmount = $total_purchase_amt;
+
+                $total_sale_amt = Purchase::whereBetween('date', [$fromdate, $todate])->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('gross_amount');
+                if($total_sale_amt != ""){
+                    $tot_purchaseAmount = $total_sale_amt;
                 }else {
                     $tot_purchaseAmount = '0';
                 }
 
+
                 // Total Paid
-                $total_paid = Purchase::whereBetween('date', [$fromdate, $todate])->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('paid_amount');
+                $total_paid = Purchase::whereBetween('date', [$fromdate, $todate])->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('payment_paid_amount');
                 if($total_paid != ""){
                     $total_paid_Amount = $total_paid;
                 }else {
@@ -1482,26 +1813,46 @@ class SupplierController extends Controller
                     $total_payment_paid = '0';
                 }
 
-                $total_discount = PurchasePayment::whereBetween('date', [$fromdate, $todate])->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('purchasepayment_discount');
-                if($total_discount != ""){
-                    $total_discount_amont = $total_discount;
+
+                $payment_discount = PurchasePayment::whereBetween('date', [$fromdate, $todate])->where('soft_delete', '!=', 1)->where('supplier_id', '=', $SupplierData->id)->sum('purchasepayment_discount');
+                if($payment_discount != ""){
+                    $totpayment_discount = $payment_discount;
                 }else {
-                    $total_discount_amont = '0';
+                    $totpayment_discount = '0';
+                }
+                $total_amount_paid = $total_paid_Amount + $total_payment_paid + $totpayment_discount;
+                $total_balance = $tot_purchaseAmount - $total_amount_paid;
+
+
+                // $tot_saleAmount = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_amount');
+                // $total_amount_paid = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_paid');
+                // $total_balance = BranchwiseBalance::where('customer_id', '=', $SupplierData->id)->where('branch_id', '=', $branchid)->sum('sales_balance');
+    
+                $payment_sale_discount = PurchasePayment::whereBetween('date', [$fromdate, $todate])->where('supplier_id', '=', $SupplierData->id)
+                                                        ->where('soft_delete', '!=', 1)
+                                                        ->sum('purchasepayment_discount');
+                if($payment_sale_discount != ""){
+                    $paymentpurchase_discount = $payment_sale_discount;
+                }else {
+                    $paymentpurchase_discount = '0';
                 }
 
-                $total_amount_paid = $total_paid_Amount + $total_payment_paid + $total_discount_amont;
-                $total_balance = $tot_purchaseAmount - $total_amount_paid;
-                $GETBranchname = 'All Branch';
-
-
-
             }
-            
-        }
-        $today = Carbon::now()->format('Y-m-d');
 
-        return view('page.backend.supplier.view', compact('SupplierData', 'purchase_data', 'suppliername', 'supplier_id', 'unique_key', 'today',
-                         'fromdate','todate', 'branchid', 'supplierid', 'PurchasePayment_data', 'tot_purchaseAmount', 'total_amount_paid', 'total_balance', 'GETBranchname'));
+        }
+
+
+        usort($Purchase_data, function($a1, $a2) {
+            $value1 = strtotime($a1['datetime']);
+            $value2 = strtotime($a2['datetime']);
+            return ($value1 < $value2) ? 1 : -1;
+         });
+
+         $branch = '';
+         $today = Carbon::now()->format('Y-m-d');
+            return view('page.backend.supplier.view', compact('SupplierData', 'Purchase_data', 'branch', 'supplier', 'Suppliername', 'supplier_id', 'unique_key', 'today',
+                         'fromdate','todate', 'branchid', 'supplierid',  'tot_purchaseAmount', 'total_amount_paid', 'total_balance', 'GETBranchname', 'paymentpurchase_discount'));
+                        
    }
 
 
