@@ -117,7 +117,7 @@
                                             @if ($Sales_datas['unique_key'] != '')
                                                 <tr>
                                                 <td>{{ ++$keydata }}</td>
-                                                    <td>{{ $Sales_datas['date'] }}</td>
+                                                    <td>{{ date('Y-m-d', strtotime($Sales_datas['date'])) }} - {{ date('h:i A', strtotime($Sales_datas['time'])) }}</td>
                                                     <td>{{ $Sales_datas['customer_name'] }}</td>
                                                     <td>{{ $Sales_datas['branch_name'] }}</td>
                                                     <td>{{ $Sales_datas['type'] }}</td>

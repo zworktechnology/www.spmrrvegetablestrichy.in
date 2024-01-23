@@ -709,6 +709,7 @@ class CustomerController extends Controller
                     'customerheading' => '',
                     'fromdateheading' => '',
                     'todateheading' => '',
+                    'datetime' => $datas->date . $datas->time,
 
                 );
             }
@@ -787,8 +788,8 @@ class CustomerController extends Controller
 
 
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
                 return ($value1 < $value2) ? 1 : -1;
              });
     
@@ -872,6 +873,7 @@ class CustomerController extends Controller
                 'customerheading' => '',
                 'fromdateheading' => '',
                 'todateheading' => '',
+                'datetime' => $datas->date . $datas->time,
 
             );
         }
@@ -940,8 +942,8 @@ class CustomerController extends Controller
 
 
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
                 return ($value1 < $value2) ? 1 : -1;
              });
     
