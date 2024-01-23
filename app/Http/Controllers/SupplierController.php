@@ -67,6 +67,10 @@ class SupplierController extends Controller
                 $last_date = '';
             }
 
+            $totalpurchase = BranchwiseBalance::where('supplier_id', '=', $datas->id)->sum('purchase_amount');
+            $totalpaidpurchase = BranchwiseBalance::where('supplier_id', '=', $datas->id)->sum('purchase_paid');
+            $totalpurchasebla = BranchwiseBalance::where('supplier_id', '=', $datas->id)->sum('purchase_balance');
+
 
             $supplierarr_data[] = array(
                 'unique_key' => $datas->unique_key,
@@ -75,15 +79,16 @@ class SupplierController extends Controller
                 'shop_name' => $datas->shop_name,
                 'status' => $datas->status,
                 'id' => $datas->id,
-                'total_purchase_amt' => $tot_purchaseAmount,
-                'total_paid' => $total_amount_paid,
+                'total_purchase_amt' => $totalpurchase + $total_discount_amont,
+                'total_paid' => $totalpaidpurchase,
                 'email_address' => $datas->email_address,
                 'shop_address' => $datas->shop_address,
                 'shop_contact_number' => $datas->shop_contact_number,
-                'balance_amount' => $total_balance,
+                'balance_amount' => $totalpurchasebla,
                 'total_discount_amont' => $total_discount_amont,
                 'LastPattityal' => $last_date,
             );
+
 
 
             $price = array();
@@ -230,6 +235,12 @@ class SupplierController extends Controller
             }
 
 
+
+            $totalpurchase = BranchwiseBalance::where('supplier_id', '=', $datas->id)->where('branch_id', '=', $branch_id)->sum('purchase_amount');
+            $totalpaidpurchase = BranchwiseBalance::where('supplier_id', '=', $datas->id)->where('branch_id', '=', $branch_id)->sum('purchase_paid');
+            $totalpurchasebla = BranchwiseBalance::where('supplier_id', '=', $datas->id)->where('branch_id', '=', $branch_id)->sum('purchase_balance');
+
+
             $supplierarr_data[] = array(
                 'unique_key' => $datas->unique_key,
                 'name' => $supplier_name->name,
@@ -237,12 +248,12 @@ class SupplierController extends Controller
                 'shop_name' => $datas->shop_name,
                 'status' => $datas->status,
                 'id' => $datas->id,
-                'total_purchase_amt' => $tot_purchaseAmount,
-                'total_paid' => $total_amount_paid,
+                'total_purchase_amt' => $totalpurchase + $total_discount_amont,
+                'total_paid' => $totalpaidpurchase,
                 'email_address' => $datas->email_address,
                 'shop_address' => $datas->shop_address,
                 'shop_contact_number' => $datas->shop_contact_number,
-                'balance_amount' => $total_balance,
+                'balance_amount' => $totalpurchasebla,
                 'total_discount_amont' => $total_discount_amont,
                 'LastPattityal' => $last_date,
             );
