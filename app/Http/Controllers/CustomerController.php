@@ -694,6 +694,7 @@ class CustomerController extends Controller
                     'branch_name' => $branch_name->shop_name,
                     'customer_name' => $CustomerData->name,
                     'date' => $datas->date,
+                    'time' => $datas->time,
                     'gross_amount' => $datas->gross_amount,
                     'paid_amount' => $paid,
                     'bill_no' => $datas->bill_no,
@@ -858,6 +859,7 @@ class CustomerController extends Controller
                 'branch_name' => $branch_name->shop_name,
                 'customer_name' => $CustomerData->name,
                 'date' => $datas->date,
+                'time' => $datas->time,
                 'gross_amount' => $datas->gross_amount,
                 'paid_amount' => $paid,
                 'bill_no' => $datas->bill_no,
@@ -1034,6 +1036,7 @@ class CustomerController extends Controller
                         'branch_name' => $branch_name->shop_name,
                         'customer_name' => $CustomerData->name,
                         'date' => $datas->date,
+                        'time' => $datas->time,
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
@@ -1049,6 +1052,7 @@ class CustomerController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => '',
                         'todateheading' => '',
+                        'datetime' => $datas->date . $datas->time,
         
                     );
                 }
@@ -1161,6 +1165,7 @@ class CustomerController extends Controller
                         'branch_name' => $branch_name->shop_name,
                         'customer_name' => $CustomerData->name,
                         'date' => $datas->date,
+                        'time' => $datas->time,
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
@@ -1176,6 +1181,7 @@ class CustomerController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => '',
                         'todateheading' => '',
+                        'datetime' => $datas->date . $datas->time,
         
                     );
                 }
@@ -1277,6 +1283,7 @@ class CustomerController extends Controller
                         'branch_name' => $branch_name->shop_name,
                         'customer_name' => $CustomerData->name,
                         'date' => $datas->date,
+                        'time' => $datas->time,
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
@@ -1292,6 +1299,7 @@ class CustomerController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => '',
                         'todateheading' => '',
+                        'datetime' => $datas->date . $datas->time,
         
                     );
                 }
@@ -1402,6 +1410,7 @@ class CustomerController extends Controller
                         'branch_name' => $branch_name->shop_name,
                         'customer_name' => $CustomerData->name,
                         'date' => $datas->date,
+                        'time' => $datas->time,
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
@@ -1417,6 +1426,7 @@ class CustomerController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => '',
                         'todateheading' => '',
+                        'datetime' => $datas->date . $datas->time,
         
                     );
                 }
@@ -1522,6 +1532,7 @@ class CustomerController extends Controller
                         'branch_name' => $branch_name->shop_name,
                         'customer_name' => $CustomerData->name,
                         'date' => $datas->date,
+                        'time' => $datas->time,
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
@@ -1537,6 +1548,7 @@ class CustomerController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => '',
                         'todateheading' => '',
+                        'datetime' => $datas->date . $datas->time,
         
                     );
                 }
@@ -1638,6 +1650,7 @@ class CustomerController extends Controller
                         'branch_name' => $branch_name->shop_name,
                         'customer_name' => $CustomerData->name,
                         'date' => $datas->date,
+                        'time' => $datas->time,
                         'gross_amount' => $datas->gross_amount,
                         'paid_amount' => $paid,
                         'bill_no' => $datas->bill_no,
@@ -1653,6 +1666,7 @@ class CustomerController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => '',
                         'todateheading' => '',
+                        'datetime' => $datas->date . $datas->time,
         
                     );
                 }
@@ -1702,8 +1716,8 @@ class CustomerController extends Controller
 
 
         usort($Sales_data, function($a1, $a2) {
-            $value1 = strtotime($a1['date']);
-            $value2 = strtotime($a2['date']);
+            $value1 = strtotime($a1['datetime']);
+            $value2 = strtotime($a2['datetime']);
             return ($value1 < $value2) ? 1 : -1;
          });
 
