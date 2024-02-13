@@ -58,9 +58,9 @@
                         <li class="{{ Route::is('expence.report', 'expence.report_view') ? 'active' : '' }}">
                             <a href="{{ route('expence.report') }}"><i data-feather="credit-card"></i><span>Expense Report</span></a>
                         </li>
-                        <li class="{{ Route::is('stockmanagement.index') ? 'active' : '' }}">
+                        {{-- <li class="{{ Route::is('stockmanagement.index') ? 'active' : '' }}">
                             <a href="{{ route('stockmanagement.index') }}"><i data-feather="database"></i><span>Stock</span></a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
                 <li class="submenu-open">

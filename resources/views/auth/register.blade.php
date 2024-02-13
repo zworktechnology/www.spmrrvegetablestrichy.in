@@ -1,4 +1,4 @@
-@extends('layout.backend.guest')
+{{-- @extends('layout.backend.guest')
 
 @section('content')
     <div class="account-content">
@@ -83,4 +83,4 @@
             </div>
         </div>
     </div>
-@endsection
+@endsection --}}

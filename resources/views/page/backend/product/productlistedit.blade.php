@@ -2,7 +2,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="productlistediteditLargeModalLabel{{ $productlist_array->unique_key }}">Update
-                Product Name</h5>
+                Product</h5>
         </div>
         <div class="modal-body">
             <form autocomplete="off" method="POST"
@@ -13,16 +13,16 @@
                 <div class="row">
                     <div class="col-lg-12 col-sm-6 col-12">
                         <div class="form-group">
-                            <label>Name</label>
+                            <label>Name <span style="color: red;">*</span></label>
                             <input type="text" name="name" placeholder="Enter Product Name"
                                 value="{{ $productlist_array->name }}">
                         </div>
                     </div>
 
                     <div class="col-lg-12 button-align">
-                        <button type="submit" class="btn btn-submit me-2">Update</button>
                         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal"
-                            aria-label="Close">Cancel</button>
+                            aria-label="Close" style="margin-right: 10px;">Cancel</button>
+                        <button type="submit" class="btn btn-submit" style="margin-left: 10px;">Save Changes</button>
                     </div>
                 </div>
             </form>
