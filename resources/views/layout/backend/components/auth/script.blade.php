@@ -1048,7 +1048,7 @@ $(document).ready(function() {
                     '<select class="form-control js-example-basic-single select sales_product_id"name="sales_product_id[]" id="sales_product_id' + i + '"required>' +
                     '<option value="" selected hidden class="text-muted">Select Product</option></select>' +
                     '</td>' +
-                    '<td><select class=" form-control sales_bagorkg" name="sales_bagorkg[]" id="sales_bagorkg' + i + '"required>' +
+                    '<td><select class=" form-control sales_bagorkg" name="sales_bagorkg[]" id="sales_bagorkg' + i + '" required>' +
                     '<option value="" selected hidden class="text-muted">Select</option>' +
                     '<option value="bag">Bag</option><option value="kg">Kg</option>' +
                     '</select></td>' +

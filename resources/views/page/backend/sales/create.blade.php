@@ -99,7 +99,7 @@
                                     
                               </select>
                            </td>
-                           <td><select class=" form-control sales_bagorkg" name="sales_bagorkg[]" id="sales_bagorkg1"required>
+                           <td><select class=" form-control sales_bagorkg" name="sales_bagorkg[]" id="sales_bagorkg1" required>
                                  <option value="" selected hidden class="text-muted">Select</option>
                                      <option value="bag">Bag</option>
                                     <option value="kg">Kg</option>
@@ -163,7 +163,7 @@
 
             
             <div class="modal-footer">
-            <input type="submit" class="btn btn-primary" onclick="salessubmitForm(this);"/>
+            <input type="submit" class="btn btn-primary" />
                <a href="{{ route('sales.index') }}" class="btn btn-danger" value="">Cancel</a>
             </div>
          </form>

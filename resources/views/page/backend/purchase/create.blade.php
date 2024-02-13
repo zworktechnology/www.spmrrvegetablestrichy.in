@@ -87,7 +87,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select class=" form-control bagorkg" name="bagorkg[]" id="bagorkg1"required>
+                                            <select class=" form-control bagorkg" name="bagorkg[]" id="bagorkg1" required>
                                                 <option value="" selected hidden class="text-muted">Select</option>
                                                 <option value="bag">Bag</option>
                                                 <option value="kg">Kg</option>
@@ -111,7 +111,7 @@
                     <br /><br />
 
                     <div class="modal-footer">
-                        <input type="submit" class="btn btn-primary" onclick="purchasesubmitForm(this);" />
+                        <input type="submit" class="btn btn-primary"  />
                         <a href="{{ route('purchase.index') }}" class="btn btn-danger" value="">Cancel</a>
                     </div>
                 </form>

@@ -114,7 +114,7 @@
         <tbody id="customer_index">
             @foreach ($Sales_data as $keydata => $Sales_datas)
             <tr>
-                <td style="font-size:14px;">{{ date('d-m-Y', strtotime($Sales_datas['date'])) }}</td>
+            <td style="font-size:14px;">{{ date('Y-m-d', strtotime($Sales_datas['date'])) }} - {{ date('h:i A', strtotime($Sales_datas['time'])) }}</td>
                   <td style="font-size:14px;">{{ $Sales_datas['branch_name'] }}</td>
                   <td style="font-size:14px;">{{ $Sales_datas['customer_name'] }}</td>
                   <td style="font-size:14px;">{{ $Sales_datas['bill_no'] }}</td>

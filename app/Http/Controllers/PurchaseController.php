@@ -4243,7 +4243,7 @@ class PurchaseController extends Controller
             usort($Purchase_data, function($a1, $a2) {
                 $value1 = strtotime($a1['datetime']);
                 $value2 = strtotime($a2['datetime']);
-                return $value1 - $value2;
+                return ($value1 < $value2) ? 1 : -1;
              });
 
 
@@ -4367,7 +4367,7 @@ class PurchaseController extends Controller
             usort($Purchase_data, function($a1, $a2) {
                 $value1 = strtotime($a1['datetime']);
                 $value2 = strtotime($a2['datetime']);
-                return $value1 - $value2;
+                return ($value1 < $value2) ? 1 : -1;
              });
 
 
@@ -4494,7 +4494,7 @@ class PurchaseController extends Controller
             usort($Purchase_data, function($a1, $a2) {
                 $value1 = strtotime($a1['datetime']);
                 $value2 = strtotime($a2['datetime']);
-                return $value1 - $value2;
+                return ($value1 < $value2) ? 1 : -1;
              });
 
 
@@ -4619,7 +4619,7 @@ class PurchaseController extends Controller
             usort($Purchase_data, function($a1, $a2) {
                 $value1 = strtotime($a1['datetime']);
                 $value2 = strtotime($a2['datetime']);
-                return $value1 - $value2;
+                return ($value1 < $value2) ? 1 : -1;
              });
 
 
@@ -4742,7 +4742,7 @@ class PurchaseController extends Controller
         usort($Purchase_data, function($a1, $a2) {
             $value1 = strtotime($a1['datetime']);
             $value2 = strtotime($a2['datetime']);
-            return $value1 - $value2;
+            return ($value1 < $value2) ? 1 : -1;
          });
 
 
@@ -4868,7 +4868,7 @@ class PurchaseController extends Controller
         usort($Purchase_data, function($a1, $a2) {
             $value1 = strtotime($a1['datetime']);
             $value2 = strtotime($a2['datetime']);
-            return $value1 - $value2;
+            return ($value1 < $value2) ? 1 : -1;
          });
 
 
@@ -4995,7 +4995,7 @@ class PurchaseController extends Controller
         usort($Purchase_data, function($a1, $a2) {
             $value1 = strtotime($a1['datetime']);
             $value2 = strtotime($a2['datetime']);
-            return $value1 - $value2;
+            return ($value1 < $value2) ? 1 : -1;
          });
 
 
@@ -5121,7 +5121,7 @@ class PurchaseController extends Controller
             usort($Purchase_data, function($a1, $a2) {
                 $value1 = strtotime($a1['datetime']);
                 $value2 = strtotime($a2['datetime']);
-                return $value1 - $value2;
+                return ($value1 < $value2) ? 1 : -1;
              });
     
     
@@ -5245,7 +5245,7 @@ class PurchaseController extends Controller
             usort($Purchase_data, function($a1, $a2) {
                 $value1 = strtotime($a1['datetime']);
                 $value2 = strtotime($a2['datetime']);
-                return $value1 - $value2;
+                return ($value1 < $value2) ? 1 : -1;
              });
     
     
@@ -5372,7 +5372,7 @@ class PurchaseController extends Controller
         usort($Purchase_data, function($a1, $a2) {
             $value1 = strtotime($a1['datetime']);
             $value2 = strtotime($a2['datetime']);
-            return $value1 - $value2;
+            return ($value1 < $value2) ? 1 : -1;
          });
 
 
@@ -5497,7 +5497,7 @@ class PurchaseController extends Controller
             usort($Purchase_data, function($a1, $a2) {
                 $value1 = strtotime($a1['datetime']);
                 $value2 = strtotime($a2['datetime']);
-                return $value1 - $value2;
+                return ($value1 < $value2) ? 1 : -1;
              });
     
     
@@ -5622,7 +5622,7 @@ class PurchaseController extends Controller
         usort($Purchase_data, function($a1, $a2) {
             $value1 = strtotime($a1['datetime']);
             $value2 = strtotime($a2['datetime']);
-            return $value1 - $value2;
+            return ($value1 < $value2) ? 1 : -1;
          });
 
 
@@ -5754,7 +5754,7 @@ class PurchaseController extends Controller
             usort($Purchase_data, function($a1, $a2) {
                 $value1 = strtotime($a1['datetime']);
                 $value2 = strtotime($a2['datetime']);
-                return $value1 - $value2;
+                return ($value1 < $value2) ? 1 : -1;
              });
     
     
@@ -5879,7 +5879,7 @@ class PurchaseController extends Controller
         usort($Purchase_data, function($a1, $a2) {
             $value1 = strtotime($a1['datetime']);
             $value2 = strtotime($a2['datetime']);
-            return $value1 - $value2;
+            return ($value1 < $value2) ? 1 : -1;
          });
 
 

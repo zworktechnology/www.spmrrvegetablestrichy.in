@@ -2617,7 +2617,6 @@ class SalesController extends Controller
          });
 
 
-
         return view('page.backend.sales.report', compact('Sales_data', 'branch', 'Customer', 'fromdate', 'todate', 'customer_id', 'branch_id'));
 
 
@@ -3402,6 +3401,7 @@ class SalesController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
                         'todateheading' => '',
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -3425,13 +3425,14 @@ class SalesController extends Controller
                     'customerheading' => '',
                     'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
                     'todateheading' => '',
+                    'datetime' => '',
                 );
             }
 
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
-                return $value1 - $value2;
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
              });
 
 
@@ -3529,6 +3530,7 @@ class SalesController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => '',
                         'todateheading' => date('d-M-Y', strtotime($todate)),
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -3552,13 +3554,14 @@ class SalesController extends Controller
                     'customerheading' => '',
                     'fromdateheading' => '',
                     'todateheading' => date('d-M-Y', strtotime($todate)),
+                    'datetime' => '',
                 );
             }
 
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
-                return $value1 - $value2;
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
              });
 
             $pdf = Pdf::loadView('page.backend.sales.t_pdfexport_view', [
@@ -3655,6 +3658,7 @@ class SalesController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => '',
                         'todateheading' => '',
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -3678,14 +3682,15 @@ class SalesController extends Controller
                     'customerheading' => '',
                     'fromdateheading' => '',
                     'todateheading' => '',
+                    'datetime' => '',
                 );
             }
 
 
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
-                return $value1 - $value2;
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
              });
 
 
@@ -3786,6 +3791,7 @@ class SalesController extends Controller
                         'customerheading' => $GetCustomer->name,
                         'fromdateheading' => '',
                         'todateheading' => '',
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
     
                     );
                 }
@@ -3809,15 +3815,16 @@ class SalesController extends Controller
                     'customerheading' => $GetCustomer->name,
                     'fromdateheading' => '',
                     'todateheading' => '',
+                    'datetime' => '',
     
                 );
             }
     
 
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
-                return $value1 - $value2;
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
              });
 
             $pdf = Pdf::loadView('page.backend.sales.c_pdfexport_view', [
@@ -3918,6 +3925,7 @@ class SalesController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
                         'todateheading' => date('d-M-Y', strtotime($todate)),
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -3941,15 +3949,16 @@ class SalesController extends Controller
                     'customerheading' => '',
                     'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
                     'todateheading' => date('d-M-Y', strtotime($todate)),
+                    'datetime' => '',
 
                 );
             }
 
            
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
-                return $value1 - $value2;
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
              });
 
             $pdf = Pdf::loadView('page.backend.sales.ft_pdfexport_view', [
@@ -4050,6 +4059,7 @@ class SalesController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
                         'todateheading' => '',
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -4073,13 +4083,14 @@ class SalesController extends Controller
                     'customerheading' => '',
                     'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
                     'todateheading' => '',
+                    'datetime' => '',
                 );
             }
 
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
-                return $value1 - $value2;
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
              });
 
             $pdf = Pdf::loadView('page.backend.sales.fb_pdfexport_view', [
@@ -4177,6 +4188,7 @@ class SalesController extends Controller
                         'customerheading' => $GetCustomer->name,
                         'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
                         'todateheading' => '',
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -4200,13 +4212,14 @@ class SalesController extends Controller
                     'customerheading' => $GetCustomer->name,
                     'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
                     'todateheading' => '',
+                    'datetime' => '',
                 );
             }
 
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
-                return $value1 - $value2;
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
              });
 
 
@@ -4308,6 +4321,7 @@ class SalesController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => '',
                         'todateheading' => date('d-M-Y', strtotime($todate)),
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -4331,14 +4345,15 @@ class SalesController extends Controller
                     'customerheading' => '',
                     'fromdateheading' => '',
                     'todateheading' => date('d-M-Y', strtotime($todate)),
+                    'datetime' => '',
                 );
             }
 
            
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
-                return $value1 - $value2;
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
              });
 
             $pdf = Pdf::loadView('page.backend.sales.tb_pdfexport_view', [
@@ -4437,6 +4452,7 @@ class SalesController extends Controller
                         'customerheading' => $GetCustomer->name,
                         'fromdateheading' => '',
                         'todateheading' => date('d-M-Y', strtotime($todate)),
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -4460,15 +4476,16 @@ class SalesController extends Controller
                     'customerheading' => $GetCustomer->name,
                     'fromdateheading' => '',
                     'todateheading' => date('d-M-Y', strtotime($todate)),
+                    'datetime' => '',
                 );
             }
 
 
 
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
-                return $value1 - $value2;
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
              });
 
 
@@ -4573,6 +4590,7 @@ class SalesController extends Controller
                         'customerheading' => $GetCustomer->name,
                         'fromdateheading' => '',
                         'todateheading' => '',
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -4596,13 +4614,14 @@ class SalesController extends Controller
                     'customerheading' => $GetCustomer->name,
                     'fromdateheading' => '',
                     'todateheading' => '',
+                    'datetime' => '',
                 );
             }
 
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
-                return $value1 - $value2;
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
              });
            
 
@@ -4701,6 +4720,7 @@ class SalesController extends Controller
                         'customerheading' => $GetCustomer->name,
                         'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
                         'todateheading' => date('d-M-Y', strtotime($todate)),
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -4724,15 +4744,16 @@ class SalesController extends Controller
                     'customerheading' => $GetCustomer->name,
                     'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
                     'todateheading' => date('d-M-Y', strtotime($todate)),
+                    'datetime' => '',
                 );
             }
 
 
 
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
-                return $value1 - $value2;
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
              });
 
             $pdf = Pdf::loadView('page.backend.sales.ftc_pdfexport_view', [
@@ -4832,6 +4853,7 @@ class SalesController extends Controller
                         'customerheading' => '',
                         'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
                         'todateheading' => date('d-M-Y', strtotime($todate)),
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -4855,13 +4877,14 @@ class SalesController extends Controller
                     'customerheading' => '',
                     'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
                     'todateheading' => date('d-M-Y', strtotime($todate)),
+                    'datetime' => '',
                 );
             }
 
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
-                return $value1 - $value2;
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
              });
 
 
@@ -4966,6 +4989,7 @@ class SalesController extends Controller
                         'customerheading' => $GetCustomer->name,
                         'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
                         'todateheading' => date('d-M-Y', strtotime($todate)),
+                        'datetime' => $branchwise_datas->date . $branchwise_datas->time,
 
                     );
                 }
@@ -4989,13 +5013,14 @@ class SalesController extends Controller
                     'customerheading' => $GetCustomer->name,
                     'fromdateheading' => date('d-M-Y', strtotime($fromdate)),
                     'todateheading' => date('d-M-Y', strtotime($todate)),
+                    'datetime' => '',
                 );
             }
 
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
-                return $value1 - $value2;
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
              });
 
 
@@ -5093,13 +5118,14 @@ class SalesController extends Controller
                     'customerheading' => $customer_name->name,
                     'fromdateheading' => date('d-M-Y', strtotime($datas->date)),
                     'todateheading' => date('d-M-Y', strtotime($datas->date)),
+                    'datetime' => $datas->date . $datas->time,
                 );
             }
     
             usort($Sales_data, function($a1, $a2) {
-                $value1 = strtotime($a1['date']);
-                $value2 = strtotime($a2['date']);
-                return $value1 - $value2;
+                $value1 = strtotime($a1['datetime']);
+                $value2 = strtotime($a2['datetime']);
+                return ($value1 < $value2) ? 1 : -1;
              });
         
 
