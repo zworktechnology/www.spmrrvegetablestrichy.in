@@ -393,14 +393,19 @@ class SupplierController extends Controller
             
 
 
+            $totalpurchase = BranchwiseBalance::where('supplier_id', '=', $datas->id)->sum('purchase_amount');
+            $totalpaidpurchase = BranchwiseBalance::where('supplier_id', '=', $datas->id)->sum('purchase_paid');
+            $totalpurchasebla = BranchwiseBalance::where('supplier_id', '=', $datas->id)->sum('purchase_balance');
+
+
             $supplierarr_data[] = array(
                 'unique_key' => $datas->unique_key,
                 'name' => $supplier_name->name,
                 'contact_number' => $datas->contact_number,
                 'shop_name' => $datas->shop_name,
-                'total_purchase_amt' => $tot_purchaseAmount,
-                'total_paid' => $total_amount_paid,
-                'balance_amount' => $total_balance,
+                'total_purchase_amt' => $totalpurchase,
+                'total_paid' => $totalpaidpurchase,
+                'balance_amount' => $totalpurchasebla,
                 'total_discount_amont' => $total_discount_amont,
             );
 
@@ -503,10 +508,12 @@ class SupplierController extends Controller
 
             $total_amount_paid = $total_paid_Amount + $total_payment_paid + $total_discount_amont;
             
-
+            $totalpurchase = BranchwiseBalance::where('supplier_id', '=', $datas->id)->where('branch_id', '=', $last_word)->sum('purchase_amount');
+            $totalpaidpurchase = BranchwiseBalance::where('supplier_id', '=', $datas->id)->where('branch_id', '=', $last_word)->sum('purchase_paid');
+            $totalpurchasebla = BranchwiseBalance::where('supplier_id', '=', $datas->id)->sum('purchase_balance');
 
             // Total Balance
-            $total_balance = $tot_purchaseAmount - $total_amount_paid;
+           // $total_balance = $totalpurchase - $totalpaidpurchase;
             
 
 
@@ -515,9 +522,9 @@ class SupplierController extends Controller
                 'name' => $supplier_name->name,
                 'contact_number' => $datas->contact_number,
                 'shop_name' => $datas->shop_name,
-                'total_purchase_amt' => $tot_purchaseAmount,
-                'total_paid' => $total_amount_paid,
-                'balance_amount' => $total_balance,
+                'total_purchase_amt' => $totalpurchase,
+                'total_paid' => $totalpaidpurchase,
+                'balance_amount' => $totalpurchasebla,
                 'total_discount_amont' => $total_discount_amont,
             );
 
