@@ -59,6 +59,7 @@ class SalesController extends Controller
                 'gross_amount' => $datas->gross_amount,
                 'old_balance' => $datas->old_balance,
                 'grand_total' => $datas->grand_total,
+                'paid_amount' => $datas->paid_amount,
                 'balance_amount' => $datas->balance_amount,
                 'bill_no' => $datas->bill_no,
                 'id' => $datas->id,
@@ -176,6 +177,7 @@ class SalesController extends Controller
                 'id' => $branchwise_datas->id,
                 'sales_terms' => $sales_terms,
                 'status' => $branchwise_datas->status,
+                'paid_amount' => $branchwise_datas->paid_amount,
                 'balance_amount' => $branchwise_datas->balance_amount,
             );
         }
@@ -284,6 +286,7 @@ class SalesController extends Controller
                 'id' => $branchwise_datas->id,
                 'sales_terms' => $sales_terms,
                 'status' => $branchwise_datas->status,
+                'paid_amount' => $branchwise_datas->paid_amount,
                 'balance_amount' => $branchwise_datas->balance_amount,
             );
         }
@@ -390,6 +393,7 @@ class SalesController extends Controller
                 'time' => $datas->time,
                 'gross_amount' => $datas->gross_amount,
                 'old_balance' => $datas->old_balance,
+                'paid_amount' => $datas->paid_amount,
                 'grand_total' => $datas->grand_total,
                 'bill_no' => $datas->bill_no,
                 'id' => $datas->id,
@@ -5183,6 +5187,8 @@ class SalesController extends Controller
                 'gross_amount' => $datas->gross_amount,
                 'old_balance' => $datas->old_balance,
                 'grand_total' => $datas->grand_total,
+                'paid_amount' => $datas->paid_amount,
+                'balance_amount' => $datas->balance_amount,
                 'bill_no' => $datas->bill_no,
                 'id' => $datas->id,
                 'sales_terms' => $sales_terms,
@@ -5238,6 +5244,8 @@ class SalesController extends Controller
                 'gross_amount' => $datas->gross_amount,
                 'old_balance' => $datas->old_balance,
                 'grand_total' => $datas->grand_total,
+                'paid_amount' => $datas->paid_amount,
+                'balance_amount' => $datas->balance_amount,
                 'bill_no' => $datas->bill_no,
                 'id' => $datas->id,
                 'sales_terms' => $sales_terms,

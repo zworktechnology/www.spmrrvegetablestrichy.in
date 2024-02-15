@@ -88,7 +88,8 @@
                                 <th>Product Details</th>
                                 <th>Total</th>
                                 <th>Old Balance</th>
-                                <th>Grand Total</th>
+                                <th>Paid</th>
+                                <th>Balance Amount</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -108,6 +109,7 @@
                                     </td>
                                     <td>{{ $Sales_datas['gross_amount'] }}</td>
                                     <td>{{ $Sales_datas['old_balance'] }}</td>
+                                    <td>{{ $Sales_datas['paid_amount'] }}</td>
                                     <td>{{ $Sales_datas['balance_amount'] }}</td>
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">

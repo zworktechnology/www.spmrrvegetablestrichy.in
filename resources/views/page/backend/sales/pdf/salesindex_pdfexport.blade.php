@@ -99,7 +99,8 @@
                                 <th style="font-size:14px;">Product Details</th>
                                 <th style="font-size:14px;">Total</th>
                                 <th style="font-size:14px;">Old Balance</th>
-                                <th style="font-size:14px;">Grand Total</th>
+                                <th style="font-size:14px;">Paid Amount</th>
+                                <th style="font-size:14px;">Balance</th>
             </tr>
         </thead>
         <tbody id="customer_index">
@@ -117,7 +118,8 @@
                                     </td>
                                     <td style="font-size:13px;">{{ $Sales_datas['gross_amount'] }}</td>
                                     <td style="font-size:13px;">{{ $Sales_datas['old_balance'] }}</td>
-                                    <td style="font-size:13px;">{{ $Sales_datas['grand_total'] }}</td>
+                                    <td style="font-size:13px;">{{ $Sales_datas['paid_amount'] }}</td>
+                                    <td style="font-size:13px;">{{ $Sales_datas['balance_amount'] }}</td>
             </tr>
             @endforeach
         </tbody>
