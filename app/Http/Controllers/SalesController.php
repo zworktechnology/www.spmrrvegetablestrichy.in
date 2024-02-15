@@ -59,6 +59,7 @@ class SalesController extends Controller
                 'gross_amount' => $datas->gross_amount,
                 'old_balance' => $datas->old_balance,
                 'grand_total' => $datas->grand_total,
+                'balance_amount' => $datas->balance_amount,
                 'bill_no' => $datas->bill_no,
                 'id' => $datas->id,
                 'sales_terms' => $sales_terms,
@@ -175,6 +176,7 @@ class SalesController extends Controller
                 'id' => $branchwise_datas->id,
                 'sales_terms' => $sales_terms,
                 'status' => $branchwise_datas->status,
+                'balance_amount' => $branchwise_datas->balance_amount,
             );
         }
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -282,6 +284,7 @@ class SalesController extends Controller
                 'id' => $branchwise_datas->id,
                 'sales_terms' => $sales_terms,
                 'status' => $branchwise_datas->status,
+                'balance_amount' => $branchwise_datas->balance_amount,
             );
         }
         $allbranch = Branch::where('soft_delete', '!=', 1)->where('status', '!=', 1)->get();
@@ -392,6 +395,7 @@ class SalesController extends Controller
                 'id' => $datas->id,
                 'sales_terms' => $sales_terms,
                 'status' => $datas->status,
+                'balance_amount' => $datas->balance_amount,
             );
         }
 

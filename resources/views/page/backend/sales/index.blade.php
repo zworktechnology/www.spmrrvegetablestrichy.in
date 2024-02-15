@@ -108,7 +108,7 @@
                                     </td>
                                     <td>{{ $Sales_datas['gross_amount'] }}</td>
                                     <td>{{ $Sales_datas['old_balance'] }}</td>
-                                    <td>{{ $Sales_datas['grand_total'] }}</td>
+                                    <td>{{ $Sales_datas['balance_amount'] }}</td>
                                     <td>
                                         <ul class="list-unstyled hstack gap-1 mb-0">
                                         @if ($Sales_datas['date'] == $today_date)
