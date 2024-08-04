@@ -4,10 +4,10 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Manager</h4>
+                <h4>Staff</h4>
             </div>
             <div class="page-btn">
-                <button type="button" class="btn btn-primary waves-effect waves-light btn-added" data-bs-toggle="modal" data-bs-target=".bs-example-modal-xl">Add Manager</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light btn-added" data-bs-toggle="modal" data-bs-target=".bs-example-modal-xl">Add Staff</button>
             </div>
         </div>
 

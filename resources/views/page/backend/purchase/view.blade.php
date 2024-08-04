@@ -7,7 +7,6 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-
         <div class="modal-body">
             <div class="card">
                 <div class="card-body">
@@ -378,5 +377,5 @@
                 </div>
             </div>
         </div>
-    </div><!-- /.modal-content -->
-</div><!-- /.modal-dialog -->
+    </div>
+</div>

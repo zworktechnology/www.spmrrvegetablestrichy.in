@@ -8,7 +8,7 @@
             </div>
             <div class="page-btn">
                 <button type="button" class="btn btn-primary waves-effect waves-light btn-added" data-bs-toggle="modal"
-                    data-bs-target=".bs-example-modal-xl">Add Branch</button>
+                    data-bs-target=".bs-example-modal-xl">New Branch</button>
             </div>
         </div>
 
@@ -19,6 +19,7 @@
                         <thead>
                             <tr>
                                 <th>Sl. No</th>
+                                <th></th>
                                 <th>Name</th>
                                 <th>Shop Name</th>
                                 <th>Address</th>
@@ -30,6 +31,10 @@
                             @foreach ($data as $keydata => $branchdata)
                                 <tr>
                                     <td>{{ ++$keydata }}</td>
+                                    <td><span class="avatar avatar-md me-2 avatar-rounded"
+                                            style="border: 1px solid #0f3800;">
+                                            <img src="{{ asset('asset/branch/' . $branchdata->logo) }}" alt="img">
+                                        </span></td>
                                     <td>{{ $branchdata->name }}</td>
                                     <td>{{ $branchdata->shop_name }}</td>
                                     <td>{!! $branchdata->address !!}</td>
@@ -39,25 +44,29 @@
                                             <li>
                                                 <a href="#edit{{ $branchdata->unique_key }}" data-bs-toggle="modal"
                                                     data-id="{{ $branchdata->unique_key }}"
-                                                    data-bs-target=".branchedit-modal-xl{{ $branchdata->unique_key }}" class="badges bg-lightyellow" style="color: white">Edit</a>
+                                                    data-bs-target=".branchedit-modal-xl{{ $branchdata->unique_key }}"
+                                                    class="badges bg-lightyellow" style="color: white">Edit</a>
                                             </li>
                                             <li>
                                                 <a href="#delete{{ $branchdata->unique_key }}" data-bs-toggle="modal"
                                                     data-id="{{ $branchdata->unique_key }}"
-                                                    data-bs-target=".branchdelete-modal-xl{{ $branchdata->unique_key }}" class="badges bg-lightgrey" style="color: white">Delete</a>
+                                                    data-bs-target=".branchdelete-modal-xl{{ $branchdata->unique_key }}"
+                                                    class="badges bg-lightgrey"
+                                                    style="color: white; background-color:brown">Del</a>
                                             </li>
                                         </ul>
                                     </td>
                                 </tr>
 
                                 <div class="modal fade branchedit-modal-xl{{ $branchdata->unique_key }}" tabindex="-1"
-                                    role="dialog" aria-labelledby="branchdeleteLargeModalLabel{{ $branchdata->unique_key }}"
+                                    role="dialog"
+                                    aria-labelledby="branchdeleteLargeModalLabel{{ $branchdata->unique_key }}"
                                     aria-hidden="true"data-bs-backdrop="static">
                                     @include('page.backend.branch.edit')
                                 </div>
 
-                                <div class="modal fade branchdelete-modal-xl{{ $branchdata->unique_key }}"
-                                    tabindex="-1" role="dialog" data-bs-backdrop="static"
+                                <div class="modal fade branchdelete-modal-xl{{ $branchdata->unique_key }}" tabindex="-1"
+                                    role="dialog" data-bs-backdrop="static"
                                     aria-labelledby="branchdeleteLargeModalLabel{{ $branchdata->unique_key }}"
                                     aria-hidden="true">
                                     @include('page.backend.branch.delete')

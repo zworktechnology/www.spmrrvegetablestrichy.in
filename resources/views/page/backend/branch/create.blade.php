@@ -10,43 +10,43 @@
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Name <span style="color: red;">*</span></label>
-                            <input type="text" name="name" placeholder="Enter Branch name" required>
+                            <input type="text" name="name" placeholder="XYZ Pvt Ltd" required>
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Shop Name <span style="color: red;">*</span></label>
-                            <input type="text" name="shop_name" placeholder="Enter shop name" required>
+                            <input type="text" name="shop_name" placeholder="XYZ" required>
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Phone Number <span style="color: red;">*</span></label>
-                            <input type="text" name="contact_number" placeholder="Enter shop phone number" required>
+                            <input type="text" name="contact_number" placeholder="00xx00xx00" required>
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Mail Address</label>
-                            <input type="text" name="mail_address" placeholder="Enter shop mail address">
+                            <input type="text" name="mail_address" placeholder="name@xyz.com">
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Web Address</label>
-                            <input type="text" name="web_address" placeholder="Enter shop web address">
+                            <input type="text" name="web_address" placeholder="www.xyz.com">
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Gst Number</label>
-                            <input type="text" name="gst_number" placeholder="Enter shop gst number">
+                            <input type="text" name="gst_number" placeholder="X00Y00Z00">
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Address <span style="color: red;">*</span></label>
-                            <textarea type="text" name="address" placeholder="Enter your shop address" required></textarea>
+                            <textarea type="text" name="address" placeholder="Address" required></textarea>
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-12">
@@ -63,7 +63,7 @@
                     </div>
                     <hr>
                     <div class="col-lg-12 button-align">
-                        <button type="submit" class="btn btn-submit me-2">Submit</button>
+                        <button type="submit" class="btn btn-submit me-2">Save</button>
                         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal"
                             aria-label="Close">Cancel</button>
                     </div>

@@ -15,7 +15,7 @@
        @endphp
         <div class="row">
 
-            <div class="col-lg-2 col-sm-4 col-6">
+            <div class="col-lg-2 col-sm-4 col-6" style="width: 12%">
                 <a href="{{ route('stockmanagement.index') }}" style="color: black">
                     <div class="dash-widget" @if ($pos == "stockmanagement")
                     style="border-color:red; background-color: red; margin-bottom:18px;"
@@ -27,7 +27,7 @@
                 </a>
             </div>
             @foreach ($branch_data as $keydata => $allbranches)
-            <div class="col-lg-2 col-sm-4 col-6">
+            <div class="col-lg-2 col-sm-4 col-6" style="width: 12%">
 
                     <div class="dash-widget">
                         <div class="dash-widgetcontent">

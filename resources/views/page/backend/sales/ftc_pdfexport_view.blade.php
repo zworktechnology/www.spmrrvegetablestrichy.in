@@ -31,7 +31,6 @@
             color: black;
         }
 
-
         * {
             box-sizing: border-box;
         }
@@ -88,15 +87,15 @@
         </div>
     </div>
     <table id="customers">
-       
+
             <tr>
                 <th style="background-color: #fff;font-size:14px;border:1px #fff">Date : {{$fromdate}} - {{$todate}}</th>
                 <th style="background-color: #fff;font-size:14px;border:1px #fff">Customer : {{$customer}}</th>
             </tr>
       </table>
 
-   
-   
+
+
 
 
     <table id="customers">
@@ -134,6 +133,6 @@
             @endforeach
         </tbody>
     </table>
-    
+
 </body>
 </html>

@@ -6,15 +6,10 @@
             <div class="page-title">
                 <h4>Product</h4>
             </div>
-
-            <div class="page-btn">
-                <button type="button" class="btn btn-primary waves-effect waves-light btn-added" data-bs-toggle="modal"
-                    data-bs-target=".product-modal-xl">Add Product</button>
-            </div>
         </div>
 
         <div class="row">
-            <div class="col-lg-12 col-sm-6 col-12">
+            <div class="col-lg-8 col-sm-8 col-8">
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -45,7 +40,7 @@
                                                         <a href="#delete{{ $productlist_array->unique_key }}" data-bs-toggle="modal"
                                                             data-id="{{ $productlist_array->unique_key }}"
                                                             data-bs-target=".productdelete-modal-xl{{ $productlist_array->unique_key }}"
-                                                            class="badges bg-lightgrey" style="color: white">Delete</a>
+                                                            class="badges bg-lightgrey" style="color: white; background-color:brown">Del</a>
                                                     </li>
                                                 </ul>
                                             </td>
@@ -72,10 +67,9 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="modal fade product-modal-xl" tabindex="-1" data-bs-backdrop="static" role="dialog"
-            aria-labelledby="productLargeModalLabel" aria-hidden="true">
-            @include('page.backend.product.create')
+            <div class="col-lg-4 col-sm-8 col-4">
+                @include('page.backend.product.create')
+            </div>
         </div>
     </div>
 @endsection

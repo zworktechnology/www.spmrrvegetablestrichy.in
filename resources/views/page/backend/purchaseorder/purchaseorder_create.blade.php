@@ -8,33 +8,28 @@
             <h4>Add Purchase Order</h4>
          </div>
       </div>
-
-
-
         <div class="card">
             <div class="card-body">
                 <form autocomplete="off" method="POST" action="{{ route('purchaseorder.purchaseorder_store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-12">
+                        <div class="col-lg-2 col-sm-2 col-12">
                             <div class="form-group">
-                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Date<span
+                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Date <span
                                         style="color: red;">*</span></label>
                                 <input type="date" name="date" placeholder="" value="{{ $today }}" required>
                             </div>
                         </div>
-
-                        <div class="col-lg-6 col-sm-6 col-12">
+                        <div class="col-lg-2 col-sm-2 col-12">
                             <div class="form-group">
-                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time<span
+                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Time <span
                                         style="color: red;">*</span></label>
                                 <input type="time" name="time" placeholder="" value="{{ $timenow }}" required>
                             </div>
                         </div>
-
                         <div class="col-lg-4 col-sm-4 col-12">
                             <div class="form-group">
-                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Supplier<span
+                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Supplier <span
                                         style="color: red;">*</span> </label>
                                 <select class="form-control js-example-basic-single select invoice_supplier" name="supplier_id" id="supplier_id" required>
                                     <option value="" disabled selected hiddden>Select Supplier</option>
@@ -44,10 +39,9 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="col-lg-4 col-sm-4 col-12">
                             <div class="form-group">
-                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Branch<span
+                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Branch <span
                                         style="color: red;">*</span></label>
                                 <select class="form-control js-example-basic-single select invoice_branchid" name="branch_id" id="branch_id" required>
                                     <option value="" disabled selected hiddden>Select Branch</option>
@@ -57,24 +51,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-sm-4 col-12">
-                            <div class="form-group">
-                                <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank<span
-                                        style="color: red;">*</span></label>
-                                <select class="form-control js-example-basic-single select" name="bank_id" id="bank_id" required>
-                                    <option value="" disabled selected hiddden>Select Bank</option>
-                                    @foreach ($bank as $banks)
-                                        <option
-                                            value="{{ $banks->id }}">
-                                            {{ $banks->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
                     </div>
-
-                    <br />
-
                     <div class="row">
                         <div class="table-responsive col-lg-12 col-sm-12 col-12">
                             <table class="table">
@@ -130,8 +107,6 @@
                                 <tbody>
                                     <tr>
                                         <td colspan="3">
-
-
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input commission_ornet" type="radio" name="commission_ornet" id="commission" value="commission">
                                                 <label class="form-check-label" for="commission">
@@ -153,7 +128,7 @@
                                 </tbody>
                                 <tbody id="extracost_tr">
                                     <tr>
-                                        <td style="font-size:15px; color: black;" class="text-end">Extra Cost<span
+                                        <td style="font-size:15px; color: black;" class="text-end">Extra Cost <span
                                             style="color: red;">*</span></td>
                                         <td colspan="3"><input type="hidden" name="purchase_extracost_id"/>
                                             <input type="text" class="form-control"
@@ -210,8 +185,22 @@
 
                                     </tr>
                                     <tr>
-                                        <td colspan="4" class="text-end" style="font-size:15px;color: black;">Payable
-                                            Amount<span style="color: red;">*</span></td>
+                                        <td colspan="1" class="text-end">
+                                            <label style="font-size:15px;padding-top: 5px;padding-bottom: 2px;">Bank <span
+                                                style="color: red;">*</span></label>
+                                        </td>
+                                        <td colspan="2">
+                                            <select class="form-control js-example-basic-single select" name="bank_id" id="bank_id" required>
+                                                <option value="" disabled selected hiddden>Select Bank</option>
+                                                @foreach ($bank as $banks)
+                                                    <option
+                                                        value="{{ $banks->id }}">
+                                                        {{ $banks->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td colspan="" class="text-end" style="font-size:15px;color: black;">Payable
+                                            Amount <span style="color: red;">*</span></td>
                                         <td colspan="2"><input type="text" class="form-control payable_amount"
                                                 name="payable_amount" placeholder="Payable Amount" required
                                                 value="" id="payable_amount"></td>
@@ -232,7 +221,6 @@
                             </table>
                         </div>
                     </div>
-
                     <div class="modal-footer">
                         <input type="submit" class="btn btn-primary" onclick="purchase_ordersubmitForm(this);" />
                         <a href="{{ route('purchaseorder.purchaseorder_index') }}" class="btn btn-danger" value="">Cancel</a>

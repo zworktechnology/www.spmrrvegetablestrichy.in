@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-2 col-sm-4 col-6">
+            <div class="col-lg-2 col-sm-4 col-6" style="width: 12%">
                 <a href="{{ route('product.index') }}" style="color: black">
                     <div class="dash-widget">
                         <div class="dash-widgetcontent">
@@ -22,7 +22,7 @@
                 </a>
             </div>
             @foreach ($branch_data as $keydata => $allbranches)
-                <div class="col-lg-2 col-sm-4 col-6">
+                <div class="col-lg-2 col-sm-4 col-6" style="width: 12%">
                     <div class="dash-widget">
                         <div class="dash-widgetcontent">
                             <h6 style="font-weight: bold;">
