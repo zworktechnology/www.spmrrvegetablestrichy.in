@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 
 class InviteController extends Controller
@@ -72,5 +73,52 @@ class InviteController extends Controller
         $user->assignRole($role->name);
 
         return redirect('login');
+    }
+
+
+
+
+
+    public function passwordview()
+    {
+        $GetUser = User::where('id', '=', auth()->user()->id)->first();
+
+        return view('page.backend.settings.index', compact('GetUser'));
+    }
+
+
+    public function passwordupdate(Request $request, $id)
+    {
+        $GetUser = User::where('id', '=', $id)->first();
+
+        $new_password = $request->get('new_password');
+        $confirmnew_password = $request->get('confirmnew_password');
+
+        
+
+        if($new_password == $confirmnew_password){
+
+            if (Hash::check($new_password, $GetUser->password)){
+
+                return redirect()->route('settings.passwordview')->with('error', 'Please Enter New Password!');
+                 
+            }else {
+                
+                $GetUser->password = Hash::make($request->get('new_password'));
+                $GetUser->update();
+
+                return redirect()->route('settings.passwordview')->with('update', 'Password Changed successfully!');
+            }
+
+            
+
+            
+        }else if($new_password != $confirmnew_password){
+
+            return redirect()->route('settings.passwordview')->with('warning', 'Passwords Mismatched!');
+        }
+
+        
+
     }
 }

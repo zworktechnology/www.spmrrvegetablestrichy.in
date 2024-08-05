@@ -94,6 +94,10 @@
                         <li class="{{ Route::is('invite.index', 'invite.store') ? 'active' : '' }}">
                             <a href="{{ route('invite.index') }}"><i data-feather="user-check"></i><span>Managers</span></a>
                         </li>
+                        <li class="{{ Route::is('settings.passwordview', 'settings.passwordupdate') ? 'active' : '' }}">
+                            <a href="{{ route('settings.passwordview') }}"><i data-feather="user-check"></i><span>Settings</span></a>
+                        </li>
+
                         @endhasrole
                     </ul>
                 </li>

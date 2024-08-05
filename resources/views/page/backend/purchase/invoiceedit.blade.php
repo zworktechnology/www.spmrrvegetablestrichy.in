@@ -128,9 +128,14 @@
                                         <td style="font-size:15px; color: black;" class="text-end">Extra Cost<span
                                             style="color: red;">*</span></td>
                                         <td colspan="2"><input type="hidden" name="purchase_extracost_id"/>
-                                            <input type="text" class="form-control" readonly
-                                                id="extracost_note" placeholder="Note" value="{{ $Purchase_Extracosts->extracost_note }}"
-                                                name="extracost_note[]"  /></td>
+                                             <select class=" form-control bagorkg" name="extracost_note[]" id="extracost_note" required>
+                                                <option value="" selected hidden class="text-muted">Select</option>
+                                                <option value="Hire"{{ $Purchase_Extracosts->extracost_note == 'Hire' ? 'selected' : '' }}>Hire</option>
+                                                <option value="Wage"{{ $Purchase_Extracosts->extracost_note == 'Wage' ? 'selected' : '' }}>Wage</option>
+                                                <option value="Gate"{{ $Purchase_Extracosts->extracost_note == 'Gate' ? 'selected' : '' }}>Gate</option>
+                                                <option value="Advance"{{ $Purchase_Extracosts->extracost_note == 'Advance' ? 'selected' : '' }}>Advance</option>
+                                            </select>
+                                          </td>
                                         
                                         <td colspan="1"><input type="text" class="form-control extracost" id="extracost"
                                                 placeholder="Extra Cost"  name="extracost[]" readonly

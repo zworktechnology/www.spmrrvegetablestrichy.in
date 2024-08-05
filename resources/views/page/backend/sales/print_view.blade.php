@@ -95,30 +95,52 @@
                         <div class="col-lg-5  col-sm-7 col-9">
                            <div class="total-order w-100 max-widthauto">
                               <ul>
+                                 @if($SalesData->extra_cost != '0')
                                  <li>
                                     <h4 style="font-size: 11px;color:blue;font-weight: 600; padding: 2px;">Extra Charge</h4>
                                     <h5 style="font-size: 11px;color:blue;font-weight: 600; padding: 2px;">₹ <span  class="">{{ $SalesData->extra_cost}}</span></h5>
                                  </li>
+                                 @endif
+
+                                 @if($SalesData->gross_amount != '0')
                                  <li>
                                     <h4 style="font-size: 11px;color:green;font-weight: 600; padding: 2px;">Gross Amount</h4>
                                     <h5 style="font-size: 11px;color:green;font-weight: 600; padding: 2px;">₹ <span  class="">{{ $SalesData->gross_amount}}</span></h5>
                                  </li>
+                                 @endif
+
+                                 @if($SalesData->old_balance != '0')
                                  <li class="">
                                     <h4 style="font-size: 11px;color:blue;font-weight: 600; padding: 2px;">Old Balance</h4>
                                     <h5 style="font-size: 11px;color:blue;font-weight: 600; padding: 2px;">₹ <span  class="">{{ $SalesData->old_balance}}</span></h5>
                                  </li>
+                                 @endif
+
+
+                                 @if($SalesData->grand_total != '0')
                                  <li class="">
                                     <h4 style="font-size: 11px;color:red;font-weight: 600; padding: 2px;">Grand Total</h4>
                                     <h5 style="font-size: 11px;color:red;font-weight: 600; padding: 2px;">₹ <span  class="">{{ $SalesData->grand_total}}</span></h5>
                                  </li>
+                                 @endif
+
+
+                                 @if($SalesData->paid_amount != '0')
                                  <li>
                                     <h4 style="font-size: 11px;color:blue;font-weight: 600; padding: 2px;">Paid Amount</h4>
                                     <h5 style="font-size: 11px;color:blue;font-weight: 600; padding: 2px;">₹ <span  class="">{{ $SalesData->paid_amount}}</span></h5>
                                  </li>
+                                 @endif
+
+                                 @if($SalesData->balance_amount != '0')
                                  <li class="">
                                     <h4 style="font-size: 11px;color:red;font-weight: 600; padding: 2px;">Nett Balance</h4>
                                     <h5 style="font-size: 11px;color:red;font-weight: 600; padding: 2px;">₹ <span  class="">{{ $SalesData->balance_amount}}</span></h5>
                                  </li>
+                                 @endif
+
+
+                                 
                               </ul>
                            </div>
                         </div>

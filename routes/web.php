@@ -335,6 +335,16 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/salesorder', [SalesController::class, 'salesorder_datefilter'])->name('salesorder.salesorder_datefilter');
     });
 
+
+
+    
+    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+        // INDEX
+        Route::middleware(['auth:sanctum', 'verified'])->get('/zworktech-pos/settings', [InviteController::class, 'passwordview'])->name('settings.passwordview');
+        // STORE
+        Route::middleware(['auth:sanctum', 'verified'])->put('/zworktech-pos/settings/update/{id}', [InviteController::class, 'passwordupdate'])->name('settings.passwordupdate');
+    });
+
 });
 
 

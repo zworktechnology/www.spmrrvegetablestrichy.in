@@ -100,6 +100,9 @@
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-weight: 800;color: blue;font-size: 11px;">GROSS AMOUNT</td>
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:blue;font-weight: 600;">{{ $PurchaseData->gross_amount}}</td>
                      </tr>
+
+
+                     @if($PurchaseData->old_balance != '0')
                      <tr class="details " >
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;"></td>
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;"></td>
@@ -107,6 +110,9 @@
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-weight: 800;color: red;font-size: 11px;">OLD BALANCE</td>
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:red;font-weight: 600;">{{ $PurchaseData->old_balance}}</td>
                      </tr>
+                     @endif
+
+                     @if($PurchaseData->grand_total != '0')
                      <tr class="details " >
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;"></td>
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;"></td>
@@ -114,6 +120,9 @@
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-weight: 800;color: blue;font-size: 11px;">GRAND TOTAL</td>
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:blue;font-weight: 600;">{{ $PurchaseData->grand_total}}</td>
                      </tr>
+                     @endif
+
+                     @if($PurchaseData->paid_amount != '0')
                      <tr class="details ">
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;"></td>
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;"></td>
@@ -121,6 +130,9 @@
                         <td  style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-weight: 800;color: green;font-size: 11px;">PAID AMOUNT</td>
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:green;font-weight: 600;">{{ $PurchaseData->paid_amount}}</td>
                      </tr>
+                     @endif
+
+                     @if($PurchaseData->balance_amount != '0')
                      <tr class="details " >
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;"></td>
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:#000;font-weight: 600;"></td>
@@ -128,6 +140,7 @@
                         <td  style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-weight: 800;color: red;font-size: 11px;">NETT BALANCE</td>
                         <td style="padding: 7px;vertical-align: top; vertical-align: inherit;vertical-align: inherit;font-size: 11px;color:red;font-weight: 600;">{{ $PurchaseData->balance_amount}}</td>
                      </tr>
+                     @endif
                   </table>
 
 

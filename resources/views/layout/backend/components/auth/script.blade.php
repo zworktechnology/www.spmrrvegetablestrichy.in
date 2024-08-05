@@ -17,6 +17,7 @@
 <script src="{{ asset('assets/backend/plugins/sweetalert/sweetalert2.all.min.js') }}"></script>
 <script src="{{ asset('assets/backend/plugins/sweetalert/sweetalerts.min.js') }}"></script>
 
+
 <script src="{{ asset('assets/backend/plugins/toastr/toastr.min.js') }}"></script>
 <script src="{{ asset('assets/backend/plugins/toastr/toastr.js') }}"></script>
 
@@ -95,7 +96,7 @@ $(".purchaseclose").click(function() {
             $(".extracost_tr").append(
                     '<tr>' +
                     '<td style="font-size:15px;color: black;" class="text-end">Extra Cost<span style="color: red;">*</span></td>' +
-                    '<td colspan="3"><input type="text" class="form-control" id="extracost_note" placeholder="Note" value="" name="extracost_note[]" required /></td>' +
+                    '<td colspan="3"><select class=" form-control bagorkg" name="extracost_note[]" id="extracost_note" required><option value="" selected hidden class="text-muted">Select</option><option value="Rent">Rent</option><option value="WAGE">Wage</option><option value="Gate">Gate</option><option value="Advance">Advance</option></select</td>' +
                     '<td><input type="text" class="form-control extracost" id="extracost" placeholder="Extra Cost" name="extracost[]" value="" /></td>' +
                     '<td><button style="width: 35px;margin-right:5px;"class="py-1 addextranotefields text-white font-medium rounded-lg text-sm  text-center btn btn-primary"type="button" id="" value="Add">+</button>' +
                     '<button style="width: 35px;"class="py-1 text-white remove-extratr font-medium rounded-lg text-sm  text-center btn btn-danger" type="button" id="" value="Add">-</button></td>' +
@@ -165,6 +166,14 @@ $(".purchaseclose").click(function() {
             var commission_ornet = this.value;
             if(commission_ornet == 'commission'){
                 $("#commission_percent").show();
+                $("#commission_percent").val(10);
+
+                var commission_percent = $("#commission_percent").val();
+
+                var total_amount = $(".total_amount").val();
+                var commision_amount = (commission_percent / 100) * total_amount;
+                $('.commission_amount').val(commision_amount.toFixed(2));
+
             }else if(commission_ornet == 'netprice'){
                 $("#commission_percent").hide();
                 $(".commission_amount").val(0);
